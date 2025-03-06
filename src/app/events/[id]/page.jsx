@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 
-export default function EventsPage() {
+export default function EventPage() {
   const { id } = useParams();
 
   return (
