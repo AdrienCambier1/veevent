@@ -2,20 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: "Syne";
+  src: url("../assets/font/Syne/Syne-VariableFont_wght.ttf");
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #ffffff;
+  --light-purple: #a597e0;
+  --blue: #605cc6;
+  --light-blue: #f3eef6;
+  --dark-blue: #3b2a6c;
+  --beige: #f1e3d3;
+  --gray: #939393;
+  --dark-gray: #1e1e1e;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  font-family: Syne;
+  @apply antialiased;
+}
+
+header {
+  @apply bg-[--beige] fixed w-screen h-16 px-8 flex items-center justify-between;
+}
+
+header nav h4 {
+  @apply relative;
+}
+
+header nav h4::before {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--dark-gray);
+  transform: scaleX(0);
+  @apply transition-all ease-in-out duration-200;
+}
+
+header nav h4:hover::before {
+  transform: scaleX(1);
+}
+
+main {
+}
+
+footer {
+}
+
+/* Titles */
+
+h1 {
+  @apply uppercase text-3xl font-extrabold;
+}
+
+h2 {
+  @apply uppercase text-2xl font-extrabold;
+}
+
+h3 {
+  @apply uppercase text-xl font-semibold;
+}
+
+h4 {
+  @apply uppercase text-base font-medium;
+}
+
+/* Buttons */
+
+.blue-primary-btn,
+.blue-secondary-btn {
+  @apply uppercase transition-all ease-in-out;
+}
+
+.blue-primary-btn {
+  @apply bg-[--blue] text-white px-6 py-1 rounded-full border-[--blue] border-2 hover:opacity-75;
+}
+
+.blue-secondary-btn {
+  @apply bg-white text-[--blue] px-6 py-1 rounded-full border-[--blue] border-2 hover:bg-[--blue] hover:text-white;
 }
