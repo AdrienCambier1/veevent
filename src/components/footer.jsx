@@ -29,12 +29,12 @@ export default function Footer() {
           <div className="flex flex-row gap-12">
             <nav className="flex flex-col gap-4 ">
               <h4>Ressources</h4>
-              <Link href="">Evenements</Link>
-              <Link href="">Organisateurs</Link>
-              <Link href="">Villes</Link>
-              <Link href="">Mes inscriptions</Link>
-              <Link href="">Marqués</Link>
-              <Link href="">Abonnements</Link>
+              <Link href="/activities/events">Evenements</Link>
+              <Link href="/activities/organisers">Organisateurs</Link>
+              <Link href="/cities">Villes</Link>
+              <Link href="/saved/inscriptions">Mes inscriptions</Link>
+              <Link href="/saved/marked">Marqués</Link>
+              <Link href="/subscriptions">Abonnements</Link>
             </nav>
             <nav className="flex flex-col gap-4 ">
               <h4>Gérer son compte</h4>

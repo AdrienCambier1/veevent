@@ -52,10 +52,10 @@ export default function Header() {
             Menu <MenuScale className="hamburger-menu" />
           </button>
           <nav className="hidden lg:flex items-center gap-8">
-            <Link href="">Activités</Link>
-            <Link href="">Villes</Link>
-            <Link href="">Enregistrés</Link>
-            <Link href="">Abonnements</Link>
+            <Link href="/activities/events">Activités</Link>
+            <Link href="/cities">Villes</Link>
+            <Link href="/saved/inscriptions">Enregistrés</Link>
+            <Link href="/subscriptions">Abonnements</Link>
           </nav>
           <div className="hidden lg:flex items-center gap-4">
             <button className="secondary-btn">

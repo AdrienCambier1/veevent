@@ -44,10 +44,10 @@ footer {
 }
 
 nav a {
-  @apply dark-text hover:opacity-75;
+  @apply dark-text hover:text-[var(--primary-blue)] transition;
 }
 nav svg {
-  @apply text-[var(--primary-blue)] h-8 w-8 hover:opacity-75;
+  @apply text-[var(--primary-blue)] h-8 w-8 hover:opacity-75 transition;
 }
 
 .logo {
