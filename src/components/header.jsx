@@ -10,7 +10,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768 && isOpen) {
+      if (window.innerWidth >= 1024 && isOpen) {
         setIsOpen(false);
       }
     };
@@ -25,27 +25,31 @@ export default function Header() {
   return (
     <>
       <header>
-        <Link href="/" className="logo">
-          v<span>ee</span>vent
-        </Link>
-        <button
-          className="md:hidden blue-rounded-btn"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          Menu <MenuScale className="hamburger-menu" />
-        </button>
-        <nav className="hidden md:flex items-center gap-8">
-          <Link href="">Activités</Link>
-          <Link href="">Villes</Link>
-        </nav>
-        <div className="hidden md:flex items-center gap-4">
-          <button className="secondary-btn">
-            S'inscrire
-            <NavArrowRight />
+        <div className="container flex justify-between items-center h-16">
+          <Link href="/" className="logo">
+            v<span>ee</span>vent
+          </Link>
+          <button
+            className="lg:hidden blue-rounded-btn"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            Menu <MenuScale className="hamburger-menu" />
           </button>
-          <button className="primary-btn">
-            Se connecter <NavArrowRight />
-          </button>
+          <nav className="hidden lg:flex items-center gap-8">
+            <Link href="">Activités</Link>
+            <Link href="">Villes</Link>
+            <Link href="">Enregistrés</Link>
+            <Link href="">Abonnements</Link>
+          </nav>
+          <div className="hidden lg:flex items-center gap-4">
+            <button className="secondary-btn">
+              S'inscrire
+              <NavArrowRight />
+            </button>
+            <button className="primary-btn">
+              Se connecter <NavArrowRight />
+            </button>
+          </div>
         </div>
       </header>
       <MenuModal isOpen={isOpen} setIsOpen={() => setIsOpen()} />

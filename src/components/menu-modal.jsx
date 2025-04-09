@@ -8,7 +8,7 @@ export default function MenuModal({ isOpen, setIsOpen }) {
       <ReactFocusLock
         className={`${
           isOpen ? "visible -translate-x-0" : "invisible -translate-x-full"
-        } menu-modal md:hidden`}
+        } menu-modal lg:hidden`}
       >
         <div className="flex flex-col gap-8">
           <div className="h-16 w-full flex items-center gap-12">
@@ -22,7 +22,8 @@ export default function MenuModal({ isOpen, setIsOpen }) {
           <nav className="flex flex-col gap-4">
             <Link href="">Activités</Link>
             <Link href="">Villes</Link>
-            <Link href="">contact.support@veevent.com</Link>
+            <Link href="">Enregistrés</Link>
+            <Link href="">Abonnements</Link>
           </nav>
         </div>
         <div className="flex items-center justify-center gap-4 h-16 w-full">

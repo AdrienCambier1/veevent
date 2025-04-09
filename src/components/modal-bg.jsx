@@ -21,7 +21,7 @@ export default function ModalBg({ isOpen, setIsOpen }) {
     <div
       className={`${
         isOpen ? "visible opacity-100" : "invisible opacity-0"
-      } modal-bg md:hidden`}
+      } modal-bg`}
       onClick={setIsOpen}
     />
   );

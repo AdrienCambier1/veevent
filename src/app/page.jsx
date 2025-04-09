@@ -17,7 +17,7 @@ export default function Home() {
         </p>
         <SearchBarButton />
       </section>
-      <section>
+      <section className="container">
         <CustomTitle title="Les villes tendances" description="Villes" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <CityCard />
@@ -30,7 +30,7 @@ export default function Home() {
           <NavArrowRight />
         </button>
       </section>
-      <section>
+      <section className="container">
         <CustomTitle title="Envie d'une sortie" description="Thèmes" />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           <ThemeCard />
@@ -39,7 +39,7 @@ export default function Home() {
           <ThemeCard />
         </div>
       </section>
-      <section>
+      <section className="container">
         <CustomTitle title="Recommandé pour vous" description="Evenements" />
         <button className="blue-rounded-btn">
           Voir plus
