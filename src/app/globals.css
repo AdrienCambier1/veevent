@@ -10,6 +10,7 @@
 :root {
   /* Colors */
   --background: #f8f8f8;
+  --background-rgb: 248, 248, 248;
   --primary-blue: #3b32ff;
   --primary-blue-rgb: 59, 50, 255;
   --secondary-blue: #171291;
@@ -31,11 +32,11 @@ body {
 }
 
 header {
-  @apply px-8 lg:px-36 w-screen h-16 bg-[var(--background)]  backdrop-blur-[2px] flex justify-between items-center;
+  @apply top-0 fixed px-8 lg:px-36 w-screen h-16 bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md flex justify-between items-center z-30;
 }
 
 main {
-  @apply px-8 lg:px-36 min-h-screen top-0 flex flex-col relative;
+  @apply mt-16 px-8 lg:px-36 min-h-screen top-0 flex flex-col relative;
 }
 
 footer {
@@ -50,7 +51,7 @@ nav svg {
 }
 
 .logo {
-  @apply text-[var(--primary-blue)] text-2xl font-extrabold;
+  @apply text-[var(--primary-blue)] text-3xl font-extrabold;
 }
 
 .logo span {
@@ -59,6 +60,10 @@ nav svg {
 
 section {
   @apply flex flex-col gap-6 mt-20;
+}
+
+.transition {
+  @apply transition-all ease-in-out duration-200;
 }
 
 /* Titles */
@@ -91,7 +96,7 @@ p {
 .primary-btn,
 .secondary-btn,
 .blue-rounded-btn {
-  @apply flex items-center justify-center gap-1 rounded-full transition-all ease-in-out w-fit h-fit;
+  @apply flex items-center justify-center gap-1 rounded-full transition w-fit h-fit py-1 px-4;
 }
 
 .primary-btn svg,
@@ -101,11 +106,11 @@ p {
 }
 
 .primary-btn {
-  @apply bg-[var(--primary-blue)] text-white py-1 px-4 hover:opacity-75;
+  @apply bg-[var(--primary-blue)] text-white hover:opacity-75;
 }
 
 .secondary-btn {
-  @apply text-[var(--primary-blue)] hover:opacity-75;
+  @apply text-[var(--primary-blue)] hover:bg-[rgba(var(--primary-blue-rgb),0.1)];
 }
 
 .blue-rounded-btn {
@@ -126,7 +131,7 @@ p {
 
 .city-card,
 .theme-card {
-  @apply rounded-2xl transition-all ease-in-out flex items-center justify-center;
+  @apply rounded-2xl transition flex items-center justify-center;
 }
 
 .city-card {
@@ -155,4 +160,19 @@ p {
 
 .theme-card svg {
   @apply text-[var(--primary-blue)] h-8 w-8;
+}
+
+/* Modals */
+
+.menu-modal,
+.modal-bg {
+  @apply transition;
+}
+
+.menu-modal {
+  @apply bg-white h-screen max-w-full fixed px-8 lg:px-36 left-0 top-0 z-40 flex flex-col justify-between;
+}
+
+.modal-bg {
+  @apply inset-0 fixed bg-black/50 z-30 backdrop-blur-[2px];
 }

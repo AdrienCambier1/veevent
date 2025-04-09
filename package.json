@@ -17,6 +17,7 @@
     "next": "^15.2.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-focus-lock": "^2.13.6",
     "swiper": "^11.2.6"
   },
   "devDependencies": {
