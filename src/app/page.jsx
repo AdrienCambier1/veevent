@@ -26,7 +26,7 @@ export default function Home() {
           <CityCard />
         </div>
         <button className="blue-rounded-btn">
-          Voir plus
+          <span>Voir plus</span>
           <NavArrowRight />
         </button>
       </section>
@@ -42,7 +42,7 @@ export default function Home() {
       <section className="container">
         <CustomTitle title="Recommandé pour vous" description="Evenements" />
         <button className="blue-rounded-btn">
-          Voir plus
+          <span>Voir plus</span>
           <NavArrowRight />
         </button>
       </section>

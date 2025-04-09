@@ -32,7 +32,7 @@ export default function Header() {
   return (
     <>
       <header>
-        <div className="container flex justify-between items-center h-16">
+        <div className="container flex gap-8 justify-between items-center h-16">
           <Link
             href="/"
             className="logo"
@@ -49,7 +49,8 @@ export default function Header() {
             className="lg:hidden blue-rounded-btn"
             onClick={() => setIsOpen(!isOpen)}
           >
-            Menu <MenuScale className="hamburger-menu" />
+            <span>Menu</span>
+            <MenuScale className="hamburger-menu" />
           </button>
           <nav className="hidden lg:flex items-center gap-8">
             <Link href="/activities/events">Activités</Link>
@@ -59,11 +60,12 @@ export default function Header() {
           </nav>
           <div className="hidden lg:flex items-center gap-4">
             <button className="secondary-btn">
-              S'inscrire
+              <span>S'inscrire</span>
               <NavArrowRight />
             </button>
             <button className="primary-btn">
-              Se connecter <NavArrowRight />
+              <span>Se connecter</span>
+              <NavArrowRight />
             </button>
           </div>
         </div>

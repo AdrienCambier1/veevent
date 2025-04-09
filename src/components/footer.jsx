@@ -14,7 +14,7 @@ export default function Footer() {
     <footer>
       <div className="container flex flex-col gap-12">
         <div className="flex flex-col gap-8">
-          <div className="flex flex-col gap-8 md:flex-row md:justify-between">
+          <div className="flex flex-col md:flex-row gap-8 justify-between">
             <Link
               href="/"
               className="logo"
@@ -40,7 +40,7 @@ export default function Footer() {
                 </Link>
               </nav>
               <Link href="" className="primary-btn">
-                Publie ton événement
+                <span>Publie ton événement</span>
                 <ArrowUpRight />
               </Link>
             </div>

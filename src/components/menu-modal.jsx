@@ -33,7 +33,8 @@ export default function MenuModal({ isOpen, setIsOpen }) {
               v<span>ee</span>vent
             </Link>
             <button className="blue-rounded-btn" onClick={setIsOpen}>
-              Menu <Xmark className="hamburger-menu" />
+              <span>Menu</span>
+              <Xmark className="hamburger-menu" />
             </button>
           </div>
           <nav className="flex flex-col gap-4">
@@ -60,11 +61,12 @@ export default function MenuModal({ isOpen, setIsOpen }) {
         </div>
         <div className="flex items-center justify-center gap-4 h-16 w-full">
           <button className="secondary-btn">
-            S'inscrire
+            <span>S'inscrire</span>
             <NavArrowRight />
           </button>
           <button className="primary-btn">
-            Se connecter <NavArrowRight />
+            <span>Se connecter</span>
+            <NavArrowRight />
           </button>
         </div>
       </ReactFocusLock>

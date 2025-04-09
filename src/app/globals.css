@@ -108,13 +108,19 @@ p {
 .primary-btn,
 .secondary-btn,
 .blue-rounded-btn {
-  @apply flex items-center justify-center gap-1 rounded-full transition w-fit h-fit;
+  @apply flex items-center justify-center gap-1 rounded-full transition w-fit h-fit overflow-hidden;
+}
+
+.primary-btn span,
+.secondary-btn span,
+.blue-rounded-btn span {
+  @apply truncate;
 }
 
 .primary-btn svg,
 .secondary-btn svg,
 .blue-rounded-btn svg {
-  @apply w-4 h-4;
+  @apply w-4 h-4 flex-shrink-0;
 }
 
 .primary-btn {
