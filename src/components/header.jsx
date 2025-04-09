@@ -59,14 +59,14 @@ export default function Header() {
             <Link href="/subscriptions">Abonnements</Link>
           </nav>
           <div className="hidden lg:flex items-center gap-4">
-            <button className="secondary-btn">
+            <Link href="/register" className="secondary-btn">
               <span>S'inscrire</span>
               <NavArrowRight />
-            </button>
-            <button className="primary-btn">
+            </Link>
+            <Link href="/login" className="primary-btn">
               <span>Se connecter</span>
               <NavArrowRight />
-            </button>
+            </Link>
           </div>
         </div>
       </header>

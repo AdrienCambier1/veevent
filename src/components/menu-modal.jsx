@@ -18,7 +18,7 @@ export default function MenuModal({ isOpen, setIsOpen }) {
         } menu-modal lg:hidden`}
       >
         <div className="flex flex-col gap-8">
-          <div className="h-16 w-full flex items-center gap-12">
+          <div className="h-16 w-full flex items-center gap-8">
             <Link
               href="/"
               className="logo"
@@ -60,14 +60,14 @@ export default function MenuModal({ isOpen, setIsOpen }) {
           </nav>
         </div>
         <div className="flex items-center justify-center gap-4 h-16 w-full">
-          <button className="secondary-btn">
+          <Link href="/register" className="secondary-btn" onClick={setIsOpen}>
             <span>S'inscrire</span>
             <NavArrowRight />
-          </button>
-          <button className="primary-btn">
+          </Link>
+          <Link href="/login" className="primary-btn" onClick={setIsOpen}>
             <span>Se connecter</span>
             <NavArrowRight />
-          </button>
+          </Link>
         </div>
       </ReactFocusLock>
       <ModalBg isOpen={isOpen} setIsOpen={setIsOpen} />

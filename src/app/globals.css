@@ -15,9 +15,11 @@
   --primary-blue-rgb: 59, 50, 255;
   --secondary-blue: #171291;
   --primary-green: #45c69b;
+  --primary-green-rgb: 69, 198, 155;
   --primary-red: #ff5132;
   --primary-red-rgb: 255, 81, 50;
   --dark-gray: #1e1e1e;
+  --dark-gray-rgb: 30, 30, 30;
   --light-gray: #818181;
   --primary-border-col: #ebebeb;
   --secondary-border-col: #d9d9d9;
@@ -35,8 +37,25 @@ header {
   @apply top-0 fixed px-8 w-screen bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
 }
 
+header nav {
+  @apply h-full;
+}
+
+header nav a {
+  @apply text-[var(--dark-gray)] relative h-full inline-flex items-center;
+}
+
+header nav a::before {
+  @apply absolute w-full h-[2px] rounded-full bg-[var(--primary-blue)] bottom-0 left-0 scale-x-0 transition;
+  content: "";
+}
+
+header nav a:hover::before {
+  @apply scale-x-100;
+}
+
 main {
-  @apply mt-16 px-8 min-h-screen top-0 flex flex-col relative;
+  @apply mt-16 px-8 top-0 flex flex-col relative;
 }
 
 footer {
@@ -44,7 +63,7 @@ footer {
 }
 
 nav a {
-  @apply dark-text hover:text-[var(--primary-blue)] transition;
+  @apply text-[var(--light-gray)] hover:text-[var(--primary-blue)] transition;
 }
 nav svg {
   @apply text-[var(--primary-blue)] h-8 w-8 hover:opacity-75 transition;
@@ -59,7 +78,7 @@ nav svg {
 }
 
 section {
-  @apply flex flex-col gap-6 mt-20;
+  @apply flex flex-col gap-6 mt-20 relative;
 }
 
 .transition {
@@ -68,6 +87,14 @@ section {
 
 .container {
   @apply w-full max-w-[1200px] mx-auto;
+}
+
+.container form {
+  @apply flex flex-col gap-4 w-full max-w-[500px];
+}
+
+form label {
+  @apply dark-text;
 }
 
 /* Titles */
@@ -103,6 +130,10 @@ p {
   @apply text-[var(--dark-gray)] text-base;
 }
 
+.blue-text {
+  @apply text-[var(--primary-blue)] text-base;
+}
+
 /* Buttons */
 
 .primary-btn,
@@ -124,7 +155,7 @@ p {
 }
 
 .primary-btn {
-  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 py-1 px-4;
+  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 py-0.5 px-4;
 }
 
 .secondary-btn {
@@ -132,7 +163,61 @@ p {
 }
 
 .blue-rounded-btn {
-  @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)] py-1 px-4 hover:opacity-75;
+  @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)] py-0.5 px-4 hover:opacity-75;
+}
+
+.primary-form-btn {
+  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 disabled:opacity-50 transition p-3 rounded-xl w-full;
+}
+
+.rounded-form-btn,
+.back-form-btn {
+  @apply flex items-center justify-center hover:opacity-75 transition p-3 rounded-full h-fit w-fit;
+}
+
+.rounded-form-btn {
+  @apply bg-white dark-shadow text-[var(--secondary-blue)];
+}
+
+.back-form-btn {
+  @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)];
+}
+
+.rounded-form-btn svg,
+.back-form-btn svg {
+  @apply h-6 w-6;
+}
+
+/* Tags */
+
+.blue-tag,
+.green-tag {
+  @apply py-0.5 px-4 rounded-full flex items-center justify-center gap-1 w-fit h-fit overflow-hidden;
+}
+
+.blue-tag svg,
+.green-tag svg {
+  @apply w-4 h-4 flex-shrink-0;
+}
+
+.blue-tag span,
+.green-tag span {
+  @apply truncate;
+}
+
+.blue-tag {
+  @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)];
+}
+
+.green-tag {
+  @apply bg-[rgba(var(--primary-green-rgb),0.1)] text-[var(--primary-green)];
+}
+
+/* Inputs */
+
+input,
+textarea {
+  @apply placeholder:text-[var(--light-gray)] text-[var(--dark-gray)] bg-white border-[var(--primary-border-col)] border rounded-xl p-3 w-full focus:outline-none;
 }
 
 /* Shadow */
@@ -178,6 +263,10 @@ p {
 
 .theme-card svg {
   @apply text-[var(--primary-blue)] h-8 w-8;
+}
+
+.white-card {
+  @apply bg-white dark-shadow rounded-xl w-full relative;
 }
 
 /* Modals */

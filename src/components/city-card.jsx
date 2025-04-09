@@ -1,14 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
-import niceImage from "../assets/images/nice.jpg";
+import niceImage from "@/assets/images/nice.jpg";
 import { ArrowUpRightCircleSolid } from "iconoir-react";
 
 export default function CityCard() {
   return (
     <Link href="/" className="city-card">
-      <Image src={niceImage} alt="Nice" fill className="object-cover" />
+      <Image src={niceImage} alt="City image" fill className="object-cover" />
 
-      <div className="p-6 h-full w-full flex flex-col gap-12 z-10">
+      <div className="p-4 h-full w-full flex flex-col gap-24 z-10">
         <div className="flex justify-between items-center">
           <p>8 événéments</p>
           <p className="!font-extrabold">Paris</p>
