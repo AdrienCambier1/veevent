@@ -1,29 +1,24 @@
 import Link from "next/link";
-import Image from "next/image";
+import { NavArrowRight } from "iconoir-react";
 
 export default function Header() {
   return (
     <header>
-      <Link href="/">
-        <h1 className="text-[--dark-blue]">
-          V<span className="text-[--blue]">ee</span>vent
-        </h1>
+      <Link href="/" className="logo">
+        v<span>ee</span>vent
       </Link>
-      <nav className="hidden xl:flex items-center gap-8">
-        <Link href="">
-          <h4>Evenements</h4>
-        </Link>
-        <Link href="">
-          <h4>Evenements</h4>
-        </Link>
+      <nav className="hidden md:flex items-center gap-8">
+        <Link href="">Activités</Link>
+        <Link href="">Villes</Link>
       </nav>
-      <div className="hidden xl:flex items-center gap-4">
-        <Link href="" className="blue-secondary-btn">
-          Notifications
-        </Link>
-        <Link href="" className="blue-primary-btn">
-          Profile
-        </Link>
+      <div className="hidden md:flex items-center gap-4">
+        <button className="secondary-btn">
+          S'inscrire
+          <NavArrowRight />
+        </button>
+        <button className="primary-btn">
+          Se connecter <NavArrowRight />
+        </button>
       </div>
     </header>
   );
