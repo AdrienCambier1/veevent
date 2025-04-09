@@ -13,7 +13,7 @@ export default function Footer() {
   return (
     <footer>
       <div className="container flex flex-col gap-12">
-        <div className="flex flex-col xl:flex-row gap-8 justify-between xl:items-center">
+        <div className="flex flex-col lg:flex-row gap-8 justify-between">
           <Link
             href="/"
             className="logo"
@@ -26,13 +26,26 @@ export default function Footer() {
           >
             v<span>ee</span>vent
           </Link>
-          <nav className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
-            <Link href="">Activités</Link>
-            <Link href="">Villes</Link>
-            <Link href="">contact.support@veevent.com</Link>
-          </nav>
-          <div className="flex flex-col sm:flex-row gap-8">
-            <nav className="flex items-center gap-4">
+          <div className="flex flex-row gap-12">
+            <nav className="flex flex-col gap-4 ">
+              <h4>Ressources</h4>
+              <Link href="">Evenements</Link>
+              <Link href="">Organisateurs</Link>
+              <Link href="">Villes</Link>
+              <Link href="">Mes inscriptions</Link>
+              <Link href="">Marqués</Link>
+              <Link href="">Abonnements</Link>
+            </nav>
+            <nav className="flex flex-col gap-4 ">
+              <h4>Gérer son compte</h4>
+              <Link href="">Informations du compte</Link>
+              <Link href="">Mes evenements</Link>
+              <Link href="">Evenements participés</Link>
+              <Link href="">Avis</Link>
+            </nav>
+          </div>
+          <div className="flex flex-col lg:flex-row gap-8">
+            <nav className="flex gap-4">
               <Link href="">
                 <Instagram />
               </Link>

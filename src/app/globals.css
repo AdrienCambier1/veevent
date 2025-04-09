@@ -51,7 +51,7 @@ nav svg {
 }
 
 .logo {
-  @apply text-[var(--primary-blue)] text-3xl font-extrabold italic;
+  @apply text-[var(--primary-blue)] text-3xl font-extrabold italic w-fit;
 }
 
 .logo span {
@@ -83,6 +83,14 @@ h2 {
 
 .custom-title h2 {
   @apply text-[var(--dark-gray)] text-2xl;
+}
+
+h3 {
+  @apply text-[var(--dark-gray)] font-bold text-xl;
+}
+
+h4 {
+  @apply text-[var(--dark-gray)] font-bold text-lg;
 }
 
 /* Texts */

@@ -3,6 +3,13 @@ import Link from "next/link";
 import ModalBg from "./modal-bg";
 import ReactFocusLock from "react-focus-lock";
 export default function MenuModal({ isOpen, setIsOpen }) {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <ReactFocusLock
@@ -12,7 +19,17 @@ export default function MenuModal({ isOpen, setIsOpen }) {
       >
         <div className="flex flex-col gap-8">
           <div className="h-16 w-full flex items-center gap-12">
-            <Link href="/" className="logo">
+            <Link
+              href="/"
+              className="logo"
+              onClick={(e) => {
+                if (window.location.pathname === "/") {
+                  e.preventDefault();
+                  scrollToTop();
+                  setIsOpen();
+                }
+              }}
+            >
               v<span>ee</span>vent
             </Link>
             <button className="blue-rounded-btn" onClick={setIsOpen}>
