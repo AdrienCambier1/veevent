@@ -8,7 +8,9 @@ export default function Header() {
       <Link href="/" className="logo">
         v<span>ee</span>vent
       </Link>
-      <MenuScale className="md:hidden hamburger-menu" />
+      <button className="md:hidden blue-rounded-btn">
+        Menu <MenuScale className="md:hidden hamburger-menu" />
+      </button>
       <nav className="hidden md:flex items-center gap-8">
         <Link href="">Activités</Link>
         <Link href="">Villes</Link>
