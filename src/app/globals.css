@@ -51,7 +51,7 @@ nav svg {
 }
 
 .logo {
-  @apply text-[var(--primary-blue)] text-3xl font-extrabold;
+  @apply text-[var(--primary-blue)] text-3xl font-extrabold italic;
 }
 
 .logo span {
