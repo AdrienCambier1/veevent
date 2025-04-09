@@ -1,12 +1,29 @@
+"use client";
 import Link from "next/link";
 import { ArrowUpRight, Instagram, Facebook, X } from "iconoir-react";
 
 export default function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <footer>
       <div className="container flex flex-col gap-12">
         <div className="flex flex-col xl:flex-row gap-8 justify-between xl:items-center">
-          <Link href="/" className="logo">
+          <Link
+            href="/"
+            className="logo"
+            onClick={(e) => {
+              if (window.location.pathname === "/") {
+                e.preventDefault();
+                scrollToTop();
+              }
+            }}
+          >
             v<span>ee</span>vent
           </Link>
           <nav className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">

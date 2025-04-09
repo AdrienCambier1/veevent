@@ -32,7 +32,7 @@ body {
 }
 
 header {
-  @apply top-0 fixed px-8 w-screen bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md  z-30;
+  @apply top-0 fixed px-8 w-screen bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
 }
 
 main {

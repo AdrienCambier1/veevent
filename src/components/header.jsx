@@ -22,11 +22,27 @@ export default function Header() {
     return () => window.removeEventListener("resize", handleResize);
   }, [isOpen]);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <header>
         <div className="container flex justify-between items-center h-16">
-          <Link href="/" className="logo">
+          <Link
+            href="/"
+            className="logo"
+            onClick={(e) => {
+              if (window.location.pathname === "/") {
+                e.preventDefault();
+                scrollToTop();
+              }
+            }}
+          >
             v<span>ee</span>vent
           </Link>
           <button
