@@ -8,7 +8,7 @@ export default function Footer() {
         <Link href="/" className="logo">
           v<span>ee</span>vent
         </Link>
-        <nav className="flex flex-col sm:flex-row sm:items-center gap-8">
+        <nav className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
           <Link href="">Activités</Link>
           <Link href="">Villes</Link>
           <Link href="">contact.support@veevent.com</Link>
