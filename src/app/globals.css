@@ -96,7 +96,7 @@ p {
 .primary-btn,
 .secondary-btn,
 .blue-rounded-btn {
-  @apply flex items-center justify-center gap-1 rounded-full transition w-fit h-fit py-1 px-4;
+  @apply flex items-center justify-center gap-1 rounded-full transition w-fit h-fit;
 }
 
 .primary-btn svg,
@@ -106,11 +106,11 @@ p {
 }
 
 .primary-btn {
-  @apply bg-[var(--primary-blue)] text-white hover:opacity-75;
+  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 py-1 px-4;
 }
 
 .secondary-btn {
-  @apply text-[var(--primary-blue)] hover:bg-[rgba(var(--primary-blue-rgb),0.1)];
+  @apply text-[var(--primary-blue)] hover:opacity-75;
 }
 
 .blue-rounded-btn {
