@@ -4,7 +4,6 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { AuthProvider } from "@/contexts/auth-context";
 import { CityProvider } from "@/contexts/city-context";
-import ScrollToTop from "@/components/scroll-to-top";
 
 export default function RootLayout({ children }) {
   return (
@@ -12,7 +11,6 @@ export default function RootLayout({ children }) {
       <body>
         <AuthProvider>
           <CityProvider>
-            <ScrollToTop />
             <Header />
             {children}
             <Footer />
