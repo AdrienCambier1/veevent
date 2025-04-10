@@ -46,22 +46,25 @@ export default function MenuModal({ isOpen, setIsOpen }) {
           <nav className="flex flex-col gap-4">
             <h4>Pages</h4>
             <Link href="/activities/events" onClick={setIsOpen}>
-              Evenements
+              Rechercher un événement
             </Link>
             <Link href="/activities/organisers" onClick={setIsOpen}>
-              Organisateurs
+              Rechercher un organisateur
             </Link>
             <Link href="/cities" onClick={setIsOpen}>
-              Villes
+              Les villes événementielles
             </Link>
             <Link href="/saved/inscriptions" onClick={setIsOpen}>
-              Mes inscriptions
+              Consulter mes inscriptions
             </Link>
             <Link href="/saved/marked" onClick={setIsOpen}>
-              Marqués
+              Consulter mes favoris
             </Link>
-            <Link href="/subscriptions" onClick={setIsOpen}>
-              Abonnements
+            <Link href="/subscriptions/events" onClick={setIsOpen}>
+              Evennements des abonnements
+            </Link>
+            <Link href="/subscriptions/profils" onClick={setIsOpen}>
+              Profils des abonnements
             </Link>
           </nav>
         </div>

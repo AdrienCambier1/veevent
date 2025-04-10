@@ -59,7 +59,7 @@ export default function Header() {
             <Link href="/activities/events">Activités</Link>
             <Link href="/cities">Villes</Link>
             <Link href="/saved/inscriptions">Enregistrés</Link>
-            <Link href="/subscriptions">Abonnements</Link>
+            <Link href="/subscriptions/events">Abonnements</Link>
           </nav>
           <div className="hidden lg:flex items-center gap-4">
             {!isAuthenticated ? (

@@ -50,12 +50,21 @@ export default function Footer() {
             <div className="flex flex-col gap-4">
               <h4>Ressources</h4>
               <nav className="flex flex-wrap gap-4 ">
-                <Link href="/activities/events">Evenements</Link>
-                <Link href="/activities/organisers">Organisateurs</Link>
-                <Link href="/cities">Villes</Link>
-                <Link href="/saved/inscriptions">Mes inscriptions</Link>
-                <Link href="/saved/marked">Marqués</Link>
-                <Link href="/subscriptions">Abonnements</Link>
+                <Link href="/activities/events">Rechercher un événement</Link>
+                <Link href="/activities/organisers">
+                  Rechercher un organisateur
+                </Link>
+                <Link href="/cities">Les villes événementielles</Link>
+                <Link href="/saved/inscriptions">
+                  Consulter mes inscriptions
+                </Link>
+                <Link href="/saved/marked">Consulter mes favoris</Link>
+                <Link href="/subscriptions/events">
+                  Evennements des abonnements
+                </Link>
+                <Link href="/subscriptions/profils">
+                  Profils des abonnements
+                </Link>
               </nav>
             </div>
             <div className="flex flex-col gap-4">
