@@ -1,4 +1,4 @@
-import { Xmark, NavArrowRight } from "iconoir-react";
+import { Xmark, NavArrowRight, User } from "iconoir-react";
 import Link from "next/link";
 import ModalBg from "./modal-bg";
 import ReactFocusLock from "react-focus-lock";
@@ -59,16 +59,10 @@ export default function MenuModal({ isOpen, setIsOpen }) {
             </Link>
           </nav>
         </div>
-        <div className="flex items-center justify-center gap-4 h-16 w-full">
-          <Link href="/register" className="secondary-btn" onClick={setIsOpen}>
-            <span>S'inscrire</span>
-            <NavArrowRight />
-          </Link>
-          <Link href="/login" className="primary-btn" onClick={setIsOpen}>
-            <span>Se connecter</span>
-            <NavArrowRight />
-          </Link>
-        </div>
+        <Link href="/login" className="primary-form-btn">
+          <span>Se connecter</span>
+          <User />
+        </Link>
       </ReactFocusLock>
       <ModalBg isOpen={isOpen} setIsOpen={setIsOpen} />
     </>

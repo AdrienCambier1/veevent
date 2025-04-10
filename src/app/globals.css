@@ -167,7 +167,11 @@ p {
 }
 
 .primary-form-btn {
-  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 disabled:opacity-50 transition p-3 rounded-xl w-full;
+  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 disabled:opacity-50 transition p-3 rounded-xl w-full flex items-center justify-center gap-2;
+}
+
+.primary-form-btn svg {
+  @apply h-6 w-6;
 }
 
 .rounded-form-btn,
@@ -293,7 +297,7 @@ textarea {
 }
 
 .menu-modal {
-  @apply bg-white h-full w-full max-w-[640px] fixed px-8 lg:px-36 left-0 top-0 z-40 flex flex-col justify-between;
+  @apply bg-white h-full w-full max-w-[30rem] fixed p-8 pt-0 lg:px-36 left-0 top-0 z-40 flex flex-col justify-between;
 }
 
 .modal-bg {

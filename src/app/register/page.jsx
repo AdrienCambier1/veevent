@@ -10,7 +10,6 @@ import {
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
 import { ArrowLeft } from "iconoir-react";
-import CustomDateInput from "@/components/custom-date-input";
 import StepIndicator from "@/components/step-indicator";
 import ThemeButton from "@/components/theme-btn";
 import { useRouter } from "next/navigation";
@@ -128,9 +127,7 @@ export default function RegisterPage() {
 
   const handleThemeToggle = (theme) => {
     setFormData((prev) => {
-      const themeExists = prev.interests.includes(theme);
-
-      if (themeExists) {
+      if (prev.interests.includes(theme)) {
         return {
           ...prev,
           interests: prev.interests.filter((item) => item !== theme),
@@ -230,10 +227,12 @@ export default function RegisterPage() {
             </div>
             <div className="flex flex-col gap-2">
               <label>Date de naissance</label>
-              <CustomDateInput
+              <input
+                type="text"
                 name="birthDate"
                 value={formData.birthDate}
                 onChange={handleChange}
+                placeholder="jj/mm/aaaa"
               />
             </div>
           </>

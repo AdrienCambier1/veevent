@@ -29,6 +29,7 @@ export default function ThemeButton({
 
   return (
     <button
+      type="button"
       className={`${isSelected && "!bg-[var(--primary-blue)]"} theme-btn group`}
       onClick={onClick}
     >
