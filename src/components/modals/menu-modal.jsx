@@ -43,13 +43,9 @@ export default function MenuModal({ isOpen, setIsOpen }) {
               <Xmark className="hamburger-menu" />
             </button>
           </div>
-          <nav className="flex flex-col gap-4">
+          <nav>
             <h4>Pages</h4>
-            <Link
-              href="/activities"
-              onClick={setIsOpen}
-              className="text-[var(--dark-gray)]"
-            >
+            <Link href="/activities" onClick={setIsOpen}>
               Activités
             </Link>
             <div>
@@ -60,18 +56,10 @@ export default function MenuModal({ isOpen, setIsOpen }) {
                 Organisateurs
               </Link>
             </div>
-            <Link
-              href="/cities"
-              onClick={setIsOpen}
-              className="text-[var(--dark-gray)]"
-            >
+            <Link href="/cities" onClick={setIsOpen}>
               Les villes
             </Link>
-            <Link
-              href="/saved"
-              onClick={setIsOpen}
-              className="text-[var(--dark-gray)]"
-            >
+            <Link href="/saved" onClick={setIsOpen}>
               Enregistrés
             </Link>
             <div>
@@ -82,11 +70,7 @@ export default function MenuModal({ isOpen, setIsOpen }) {
                 Mes favoris
               </Link>
             </div>
-            <Link
-              href="/subscriptions"
-              onClick={setIsOpen}
-              className="text-[var(--dark-gray)]"
-            >
+            <Link href="/subscriptions" onClick={setIsOpen}>
               Abonnements
             </Link>
             <div>

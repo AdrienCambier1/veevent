@@ -49,7 +49,7 @@ export default function Footer() {
           <div className="grid grid-cols-2 gap-8">
             <div className="flex flex-col gap-4">
               <h4>Ressources</h4>
-              <nav className="flex flex-wrap gap-4 ">
+              <nav>
                 <Link href="/activities/events">Rechercher un événement</Link>
                 <Link href="/activities/organisers">
                   Rechercher un organisateur
