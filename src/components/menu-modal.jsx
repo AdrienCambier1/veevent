@@ -18,7 +18,7 @@ export default function MenuModal({ isOpen, setIsOpen }) {
         } menu-modal lg:hidden`}
       >
         <div className="flex flex-col gap-8">
-          <div className="h-16 w-full flex items-center gap-8">
+          <div className="w-full flex gap-8 justify-between items-center h-16">
             <Link
               href="/"
               className="logo"
