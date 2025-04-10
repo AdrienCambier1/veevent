@@ -10,8 +10,16 @@ import {
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
 import { ArrowLeft } from "iconoir-react";
+import CustomDateInput from "@/components/custom-date-input";
+import StepIndicator from "@/components/step-indicator";
+import ThemeButton from "@/components/theme-btn";
+import { useRouter } from "next/navigation";
+import { Eye, EyeClosed } from "iconoir-react";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -51,6 +59,7 @@ export default function RegisterPage() {
           formData.birthDate !== ""
         );
       case 3:
+        return formData.interests.length > 0;
       default:
         return false;
     }
@@ -83,25 +92,56 @@ export default function RegisterPage() {
     }
   };
 
-  const isSubmitStepOneDisabled =
-    !formData.email ||
-    !formData.username ||
-    !formData.password ||
-    !isPasswordValid;
-
-  const handleStepOne = (e) => {
-    e.preventDefault();
-
-    if (!isSubmitStepOneDisabled) setStep(step + 1);
-  };
-
   const handlePreviousStep = () => {
     setStep(step - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log("Inscription avec:", formData);
+
+    if (!isStepValid()) return;
+
+    if (step < 3) {
+      handleNextStep();
+    } else {
+      router.push("/");
+    }
+  };
+
+  const steps = [
+    {
+      value: 1,
+      onClick: () => setStep(1),
+      disabled: false,
+    },
+    {
+      value: 2,
+      onClick: () => setStep(2),
+      disabled: step === 1 && !isStepValid(),
+    },
+    {
+      value: 3,
+      onClick: () => setStep(3),
+      disabled: step < 2 || (step === 2 && !isStepValid()),
+    },
+  ];
+
+  const handleThemeToggle = (theme) => {
+    setFormData((prev) => {
+      const themeExists = prev.interests.includes(theme);
+
+      if (themeExists) {
+        return {
+          ...prev,
+          interests: prev.interests.filter((item) => item !== theme),
+        };
+      } else {
+        return {
+          ...prev,
+          interests: [...prev.interests, theme],
+        };
+      }
+    });
   };
 
   const renderStep = () => {
@@ -112,7 +152,7 @@ export default function RegisterPage() {
             <div className="flex flex-col gap-2">
               <label>Email</label>
               <input
-                type="email"
+                type="text"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -131,14 +171,22 @@ export default function RegisterPage() {
             </div>
             <div className="flex flex-col gap-2">
               <label>Mot de passe</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="****"
-              />
-
+              <div className="relative">
+                <input
+                  type={`${showPassword ? "text" : "password"}`}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="****"
+                />
+                <div className="input-icon">
+                  {showPassword ? (
+                    <Eye onClick={() => setShowPassword(!showPassword)} />
+                  ) : (
+                    <EyeClosed onClick={() => setShowPassword(!showPassword)} />
+                  )}
+                </div>
+              </div>
               {formData.password && (
                 <p
                   className={
@@ -149,7 +197,7 @@ export default function RegisterPage() {
                 >
                   {isPasswordValid
                     ? "Mot de passe valide"
-                    : "Utilisez des majuscules, chiffres et caractères spéciaux."}
+                    : "Votre mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial."}
                 </p>
               )}
             </div>
@@ -182,8 +230,7 @@ export default function RegisterPage() {
             </div>
             <div className="flex flex-col gap-2">
               <label>Date de naissance</label>
-              <input
-                type="date"
+              <CustomDateInput
                 name="birthDate"
                 value={formData.birthDate}
                 onChange={handleChange}
@@ -192,8 +239,18 @@ export default function RegisterPage() {
           </>
         );
       case 3:
+        const availableThemes = ["Musique", "Sport", "Learning"];
+
         return (
           <>
+            {availableThemes.map((theme) => (
+              <ThemeButton
+                key={theme}
+                theme={theme}
+                isSelected={formData.interests.includes(theme)}
+                onClick={() => handleThemeToggle(theme)}
+              />
+            ))}
             <p className="text-center">
               Une fois validé, vous pourrrez modifier vos préférences dans votre
               profil
@@ -209,50 +266,35 @@ export default function RegisterPage() {
     <main>
       <section className="items-center">
         <MainTitle title="S'inscrire" />
-        <p className="text-center">
-          Créez votre compte en quelques étapes simples
-        </p>
+        <StepIndicator currentStep={step} steps={steps} />
       </section>
       <section className="container flex items-center">
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form onSubmit={handleFormSubmit}>
           {renderStep()}
 
-          {step < 3 ? (
-            step === 1 ? (
-              <div className="flex flex-col gap-2">
-                <button
-                  type="button"
-                  onClick={handleNextStep}
-                  disabled={!isStepValid()}
-                  className="primary-form-btn"
-                >
-                  Continuer
-                </button>
-                <p className="text-center w-fit">
-                  Déjà un compte ?{" "}
-                  <Link href="/login" className="blue-text underline">
-                    Se connecter
-                  </Link>
-                </p>
-              </div>
-            ) : (
+          {step === 1 ? (
+            <div className="flex flex-col gap-2">
               <button
                 type="submit"
-                onClick={handleNextStep}
                 disabled={!isStepValid()}
                 className="primary-form-btn"
               >
                 Continuer
               </button>
-            )
+              <p className="text-center w-fit">
+                Déjà un compte ?{" "}
+                <Link href="/login" className="blue-text underline">
+                  Se connecter
+                </Link>
+              </p>
+            </div>
           ) : (
             <button
               type="submit"
-              onClick={handleSubmit}
               disabled={!isStepValid()}
               className="primary-form-btn"
             >
-              S'inscrire
+              {step < 3 ? "Continuer" : "S'inscrire"}
             </button>
           )}
 

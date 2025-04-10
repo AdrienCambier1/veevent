@@ -139,7 +139,7 @@ p {
 .primary-btn,
 .secondary-btn,
 .blue-rounded-btn {
-  @apply flex items-center justify-center gap-1 rounded-full transition w-fit h-fit overflow-hidden;
+  @apply flex items-center justify-center gap-2 rounded-full transition w-fit h-fit overflow-hidden;
 }
 
 .primary-btn span,
@@ -155,7 +155,7 @@ p {
 }
 
 .primary-btn {
-  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 py-0.5 px-4;
+  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 py-1 px-4;
 }
 
 .secondary-btn {
@@ -163,7 +163,7 @@ p {
 }
 
 .blue-rounded-btn {
-  @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)] py-0.5 px-4 hover:opacity-75;
+  @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)] py-1 px-4 hover:opacity-75;
 }
 
 .primary-form-btn {
@@ -176,7 +176,7 @@ p {
 }
 
 .rounded-form-btn {
-  @apply bg-white dark-shadow text-[var(--secondary-blue)];
+  @apply bg-white dark-shadow text-[var(--primary-blue)];
 }
 
 .back-form-btn {
@@ -188,11 +188,19 @@ p {
   @apply h-6 w-6;
 }
 
+.theme-btn {
+  @apply white-card p-3 flex items-center justify-between border-2 border-transparent hover:border-[var(--primary-blue)] transition;
+}
+
+.theme-btn svg {
+  @apply text-[var(--primary-blue)] h-6 w-6 transition;
+}
+
 /* Tags */
 
 .blue-tag,
 .green-tag {
-  @apply py-0.5 px-4 rounded-full flex items-center justify-center gap-1 w-fit h-fit overflow-hidden;
+  @apply py-1 px-4 rounded-full flex items-center justify-center gap-2 w-fit h-fit overflow-hidden;
 }
 
 .blue-tag svg,
@@ -217,7 +225,15 @@ p {
 
 input,
 textarea {
-  @apply placeholder:text-[var(--light-gray)] text-[var(--dark-gray)] bg-white border-[var(--primary-border-col)] border rounded-xl p-3 w-full focus:outline-none;
+  @apply placeholder:text-[var(--light-gray)] text-[var(--dark-gray)] bg-white border-[var(--primary-border-col)] border rounded-xl p-3 focus:outline-none w-full;
+}
+
+.input-icon {
+  @apply absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-[var(--dark-gray)] bg-white;
+}
+
+.input-icon svg {
+  @apply h-6 w-6 hover:opacity-75 transition;
 }
 
 /* Shadow */
@@ -254,7 +270,7 @@ textarea {
 }
 
 .theme-card {
-  @apply bg-white dark-shadow rounded-xl p-12 w-full hover:bg-[var(--primary-blue)];
+  @apply bg-white dark-shadow rounded-xl p-12 w-full hover:bg-[var(--primary-blue)] transition;
 }
 
 .theme-card p {
@@ -262,7 +278,7 @@ textarea {
 }
 
 .theme-card svg {
-  @apply text-[var(--primary-blue)] h-8 w-8;
+  @apply text-[var(--primary-blue)] h-8 w-8 transition;
 }
 
 .white-card {
