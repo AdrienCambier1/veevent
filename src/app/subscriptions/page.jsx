@@ -1,10 +1,10 @@
 "use client";
-import MainTitle from "@/components/main-title";
-import CustomTitle from "@/components/custom-title";
-import DropdownButton from "@/components/dropdown-button";
-import EventCard from "@/components/event-card";
+import MainTitle from "@/components/titles/main-title";
+import CustomTitle from "@/components/titles/custom-title";
+import DropdownButton from "@/components/buttons/dropdown-button";
+import EventCard from "@/components/cards/event-card";
 import { useState } from "react";
-import MultiDropdownButton from "@/components/multi-dropdown-button";
+import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
 
 export default function SubscriptionsPage() {
   const [sortOption, setSortOption] = useState("recent");

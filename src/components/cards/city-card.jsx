@@ -3,20 +3,26 @@ import Image from "next/image";
 import niceImage from "@/assets/images/nice.jpg";
 import { ArrowUpRightCircleSolid } from "iconoir-react";
 
-export default function CityCard() {
+export default function CityCard({ city, events, changeCity }) {
   return (
-    <Link href="/" className="city-card">
+    <Link
+      href="/activities/events"
+      className="city-card group"
+      onClick={changeCity}
+    >
       <Image src={niceImage} alt="City image" fill className="object-cover" />
 
       <div className="p-4 h-full w-full flex flex-col gap-24 z-10">
         <div className="flex justify-between items-center">
-          <p>8 événéments</p>
-          <p className="!font-extrabold">Paris</p>
+          <p>{events} événements</p>
+          <p className="!font-extrabold">{city}</p>
         </div>
 
         <div className="flex items-end gap-8">
-          <p className="!text-xl flex-1">Découvrez les événements de Paris</p>
-          <ArrowUpRightCircleSolid />
+          <p className="!text-xl flex-1 text-start">
+            Découvrez les événements de {city}
+          </p>
+          <ArrowUpRightCircleSolid className="group-hover:-translate-y-1 transition" />
         </div>
       </div>
 

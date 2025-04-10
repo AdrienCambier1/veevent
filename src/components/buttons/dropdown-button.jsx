@@ -60,8 +60,8 @@ export default function DropdownButton({
           <button
             key={index}
             className={`dropdown-child ${
-              selectedValue === option.value ? "text-[var(--primary-blue)]" : ""
-            } hover:bg-[rgba(var(--primary-blue-rgb),0.1)]`}
+              selectedValue === option.value && "!text-[var(--primary-blue)]"
+            }`}
             onClick={() => handleSelect(option)}
           >
             <span>{option.label}</span>

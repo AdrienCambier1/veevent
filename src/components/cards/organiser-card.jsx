@@ -1,6 +1,6 @@
 import profilPicture from "@/assets/images/profil-pic.jpg";
 import Image from "next/image";
-import RatingStar from "./rating-stars";
+import RatingStar from "../rating-stars";
 import Link from "next/link";
 import { NavArrowRight } from "iconoir-react";
 
@@ -17,11 +17,11 @@ export default function OrganiserCard({
       <Image
         src={profilPicture}
         alt="Profil picture"
-        className="rounded-full object-cover w-20 h-20"
+        className="profil-pic-xl"
       />
       <div className="flex flex-col gap-4 w-full">
         <h3 className="text-[var(--secondary-blue)]">{name}</h3>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col">
           <p className="blue-text">{id}</p>
           <RatingStar note={note} />
         </div>

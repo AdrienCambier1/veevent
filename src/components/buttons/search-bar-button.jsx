@@ -67,7 +67,7 @@ export default function SearchBarButton() {
   return (
     <Link
       href="/"
-      className="max-w-[30rem] w-full flex items-center gap-6 bg-white p-4 rounded-full blue-shadow hover:opacity-75 transition-all ease-in-out"
+      className="max-w-[30rem] w-full flex items-center gap-6 bg-white p-4 rounded-full blue-shadow hover:scale-105 transition"
     >
       <Search className="text-[var(--primary-blue)] h-6 w-6" />
       <div className="flex">

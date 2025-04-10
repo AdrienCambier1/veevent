@@ -1,4 +1,4 @@
-import MainTitle from "@/components/main-title";
+import MainTitle from "@/components/titles/main-title";
 import Link from "next/link";
 import { ArrowLeft } from "iconoir-react";
 import Image from "next/image";

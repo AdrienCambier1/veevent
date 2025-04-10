@@ -1,12 +1,14 @@
 "use client";
-import MainTitle from "@/components/main-title";
-import CustomTitle from "@/components/custom-title";
-import DropdownButton from "@/components/dropdown-button";
-import CityCard from "@/components/city-card";
+import MainTitle from "@/components/titles/main-title";
+import CustomTitle from "@/components/titles/custom-title";
+import DropdownButton from "@/components/buttons/dropdown-button";
+import CityCard from "@/components/cards/city-card";
 import { useState } from "react";
+import { useCity } from "@/contexts/city-context";
 
 export default function CitiesPage() {
   const [sortOption, setSortOption] = useState("events");
+  const { cities, changeCity } = useCity();
 
   const sortOptions = [
     { label: "Plus d'événements", value: "events" },
@@ -40,10 +42,14 @@ export default function CitiesPage() {
           </div>
         </div>
         <div className="cards-grid">
-          <CityCard />
-          <CityCard />
-          <CityCard />
-          <CityCard />
+          {cities.map((city, index) => (
+            <CityCard
+              key={index}
+              city={city.name}
+              changeCity={() => changeCity(city)}
+              events={city.events}
+            />
+          ))}
         </div>
       </section>
     </main>

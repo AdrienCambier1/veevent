@@ -1,9 +1,9 @@
 "use client";
-import CustomTitle from "@/components/custom-title";
-import EventCard from "@/components/event-card";
-import DropdownButton from "@/components/dropdown-button";
+import CustomTitle from "@/components/titles/custom-title";
+import EventCard from "@/components/cards/event-card";
+import DropdownButton from "@/components/buttons/dropdown-button";
 import { useState } from "react";
-import MultiDropdownButton from "@/components/multi-dropdown-button";
+import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
 
 export default function InscriptionsPage() {
   const [sortOption, setSortOption] = useState("recent");

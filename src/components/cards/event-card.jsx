@@ -1,7 +1,7 @@
 import { Bookmark } from "iconoir-react";
 import profilPicture from "@/assets/images/profil-pic.jpg";
-import RatingStar from "./rating-stars";
-import ThemeTag from "./theme-tag";
+import RatingStar from "../rating-stars";
+import ThemeTag from "../theme-tag";
 import Image from "next/image";
 import niceImage from "@/assets/images/nice.jpg";
 
@@ -24,7 +24,7 @@ export default function EventCard() {
           <Image
             src={profilPicture}
             alt="Profil picture"
-            className="rounded-full object-cover w-12 h-12"
+            className="profil-pic-md"
           />
           <div className="flex flex-col">
             <p className="dark-text">Jean Claude</p>

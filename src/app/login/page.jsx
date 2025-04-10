@@ -1,5 +1,5 @@
 "use client";
-import MainTitle from "@/components/main-title";
+import MainTitle from "@/components/titles/main-title";
 import Link from "next/link";
 import OrSplitter from "@/components/or-splitter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,8 +11,10 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeClosed } from "iconoir-react";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function LoginPage() {
+  const { login } = useAuth();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -31,6 +33,7 @@ export default function LoginPage() {
 
     if (formData.email && formData.password) {
       router.push("/");
+      login();
     }
   };
 

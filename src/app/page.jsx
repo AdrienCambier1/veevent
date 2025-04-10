@@ -1,11 +1,12 @@
 "use client";
-import SearchBarButton from "@/components/search-bar-button";
-import CustomTitle from "@/components/custom-title";
-import CityCard from "@/components/city-card";
+import SearchBarButton from "@/components/buttons/search-bar-button";
+import CustomTitle from "@/components/titles/custom-title";
+import CityCard from "@/components/cards/city-card";
 import { NavArrowRight } from "iconoir-react";
-import ThemeCard from "@/components/theme-card";
-import EventCard from "@/components/event-card";
-import MainTitle from "@/components/main-title";
+import ThemeCard from "@/components/cards/theme-card";
+import EventCard from "@/components/cards/event-card";
+import MainTitle from "@/components/titles/main-title";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -22,22 +23,24 @@ export default function Home() {
       <section className="container">
         <CustomTitle title="Les villes tendances" description="Villes" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <CityCard />
-          <CityCard />
-          <CityCard />
-          <CityCard />
+          <CityCard city="Paris" events={8} />
+          <CityCard city="Nice" events={10} />
+          <CityCard city="Toulouse" events={5} />
         </div>
-        <button className="blue-rounded-btn">
+        <Link href="/cities" className="blue-rounded-btn">
           <span>Voir plus</span>
           <NavArrowRight />
-        </button>
+        </Link>
       </section>
       <section className="container">
         <CustomTitle title="Envie d'une sortie" description="Thèmes" />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <ThemeCard />
-          <ThemeCard />
-          <ThemeCard />
+          <ThemeCard theme="sport" href="/activities/events?theme=sport" />
+          <ThemeCard theme="musique" href="/activities/events?theme=musique" />
+          <ThemeCard
+            theme="learning"
+            href="/activities/events?theme=learning"
+          />
           <ThemeCard />
         </div>
       </section>
@@ -60,10 +63,10 @@ export default function Home() {
           <EventCard />
           <EventCard />
         </div>
-        <button className="blue-rounded-btn">
+        <Link href="/activities/events" className="blue-rounded-btn">
           <span>Voir plus</span>
           <NavArrowRight />
-        </button>
+        </Link>
       </section>
     </main>
   );

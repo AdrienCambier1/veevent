@@ -1,8 +1,14 @@
-import { Xmark, NavArrowRight, User } from "iconoir-react";
+import { Xmark, User } from "iconoir-react";
 import Link from "next/link";
 import ModalBg from "./modal-bg";
 import ReactFocusLock from "react-focus-lock";
+import { useAuth } from "@/contexts/auth-context";
+import ProfilBtn from "../buttons/profil-btn";
+import CityBtn from "../buttons/city-btn";
+
 export default function MenuModal({ isOpen, setIsOpen }) {
+  const { isAuthenticated } = useAuth();
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -59,10 +65,17 @@ export default function MenuModal({ isOpen, setIsOpen }) {
             </Link>
           </nav>
         </div>
-        <Link href="/login" className="primary-form-btn" onClick={setIsOpen}>
-          <span>Se connecter</span>
-          <User />
-        </Link>
+        {!isAuthenticated ? (
+          <Link href="/login" className="primary-form-btn" onClick={setIsOpen}>
+            <span>Se connecter</span>
+            <User />
+          </Link>
+        ) : (
+          <div className="flex items-center justify-end gap-4">
+            <CityBtn reverse={true} onClick={setIsOpen} />
+            <ProfilBtn reverse={true} onClick={setIsOpen} />
+          </div>
+        )}
       </ReactFocusLock>
       <ModalBg isOpen={isOpen} setIsOpen={setIsOpen} />
     </>

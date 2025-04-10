@@ -1,11 +1,14 @@
 "use client";
 import Link from "next/link";
-import { NavArrowRight } from "iconoir-react";
-import { MenuScale } from "iconoir-react";
-import MenuModal from "./menu-modal";
+import { NavArrowRight, MenuScale } from "iconoir-react";
+import MenuModal from "./modals/menu-modal";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/auth-context";
+import ProfilBtn from "./buttons/profil-btn";
+import CityBtn from "./buttons/city-btn";
 
 export default function Header() {
+  const { isAuthenticated } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -59,14 +62,23 @@ export default function Header() {
             <Link href="/subscriptions">Abonnements</Link>
           </nav>
           <div className="hidden lg:flex items-center gap-4">
-            <Link href="/register" className="secondary-btn">
-              <span>S'inscrire</span>
-              <NavArrowRight />
-            </Link>
-            <Link href="/login" className="primary-btn">
-              <span>Se connecter</span>
-              <NavArrowRight />
-            </Link>
+            {!isAuthenticated ? (
+              <>
+                <Link href="/register" className="secondary-btn">
+                  <span>S'inscrire</span>
+                  <NavArrowRight />
+                </Link>
+                <Link href="/login" className="primary-btn">
+                  <span>Se connecter</span>
+                  <NavArrowRight />
+                </Link>
+              </>
+            ) : (
+              <>
+                <CityBtn />
+                <ProfilBtn />
+              </>
+            )}
           </div>
         </div>
       </header>

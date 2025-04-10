@@ -2,14 +2,20 @@
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import { AuthProvider } from "@/contexts/auth-context";
+import { CityProvider } from "@/contexts/city-context";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <body>
-        <Header />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <CityProvider>
+            <Header />
+            {children}
+            <Footer />
+          </CityProvider>
+        </AuthProvider>
       </body>
     </html>
   );

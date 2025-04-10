@@ -1,4 +1,4 @@
-import MainTitle from "@/components/main-title";
+import MainTitle from "@/components/titles/main-title";
 import CustomNav from "@/components/custom-nav";
 
 export default function SavedLayout({ children }) {

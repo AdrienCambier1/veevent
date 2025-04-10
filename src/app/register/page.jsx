@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import MainTitle from "@/components/main-title";
+import MainTitle from "@/components/titles/main-title";
 import Link from "next/link";
 import OrSplitter from "@/components/or-splitter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { ArrowLeft } from "iconoir-react";
 import StepIndicator from "@/components/step-indicator";
-import ThemeButton from "@/components/theme-btn";
+import ThemeButton from "@/components/buttons/theme-btn";
 import { useRouter } from "next/navigation";
 import { Eye, EyeClosed } from "iconoir-react";
 

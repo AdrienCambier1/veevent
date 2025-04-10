@@ -1,11 +1,13 @@
 "use client";
-import CustomTitle from "@/components/custom-title";
-import EventCard from "@/components/event-card";
-import DropdownButton from "@/components/dropdown-button";
-import { useState } from "react";
-import MultiDropdownButton from "@/components/multi-dropdown-button";
+import CustomTitle from "@/components/titles/custom-title";
+import EventCard from "@/components/cards/event-card";
+import DropdownButton from "@/components/buttons/dropdown-button";
+import { useState, useEffect } from "react";
+import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
+import { useSearchParams } from "next/navigation";
 
 export default function EventsPage() {
+  const searchParams = useSearchParams();
   const [sortOption, setSortOption] = useState("recent");
   const [selectedFilters, setSelectedFilters] = useState([]);
 
@@ -22,6 +24,18 @@ export default function EventsPage() {
     { label: "Théâtre", value: "theatre" },
     { label: "Arts", value: "arts" },
   ];
+
+  useEffect(() => {
+    const themeParam = searchParams.get("theme");
+    if (themeParam) {
+      const themeExists = filterOptions.some(
+        (option) => option.value === themeParam
+      );
+      if (themeExists && !selectedFilters.includes(themeParam)) {
+        setSelectedFilters([themeParam]);
+      }
+    }
+  }, [searchParams, filterOptions]);
 
   const handleFilterSelect = (option) => {
     setSelectedFilters([...selectedFilters, option.value]);

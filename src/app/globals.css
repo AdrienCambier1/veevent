@@ -82,7 +82,7 @@ section {
 }
 
 .transition {
-  @apply transition-all ease-in-out duration-200;
+  @apply transition-all ease-in-out duration-300;
 }
 
 .container {
@@ -97,8 +97,18 @@ form label {
   @apply dark-text;
 }
 
+/* Images */
+
 .banner {
   @apply dark-shadow rounded-2xl w-full h-[20rem] object-cover;
+}
+
+.profil-pic-xl {
+  @apply h-20 w-20 rounded-full object-cover;
+}
+
+.profil-pic-md {
+  @apply h-12 w-12 rounded-full object-cover;
 }
 
 /* Titles */
@@ -155,7 +165,8 @@ p {
 .primary-btn svg,
 .secondary-btn svg,
 .blue-rounded-btn svg,
-.dropdown-child svg {
+.dropdown-child svg,
+.dropdown-dangerous svg {
   @apply w-4 h-4 flex-shrink-0;
 }
 
@@ -205,12 +216,40 @@ p {
   @apply text-[var(--primary-blue)] h-6 w-6 transition;
 }
 
+.dropdown-parent,
+.dropdown-parent-reverse {
+  @apply min-w-52 z-20 !absolute white-card h-fit p-2 flex flex-col gap-2 transition w-full;
+}
+
 .dropdown-parent {
-  @apply z-20 !absolute white-card h-fit top-full mt-2 p-2 flex flex-col gap-2 transition w-full;
+  @apply top-full mt-2;
+}
+
+.dropdown-parent-reverse {
+  @apply bottom-full mb-2;
+}
+
+.dropdown-child,
+.dropdown-text,
+.dropdown-dangerous {
+  @apply py-1 flex items-center justify-between text-[var(--dark-gray)] gap-4 transition text-nowrap;
 }
 
 .dropdown-child {
-  @apply py-1 px-2 w-full rounded-xl transition flex items-center justify-between;
+  @apply px-3 w-full rounded-xl hover:bg-[rgba(var(--primary-blue-rgb),0.1)];
+}
+
+.dropdown-text {
+  @apply mx-3 box-border border-b border-[var(--secondary-border-col)];
+}
+
+.dropdown-dangerous {
+  @apply px-3 w-full rounded-xl text-[var(--primary-red)] hover:bg-[rgba(var(--primary-red-rgb),0.1)];
+}
+
+.profil-btn::before {
+  @apply absolute bottom-0 right-0 h-4 w-4 bg-[var(--primary-green)] rounded-full border-2 border-white;
+  content: "";
 }
 
 /* Tags */
@@ -321,7 +360,7 @@ textarea,
 }
 
 .menu-modal {
-  @apply bg-white h-full w-full max-w-[30rem] fixed p-8 pt-0 lg:px-36 left-0 top-0 z-40 flex flex-col justify-between;
+  @apply bg-white h-full w-full max-w-[30rem] fixed p-8 pt-0 lg:px-36 left-0 top-0 z-40 flex flex-col justify-between gap-8 overflow-y-auto;
 }
 
 .modal-bg {

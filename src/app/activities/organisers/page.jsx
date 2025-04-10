@@ -1,7 +1,7 @@
 "use client";
-import CustomTitle from "@/components/custom-title";
-import OrganiserCard from "@/components/organiser-card";
-import DropdownButton from "@/components/dropdown-button";
+import CustomTitle from "@/components/titles/custom-title";
+import OrganiserCard from "@/components/cards/organiser-card";
+import DropdownButton from "@/components/buttons/dropdown-button";
 import { useState } from "react";
 
 export default function OrganisersPage() {

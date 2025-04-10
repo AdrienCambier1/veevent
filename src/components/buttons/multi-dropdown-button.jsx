@@ -67,9 +67,8 @@ export default function MultiDropdownButton({
           <button
             key={index}
             className={`dropdown-child ${
-              selectedValues.includes(option.value)
-                ? "text-[var(--primary-green)]"
-                : ""
+              selectedValues.includes(option.value) &&
+              "!text-[var(--primary-green)]"
             } hover:bg-[rgba(var(--primary-green-rgb),0.1)]`}
             onClick={() => handleSelect(option)}
           >
