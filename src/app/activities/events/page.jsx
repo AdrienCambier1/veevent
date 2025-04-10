@@ -1,13 +1,13 @@
 "use client";
-export const dynamic = "force-dynamic";
+import { Suspense } from "react";
 import CustomTitle from "@/components/titles/custom-title";
 import EventCard from "@/components/cards/event-card";
 import DropdownButton from "@/components/buttons/dropdown-button";
 import { useState, useEffect } from "react";
 import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
-import { useSearchParams } from "next/navigation";
 
-export default function EventsPage() {
+function EventsContent() {
+  const { useSearchParams } = require("next/navigation");
   const searchParams = useSearchParams();
   const [sortOption, setSortOption] = useState("recent");
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -36,7 +36,7 @@ export default function EventsPage() {
         setSelectedFilters([themeParam]);
       }
     }
-  }, [searchParams, filterOptions]);
+  }, [searchParams, filterOptions, selectedFilters]);
 
   const handleFilterSelect = (option) => {
     setSelectedFilters([...selectedFilters, option.value]);
@@ -47,37 +47,40 @@ export default function EventsPage() {
   };
 
   return (
-    <>
-      <section className="page-grid">
-        <div className="flex flex-col gap-6">
-          <CustomTitle
-            title="Rechercher un événement"
-            description="Evenements"
+    <section className="page-grid">
+      <div className="flex flex-col gap-6">
+        <CustomTitle title="Rechercher un événement" description="Evenements" />
+        <div className="flex flex-col gap-4">
+          <input type="text" placeholder="Mot clé" />
+          <MultiDropdownButton
+            options={filterOptions}
+            selectedValues={selectedFilters}
+            label="Filtre par catégorie :"
+            onSelect={handleFilterSelect}
+            onRemove={handleFilterRemove}
           />
-          <div className="flex flex-col gap-4">
-            <input type="text" placeholder="Mot clé" />
-            <MultiDropdownButton
-              options={filterOptions}
-              selectedValues={selectedFilters}
-              label="Filtre par catégorie :"
-              onSelect={handleFilterSelect}
-              onRemove={handleFilterRemove}
-            />
-            <DropdownButton
-              options={sortOptions}
-              selectedValue={sortOption}
-              label="Trier par :"
-              onSelect={(option) => setSortOption(option.value)}
-            />
-          </div>
+          <DropdownButton
+            options={sortOptions}
+            selectedValue={sortOption}
+            label="Trier par :"
+            onSelect={(option) => setSortOption(option.value)}
+          />
         </div>
-        <div className="cards-grid">
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-        </div>
-      </section>
-    </>
+      </div>
+      <div className="cards-grid">
+        <EventCard />
+        <EventCard />
+        <EventCard />
+        <EventCard />
+      </div>
+    </section>
+  );
+}
+
+export default function EventsPage() {
+  return (
+    <Suspense fallback={<> </>}>
+      <EventsContent />
+    </Suspense>
   );
 }
