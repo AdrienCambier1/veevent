@@ -1,6 +1,8 @@
 import Image from "next/image";
 import nice4k from "@/assets/images/nice4k.jpg";
 import ProfilCard from "@/components/cards/profil-card";
+import Link from "next/link";
+import ProfilHeader from "@/components/profil-header";
 
 export default function AccountLayout({ children }) {
   return (

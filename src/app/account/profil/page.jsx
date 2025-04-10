@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function ProfilPage() {
-  return <div></div>;
+  redirect("/account/profil/events");
 }

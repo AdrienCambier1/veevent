@@ -55,7 +55,7 @@ export default function ProfilBtn({ reverse, onClick }) {
       >
         <p className="dropdown-text">{user?.name || "Utilisateur"}</p>
         <Link
-          href="/account/profil"
+          href="/account/profil/events"
           className="dropdown-child"
           onClick={handleClose}
         >

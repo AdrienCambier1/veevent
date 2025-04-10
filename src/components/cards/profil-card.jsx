@@ -12,7 +12,7 @@ export default function ProfilCard({ name, id, note }) {
       />
       <div className="flex flex-col gap-2 overflow-hidden">
         <h2 className="truncate">{name}</h2>
-        <div className="flex gap-2 items-center">
+        <div className="flex flex-col">
           <p className="blue-text">{id}</p>
           <RatingStar note={note} />
         </div>

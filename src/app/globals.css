@@ -97,6 +97,26 @@ form label {
   @apply dark-text;
 }
 
+.profil-header {
+  @apply container md:flex-row justify-between;
+}
+
+.profil-header * {
+  @apply truncate;
+}
+
+.profil-header .heavy {
+  @apply text-[var(--dark-gray)] font-bold text-2xl;
+}
+
+.profil-header > div {
+  @apply flex gap-6;
+}
+
+.profil-header div div {
+  @apply flex flex-col w-fit;
+}
+
 /* Images */
 
 .banner {

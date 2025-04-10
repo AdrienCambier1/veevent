@@ -1,65 +1,12 @@
-"use client";
-import CustomTitle from "@/components/titles/custom-title";
-import EventCard from "@/components/cards/event-card";
-import DropdownButton from "@/components/buttons/dropdown-button";
-import { useState } from "react";
-import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
+import EventList from "@/components/event-list";
 
 export default function MarkedPage() {
-  const [sortOption, setSortOption] = useState("recent");
-  const [selectedFilters, setSelectedFilters] = useState([]);
-
-  const sortOptions = [
-    { label: "Plus récent", value: "recent" },
-    { label: "Plus ancien", value: "ancien" },
-    { label: "Plus populaire", value: "populaire" },
-  ];
-
-  const filterOptions = [
-    { label: "Musique", value: "musique" },
-    { label: "Sport", value: "sport" },
-    { label: "Cinéma", value: "cinema" },
-    { label: "Théâtre", value: "theatre" },
-    { label: "Arts", value: "arts" },
-  ];
-
-  const handleFilterSelect = (option) => {
-    setSelectedFilters([...selectedFilters, option.value]);
-  };
-
-  const handleFilterRemove = (value) => {
-    setSelectedFilters(selectedFilters.filter((filter) => filter !== value));
-  };
-
   return (
-    <>
-      <section className="page-grid">
-        <div className="flex flex-col gap-6">
-          <CustomTitle title="Consulter mes favoris" description="Evenements" />
-          <div className="flex flex-col gap-4">
-            <input type="text" placeholder="Mot clé" />
-            <MultiDropdownButton
-              options={filterOptions}
-              selectedValues={selectedFilters}
-              label="Filtre par catégorie :"
-              onSelect={handleFilterSelect}
-              onRemove={handleFilterRemove}
-            />
-            <DropdownButton
-              options={sortOptions}
-              selectedValue={sortOption}
-              label="Trier par :"
-              onSelect={(option) => setSortOption(option.value)}
-            />
-          </div>
-        </div>
-        <div className="cards-grid">
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-        </div>
-      </section>
-    </>
+    <EventList
+      title="Consulter mes favoris"
+      description="Evenements"
+      showFilters={true}
+      showSort={true}
+    />
   );
 }

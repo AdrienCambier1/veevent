@@ -1,13 +1,12 @@
+"use client";
 import EventList from "@/components/event-list";
 
 export default function EventsPage() {
   return (
     <EventList
-      title="Rechercher un événement"
+      title="Rechercher mes événements"
       description="Evenements"
-      showSort={true}
-      showFilters={true}
-      useUrlParams={true}
+      showCreateButton={true}
     />
   );
 }
