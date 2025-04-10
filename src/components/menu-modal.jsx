@@ -59,7 +59,7 @@ export default function MenuModal({ isOpen, setIsOpen }) {
             </Link>
           </nav>
         </div>
-        <Link href="/login" className="primary-form-btn">
+        <Link href="/login" className="primary-form-btn" onClick={setIsOpen}>
           <span>Se connecter</span>
           <User />
         </Link>
