@@ -1,7 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function ActivitiesPage() {
-  return (
-    <div>
-      <h1>Activities</h1>
-    </div>
-  );
+  redirect("/activities/events");
 }

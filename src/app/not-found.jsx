@@ -7,7 +7,7 @@ import notFound from "@/assets/images/not-found.png";
 export default function NotFound() {
   return (
     <main>
-      <section className="items-center">
+      <section className="container items-center">
         <MainTitle title="Page 404" />
         <p className="text-center">Oops! Cette page n'existe pas.</p>
         <Link href="/" className="primary-btn">

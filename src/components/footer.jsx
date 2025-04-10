@@ -13,6 +13,7 @@ export default function Footer() {
   return (
     <footer>
       <div className="container flex flex-col gap-12">
+        <div className="bg-[var(--primary-blue)] w-full h-[2px]" />
         <div className="flex flex-col gap-8">
           <div className="flex flex-col md:flex-row gap-8 justify-between">
             <Link

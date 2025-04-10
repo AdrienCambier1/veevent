@@ -59,7 +59,7 @@ main {
 }
 
 footer {
-  @apply px-8 bg-white py-8 mt-20;
+  @apply bg-white p-8 pt-0 mt-20 relative;
 }
 
 nav a {
@@ -70,7 +70,7 @@ nav svg {
 }
 
 .logo {
-  @apply text-[var(--primary-blue)] text-3xl font-extrabold italic w-fit;
+  @apply text-[var(--primary-blue)] text-2xl font-extrabold italic w-fit;
 }
 
 .logo span {
@@ -95,6 +95,10 @@ section {
 
 form label {
   @apply dark-text;
+}
+
+.banner {
+  @apply dark-shadow rounded-2xl w-full h-[20rem] object-cover;
 }
 
 /* Titles */
@@ -150,7 +154,8 @@ p {
 
 .primary-btn svg,
 .secondary-btn svg,
-.blue-rounded-btn svg {
+.blue-rounded-btn svg,
+.dropdown-child svg {
   @apply w-4 h-4 flex-shrink-0;
 }
 
@@ -200,6 +205,14 @@ p {
   @apply text-[var(--primary-blue)] h-6 w-6 transition;
 }
 
+.dropdown-parent {
+  @apply z-20 !absolute white-card h-fit top-full mt-2 p-2 flex flex-col gap-2 transition w-full;
+}
+
+.dropdown-child {
+  @apply py-1 px-2 w-full rounded-xl transition flex items-center justify-between;
+}
+
 /* Tags */
 
 .blue-tag,
@@ -228,8 +241,9 @@ p {
 /* Inputs */
 
 input,
-textarea {
-  @apply placeholder:text-[var(--light-gray)] text-[var(--dark-gray)] bg-white border-[var(--primary-border-col)] border rounded-xl p-3 focus:outline-none w-full;
+textarea,
+.input-btn {
+  @apply placeholder:text-[var(--light-gray)] text-[var(--dark-gray)] bg-white border-[var(--primary-border-col)] border rounded-xl p-3 focus:outline-none w-full flex items-center justify-start gap-4;
 }
 
 .input-icon {
@@ -287,6 +301,16 @@ textarea {
 
 .white-card {
   @apply bg-white dark-shadow rounded-xl w-full relative;
+}
+
+/* Grids */
+
+.page-grid {
+  @apply container grid grid-cols-1 lg:grid-cols-3 gap-12;
+}
+
+.cards-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-6 w-full lg:col-span-2;
 }
 
 /* Modals */

@@ -1,7 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function SavedPage() {
-  return (
-    <div>
-      <h1>Saved Page</h1>
-    </div>
-  );
+  redirect("/saved/inscriptions");
 }

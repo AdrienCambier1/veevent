@@ -263,11 +263,11 @@ export default function RegisterPage() {
 
   return (
     <main>
-      <section className="items-center">
+      <section className="container items-center">
         <MainTitle title="S'inscrire" />
         <StepIndicator currentStep={step} steps={steps} />
       </section>
-      <section className="container flex items-center">
+      <section className="container items-center">
         <form onSubmit={handleFormSubmit}>
           {renderStep()}
 

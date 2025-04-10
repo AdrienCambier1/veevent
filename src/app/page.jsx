@@ -10,7 +10,7 @@ import MainTitle from "@/components/main-title";
 export default function Home() {
   return (
     <main>
-      <section className="items-center">
+      <section className="container items-center">
         <MainTitle title="Découvrez nos événements" />
         <p className="text-center">
           Un concert 🎸qui fait vibrer. Un atelier qui inspire.

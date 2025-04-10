@@ -21,7 +21,7 @@ export default function ThemeTag({ theme = [] }) {
   };
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 w-full">
       {theme.map((item, index) => {
         const themeName = typeof item === "string" ? item : item.name;
         return (

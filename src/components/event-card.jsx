@@ -18,7 +18,7 @@ export default function EventCard() {
           <h3 className="text-[var(--secondary-blue)]">
             Atelier fresque végétal
           </h3>
-          <Bookmark className="text-[var(--primary-blue)] h-6 w-6" />
+          <Bookmark className="text-[var(--primary-blue)] h-6 w-6 flex-shrink-0" />
         </div>
         <div className="flex items-center gap-4">
           <Image

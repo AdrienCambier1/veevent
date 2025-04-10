@@ -40,13 +40,13 @@ export default function LoginPage() {
 
   return (
     <main>
-      <section className="items-center">
+      <section className="container items-center">
         <MainTitle title="Se connecter" />
         <p className="text-center">
           Bonjour! Veuillez entrez vos informations afin de vous identifier
         </p>
       </section>
-      <section className="container flex items-center">
+      <section className="container items-center">
         <form onSubmit={handleFormSubmit}>
           <div className="flex flex-col gap-2">
             <label>Email</label>
