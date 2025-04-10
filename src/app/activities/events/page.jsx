@@ -1,9 +1,10 @@
 "use client";
+export const dynamic = "force-dynamic";
 import CustomTitle from "@/components/titles/custom-title";
 import EventCard from "@/components/cards/event-card";
 import DropdownButton from "@/components/buttons/dropdown-button";
 import { useState, useEffect } from "react";
-import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
+import MultiDropdownButton from "@/components/multi-dropdown-button";
 import { useSearchParams } from "next/navigation";
 
 export default function EventsPage() {
