@@ -45,27 +45,58 @@ export default function MenuModal({ isOpen, setIsOpen }) {
           </div>
           <nav className="flex flex-col gap-4">
             <h4>Pages</h4>
-            <Link href="/activities/events" onClick={setIsOpen}>
-              Rechercher un événement
+            <Link
+              href="/activities"
+              onClick={setIsOpen}
+              className="text-[var(--dark-gray)]"
+            >
+              Activités
             </Link>
-            <Link href="/activities/organisers" onClick={setIsOpen}>
-              Rechercher un organisateur
+            <div>
+              <Link href="/activities/events" onClick={setIsOpen}>
+                Evenements
+              </Link>
+              <Link href="/activities/organisers" onClick={setIsOpen}>
+                Organisateurs
+              </Link>
+            </div>
+            <Link
+              href="/cities"
+              onClick={setIsOpen}
+              className="text-[var(--dark-gray)]"
+            >
+              Les villes
             </Link>
-            <Link href="/cities" onClick={setIsOpen}>
-              Les villes événementielles
+            <Link
+              href="/saved"
+              onClick={setIsOpen}
+              className="text-[var(--dark-gray)]"
+            >
+              Enregistrés
             </Link>
-            <Link href="/saved/inscriptions" onClick={setIsOpen}>
-              Consulter mes inscriptions
+            <div>
+              <Link href="/saved/inscriptions" onClick={setIsOpen}>
+                Inscriptions
+              </Link>
+              <Link href="/saved/marked" onClick={setIsOpen}>
+                Mes favoris
+              </Link>
+            </div>
+            <Link
+              href="/subscriptions"
+              onClick={setIsOpen}
+              className="text-[var(--dark-gray)]"
+            >
+              Abonnements
             </Link>
-            <Link href="/saved/marked" onClick={setIsOpen}>
-              Consulter mes favoris
-            </Link>
-            <Link href="/subscriptions/events" onClick={setIsOpen}>
-              Evennements des abonnements
-            </Link>
-            <Link href="/subscriptions/profils" onClick={setIsOpen}>
-              Profils des abonnements
-            </Link>
+            <div>
+              <Link href="/subscriptions/events" onClick={setIsOpen}>
+                Evennements des abonnements
+              </Link>
+              <Link href="/subscriptions/profils" onClick={setIsOpen}>
+                Profils des abonnements
+              </Link>
+            </div>
           </nav>
         </div>
         {!isAuthenticated ? (
