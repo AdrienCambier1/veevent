@@ -29,7 +29,7 @@ export default function Footer() {
               v<span>ee</span>vent
             </Link>
             <div className="flex items-center gap-8">
-              <nav className="flex gap-4">
+              <nav>
                 <Link href="">
                   <Instagram />
                 </Link>
@@ -49,7 +49,7 @@ export default function Footer() {
           <div className="grid grid-cols-2 gap-8">
             <div className="flex flex-col gap-4">
               <h4>Ressources</h4>
-              <nav>
+              <nav className="flex-wrap">
                 <Link href="/activities/events">Rechercher un événement</Link>
                 <Link href="/activities/organisers">
                   Rechercher un organisateur

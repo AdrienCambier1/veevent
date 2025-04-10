@@ -119,7 +119,7 @@ header nav a:hover::before {
 }
 
 footer nav {
-  @apply flex flex-wrap gap-4;
+  @apply flex gap-4;
 }
 
 footer nav a {
