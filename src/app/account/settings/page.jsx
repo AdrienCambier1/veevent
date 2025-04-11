@@ -1,3 +1,11 @@
+import InformationsPage from "./informations/page";
+import PreferencesPage from "./preferences/page";
+
 export default function SettingsPage() {
-  return <></>;
+  return (
+    <>
+      <InformationsPage />
+      <PreferencesPage />
+    </>
+  );
 }

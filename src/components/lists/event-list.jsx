@@ -1,9 +1,8 @@
 "use client";
-import { Suspense } from "react";
 import CustomTitle from "@/components/titles/custom-title";
 import EventCard from "@/components/cards/event-card";
 import DropdownButton from "@/components/buttons/dropdown-button";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
 import { Plus } from "iconoir-react";
 import Link from "next/link";

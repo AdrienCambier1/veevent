@@ -12,11 +12,29 @@ export default function SearchBarModal({ isOpen, setIsOpen }) {
   const router = useRouter();
   const searchDropdownRef = useRef(null);
   const inputRef = useRef(null);
+  const modalRef = useRef(null);
 
   const searchTypes = [
     { label: "Evenements", value: "events" },
     { label: "Organisateurs", value: "organisers" },
   ];
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter" && isOpen && searchTerm.trim()) {
+        e.preventDefault();
+        handleSearch(e);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, searchTerm, searchType]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -75,6 +93,7 @@ export default function SearchBarModal({ isOpen, setIsOpen }) {
   return (
     <>
       <ReactFocusLock
+        ref={modalRef}
         className={`${
           isOpen ? "visible" : "invisible"
         } modal-container !items-start`}
@@ -90,12 +109,6 @@ export default function SearchBarModal({ isOpen, setIsOpen }) {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleSearch(e);
-              }
-            }}
             placeholder={
               searchType === "events"
                 ? "Rechercher un événement"

@@ -219,7 +219,8 @@ p {
 
 .primary-btn span,
 .secondary-btn span,
-.blue-rounded-btn span {
+.blue-rounded-btn span,
+.copy-btn span {
   @apply truncate;
 }
 
@@ -227,8 +228,13 @@ p {
 .secondary-btn svg,
 .blue-rounded-btn svg,
 .dropdown-child svg,
-.dropdown-dangerous svg {
+.dropdown-dangerous svg,
+.copy-btn svg {
   @apply w-4 h-4 flex-shrink-0;
+}
+
+.copy-btn {
+  @apply bg-white dark-shadow px-4 py-1 rounded-xl flex items-center gap-2 hover:opacity-75 transition;
 }
 
 .primary-btn {
@@ -265,8 +271,9 @@ p {
 }
 
 .rounded-form-btn svg,
-.back-form-btn svg {
-  @apply h-6 w-6;
+.back-form-btn svg,
+.nav-btn svg {
+  @apply h-6 w-6 flex-shrink-0;
 }
 
 .theme-btn {
@@ -315,6 +322,18 @@ p {
 
 .search-bar-btn svg {
   @apply text-[var(--primary-blue)] h-6 w-6 flex-shrink-0;
+}
+
+.nav-btn {
+  @apply flex items-center gap-4 hover:bg-white p-2 rounded-xl transition w-full;
+}
+
+.nav-btn:hover {
+  @apply dark-shadow;
+}
+
+.nav-btn > div {
+  @apply flex items-center justify-center p-3 rounded-xl;
 }
 
 /********/
@@ -417,6 +436,18 @@ textarea,
 
 .white-card {
   @apply bg-white dark-shadow rounded-xl w-full relative;
+}
+
+.informations-card {
+  @apply white-card p-4 flex flex-col justify-between gap-4;
+}
+
+.informations-card .img-container {
+  @apply p-4 bg-gradient-to-b from-[rgba(var(--primary-blue-rgb),0.1)] to-transparent rounded-full size-fit;
+}
+
+.informations-card svg {
+  @apply h-6 w-6 text-[var(--primary-blue)] flex-shrink-0;
 }
 
 /*********/

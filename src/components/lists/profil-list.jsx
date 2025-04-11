@@ -2,10 +2,14 @@
 import CustomTitle from "@/components/titles/custom-title";
 import OrganiserCard from "@/components/cards/organiser-card";
 import DropdownButton from "@/components/buttons/dropdown-button";
-import { useState } from "react";
+import { useState, Suspense, useEffect, useRef } from "react";
 
-export default function ProfilList({ title, description }) {
+function ProfilListContent({ title, description }) {
+  const { useSearchParams } = require("next/navigation");
+  const searchParams = useSearchParams();
   const [sortOption, setSortOption] = useState("liked");
+  const [searchTerm, setSearchTerm] = useState("");
+  const initializedRef = useRef(false);
 
   const sortOptions = [
     { label: "Mieux noté", value: "liked" },
@@ -13,12 +17,30 @@ export default function ProfilList({ title, description }) {
     { label: "Plus d'abonnés", value: "subscribers" },
   ];
 
+  useEffect(() => {
+    if (initializedRef.current) return;
+
+    if (searchParams) {
+      const searchParam = searchParams.get("search");
+      if (searchParam) {
+        setSearchTerm(searchParam);
+      }
+    }
+
+    initializedRef.current = true;
+  }, [searchParams]);
+
   return (
     <section className="page-grid">
       <div className="flex flex-col gap-6">
         <CustomTitle title={title} description={description} />
         <div className="flex flex-col gap-4">
-          <input type="text" placeholder="Mot clé" />
+          <input
+            type="text"
+            placeholder="Mot clé"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           <DropdownButton
             options={sortOptions}
             selectedValue={sortOption}
@@ -58,5 +80,13 @@ export default function ProfilList({ title, description }) {
         />
       </div>
     </section>
+  );
+}
+
+export default function ProfilList(props) {
+  return (
+    <Suspense fallback={<></>}>
+      <ProfilListContent {...props} />
+    </Suspense>
   );
 }
