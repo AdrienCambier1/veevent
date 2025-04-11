@@ -51,6 +51,8 @@ export default function SearchBarModal({ isOpen, setIsOpen }) {
         `/activities/organisers?search=${encodeURIComponent(searchTerm)}`
       );
     }
+
+    setIsOpen();
   };
 
   const handleTypeChange = (type) => {
@@ -75,7 +77,7 @@ export default function SearchBarModal({ isOpen, setIsOpen }) {
       <ReactFocusLock
         className={`${
           isOpen ? "visible" : "invisible"
-        } modal-container !items-end`}
+        } modal-container !items-start`}
       >
         <div
           className={`${
