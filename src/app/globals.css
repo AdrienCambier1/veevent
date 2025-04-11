@@ -165,6 +165,32 @@ header nav a {
   @apply h-12 w-12 rounded-full object-cover;
 }
 
+.img-gradient-blue svg,
+.img-gradient-red svg {
+  @apply h-6 w-6 flex-shrink-0;
+}
+
+.img-gradient-blue svg {
+  @apply text-[var(--primary-blue)];
+}
+
+.img-gradient-red svg {
+  @apply text-[var(--primary-red)];
+}
+
+.img-gradient-blue,
+.img-gradient-red {
+  @apply bg-gradient-to-b to-transparent p-4  rounded-full size-fit;
+}
+
+.img-gradient-blue {
+  @apply from-[rgba(var(--primary-blue-rgb),0.1)];
+}
+
+.img-gradient-red {
+  @apply from-[rgba(var(--primary-red-rgb),0.1)];
+}
+
 /**********/
 /* Titles */
 /**********/
@@ -234,11 +260,11 @@ p {
 }
 
 .copy-btn {
-  @apply bg-white dark-shadow px-4 py-1 rounded-xl flex items-center gap-2 hover:opacity-75 transition;
+  @apply bg-white dark-shadow px-4 py-1.5 rounded-xl flex items-center gap-2 hover:opacity-75 transition;
 }
 
 .primary-btn {
-  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 py-1 px-4;
+  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 py-1.5 px-4;
 }
 
 .secondary-btn {
@@ -246,15 +272,24 @@ p {
 }
 
 .blue-rounded-btn {
-  @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)] py-1 px-4 hover:opacity-75;
+  @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)] py-1.5 px-4 hover:opacity-75;
+}
+
+.primary-form-btn,
+.secondary-form-btn {
+  @apply hover:opacity-75 p-3 rounded-xl h-fit w-full transition flex items-center justify-center gap-2;
 }
 
 .primary-form-btn {
-  @apply bg-[var(--primary-blue)] text-white hover:opacity-75 disabled:opacity-50 transition p-3 rounded-xl w-full flex items-center justify-center gap-2;
+  @apply bg-[var(--primary-blue)] text-white disabled:opacity-50;
 }
 
 .primary-form-btn svg {
   @apply h-6 w-6;
+}
+
+.secondary-form-btn {
+  @apply text-[var(--primary-blue)] box-border border border-[var(--primary-blue)];
 }
 
 .rounded-form-btn,
@@ -286,7 +321,7 @@ p {
 
 .dropdown-parent,
 .dropdown-parent-reverse {
-  @apply min-w-52 z-20 !absolute white-card h-fit p-2 flex flex-col gap-2 transition w-full;
+  @apply min-w-52 z-10 !absolute white-card h-fit p-2 flex flex-col gap-2 transition w-full;
 }
 
 .dropdown-parent {
@@ -300,7 +335,7 @@ p {
 .dropdown-child,
 .dropdown-text,
 .dropdown-dangerous {
-  @apply py-1 flex items-center justify-between text-[var(--dark-gray)] gap-4 transition text-nowrap;
+  @apply py-1.5 flex items-center justify-between text-[var(--dark-gray)] gap-4 transition text-nowrap;
 }
 
 .dropdown-child {
@@ -342,7 +377,7 @@ p {
 
 .blue-tag,
 .green-tag {
-  @apply py-1 px-4 rounded-full flex items-center justify-center gap-2 max-w-full w-fit h-fit overflow-hidden;
+  @apply py-1.5 px-4 rounded-full flex items-center justify-center gap-2 max-w-full w-fit h-fit overflow-hidden;
 }
 
 .blue-tag svg,
@@ -442,14 +477,6 @@ textarea,
   @apply white-card p-4 flex flex-col justify-between gap-4;
 }
 
-.informations-card .img-container {
-  @apply p-4 bg-gradient-to-b from-[rgba(var(--primary-blue-rgb),0.1)] to-transparent rounded-full size-fit;
-}
-
-.informations-card svg {
-  @apply h-6 w-6 text-[var(--primary-blue)] flex-shrink-0;
-}
-
 /*********/
 /* Grids */
 /*********/
@@ -480,5 +507,13 @@ textarea,
 }
 
 .modal-container {
-  @apply flex items-center justify-center p-8 fixed inset-0 z-50 pointer-events-none;
+  @apply flex items-center justify-center p-8 fixed inset-0 z-50 pointer-events-none overflow-auto;
+}
+
+.modal-content {
+  @apply bg-white h-fit w-full max-w-[30rem] rounded-2xl p-6 pointer-events-auto flex flex-col items-center gap-8 transition;
+}
+
+.modal-wrapper {
+  @apply min-h-full flex items-center justify-center p-4;
 }

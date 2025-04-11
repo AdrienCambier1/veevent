@@ -8,7 +8,7 @@ export default function InformationsCard({ icon: Icon, title, description }) {
           <h4>{title}</h4>
           <p className="break-words">{description}</p>
         </div>
-        <div className="img-container">{Icon && <Icon />}</div>
+        <div className="img-gradient-blue">{Icon && <Icon />}</div>
       </div>
       <div className="w-full flex justify-end">
         <button className="secondary-btn">

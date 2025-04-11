@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { NavArrowRight, MenuScale } from "iconoir-react";
+import { NavArrowRight, MenuScale, LogOut } from "iconoir-react";
 import MenuModal from "./modals/menu-modal";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/auth-context";

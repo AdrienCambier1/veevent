@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function ModalBg({ isOpen, setIsOpen }) {
+export default function ModalBg({ isOpen, setIsOpen, className }) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflowY = "hidden";
@@ -21,7 +21,7 @@ export default function ModalBg({ isOpen, setIsOpen }) {
     <div
       className={`${
         isOpen ? "visible opacity-100" : "invisible opacity-0"
-      } modal-bg`}
+      } modal-bg ${className}`}
       onClick={setIsOpen}
     />
   );
