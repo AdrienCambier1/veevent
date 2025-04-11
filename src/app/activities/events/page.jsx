@@ -7,7 +7,6 @@ export default function EventsPage() {
       description="Evenements"
       showSort={true}
       showFilters={true}
-      useUrlParams={true}
     />
   );
 }

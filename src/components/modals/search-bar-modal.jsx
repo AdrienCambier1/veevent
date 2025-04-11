@@ -122,7 +122,7 @@ export default function SearchBarModal({ isOpen, setIsOpen }) {
               <div
                 className={`${
                   searchDropdown ? "visible opacity-100" : "invisible opacity-0"
-                } !w-fit right-0 dropdown-parent-reverse`}
+                } !w-fit right-0 dropdown-parent`}
               >
                 {searchTypes.map((type, index) => (
                   <button

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import CustomTitle from "@/components/titles/custom-title";
 import EventCard from "@/components/cards/event-card";
 import DropdownButton from "@/components/buttons/dropdown-button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
 import { Plus } from "iconoir-react";
 import Link from "next/link";
@@ -14,12 +14,13 @@ function EventListContent({
   showSort,
   showFilters,
   showCreateButton,
-  useUrlParams,
 }) {
   const { useSearchParams } = require("next/navigation");
-  const searchParams = useUrlParams ? useSearchParams() : null;
+  const searchParams = useSearchParams();
   const [sortOption, setSortOption] = useState("recent");
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const initializedRef = useRef(false);
 
   const sortOptions = [
     { label: "Plus récent", value: "recent" },
@@ -36,18 +37,27 @@ function EventListContent({
   ];
 
   useEffect(() => {
-    if (useUrlParams && searchParams) {
+    if (initializedRef.current) return;
+
+    if (searchParams) {
       const themeParam = searchParams.get("theme");
       if (themeParam) {
         const themeExists = filterOptions.some(
           (option) => option.value === themeParam
         );
-        if (themeExists && !selectedFilters.includes(themeParam)) {
+        if (themeExists) {
           setSelectedFilters([themeParam]);
         }
       }
+
+      const searchParam = searchParams.get("search");
+      if (searchParam) {
+        setSearchTerm(searchParam);
+      }
     }
-  }, [searchParams, filterOptions, selectedFilters, useUrlParams]);
+
+    initializedRef.current = true;
+  }, [searchParams]);
 
   const handleFilterSelect = (option) => {
     setSelectedFilters([...selectedFilters, option.value]);
@@ -62,7 +72,12 @@ function EventListContent({
       <div className="flex flex-col gap-6">
         <CustomTitle title={title} description={description} />
         <div className="flex flex-col gap-4">
-          <input type="text" placeholder="Mot clé" />
+          <input
+            type="text"
+            placeholder="Mot clé"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           {showFilters && (
             <MultiDropdownButton
               options={filterOptions}
