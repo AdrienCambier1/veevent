@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function ProfilCard({ name, id, note }) {
   return (
-    <div className="bg-white dark-shadow w-full max-w-[500px] absolute -translate-y-1/2 rounded-full h-fit p-4 flex gap-4 items-center">
+    <div className="bg-white dark-shadow w-full max-w-[600px] absolute -translate-y-1/2 rounded-full h-fit p-4 flex gap-4 items-center">
       <Image
         src={profilPicture}
         alt="Profil picture"

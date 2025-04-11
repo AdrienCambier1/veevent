@@ -34,7 +34,7 @@ html {
 }
 
 body {
-  @apply bg-[var(--background)] font-[Syne] font-normal antialiased;
+  @apply bg-[var(--background)] font-[Syne] font-normal text-sm antialiased;
 }
 
 header {
@@ -78,7 +78,7 @@ form label {
 }
 
 .profil-header {
-  @apply container md:flex-row justify-between;
+  @apply container flex-col items-center justify-between;
 }
 
 .profil-header * {
@@ -89,12 +89,8 @@ form label {
   @apply text-[var(--dark-gray)] font-bold text-2xl;
 }
 
-.profil-header > div {
-  @apply flex gap-6;
-}
-
-.profil-header div div {
-  @apply flex flex-col w-fit;
+.profil-header div div div {
+  @apply flex flex-col w-fit items-center md:items-start;
 }
 
 /**************/
@@ -158,7 +154,7 @@ header nav a {
 /**********/
 
 .banner {
-  @apply dark-shadow rounded-2xl w-full h-[20rem] object-cover;
+  @apply dark-shadow rounded-2xl w-full max-h-[20rem] aspect-[16/9] object-cover;
 }
 
 .profil-pic-xl {
@@ -175,7 +171,7 @@ header nav a {
 
 h1,
 h2 {
-  @apply text-[var(--dark-gray)] font-bold text-2xl;
+  @apply text-[var(--dark-gray)] font-bold text-xl;
 }
 
 .custom-title {
@@ -183,13 +179,10 @@ h2 {
 }
 
 .custom-title h2 {
-  @apply text-[var(--dark-gray)] text-2xl;
+  @apply text-[var(--dark-gray)] text-xl;
 }
 
-h3 {
-  @apply text-[var(--dark-gray)] font-bold text-xl;
-}
-
+h3,
 h4 {
   @apply text-[var(--dark-gray)] font-bold text-lg;
 }
@@ -199,15 +192,15 @@ h4 {
 /*********/
 
 p {
-  @apply text-[var(--light-gray)] text-base;
+  @apply text-[var(--light-gray)] text-sm;
 }
 
 .dark-text {
-  @apply text-[var(--dark-gray)] text-base;
+  @apply text-[var(--dark-gray)] text-sm;
 }
 
 .blue-text {
-  @apply text-[var(--primary-blue)] text-base;
+  @apply text-[var(--primary-blue)] text-sm;
 }
 
 .dropdown-text {
