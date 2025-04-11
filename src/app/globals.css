@@ -309,6 +309,14 @@ p {
   content: "";
 }
 
+.search-bar-btn {
+  @apply relative max-w-[30rem] w-full flex items-center gap-6 bg-white p-4 rounded-full blue-shadow transition;
+}
+
+.search-bar-btn svg {
+  @apply text-[var(--primary-blue)] h-6 w-6 flex-shrink-0;
+}
+
 /********/
 /* Tags */
 /********/
@@ -352,6 +360,10 @@ textarea,
 
 .input-icon svg {
   @apply h-6 w-6 hover:opacity-75 transition;
+}
+
+.invisible-input {
+  @apply h-fit border-none outline-none bg-transparent p-0 rounded-none;
 }
 
 /**********/
@@ -433,5 +445,9 @@ textarea,
 }
 
 .modal-bg {
-  @apply inset-0 fixed bg-black/50 z-30 backdrop-blur-[2px];
+  @apply inset-0 fixed bg-black/50 z-30 backdrop-blur-[2px] cursor-pointer;
+}
+
+.modal-container {
+  @apply flex items-center justify-center p-8 fixed inset-0 z-50 pointer-events-none;
 }

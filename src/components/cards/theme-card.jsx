@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Headset, Basketball, Book } from "iconoir-react";
 
-export default function ThemeCard({ theme = "musique", href = "#" }) {
+export default function ThemeCard({ theme = "musique" }) {
   const iconClasses = "group-hover:text-white";
 
   const themeIcons = {
@@ -25,7 +25,10 @@ export default function ThemeCard({ theme = "musique", href = "#" }) {
   };
 
   return (
-    <Link href={href} className="theme-card group">
+    <Link
+      href={`/activities/events?theme=${theme}`}
+      className="theme-card group"
+    >
       <div className="flex flex-col items-center justify-center gap-2">
         {getThemeIcon(theme)}
         <p className="group-hover:text-white transition">{theme}</p>

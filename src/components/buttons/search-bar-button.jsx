@@ -1,13 +1,12 @@
 "use client";
 import { Search } from "iconoir-react";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { TextPlugin } from "gsap/TextPlugin";
 
 gsap.registerPlugin(TextPlugin);
 
-export default function SearchBarButton() {
+export default function SearchBarButton({ onClick }) {
   const textRef = useRef(null);
   const cursorRef = useRef(null);
 
@@ -65,17 +64,14 @@ export default function SearchBarButton() {
   }, []);
 
   return (
-    <Link
-      href="/"
-      className="max-w-[30rem] w-full flex items-center gap-6 bg-white p-4 rounded-full blue-shadow hover:scale-105 transition"
-    >
-      <Search className="text-[var(--primary-blue)] h-6 w-6" />
+    <button className="search-bar-btn hover:opacity-75" onClick={onClick}>
+      <Search />
       <div className="flex">
         <p ref={textRef}></p>
         <span ref={cursorRef} className="ml-0.5 text-[var(--light-gray)]">
           |
         </span>
       </div>
-    </Link>
+    </button>
   );
 }

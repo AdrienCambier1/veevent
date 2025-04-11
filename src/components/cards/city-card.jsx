@@ -19,7 +19,7 @@ export default function CityCard({ city, events, changeCity }) {
         </div>
 
         <div className="flex items-end gap-8">
-          <p className="!text-xl flex-1 text-start">
+          <p className="!text-lg flex-1 text-start">
             Découvrez les événements de {city}
           </p>
           <ArrowUpRightCircleSolid className="group-hover:-translate-y-1 transition" />
