@@ -4,7 +4,7 @@ import { NavArrowRight } from "iconoir-react";
 import CustomNav from "@/components/custom-nav";
 import { usePathname } from "next/navigation";
 
-export default function ProfilHeader({ redirect }) {
+export default function ProfilHeader() {
   const pathname = usePathname();
   const isProfilRoute = pathname?.includes("/account/profil/");
 
@@ -16,7 +16,7 @@ export default function ProfilHeader({ redirect }) {
 
   return (
     <section className="profil-header">
-      <div className="flex flex-col md:flex-row gap-6 items-center justify-between w-full">
+      <div className="flex flex-col-reverse md:flex-row gap-6 items-center justify-between w-full">
         <div className="flex flex-wrap justify-center md:justify-start gap-6">
           <div>
             <p>Abonnements</p>
@@ -36,39 +36,15 @@ export default function ProfilHeader({ redirect }) {
           </div>
         </div>
         {isProfilRoute ? (
-          <>
-            <Link
-              href="/account/settings"
-              className="primary-btn !hidden md:!flex"
-            >
-              <span>Mes informations</span>
-              <NavArrowRight />
-            </Link>
-            <Link
-              href="/account/settings"
-              className="primary-form-btn md:hidden"
-            >
-              <span>Mes informations</span>
-              <NavArrowRight />
-            </Link>
-          </>
+          <Link href="/account/settings" className="primary-btn">
+            <span>Mes informations</span>
+            <NavArrowRight />
+          </Link>
         ) : (
-          <>
-            <Link
-              href="/account/profil/events"
-              className="primary-btn !hidden md:!flex"
-            >
-              <span>Mon activité</span>
-              <NavArrowRight />
-            </Link>
-            <Link
-              href="/account/profil/events"
-              className="primary-form-btn md:hidden"
-            >
-              <span>Mon activité</span>
-              <NavArrowRight />
-            </Link>
-          </>
+          <Link href="/account/profil/events" className="primary-btn">
+            <span>Mon activité</span>
+            <NavArrowRight />
+          </Link>
         )}
       </div>
       {isProfilRoute && (
