@@ -19,12 +19,12 @@ export default function InformationsPage() {
         <InformationsCard
           icon={Mail}
           title="Email"
-          description="jeanclaude@gmail.comjeanclaude@ gmail.comjeanclaude@gmail.com"
+          description="jeanclaude@gmail.com"
         />
         <InformationsCard
           icon={PasswordCursor}
-          title="Dernière mise à jour : 01/01/2023"
-          description="jeanclaude@gmail.com"
+          title="Mot de passe"
+          description="Dernière mise à jour : 01/01/2023"
         />
       </div>
     </div>

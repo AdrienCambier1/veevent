@@ -214,7 +214,7 @@ p {
 .primary-btn,
 .secondary-btn,
 .blue-rounded-btn {
-  @apply flex items-center justify-center gap-2 rounded-full transition w-fit h-fit overflow-hidden;
+  @apply flex items-center justify-center gap-2 rounded-full transition max-w-full w-fit h-fit overflow-hidden;
 }
 
 .primary-btn span,
@@ -342,7 +342,7 @@ p {
 
 .blue-tag,
 .green-tag {
-  @apply py-1 px-4 rounded-full flex items-center justify-center gap-2 w-fit h-fit overflow-hidden;
+  @apply py-1 px-4 rounded-full flex items-center justify-center gap-2 max-w-full w-fit h-fit overflow-hidden;
 }
 
 .blue-tag svg,
@@ -352,7 +352,7 @@ p {
 
 .blue-tag span,
 .green-tag span {
-  @apply truncate;
+  @apply truncate w-full;
 }
 
 .blue-tag {

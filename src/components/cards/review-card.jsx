@@ -12,7 +12,7 @@ export default function ReviewCard({ name, note, date, review, event }) {
         alt="Profil picture"
         className="profil-pic-xl"
       />
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-4 overflow-hidden">
         <h3 className="text-[var(--secondary-blue)]">{name}</h3>
         <div className="flex flex-col">
           <p className="dark-text">Note attribuée</p>
