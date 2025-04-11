@@ -1,4 +1,4 @@
-import ProfilList from "@/components/profil-list";
+import ProfilList from "@/components/lists/profil-list";
 
 export default function ProfilsPage() {
   return (

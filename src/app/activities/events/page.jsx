@@ -1,4 +1,4 @@
-import EventList from "@/components/event-list";
+import EventList from "@/components/lists/event-list";
 
 export default function EventsPage() {
   return (
