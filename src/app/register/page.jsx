@@ -155,6 +155,11 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 placeholder="gerard@example.com"
               />
+              {formData.email && !validateEmail(formData.email) && (
+                <p className="text-[var(--primary-red)]">
+                  Veuillez entrer une adresse email valide
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-2">
               <label>Identifiant</label>

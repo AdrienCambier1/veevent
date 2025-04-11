@@ -70,7 +70,7 @@ section {
 }
 
 .container form {
-  @apply flex flex-col gap-4 w-full max-w-[500px];
+  @apply flex flex-col gap-6 w-full max-w-[500px];
 }
 
 form label {

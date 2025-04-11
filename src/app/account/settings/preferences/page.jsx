@@ -1,5 +1,6 @@
 "use client";
 import ThemeButton from "@/components/buttons/theme-btn";
+import { EditPencil } from "iconoir-react";
 import { useState } from "react";
 
 export default function PreferencesPage() {
@@ -28,6 +29,12 @@ export default function PreferencesPage() {
             onClick={() => handleThemeToggle(theme)}
           />
         ))}
+      </div>
+      <div className="flex items-center justify-between">
+        <button className="blue-rounded-btn">
+          <span>Modifier</span>
+          <EditPencil />
+        </button>
       </div>
     </div>
   );
