@@ -32,6 +32,8 @@ export default function DialogModal({
     }
   };
 
+  if (!mounted) return null;
+
   return ReactDOM.createPortal(
     <>
       <ReactFocusLock
@@ -41,7 +43,13 @@ export default function DialogModal({
           className={`${isOpen ? "opacity-100" : "opacity-0"} modal-content`}
         >
           <div className="flex flex-col items-center gap-2">
-            <div className="img-gradient-red">{Icon && <Icon />}</div>
+            <div
+              className={`${
+                isDangerous ? "img-gradient-red" : "img-gradient-blue"
+              }`}
+            >
+              {Icon && <Icon />}
+            </div>
             <h3 className="text-center">{title}</h3>
           </div>
           <p className="text-center">{description}</p>

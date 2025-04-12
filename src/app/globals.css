@@ -22,6 +22,7 @@
   --dark-gray-rgb: 30, 30, 30;
   --light-gray: #818181;
   --primary-border-col: #ebebeb;
+  --primary-border-col-rgb: 235, 235, 235;
   --secondary-border-col: #d9d9d9;
 }
 
@@ -69,7 +70,7 @@ section {
   @apply w-full max-w-[1200px] mx-auto;
 }
 
-.container form {
+form {
   @apply flex flex-col gap-6 w-full max-w-[500px];
 }
 
@@ -321,7 +322,7 @@ p {
 
 .dropdown-parent,
 .dropdown-parent-reverse {
-  @apply min-w-52 z-10 !absolute white-card h-fit p-2 flex flex-col gap-2 transition w-full;
+  @apply min-w-52 z-20 !absolute white-card h-fit p-2 flex flex-col gap-2 transition w-full;
 }
 
 .dropdown-parent {
@@ -516,4 +517,8 @@ textarea,
 
 .modal-wrapper {
   @apply min-h-full flex items-center justify-center p-4;
+}
+
+.modal-content input {
+  @apply bg-[rgba(var(--primary-border-col-rgb),0.2)] border-[var(--primary-border-col)];
 }

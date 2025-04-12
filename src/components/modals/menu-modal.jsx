@@ -32,7 +32,9 @@ export default function MenuModal({ isOpen, setIsOpen }) {
                 if (window.location.pathname === "/") {
                   e.preventDefault();
                   scrollToTop();
-                  setIsOpen();
+                  setIsOpen(false);
+                } else {
+                  setIsOpen(false);
                 }
               }}
             >

@@ -1,6 +1,12 @@
+"use client";
 import { NavArrowRight } from "iconoir-react";
 
-export default function InformationsCard({ icon: Icon, title, description }) {
+export default function InformationsCard({
+  icon: Icon,
+  title,
+  description,
+  onClick,
+}) {
   return (
     <div className="informations-card">
       <div className="flex justify-between gap-4">
@@ -11,7 +17,7 @@ export default function InformationsCard({ icon: Icon, title, description }) {
         <div className="img-gradient-blue">{Icon && <Icon />}</div>
       </div>
       <div className="w-full flex justify-end">
-        <button className="secondary-btn">
+        <button className="secondary-btn" onClick={onClick}>
           <span>Modifier</span>
           <NavArrowRight />
         </button>
