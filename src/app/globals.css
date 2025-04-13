@@ -166,6 +166,10 @@ header nav a {
   @apply h-12 w-12 rounded-full object-cover;
 }
 
+.profil-pic-sm {
+  @apply h-8 w-8 rounded-full object-cover border-2 border-white;
+}
+
 .img-gradient-blue svg,
 .img-gradient-red svg {
   @apply h-6 w-6 flex-shrink-0;
@@ -261,7 +265,7 @@ p {
 }
 
 .copy-btn {
-  @apply bg-white dark-shadow px-4 py-1.5 rounded-xl flex items-center gap-2 hover:opacity-75 transition;
+  @apply bg-white dark-shadow px-4 py-1.5 w-fit h-fit rounded-xl flex items-center gap-2 hover:opacity-75 transition;
 }
 
 .primary-btn {
@@ -370,6 +374,10 @@ p {
 
 .nav-btn > div {
   @apply flex items-center justify-center p-3 rounded-xl;
+}
+
+.more-btn {
+  @apply text-[var(--light-gray)] hover:text-[var(--dark-gray)] transition h-6 w-6 flex-shrink-0 cursor-pointer;
 }
 
 /********/

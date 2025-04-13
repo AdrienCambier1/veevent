@@ -1,11 +1,36 @@
-import { Bookmark } from "iconoir-react";
+"use client";
+import { Bookmark, MoreHoriz, Trash } from "iconoir-react";
 import profilPicture from "@/assets/images/profil-pic.jpg";
 import RatingStar from "../rating-stars";
 import ThemeTag from "../theme-tag";
 import Image from "next/image";
 import niceImage from "@/assets/images/nice.jpg";
+import ProfilImages from "../profil-images";
+import { useState, useRef, useEffect } from "react";
 
-export default function EventCard() {
+export default function EventCard({ canEdit }) {
+  const [editDropdown, setEditDropdown] = useState(false);
+  const editDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        editDropdownRef.current &&
+        !editDropdownRef.current.contains(event.target)
+      ) {
+        setEditDropdown(false);
+      }
+    };
+
+    if (editDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [editDropdown]);
+
   return (
     <div className="white-card">
       <Image
@@ -39,6 +64,28 @@ export default function EventCard() {
           congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
           consectetur. 
         </p>
+        <div className="flex justify-between items-center">
+          <ProfilImages totalCount={8} />
+          {canEdit && (
+            <div className="relative" ref={editDropdownRef}>
+              <MoreHoriz
+                className="more-btn"
+                onClick={() => setEditDropdown(!editDropdown)}
+              />
+              <div
+                className={`${
+                  editDropdown ? "visible opacity-100" : "invisible opacity-0"
+                } dropdown-parent right-0`}
+              >
+                <button className="dropdown-child">Modifier</button>
+                <button className="dropdown-dangerous">
+                  <span>Supprimer</span>
+                  <Trash />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

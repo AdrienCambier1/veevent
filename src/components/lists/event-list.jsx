@@ -13,6 +13,7 @@ function EventListContent({
   showSort,
   showFilters,
   showCreateButton,
+  canEdit,
 }) {
   const { useSearchParams } = require("next/navigation");
   const searchParams = useSearchParams();
@@ -103,10 +104,10 @@ function EventListContent({
         </div>
       </div>
       <div className="cards-grid">
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
+        <EventCard canEdit={canEdit} />
+        <EventCard canEdit={canEdit} />
+        <EventCard canEdit={canEdit} />
+        <EventCard canEdit={canEdit} />
       </div>
     </section>
   );

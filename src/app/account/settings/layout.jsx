@@ -6,7 +6,7 @@ export default function SettingsLayout({ children }) {
   return (
     <>
       <section className="container">
-        <div className="flex justify-between items-center border-b border-[var(--secondary-border-col)] gap-4 pb-4">
+        <div className="flex flex-wrap justify-between border-b border-[var(--secondary-border-col)] gap-4 pb-4">
           <h2>Paramètres de votre compte</h2>
           <CopyBtn id="Jeanclaude" />
         </div>

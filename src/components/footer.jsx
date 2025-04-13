@@ -70,10 +70,12 @@ export default function Footer() {
             <div className="flex flex-col gap-4">
               <h4>Gérer son compte</h4>
               <nav className="flex flex-wrap gap-4 ">
-                <Link href="">Informations du compte</Link>
-                <Link href="">Mes evenements</Link>
-                <Link href="">Evenements participés</Link>
-                <Link href="">Avis</Link>
+                <Link href="/account/settings">Paramètres du compte</Link>
+                <Link href="/account/profil/events">Mes evenements</Link>
+                <Link href="/account/profil/participations">
+                  Evenements participés
+                </Link>
+                <Link href="/account/profil/reviews">Avis</Link>
               </nav>
             </div>
           </div>

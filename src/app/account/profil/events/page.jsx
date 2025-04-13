@@ -6,6 +6,7 @@ export default function EventsPage() {
       title="Rechercher mes événements"
       description="Evenements"
       showCreateButton={true}
+      canEdit={true}
     />
   );
 }

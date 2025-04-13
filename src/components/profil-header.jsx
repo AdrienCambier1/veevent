@@ -37,7 +37,7 @@ export default function ProfilHeader() {
         </div>
         {isProfilRoute ? (
           <Link href="/account/settings" className="primary-btn">
-            <span>Mes informations</span>
+            <span>Paramètres du compte</span>
             <NavArrowRight />
           </Link>
         ) : (
