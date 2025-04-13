@@ -312,7 +312,8 @@ p {
 
 .rounded-form-btn svg,
 .back-form-btn svg,
-.nav-btn svg {
+.nav-btn svg,
+.more-btn svg {
   @apply h-6 w-6 flex-shrink-0;
 }
 
@@ -377,7 +378,7 @@ p {
 }
 
 .more-btn {
-  @apply text-[var(--light-gray)] hover:text-[var(--dark-gray)] transition h-6 w-6 flex-shrink-0 cursor-pointer;
+  @apply text-[var(--light-gray)] hover:text-[var(--dark-gray)] transition;
 }
 
 /********/

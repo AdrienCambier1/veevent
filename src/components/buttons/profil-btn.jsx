@@ -38,7 +38,7 @@ export default function ProfilBtn({ reverse, onClick }) {
 
   return (
     <>
-      <div className="relative flex items-center" ref={profilDropdownRef}>
+      <div className="relative" ref={profilDropdownRef}>
         <button
           className="profil-btn relative"
           onClick={() => setProfilDropdown(!profilDropdown)}

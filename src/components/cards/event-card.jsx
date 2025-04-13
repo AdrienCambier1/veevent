@@ -68,17 +68,27 @@ export default function EventCard({ canEdit }) {
           <ProfilImages totalCount={8} />
           {canEdit && (
             <div className="relative" ref={editDropdownRef}>
-              <MoreHoriz
+              <button
                 className="more-btn"
                 onClick={() => setEditDropdown(!editDropdown)}
-              />
+              >
+                <MoreHoriz />
+              </button>
               <div
                 className={`${
                   editDropdown ? "visible opacity-100" : "invisible opacity-0"
                 } dropdown-parent right-0`}
               >
-                <button className="dropdown-child">Modifier</button>
-                <button className="dropdown-dangerous">
+                <button
+                  className="dropdown-child"
+                  onClick={() => setEditDropdown(false)}
+                >
+                  Modifier
+                </button>
+                <button
+                  className="dropdown-dangerous"
+                  onClick={() => setEditDropdown(false)}
+                >
                   <span>Supprimer</span>
                   <Trash />
                 </button>
