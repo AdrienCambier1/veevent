@@ -14,7 +14,7 @@ export default function EventPage() {
   const eventInfos = [
     { icon: Calendar, value: "samedi 24 juin 2025 • 15h30 " },
     { icon: HomeAltSlim, value: "Los pollos hermanos" },
-    { icon: Group, value: "8 personnes" },
+    { icon: Group, value: "8 personnes", type: "users" },
   ];
 
   const placeInfos = [

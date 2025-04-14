@@ -94,6 +94,36 @@ form label {
   @apply flex flex-col w-fit items-center md:items-start;
 }
 
+.mask-both-ends {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 40px,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 40px,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+}
+
+.scrollbar-hide {
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* IE/Edge */
+  -ms-overflow-style: none;
+}
+
+/* Chrome, Safari, Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /**************/
 /* Navigation */
 /**************/
@@ -160,6 +190,10 @@ header nav a {
 
 .profil-pic-xl {
   @apply h-20 w-20 rounded-full object-cover;
+}
+
+.profil-pic-lg {
+  @apply h-16 w-16 rounded-full object-cover;
 }
 
 .profil-pic-md {
@@ -260,7 +294,8 @@ p {
 .blue-rounded-btn svg,
 .dropdown-child svg,
 .dropdown-dangerous svg,
-.copy-btn svg {
+.copy-btn svg,
+.trash-btn svg {
   @apply w-4 h-4 flex-shrink-0;
 }
 
@@ -289,10 +324,6 @@ p {
   @apply bg-[var(--primary-blue)] text-white disabled:opacity-50;
 }
 
-.primary-form-btn svg {
-  @apply h-6 w-6;
-}
-
 .secondary-form-btn {
   @apply text-[var(--primary-blue)] box-border border border-[var(--primary-blue)];
 }
@@ -310,6 +341,7 @@ p {
   @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)];
 }
 
+.primary-form-btn svg,
 .rounded-form-btn svg,
 .back-form-btn svg,
 .nav-btn svg,
@@ -327,7 +359,7 @@ p {
 
 .dropdown-parent,
 .dropdown-parent-reverse {
-  @apply min-w-52 z-20 !absolute white-card h-fit p-2 flex flex-col gap-2 transition w-full;
+  @apply min-w-52 z-20 absolute bg-white rounded-xl darker-dark-shadow p-2 flex flex-col gap-2 transition h-fit w-full;
 }
 
 .dropdown-parent {
@@ -379,6 +411,10 @@ p {
 
 .more-btn {
   @apply text-[var(--light-gray)] hover:text-[var(--dark-gray)] transition;
+}
+
+.trash-btn {
+  @apply text-[var(--primary-red)] hover:opacity-75 transition;
 }
 
 /********/
@@ -436,6 +472,10 @@ textarea,
 
 .dark-shadow {
   @apply shadow-[0_4px_20px_rgba(0,0,0,0.05)];
+}
+
+.darker-dark-shadow {
+  @apply shadow-[0_4px_20px_rgba(0,0,0,0.1)];
 }
 
 .blue-shadow {
