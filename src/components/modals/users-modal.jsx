@@ -50,16 +50,18 @@ export default function UsersModal({
         className={`${isOpen ? "visible" : "invisible"} modal-container`}
       >
         <div
-          className={`${isOpen ? "opacity-100" : "opacity-0"} modal-content`}
+          className={`${
+            isOpen ? "opacity-100" : "opacity-0"
+          } modal-content !p-0`}
         >
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2 pt-8">
             <div className="img-gradient-blue">
               <Group />
             </div>
             <h3 className="text-center">{config.title}</h3>
           </div>
           {users.length > 0 ? (
-            <div className="relative flex flex-col gap-2 max-h-64 w-full mask-both-ends overflow-y-auto scroll-smooth py-2 scrollbar-hide">
+            <div className="relative flex flex-col gap-2 max-h-64 w-full mask-bottom overflow-y-auto p-8 pt-0">
               {users.map((user, index) => (
                 <UserElement
                   name={user.name}
@@ -72,18 +74,20 @@ export default function UsersModal({
           ) : (
             <p>{config.emptyText}</p>
           )}
-          {canEdit ? (
-            <div className="flex flex-col-reverse md:flex-row gap-4 w-full">
-              <button className="secondary-form-btn" onClick={setIsOpen}>
-                Annuler
+          <div className="flex flex-col-reverse md:flex-row gap-4 w-full p-8 pt-0">
+            {canEdit ? (
+              <>
+                <button className="secondary-form-btn" onClick={setIsOpen}>
+                  Annuler
+                </button>
+                <button className="primary-form-btn">Sauvegarder</button>
+              </>
+            ) : (
+              <button className="primary-form-btn" onClick={setIsOpen}>
+                Fermer
               </button>
-              <button className="primary-form-btn">Sauvegarder</button>
-            </div>
-          ) : (
-            <button className="primary-form-btn" onClick={setIsOpen}>
-              Fermer
-            </button>
-          )}
+            )}
+          </div>
         </div>
       </ReactFocusLock>
       <ModalBg className="!z-40" isOpen={isOpen} setIsOpen={setIsOpen} />

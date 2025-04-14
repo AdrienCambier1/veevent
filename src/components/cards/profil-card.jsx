@@ -17,15 +17,10 @@ export default function ProfilCard({ name, id, note, className, isOrganiser }) {
         <h2 className="truncate">{name}</h2>
         <div className="flex items-center gap-2">
           {isOrganiser && (
-            <>
-              <div className="green-tag !hidden sm:!flex">
-                <span>Organisateur</span>
-                <UserStar />
-              </div>
-              <div className="green-tag sm:!hidden !p-1.5">
-                <UserStar />
-              </div>
-            </>
+            <div className="green-tag">
+              <span className="hidden sm:block">Organisateur</span>
+              <UserStar />
+            </div>
           )}
           <div className="flex flex-col">
             <p className="blue-text">{id}</p>

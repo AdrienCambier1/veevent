@@ -94,34 +94,17 @@ form label {
   @apply flex flex-col w-fit items-center md:items-start;
 }
 
-.mask-both-ends {
+.mask-bottom {
   mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    black 30px,
-    black calc(100% - 30px),
+    black calc(100% - 40px),
     transparent 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    black 30px,
-    black calc(100% - 30px),
+    black calc(100% - 40px),
     transparent 100%
   );
-}
-
-.scrollbar-hide {
-  /* Firefox */
-  scrollbar-width: none;
-
-  /* IE/Edge */
-  -ms-overflow-style: none;
-}
-
-/* Chrome, Safari, Opera */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
 }
 
 /**************/

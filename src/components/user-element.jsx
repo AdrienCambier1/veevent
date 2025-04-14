@@ -20,15 +20,10 @@ export default function UserElement({
           <p className="dark-text">{name}</p>
           <div className="flex items-center gap-2">
             {type === "organiser" && (
-              <>
-                <div className="green-tag !hidden sm:!flex">
-                  <span>Organisateur</span>
-                  <UserStar />
-                </div>
-                <div className="green-tag sm:!hidden !p-1.5">
-                  <UserStar />
-                </div>
-              </>
+              <div className="green-tag">
+                <span className="hidden sm:block">Organisateur</span>
+                <UserStar />
+              </div>
             )}
             <p className="blue-text truncate">{id}</p>
           </div>
