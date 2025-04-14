@@ -39,6 +39,11 @@ export default function UsersModal({
     { name: "Jean Claude", id: "@jeanclaudedu06" },
     { name: "Jean Claude", id: "@jeanclaudedu06" },
     { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
   ];
 
   const config = modalConfig[type] || modalConfig.participants;
@@ -51,18 +56,16 @@ export default function UsersModal({
         className={`${isOpen ? "visible" : "invisible"} modal-container`}
       >
         <div
-          className={`${
-            isOpen ? "opacity-100" : "opacity-0"
-          } modal-content !p-0`}
+          className={`${isOpen ? "opacity-100" : "opacity-0"} modal-content`}
         >
-          <div className="flex flex-col items-center gap-2 pt-8">
+          <div className="flex flex-col items-center gap-2">
             <div className="img-gradient-blue">
               <Group />
             </div>
             <h3 className="text-center">{config.title}</h3>
           </div>
           {users.length > 0 ? (
-            <div className="relative flex flex-col gap-2 max-h-64 w-full mask-bottom overflow-y-auto p-8 pt-0">
+            <div className="relative flex flex-col gap-2 pb-6 max-h-56 w-full mask-bottom overflow-y-auto scrollbar-hide">
               {users.map((user, index) => (
                 <UserElement name={user.name} key={index} id={user.id} />
               ))}
@@ -70,20 +73,18 @@ export default function UsersModal({
           ) : (
             <p>{config.emptyText}</p>
           )}
-          <div className="flex flex-col-reverse md:flex-row gap-4 w-full p-8 pt-0">
-            {canEdit ? (
-              <>
-                <button className="secondary-form-btn" onClick={setIsOpen}>
-                  Annuler
-                </button>
-                <button className="primary-form-btn">Sauvegarder</button>
-              </>
-            ) : (
-              <button className="primary-form-btn" onClick={setIsOpen}>
-                Fermer
+          {canEdit ? (
+            <div className="flex flex-col-reverse md:flex-row gap-4 w-full">
+              <button className="secondary-form-btn" onClick={setIsOpen}>
+                Annuler
               </button>
-            )}
-          </div>
+              <button className="primary-form-btn">Sauvegarder</button>
+            </div>
+          ) : (
+            <button className="primary-form-btn" onClick={setIsOpen}>
+              Fermer
+            </button>
+          )}
         </div>
       </ReactFocusLock>
       <ModalBg className="!z-40" isOpen={isOpen} setIsOpen={setIsOpen} />
