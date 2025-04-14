@@ -2,11 +2,12 @@
 import { Bookmark, MoreHoriz, Trash } from "iconoir-react";
 import profilPicture from "@/assets/images/profil-pic.jpg";
 import RatingStar from "../rating-stars";
-import ThemeTag from "../theme-tag";
+import ThemeTags from "../theme-tags";
 import Image from "next/image";
 import niceImage from "@/assets/images/nice.jpg";
 import ProfilImages from "../profil-images";
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 export default function EventCard({ canEdit }) {
   const [editDropdown, setEditDropdown] = useState(false);
@@ -32,7 +33,7 @@ export default function EventCard({ canEdit }) {
   }, [editDropdown]);
 
   return (
-    <div className="white-card">
+    <Link href="/events/1" className="white-card">
       <Image
         src={niceImage}
         alt="Event image"
@@ -57,7 +58,7 @@ export default function EventCard({ canEdit }) {
           </div>
         </div>
         <p className="blue-text">Antibes | samedi 24 juin 2025 • 15h30 </p>
-        <ThemeTag theme={["Musique", "Sponsorisé", "Sport", "Learning"]} />
+        <ThemeTags theme={["Musique", "Sponsorisé", "Sport", "Learning"]} />
         <p className="line-clamp-3">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
           semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
@@ -97,6 +98,6 @@ export default function EventCard({ canEdit }) {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

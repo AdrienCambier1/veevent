@@ -2,7 +2,7 @@
 import { NavArrowDown } from "iconoir-react";
 import { useState, useEffect, useRef } from "react";
 import { Check } from "iconoir-react";
-import ThemeTag from "@/components/theme-tag";
+import ThemeTags from "../theme-tags";
 
 export default function MultiDropdownButton({
   options = [],
@@ -55,7 +55,7 @@ export default function MultiDropdownButton({
           <span>{label}</span>
           <NavArrowDown className="text-[var(--dark-gray)] h-6 w-6 hover:opacity-75 transition ml-auto flex-shrink-0" />
         </div>
-        {selectedOptions.length > 0 && <ThemeTag theme={selectedThemes} />}
+        {selectedOptions.length > 0 && <ThemeTags theme={selectedThemes} />}
       </button>
 
       <div

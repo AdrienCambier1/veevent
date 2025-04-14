@@ -1,6 +1,6 @@
 import { Headset, Megaphone, Basketball, Book } from "iconoir-react";
 
-export default function ThemeTag({ theme = [] }) {
+export default function ThemeTags({ theme = [] }) {
   const themeIcons = {
     musique: <Headset className="h-4 w-4" />,
     sponsorisé: <Megaphone className="h-4 w-4" />,
