@@ -1,6 +1,7 @@
 import profilPicture from "@/assets/images/profil-pic.jpg";
 import RatingStar from "@/components/rating-stars";
 import Image from "next/image";
+import { UserStar } from "iconoir-react";
 
 export default function ProfilCard({ name, id, note, className, isOrganiser }) {
   return (
@@ -16,9 +17,15 @@ export default function ProfilCard({ name, id, note, className, isOrganiser }) {
         <h2 className="truncate">{name}</h2>
         <div className="flex items-center gap-2">
           {isOrganiser && (
-            <div className="green-tag">
-              <span>Organisateur</span>
-            </div>
+            <>
+              <div className="green-tag !hidden sm:!flex">
+                <span>Organisateur</span>
+                <UserStar />
+              </div>
+              <div className="green-tag sm:!hidden !p-1.5">
+                <UserStar />
+              </div>
+            </>
           )}
           <div className="flex flex-col">
             <p className="blue-text">{id}</p>

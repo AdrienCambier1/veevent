@@ -98,15 +98,15 @@ form label {
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    black 40px,
-    black calc(100% - 40px),
+    black 30px,
+    black calc(100% - 30px),
     transparent 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    black 40px,
-    black calc(100% - 40px),
+    black 30px,
+    black calc(100% - 30px),
     transparent 100%
   );
 }

@@ -1,5 +1,5 @@
 import profilPicture from "@/assets/images/profil-pic.jpg";
-import { Trash } from "iconoir-react";
+import { Trash, UserStar } from "iconoir-react";
 import Image from "next/image";
 
 export default function UserElement({
@@ -20,11 +20,17 @@ export default function UserElement({
           <p className="dark-text">{name}</p>
           <div className="flex items-center gap-2">
             {type === "organiser" && (
-              <div className="green-tag">
-                <span>Organisateur</span>
-              </div>
+              <>
+                <div className="green-tag !hidden sm:!flex">
+                  <span>Organisateur</span>
+                  <UserStar />
+                </div>
+                <div className="green-tag sm:!hidden !p-1.5">
+                  <UserStar />
+                </div>
+              </>
             )}
-            <p className="blue-text">{id}</p>
+            <p className="blue-text truncate">{id}</p>
           </div>
         </div>
         <button className="trash-btn">

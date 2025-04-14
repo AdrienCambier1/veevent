@@ -59,7 +59,7 @@ export default function UsersModal({
             <h3 className="text-center">{config.title}</h3>
           </div>
           {users.length > 0 ? (
-            <div className="relative flex flex-col gap-2 max-h-64 w-full mask-both-ends overflow-auto py-4 scrollbar-hide">
+            <div className="relative flex flex-col gap-2 max-h-64 w-full mask-both-ends overflow-y-auto scroll-smooth py-2 scrollbar-hide">
               {users.map((user, index) => (
                 <UserElement
                   name={user.name}
