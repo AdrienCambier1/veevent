@@ -34,7 +34,8 @@ export default function UsersModal({
   };
 
   const users = [
-    { name: "Jean Claude", id: "@jeanclaudedu06", type: "organiser" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
     { name: "Jean Claude", id: "@jeanclaudedu06" },
     { name: "Jean Claude", id: "@jeanclaudedu06" },
     { name: "Jean Claude", id: "@jeanclaudedu06" },
@@ -63,12 +64,7 @@ export default function UsersModal({
           {users.length > 0 ? (
             <div className="relative flex flex-col gap-2 max-h-64 w-full mask-bottom overflow-y-auto p-8 pt-0">
               {users.map((user, index) => (
-                <UserElement
-                  name={user.name}
-                  key={index}
-                  id={user.id}
-                  type={user.type}
-                />
+                <UserElement name={user.name} key={index} id={user.id} />
               ))}
             </div>
           ) : (
