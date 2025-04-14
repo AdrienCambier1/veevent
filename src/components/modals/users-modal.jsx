@@ -44,6 +44,16 @@ export default function UsersModal({
     { name: "Jean Claude", id: "@jeanclaudedu06" },
     { name: "Jean Claude", id: "@jeanclaudedu06" },
     { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
+    { name: "Jean Claude", id: "@jeanclaudedu06" },
   ];
 
   const config = modalConfig[type] || modalConfig.participants;

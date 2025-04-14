@@ -15,9 +15,11 @@ export default function UserElement({ name, id, canEdit = false }) {
           <p className="dark-text">{name}</p>
           <p className="blue-text truncate">{id}</p>
         </div>
-        <button className="trash-btn">
-          <Trash />
-        </button>
+        {canEdit && (
+          <button className="trash-btn">
+            <Trash />
+          </button>
+        )}
       </div>
     </div>
   );
