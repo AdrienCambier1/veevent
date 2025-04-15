@@ -527,6 +527,10 @@ textarea,
   @apply bg-gradient-to-b from-transparent to-black/20 h-full w-full;
 }
 
+.overflow-card {
+  @apply relative rounded-t-xl pb-6 max-h-72 w-full mask-bottom overflow-y-auto scrollbar-hide;
+}
+
 /*********/
 /* Grids */
 /*********/
