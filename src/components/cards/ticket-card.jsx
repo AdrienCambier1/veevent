@@ -1,6 +1,6 @@
 import { Plus } from "iconoir-react";
 
-export default function TicketCard({ title, description, price }) {
+export default function TicketCard({ title, description, price, onClick }) {
   return (
     <div className="ticket-card">
       <div className="corner left-0 top-0 -translate-x-1/2 -translate-y-1/2" />
@@ -14,7 +14,7 @@ export default function TicketCard({ title, description, price }) {
         </div>
         <div className="flex items-center justify-between">
           <p className="text-xl font-bold">{price}€</p>
-          <button className="primary-btn ">
+          <button className="primary-btn" onClick={onClick}>
             <span>Réserver</span>
             <Plus />
           </button>

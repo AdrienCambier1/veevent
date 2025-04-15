@@ -5,10 +5,13 @@ import SettingsModal from "@/components/modals/settings-modal";
 import { useState } from "react";
 
 export default function InformationsPage() {
-  const [nameModal, setNameModal] = useState(false);
-  const [birthDateModal, setBirthDateModal] = useState(false);
-  const [emailModal, setEmailModal] = useState(false);
-  const [passwordModal, setPasswordModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("name");
+
+  const openModal = (type) => {
+    setModalType(type);
+    setIsModalOpen(true);
+  };
 
   return (
     <>
@@ -19,47 +22,32 @@ export default function InformationsPage() {
             icon={User}
             title="Nom et prénom"
             description="Jean Claude"
-            onClick={() => setNameModal(true)}
+            onClick={() => openModal("name")}
           />
           <InformationsCard
             icon={Calendar}
             title="Date de naissance"
             description="11/09/2001"
-            onClick={() => setBirthDateModal(true)}
+            onClick={() => openModal("birthdate")}
           />
           <InformationsCard
             icon={Mail}
             title="Email"
             description="jeanclaude@gmail.com"
-            onClick={() => setEmailModal(true)}
+            onClick={() => openModal("email")}
           />
           <InformationsCard
             icon={Lock}
             title="Mot de passe"
             description="Dernière mise à jour : 01/01/2023"
-            onClick={() => setPasswordModal(true)}
+            onClick={() => openModal("password")}
           />
         </div>
       </div>
       <SettingsModal
-        isOpen={nameModal}
-        setIsOpen={() => setNameModal(false)}
-        type="name"
-      />
-      <SettingsModal
-        isOpen={birthDateModal}
-        setIsOpen={() => setBirthDateModal(false)}
-        type="birthdate"
-      />
-      <SettingsModal
-        isOpen={emailModal}
-        setIsOpen={() => setEmailModal(false)}
-        type="email"
-      />
-      <SettingsModal
-        isOpen={passwordModal}
-        setIsOpen={() => setPasswordModal(false)}
-        type="password"
+        isOpen={isModalOpen}
+        setIsOpen={() => setIsModalOpen(false)}
+        type={modalType}
       />
     </>
   );

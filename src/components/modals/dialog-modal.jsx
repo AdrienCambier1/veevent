@@ -1,3 +1,4 @@
+"use client";
 import ReactFocusLock from "react-focus-lock";
 import ModalBg from "./modal-bg";
 import ReactDOM from "react-dom";
@@ -53,25 +54,31 @@ export default function DialogModal({
             <h3 className="text-center">{title}</h3>
           </div>
           <p className="text-center">{description}</p>
-          <div className="flex flex-col-reverse md:flex-row gap-4 w-full">
-            <button
-              className={`${
-                isDangerous &&
-                "!border-[var(--primary-red)] !text-[var(--primary-red)]"
-              } secondary-form-btn`}
-              onClick={setIsOpen}
-            >
-              Annuler
+          {action ? (
+            <div className="flex flex-col-reverse md:flex-row gap-4 w-full">
+              <button
+                className={`${
+                  isDangerous &&
+                  "!border-[var(--primary-red)] !text-[var(--primary-red)]"
+                } secondary-form-btn`}
+                onClick={setIsOpen}
+              >
+                Annuler
+              </button>
+              <button
+                className={`${
+                  isDangerous && "!bg-[var(--primary-red)]"
+                } primary-form-btn`}
+                onClick={handleSubmit}
+              >
+                {action}
+              </button>
+            </div>
+          ) : (
+            <button className="primary-form-btn" onClick={setIsOpen}>
+              Fermer
             </button>
-            <button
-              className={`${
-                isDangerous && "!bg-[var(--primary-red)]"
-              } primary-form-btn`}
-              onClick={handleSubmit}
-            >
-              {action}
-            </button>
-          </div>
+          )}
         </div>
       </ReactFocusLock>
       <ModalBg className="!z-40" isOpen={isOpen} setIsOpen={setIsOpen} />
