@@ -46,7 +46,7 @@ export default function PaymentModal({
             </div>
             <h3 className="text-center">Votre commande</h3>
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 ">
             <CreditCard />
             <p>
               Entrez les informations de votre carte bancaire pour procéder à
@@ -54,6 +54,7 @@ export default function PaymentModal({
             </p>
           </div>
           <ItemList items={paymentInfos} />
+
           <div className="flex flex-col-reverse md:flex-row gap-4 w-full">
             <button className="secondary-form-btn" onClick={setIsOpen}>
               Annuler
