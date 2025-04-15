@@ -55,10 +55,10 @@ export default function Home() {
             <EventCard />
             <EventCard />
           </div>
-          <button className="blue-rounded-btn">
+          <Link href="/subscriptions/events" className="blue-rounded-btn">
             <span>Voir plus</span>
             <NavArrowRight />
-          </button>
+          </Link>
         </section>
         <section className="container">
           <CustomTitle title="Proche de chez vous" description="Evenements" />
