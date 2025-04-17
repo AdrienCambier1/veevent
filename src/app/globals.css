@@ -226,6 +226,10 @@ header nav a {
   @apply from-[rgba(var(--primary-red-rgb),0.1)];
 }
 
+.img-picker-preview {
+  @apply object-cover rounded-xl dark-shadow aspect-[16/9];
+}
+
 /**********/
 /* Titles */
 /**********/
