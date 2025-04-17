@@ -81,7 +81,10 @@ export default function ProfilBtn({ reverse, onClick }) {
         description="Souhaitez-vous vraiment vous déconnecter de votre compte ?"
         action="Se déconnecter"
         icon={LogOut}
-        onClick={() => logout()}
+        onClick={() => {
+          handleClose();
+          logout();
+        }}
         href="/"
       />
     </>
