@@ -96,7 +96,7 @@ function EventListContent({
             />
           )}
           {showCreateButton && (
-            <Link href="" className="primary-btn">
+            <Link href="/events/create" className="primary-btn">
               <span>Créer un événement</span>
               <Plus />
             </Link>

@@ -12,9 +12,21 @@ export default function ModalBg({ isOpen, setIsOpen, className }) {
         );
 
       if (!anyModalOpen) {
-        document.body.style.removeProperty("overflow-y");
+        document.body.style.overflowY = "";
       }
     }
+
+    return () => {
+      const stillHasOpenModals =
+        document.querySelectorAll(".modal-bg").length > 1 &&
+        Array.from(document.querySelectorAll(".modal-bg")).some(
+          (modal) => !modal.classList.contains("invisible")
+        );
+
+      if (!stillHasOpenModals) {
+        document.body.style.overflowY = "";
+      }
+    };
   }, [isOpen]);
 
   return (

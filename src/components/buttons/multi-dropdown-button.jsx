@@ -65,6 +65,7 @@ export default function MultiDropdownButton({
       >
         {options.map((option, index) => (
           <button
+            type="button"
             key={index}
             className={`dropdown-child ${
               selectedValues.includes(option.value) &&

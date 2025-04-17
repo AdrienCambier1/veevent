@@ -40,7 +40,7 @@ export default function Footer() {
                   <X />
                 </Link>
               </nav>
-              <Link href="" className="primary-btn">
+              <Link href="/events/create" className="primary-btn">
                 <span>Publie ton événement</span>
                 <ArrowUpRight />
               </Link>

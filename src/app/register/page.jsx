@@ -18,6 +18,7 @@ import { Eye, EyeClosed } from "iconoir-react";
 export default function RegisterPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -29,7 +30,6 @@ export default function RegisterPage() {
     interests: [],
   });
 
-  const [step, setStep] = useState(1);
   const [passwordStrength, setPasswordStrength] = useState({
     length: false,
     hasUpperCase: false,
@@ -37,9 +37,6 @@ export default function RegisterPage() {
     hasNumber: false,
     hasSpecial: false,
   });
-
-  const isPasswordValid =
-    Object.values(passwordStrength).filter(Boolean).length >= 4;
 
   const isStepValid = () => {
     switch (step) {
@@ -63,6 +60,27 @@ export default function RegisterPage() {
         return false;
     }
   };
+
+  const steps = [
+    {
+      value: 1,
+      onClick: () => setStep(1),
+      disabled: false,
+    },
+    {
+      value: 2,
+      onClick: () => setStep(2),
+      disabled: step === 1 && !isStepValid(),
+    },
+    {
+      value: 3,
+      onClick: () => setStep(3),
+      disabled: step < 2 || (step === 2 && !isStepValid()),
+    },
+  ];
+
+  const isPasswordValid =
+    Object.values(passwordStrength).filter(Boolean).length >= 4;
 
   const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -106,24 +124,6 @@ export default function RegisterPage() {
       router.push("/");
     }
   };
-
-  const steps = [
-    {
-      value: 1,
-      onClick: () => setStep(1),
-      disabled: false,
-    },
-    {
-      value: 2,
-      onClick: () => setStep(2),
-      disabled: step === 1 && !isStepValid(),
-    },
-    {
-      value: 3,
-      onClick: () => setStep(3),
-      disabled: step < 2 || (step === 2 && !isStepValid()),
-    },
-  ];
 
   const handleThemeToggle = (theme) => {
     setFormData((prev) => {

@@ -215,7 +215,7 @@ header nav a {
 
 .img-gradient-blue,
 .img-gradient-red {
-  @apply bg-gradient-to-b to-transparent p-4  rounded-full size-fit;
+  @apply bg-gradient-to-b to-transparent p-4 rounded-full size-fit;
 }
 
 .img-gradient-blue {
@@ -274,14 +274,16 @@ p {
 
 .primary-btn,
 .secondary-btn,
-.blue-rounded-btn {
+.blue-rounded-btn,
+.img-remove-btn {
   @apply flex items-center justify-center gap-2 rounded-full transition max-w-full w-fit h-fit overflow-hidden;
 }
 
 .primary-btn span,
 .secondary-btn span,
 .blue-rounded-btn span,
-.copy-btn span {
+.copy-btn span,
+.img-remove-btn span {
   @apply truncate;
 }
 
@@ -291,7 +293,8 @@ p {
 .dropdown-child svg,
 .dropdown-dangerous svg,
 .copy-btn svg,
-.trash-btn svg {
+.trash-btn svg,
+.img-remove-btn svg {
   @apply w-4 h-4 flex-shrink-0;
 }
 
@@ -301,6 +304,10 @@ p {
 
 .primary-btn {
   @apply bg-[var(--primary-blue)] text-white hover:opacity-75 py-1.5 px-4;
+}
+
+.img-remove-btn {
+  @apply bg-[rgba(var(--primary-red-rgb),0.75)] backdrop-blur-md text-white hover:opacity-75 py-1.5 px-4;
 }
 
 .secondary-btn {

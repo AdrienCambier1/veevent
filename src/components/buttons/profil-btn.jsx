@@ -75,16 +75,13 @@ export default function ProfilBtn({ reverse, onClick }) {
       </div>
       <DialogModal
         isOpen={logoutModalOpen}
-        setIsOpen={() => setLogoutModalOpen(!logoutModalOpen)}
+        setIsOpen={() => setLogoutModalOpen(false)}
         isDangerous={true}
         title="Se déconnecter"
         description="Souhaitez-vous vraiment vous déconnecter de votre compte ?"
         action="Se déconnecter"
         icon={LogOut}
-        onClick={() => {
-          logout();
-          handleClose();
-        }}
+        onClick={() => logout()}
         href="/"
       />
     </>
