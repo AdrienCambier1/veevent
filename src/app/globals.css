@@ -226,10 +226,6 @@ header nav a {
   @apply from-[rgba(var(--primary-red-rgb),0.1)];
 }
 
-.img-picker-preview {
-  @apply object-cover rounded-xl dark-shadow aspect-[16/9];
-}
-
 /**********/
 /* Titles */
 /**********/
@@ -420,10 +416,6 @@ p {
 
 .trash-btn {
   @apply text-[var(--primary-red)] hover:opacity-75 transition;
-}
-
-.img-picker-btn {
-  @apply h-full w-full flex flex-col items-center justify-center gap-4 bg-white border border-[var(--primary-border-col)] rounded-xl p-8 text-center cursor-pointer;
 }
 
 /********/

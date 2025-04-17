@@ -63,16 +63,10 @@ export default function ImagePicker({ onChange, value }) {
           </button>
         </div>
       ) : (
-        <div className="img-picker-btn" onClick={handleButtonClick}>
-          <div className="img-gradient-blue">
-            <MediaImagePlus />
-          </div>
-          <p>Ajouter une affiche à votre événement</p>
-          <button type="button" className="secondary-btn">
-            <span>Ajouter une affiche</span>
-            <Plus />
-          </button>
-        </div>
+        <button className="primary-form-btn" onClick={handleButtonClick}>
+          <span>Ajouter une affiche</span>
+          <MediaImagePlus />
+        </button>
       )}
     </div>
   );
