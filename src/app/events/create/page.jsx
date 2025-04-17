@@ -88,11 +88,15 @@ export default function CreatePage() {
   };
 
   const handleFilterSelect = (option) => {
-    setSelectedFilters([...selectedFilters, option.value]);
+    const newFilters = [...selectedFilters, option.value];
+    setSelectedFilters(newFilters);
+    setFormData({ ...formData, tags: newFilters });
   };
 
   const handleFilterRemove = (value) => {
-    setSelectedFilters(selectedFilters.filter((filter) => filter !== value));
+    const newFilters = selectedFilters.filter((filter) => filter !== value);
+    setSelectedFilters(newFilters);
+    setFormData({ ...formData, tags: newFilters });
   };
 
   const handleFormSubmit = (e) => {

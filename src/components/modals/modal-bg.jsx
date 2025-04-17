@@ -2,28 +2,20 @@ import { useEffect } from "react";
 
 export default function ModalBg({ isOpen, setIsOpen, className }) {
   useEffect(() => {
+    const hasVisibleModals = () => {
+      return Array.from(document.querySelectorAll(".modal-bg")).some(
+        (modal) => !modal.classList.contains("invisible")
+      );
+    };
+
     if (isOpen) {
       document.body.style.overflowY = "hidden";
-    } else {
-      const anyModalOpen =
-        document.querySelectorAll(".modal-bg").length > 0 &&
-        Array.from(document.querySelectorAll(".modal-bg")).some(
-          (modal) => !modal.classList.contains("invisible")
-        );
-
-      if (!anyModalOpen) {
-        document.body.style.overflowY = "";
-      }
+    } else if (!hasVisibleModals()) {
+      document.body.style.overflowY = "";
     }
 
     return () => {
-      const stillHasOpenModals =
-        document.querySelectorAll(".modal-bg").length > 1 &&
-        Array.from(document.querySelectorAll(".modal-bg")).some(
-          (modal) => !modal.classList.contains("invisible")
-        );
-
-      if (!stillHasOpenModals) {
+      if (!hasVisibleModals()) {
         document.body.style.overflowY = "";
       }
     };
