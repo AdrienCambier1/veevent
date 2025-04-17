@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
-import { Trash, MediaImagePlus, Plus } from "iconoir-react";
+import { MediaImagePlus, Xmark } from "iconoir-react";
 
 export default function ImagePicker({ onChange, value }) {
   const [preview, setPreview] = useState(value || "");
@@ -39,7 +39,7 @@ export default function ImagePicker({ onChange, value }) {
   };
 
   return (
-    <div className="relative">
+    <>
       <input
         type="file"
         ref={fileInputRef}
@@ -49,25 +49,26 @@ export default function ImagePicker({ onChange, value }) {
       />
 
       {preview ? (
-        <div className="relative">
+        <>
           <img
             src={preview}
             alt="Prévisualisation"
             className="img-picker-preview"
           />
           <button
-            className="img-remove-btn absolute top-2 right-2"
+            className="secondary-btn !text-[var(--primary-red)]"
             onClick={handleRemove}
           >
-            <Trash />
+            <span>Retirer l'affiche</span>
+            <Xmark />
           </button>
-        </div>
+        </>
       ) : (
         <button className="primary-form-btn" onClick={handleButtonClick}>
           <span>Ajouter une affiche</span>
           <MediaImagePlus />
         </button>
       )}
-    </div>
+    </>
   );
 }
