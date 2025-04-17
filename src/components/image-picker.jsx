@@ -39,7 +39,7 @@ export default function ImagePicker({ onChange, value }) {
   };
 
   return (
-    <div className="aspect-[16/9] relative">
+    <div className="relative">
       <input
         type="file"
         ref={fileInputRef}
@@ -53,7 +53,7 @@ export default function ImagePicker({ onChange, value }) {
           <img
             src={preview}
             alt="Prévisualisation"
-            className="banner !rounded-xl"
+            className="img-picker-preview"
           />
           <button
             className="img-remove-btn absolute top-2 right-2"
@@ -64,7 +64,9 @@ export default function ImagePicker({ onChange, value }) {
         </div>
       ) : (
         <div className="img-picker-btn" onClick={handleButtonClick}>
-          <MediaImagePlus />
+          <div className="img-gradient-blue">
+            <MediaImagePlus />
+          </div>
           <p>Ajouter une affiche à votre événement</p>
           <button type="button" className="secondary-btn">
             <span>Ajouter une affiche</span>
