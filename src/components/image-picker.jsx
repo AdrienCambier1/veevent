@@ -39,7 +39,7 @@ export default function ImagePicker({ onChange, value }) {
   };
 
   return (
-    <div className="aspect-[16/9]">
+    <div className="aspect-[16/9] relative">
       <input
         type="file"
         ref={fileInputRef}
@@ -59,19 +59,13 @@ export default function ImagePicker({ onChange, value }) {
             className="img-remove-btn absolute top-2 right-2"
             onClick={handleRemove}
           >
-            <span>Retirer l'image</span>
             <Trash />
           </button>
         </div>
       ) : (
-        <div
-          className="h-full w-full bg-white flex flex-col items-center justify-center gap-4 border border-[var(--primary-border-col)] rounded-xl p-8 text-center cursor-pointer"
-          onClick={handleButtonClick}
-        >
-          <MediaImagePlus className="h-6 w-6 flex-shrink-0" />
-          <p>
-            Veuillez ajouter une affiche à votre événement afin de le publier.
-          </p>
+        <div className="img-picker-btn" onClick={handleButtonClick}>
+          <MediaImagePlus />
+          <p>Ajouter une affiche à votre événement</p>
           <button type="button" className="secondary-btn">
             <span>Ajouter une affiche</span>
             <Plus />
