@@ -7,23 +7,30 @@ import { useEffect, useState } from "react";
 export default function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
-  const [showLoader, setShowLoader] = useState(true);
+  const [redirecting, setRedirecting] = useState(false);
+  const [loadingComplete, setLoadingComplete] = useState(false);
 
   useEffect(() => {
-    const minLoaderTimer = setTimeout(() => {
-      setShowLoader(false);
-    }, 500);
+    router.prefetch("/login");
+  }, [router]);
 
-    return () => clearTimeout(minLoaderTimer);
+  useEffect(() => {
+    const minTimer = setTimeout(() => {
+      setLoadingComplete(true);
+    }, 300);
+
+    return () => clearTimeout(minTimer);
   }, []);
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (!loading && !isAuthenticated && !redirecting && loadingComplete) {
+      setRedirecting(true);
+
       router.replace("/login");
     }
-  }, [isAuthenticated, loading, router]);
+  }, [isAuthenticated, loading, router, redirecting, loadingComplete]);
 
-  if (showLoader && loading && !isAuthenticated) {
+  if (loading || !isAuthenticated || !loadingComplete) {
     return (
       <div className="loader-container">
         <div className="loader" />
