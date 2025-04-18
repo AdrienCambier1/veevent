@@ -2,12 +2,20 @@
 
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import LoaderModal from "./modals/loader-modal";
+import { useEffect, useState } from "react";
 
 export default function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    const minLoaderTimer = setTimeout(() => {
+      setShowLoader(false);
+    }, 500);
+
+    return () => clearTimeout(minLoaderTimer);
+  }, []);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -15,5 +23,13 @@ export default function ProtectedRoute({ children }) {
     }
   }, [isAuthenticated, loading, router]);
 
-  return isAuthenticated ? children : <LoaderModal />;
+  if (showLoader || loading || !isAuthenticated) {
+    return (
+      <div className="loader-container">
+        <div className="loader" />
+      </div>
+    );
+  }
+
+  return children;
 }

@@ -644,6 +644,10 @@ textarea,
 /* Loading animation */
 /*********************/
 
+.loader-container {
+  @apply absolute inset-0 flex items-center justify-center bg-[var(--background)] z-[999];
+}
+
 .loader {
   width: 60px;
   height: 60px;
