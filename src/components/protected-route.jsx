@@ -23,7 +23,7 @@ export default function ProtectedRoute({ children }) {
     }
   }, [isAuthenticated, loading, router]);
 
-  if (showLoader || loading || !isAuthenticated) {
+  if (showLoader && loading && !isAuthenticated) {
     return (
       <div className="loader-container">
         <div className="loader" />
