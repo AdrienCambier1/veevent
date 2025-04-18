@@ -165,7 +165,7 @@ footer nav svg {
 .menu-modal nav div a,
 footer nav a,
 header nav a {
-  @apply hover:text-[var(--primary-blue)] transition;
+  @apply hover:text-[var(--primary-blue)] w-fit transition;
 }
 
 .menu-modal nav a {
