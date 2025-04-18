@@ -180,6 +180,19 @@ header nav a {
 /* Images */
 /**********/
 
+.img-gradient-blue svg,
+.img-gradient-red svg {
+  @apply h-6 w-6 flex-shrink-0;
+}
+
+.img-gradient-blue svg {
+  @apply text-[var(--primary-blue)];
+}
+
+.img-gradient-red svg {
+  @apply text-[var(--primary-red)];
+}
+
 .banner {
   @apply dark-shadow rounded-2xl w-full max-h-[20rem] aspect-[16/9] object-cover;
 }
@@ -198,19 +211,6 @@ header nav a {
 
 .profil-pic-sm {
   @apply h-8 w-8 rounded-full object-cover border-2 border-white;
-}
-
-.img-gradient-blue svg,
-.img-gradient-red svg {
-  @apply h-6 w-6 flex-shrink-0;
-}
-
-.img-gradient-blue svg {
-  @apply text-[var(--primary-blue)];
-}
-
-.img-gradient-red svg {
-  @apply text-[var(--primary-red)];
 }
 
 .img-gradient-blue,
@@ -276,6 +276,38 @@ p {
 /* Buttons */
 /***********/
 
+.primary-btn svg,
+.secondary-btn svg,
+.blue-rounded-btn svg,
+.red-rounded-btn svg,
+.dropdown-child svg,
+.dropdown-dangerous svg,
+.copy-btn svg,
+.trash-btn svg {
+  @apply w-4 h-4 flex-shrink-0;
+}
+
+.theme-btn svg,
+.rounded-form-btn svg,
+.back-form-btn svg,
+.more-btn svg,
+.nav-btn svg,
+.search-bar-btn svg {
+  @apply h-6 w-6 flex-shrink-0 transition;
+}
+
+.rounded-form-btn svg,
+.back-form-btn svg,
+.theme-btn svg,
+.search-bar-btn svg {
+  @apply text-[var(--primary-blue)];
+}
+
+.primary-form-btn svg,
+.secondary-form-btn svg {
+  @apply h-5 w-5 flex-shrink-0;
+}
+
 .primary-btn,
 .secondary-btn,
 .blue-rounded-btn,
@@ -289,17 +321,6 @@ p {
 .red-rounded-btn span,
 .copy-btn span {
   @apply truncate;
-}
-
-.primary-btn svg,
-.secondary-btn svg,
-.blue-rounded-btn svg,
-.red-rounded-btn svg,
-.dropdown-child svg,
-.dropdown-dangerous svg,
-.copy-btn svg,
-.trash-btn svg {
-  @apply w-4 h-4 flex-shrink-0;
 }
 
 .copy-btn {
@@ -331,11 +352,6 @@ p {
   @apply bg-[var(--primary-blue)] text-white disabled:opacity-50;
 }
 
-.primary-form-btn svg,
-.secondary-form-btn svg {
-  @apply h-5 w-5 flex-shrink-0;
-}
-
 .secondary-form-btn {
   @apply text-[var(--primary-blue)] box-border border border-[var(--primary-blue)];
 }
@@ -360,14 +376,6 @@ p {
 
 .theme-btn {
   @apply white-card p-3 flex items-center justify-between border-2 border-transparent hover:border-[var(--primary-blue)] transition;
-}
-
-.theme-btn svg,
-.rounded-form-btn svg,
-.back-form-btn svg,
-.more-btn svg,
-.nav-btn svg {
-  @apply text-[var(--primary-blue)] h-6 w-6 flex-shrink-0 transition;
 }
 
 .dropdown-parent,
@@ -406,10 +414,6 @@ p {
   @apply relative max-w-[30rem] w-full flex items-center gap-6 bg-white p-4 rounded-full blue-shadow transition;
 }
 
-.search-bar-btn svg {
-  @apply text-[var(--primary-blue)] h-6 w-6 flex-shrink-0;
-}
-
 .nav-btn {
   @apply flex items-center gap-4 hover:bg-white p-2 rounded-xl transition w-full;
 }
@@ -434,14 +438,14 @@ p {
 /* Tags */
 /********/
 
-.blue-tag,
-.green-tag {
-  @apply py-1.5 px-4 rounded-full flex items-center justify-center gap-2 max-w-full w-fit h-fit overflow-hidden;
-}
-
 .blue-tag svg,
 .green-tag svg {
   @apply w-4 h-4 flex-shrink-0;
+}
+
+.blue-tag,
+.green-tag {
+  @apply py-1.5 px-4 rounded-full flex items-center justify-center gap-2 max-w-full w-fit h-fit overflow-hidden;
 }
 
 .blue-tag span,
@@ -461,6 +465,10 @@ p {
 /* Inputs */
 /**********/
 
+.input-icon svg {
+  @apply h-5 w-5 hover:opacity-75 transition;
+}
+
 input,
 textarea,
 .input-btn {
@@ -469,10 +477,6 @@ textarea,
 
 .input-icon {
   @apply absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-[var(--dark-gray)] bg-white;
-}
-
-.input-icon svg {
-  @apply h-5 w-5 hover:opacity-75 transition;
 }
 
 .invisible-input {
@@ -499,6 +503,23 @@ textarea,
 /* Cards */
 /*********/
 
+.city-card svg,
+.theme-card svg {
+  @apply h-8 w-8 flex-shrink-0 transition;
+}
+
+.credit-card svg {
+  @apply text-white h-6 w-6 flex-shrink-0;
+}
+
+.theme-card svg {
+  @apply text-[var(--primary-blue)];
+}
+
+.city-card svg {
+  @apply text-white;
+}
+
 .city-card,
 .theme-card {
   @apply rounded-2xl transition flex items-center justify-center;
@@ -516,20 +537,12 @@ textarea,
   @apply text-white font-semibold text-sm;
 }
 
-.city-card svg {
-  @apply text-white h-8 w-8;
-}
-
 .theme-card {
   @apply bg-white dark-shadow rounded-xl p-12 w-full hover:bg-[var(--primary-blue)] transition;
 }
 
 .theme-card p {
   @apply text-[var(--primary-blue)] font-semibold text-sm;
-}
-
-.theme-card svg {
-  @apply text-[var(--primary-blue)] h-8 w-8 transition;
 }
 
 .white-card {
@@ -546,22 +559,6 @@ textarea,
 
 .overflow-card {
   @apply relative rounded-t-xl pb-6 max-h-72 w-full mask-bottom overflow-y-auto scrollbar-hide;
-}
-
-/*********/
-/* Grids */
-/*********/
-
-.page-grid {
-  @apply container grid grid-cols-1 lg:grid-cols-3 gap-12;
-}
-
-.event-grid {
-  @apply container grid grid-cols-1 lg:grid-cols-2 gap-12;
-}
-
-.cards-grid {
-  @apply grid grid-cols-1 sm:grid-cols-2 gap-6 w-full lg:col-span-2;
 }
 
 .ticket-card {
@@ -590,12 +587,24 @@ textarea,
   @apply text-white;
 }
 
-.credit-card svg {
-  @apply text-white h-6 w-6 flex-shrink-0;
-}
-
 .credit-card input {
   @apply border-none p-0 rounded-none !bg-transparent text-white placeholder:text-white/50;
+}
+
+/*********/
+/* Grids */
+/*********/
+
+.page-grid {
+  @apply container grid grid-cols-1 lg:grid-cols-3 gap-12;
+}
+
+.event-grid {
+  @apply container grid grid-cols-1 lg:grid-cols-2 gap-12;
+}
+
+.cards-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-6 w-full lg:col-span-2;
 }
 
 /**********/
