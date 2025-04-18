@@ -22,11 +22,12 @@ export default function DialogModal({
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsOpen();
-    if (onClick) onClick();
 
     if (href && mounted) {
       router.push(href);
     }
+
+    if (onClick) onClick();
   };
 
   useEffect(() => {
