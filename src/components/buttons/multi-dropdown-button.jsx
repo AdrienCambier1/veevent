@@ -70,7 +70,7 @@ export default function MultiDropdownButton({
             className={`dropdown-child ${
               selectedValues.includes(option.value) &&
               "!text-[var(--primary-green)]"
-            } hover:bg-[rgba(var(--primary-green-rgb),0.1)]`}
+            } hover:!bg-[rgba(var(--primary-green-rgb),0.1)]`}
             onClick={() => handleSelect(option)}
           >
             <span>{option.label}</span>

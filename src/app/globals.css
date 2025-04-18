@@ -292,14 +292,14 @@ p {
 .back-form-btn svg,
 .more-btn svg,
 .nav-btn svg,
-.search-bar-btn svg {
+.search-bar-btn > svg {
   @apply h-6 w-6 flex-shrink-0 transition;
 }
 
 .rounded-form-btn svg,
 .back-form-btn svg,
 .theme-btn svg,
-.search-bar-btn svg {
+.search-bar-btn > svg {
   @apply text-[var(--primary-blue)];
 }
 
