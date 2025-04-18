@@ -55,10 +55,7 @@ export default function ImagePicker({ onChange, value }) {
             alt="Prévisualisation"
             className="img-picker-preview"
           />
-          <button
-            className="secondary-btn !text-[var(--primary-red)]"
-            onClick={handleRemove}
-          >
+          <button className="red-rounded-btn" onClick={handleRemove}>
             <span>Retirer l'affiche</span>
             <Xmark />
           </button>

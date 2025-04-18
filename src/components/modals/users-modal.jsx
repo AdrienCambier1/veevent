@@ -86,13 +86,13 @@ export default function UsersModal({
           {canEdit ? (
             <div className="flex flex-col-reverse md:flex-row gap-4 w-full">
               <button className="secondary-form-btn" onClick={setIsOpen}>
-                Annuler
+                <span>Annuler</span>
               </button>
               <button className="primary-form-btn">Sauvegarder</button>
             </div>
           ) : (
             <button className="primary-form-btn" onClick={setIsOpen}>
-              Fermer
+              <span>Fermer</span>
             </button>
           )}
         </div>

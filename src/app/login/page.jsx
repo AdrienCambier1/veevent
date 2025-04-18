@@ -87,7 +87,7 @@ export default function LoginPage() {
               disabled={!isFormValid()}
               className="primary-form-btn"
             >
-              Se connecter
+              <span>Se connecter</span>
             </button>
             <p>
               Pas encore de compte ?{" "}

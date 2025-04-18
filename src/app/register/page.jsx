@@ -38,6 +38,14 @@ export default function RegisterPage() {
     hasSpecial: false,
   });
 
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const isPasswordValid =
+    Object.values(passwordStrength).filter(Boolean).length >= 4;
+
   const isStepValid = () => {
     switch (step) {
       case 1:
@@ -78,14 +86,6 @@ export default function RegisterPage() {
       disabled: step < 2 || (step === 2 && !isStepValid()),
     },
   ];
-
-  const isPasswordValid =
-    Object.values(passwordStrength).filter(Boolean).length >= 4;
-
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
 
   useEffect(() => {
     const { password } = formData;
@@ -283,7 +283,7 @@ export default function RegisterPage() {
                 disabled={!isStepValid()}
                 className="primary-form-btn"
               >
-                Continuer
+                <span>Continuer</span>
               </button>
               <p className="text-center w-fit">
                 Déjà un compte ?{" "}
@@ -298,7 +298,7 @@ export default function RegisterPage() {
               disabled={!isStepValid()}
               className="primary-form-btn"
             >
-              {step < 3 ? "Continuer" : "S'inscrire"}
+              <span>{step < 3 ? "Continuer" : "S'inscrire"}</span>
             </button>
           )}
 

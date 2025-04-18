@@ -278,13 +278,15 @@ p {
 
 .primary-btn,
 .secondary-btn,
-.blue-rounded-btn {
+.blue-rounded-btn,
+.red-rounded-btn {
   @apply flex items-center justify-center gap-2 rounded-full transition max-w-full w-fit h-fit overflow-hidden;
 }
 
 .primary-btn span,
 .secondary-btn span,
 .blue-rounded-btn span,
+.red-rounded-btn span,
 .copy-btn span {
   @apply truncate;
 }
@@ -292,6 +294,7 @@ p {
 .primary-btn svg,
 .secondary-btn svg,
 .blue-rounded-btn svg,
+.red-rounded-btn svg,
 .dropdown-child svg,
 .dropdown-dangerous svg,
 .copy-btn svg,
@@ -315,6 +318,10 @@ p {
   @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)] py-1.5 px-4 hover:opacity-75;
 }
 
+.red-rounded-btn {
+  @apply bg-[rgba(var(--primary-red-rgb),0.1)] text-[var(--primary-red)] py-1.5 px-4 hover:opacity-75;
+}
+
 .primary-form-btn,
 .secondary-form-btn {
   @apply hover:opacity-75 p-3 rounded-xl h-fit w-full transition flex items-center justify-center gap-2;
@@ -322,6 +329,11 @@ p {
 
 .primary-form-btn {
   @apply bg-[var(--primary-blue)] text-white disabled:opacity-50;
+}
+
+.primary-form-btn svg,
+.secondary-form-btn svg {
+  @apply h-5 w-5 flex-shrink-0;
 }
 
 .secondary-form-btn {
@@ -346,20 +358,16 @@ p {
   @apply bg-[rgba(var(--primary-blue-rgb),0.1)] text-[var(--primary-blue)];
 }
 
-.primary-form-btn svg,
-.rounded-form-btn svg,
-.back-form-btn svg,
-.nav-btn svg,
-.more-btn svg {
-  @apply h-6 w-6 flex-shrink-0;
-}
-
 .theme-btn {
   @apply white-card p-3 flex items-center justify-between border-2 border-transparent hover:border-[var(--primary-blue)] transition;
 }
 
-.theme-btn svg {
-  @apply text-[var(--primary-blue)] h-6 w-6 transition;
+.theme-btn svg,
+.rounded-form-btn svg,
+.back-form-btn svg,
+.more-btn svg,
+.nav-btn svg {
+  @apply text-[var(--primary-blue)] h-6 w-6 flex-shrink-0 transition;
 }
 
 .dropdown-parent,
@@ -464,7 +472,7 @@ textarea,
 }
 
 .input-icon svg {
-  @apply h-6 w-6 hover:opacity-75 transition;
+  @apply h-5 w-5 hover:opacity-75 transition;
 }
 
 .invisible-input {

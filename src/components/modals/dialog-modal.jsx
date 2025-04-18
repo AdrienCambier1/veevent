@@ -63,7 +63,7 @@ export default function DialogModal({
                 } secondary-form-btn`}
                 onClick={setIsOpen}
               >
-                Annuler
+                <span>Annuler</span>
               </button>
               <button
                 className={`${
@@ -71,12 +71,12 @@ export default function DialogModal({
                 } primary-form-btn`}
                 onClick={handleSubmit}
               >
-                {action}
+                <span>{action}</span>
               </button>
             </div>
           ) : (
             <button className="primary-form-btn" onClick={setIsOpen}>
-              Fermer
+              <span>Fermer</span>
             </button>
           )}
         </div>

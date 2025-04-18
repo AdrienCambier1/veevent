@@ -53,7 +53,7 @@ export default function MultiDropdownButton({
       >
         <div className="flex justify-between items-center w-full">
           <span>{label}</span>
-          <NavArrowDown className="text-[var(--dark-gray)] h-6 w-6 hover:opacity-75 transition ml-auto flex-shrink-0" />
+          <NavArrowDown className="text-[var(--dark-gray)] h-5 w-5 hover:opacity-75 transition ml-auto flex-shrink-0" />
         </div>
         {selectedOptions.length > 0 && <ThemeTags theme={selectedThemes} />}
       </button>
@@ -73,12 +73,8 @@ export default function MultiDropdownButton({
             } hover:bg-[rgba(var(--primary-green-rgb),0.1)]`}
             onClick={() => handleSelect(option)}
           >
-            <div className="flex w-full justify-between items-center">
-              <span>{option.label}</span>
-              {selectedValues.includes(option.value) && (
-                <Check className="h-5 w-5 text-[var(--primary-green)]" />
-              )}
-            </div>
+            <span>{option.label}</span>
+            {selectedValues.includes(option.value) && <Check />}
           </button>
         ))}
       </div>

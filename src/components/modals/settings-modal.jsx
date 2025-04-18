@@ -137,10 +137,10 @@ export default function SettingsModal({ isOpen, setIsOpen, type = "name" }) {
           </form>
           <div className="flex flex-col-reverse md:flex-row gap-4 w-full">
             <button className="secondary-form-btn" onClick={setIsOpen}>
-              Annuler
+              <span>Annuler</span>
             </button>
             <button className="primary-form-btn" onClick={handleSubmit}>
-              Sauvegarder
+              <span>Sauvegarder</span>
             </button>
           </div>
         </div>

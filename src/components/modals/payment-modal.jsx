@@ -58,10 +58,10 @@ export default function PaymentModal({
           </div>
           <div className="flex flex-col-reverse md:flex-row gap-4 w-full">
             <button className="secondary-form-btn" onClick={setIsOpen}>
-              Annuler
+              <span>Annuler</span>
             </button>
             <button className="primary-form-btn" onClick={handleSubmit}>
-              Payer
+              <span>Payer</span>
             </button>
           </div>
         </div>

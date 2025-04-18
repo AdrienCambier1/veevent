@@ -215,10 +215,10 @@ export default function CreatePage() {
             disabled={!isStepValid()}
             className="primary-form-btn"
           >
-            Continuer
+            <span>Continuer</span>
           </button>
           <Link href="/" className="secondary-form-btn">
-            Annuler
+            <span>Annuler</span>
           </Link>
           {step > 1 && (
             <div className="w-full flex justify-center">

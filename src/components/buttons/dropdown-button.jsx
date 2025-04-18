@@ -48,7 +48,7 @@ export default function DropdownButton({
             {selectedOption?.label || ""}
           </span>
         </span>
-        <NavArrowDown className="text-[var(--dark-gray)] h-6 w-6 hover:opacity-75 transition" />
+        <NavArrowDown className="text-[var(--dark-gray)] h-5 w-5 hover:opacity-75 transition" />
       </button>
 
       <div
