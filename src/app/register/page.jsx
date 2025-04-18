@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import MainTitle from "@/components/titles/main-title";
 import Link from "next/link";
 import OrSplitter from "@/components/or-splitter";
@@ -15,7 +15,7 @@ import ThemeButton from "@/components/buttons/theme-btn";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeClosed } from "iconoir-react";
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
@@ -342,5 +342,13 @@ export default function RegisterPage() {
         </form>
       </section>
     </main>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<></>}>
+      <RegisterPageContent />
+    </Suspense>
   );
 }

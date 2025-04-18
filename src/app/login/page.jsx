@@ -8,12 +8,12 @@ import {
   faFacebookF,
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeClosed } from "iconoir-react";
 import { useAuth } from "@/contexts/auth-context";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const { login } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -120,5 +120,13 @@ export default function LoginPage() {
         </form>
       </section>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<></>}>
+      <LoginPageContent />
+    </Suspense>
   );
 }
