@@ -9,13 +9,14 @@ import {
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeClosed } from "iconoir-react";
 import { useAuth } from "@/contexts/auth-context";
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -32,8 +33,9 @@ export default function LoginPage() {
     e.preventDefault();
 
     if (formData.email && formData.password) {
-      router.push("/");
       login();
+      const redirectPath = searchParams.get("redirect") || "/";
+      router.push(redirectPath);
     }
   };
 
@@ -91,7 +93,14 @@ export default function LoginPage() {
             </button>
             <p>
               Pas encore de compte ?{" "}
-              <Link href="/register" className="blue-text underline">
+              <Link
+                href={`/register${
+                  searchParams.get("redirect")
+                    ? `?redirect=${searchParams.get("redirect")}`
+                    : ""
+                }`}
+                className="blue-text underline"
+              >
                 S'inscrire
               </Link>
             </p>

@@ -2,7 +2,6 @@
 import ReactFocusLock from "react-focus-lock";
 import ModalBg from "./modal-bg";
 import ReactDOM from "react-dom";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function DialogModal({
@@ -14,18 +13,12 @@ export default function DialogModal({
   description,
   icon: Icon,
   onClick,
-  href,
 }) {
   const [mounted, setMounted] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsOpen();
-
-    if (href && mounted) {
-      router.push(href);
-    }
 
     if (onClick) onClick();
   };

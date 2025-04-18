@@ -56,6 +56,7 @@ export function AuthProvider({ children }) {
     setUser(null);
 
     localStorage.removeItem("auth");
+    window.location.href = "/";
 
     return true;
   };

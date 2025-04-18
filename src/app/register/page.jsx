@@ -12,11 +12,12 @@ import {
 import { ArrowLeft } from "iconoir-react";
 import StepIndicator from "@/components/step-indicator";
 import ThemeButton from "@/components/buttons/theme-btn";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeClosed } from "iconoir-react";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [step, setStep] = useState(1);
 
@@ -121,7 +122,8 @@ export default function RegisterPage() {
     if (step < 3) {
       handleNextStep();
     } else {
-      router.push("/");
+      const redirectPath = searchParams.get("redirect") || "/";
+      router.push(redirectPath);
     }
   };
 
@@ -287,7 +289,14 @@ export default function RegisterPage() {
               </button>
               <p className="text-center w-fit">
                 Déjà un compte ?{" "}
-                <Link href="/login" className="blue-text underline">
+                <Link
+                  href={`/login${
+                    searchParams.get("redirect")
+                      ? `?redirect=${searchParams.get("redirect")}`
+                      : ""
+                  }`}
+                  className="blue-text underline"
+                >
                   Se connecter
                 </Link>
               </p>

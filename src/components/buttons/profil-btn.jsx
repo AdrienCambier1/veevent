@@ -85,7 +85,6 @@ export default function ProfilBtn({ reverse, onClick }) {
           handleClose();
           logout();
         }}
-        href="/"
       />
     </>
   );
