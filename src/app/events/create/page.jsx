@@ -6,7 +6,7 @@ import { ArrowLeft } from "iconoir-react";
 import ImagePicker from "@/components/image-picker";
 import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
 import Link from "next/link";
-import ProtectedRoute from "@/components/protected-route";
+import ProtectedRoute from "@/components/navigations/protected-route";
 
 export default function CreatePage() {
   const [step, setStep] = useState(1);

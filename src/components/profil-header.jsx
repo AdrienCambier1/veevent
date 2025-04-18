@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { NavArrowRight } from "iconoir-react";
-import CustomNav from "@/components/custom-nav";
+import CustomNav from "@/components/navigations/custom-nav";
 import { usePathname } from "next/navigation";
 
 export default function ProfilHeader() {

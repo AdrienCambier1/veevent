@@ -2,7 +2,7 @@ import Image from "next/image";
 import nice4k from "@/assets/images/nice4k.jpg";
 import ProfilCard from "@/components/cards/profil-card";
 import ProfilHeader from "@/components/profil-header";
-import ProtectedRoute from "@/components/protected-route";
+import ProtectedRoute from "@/components/navigations/protected-route";
 
 export default function AccountLayout({ children }) {
   return (

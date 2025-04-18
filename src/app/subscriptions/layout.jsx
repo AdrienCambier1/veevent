@@ -1,6 +1,6 @@
 import MainTitle from "@/components/titles/main-title";
-import CustomNav from "@/components/custom-nav";
-import ProtectedRoute from "@/components/protected-route";
+import CustomNav from "@/components/navigations/custom-nav";
+import ProtectedRoute from "@/components/navigations/protected-route";
 
 export default function SubscriptionsLayout({ children }) {
   const navigation = [
