@@ -14,10 +14,6 @@ export default function UsersModal({
 }) {
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const modalConfig = {
     participants: {
       title: "Participants",
@@ -57,6 +53,10 @@ export default function UsersModal({
   ];
 
   const config = modalConfig[type] || modalConfig.participants;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) return null;
 

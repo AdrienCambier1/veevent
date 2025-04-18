@@ -21,14 +21,14 @@ export default function PaymentModal({
     { icon: Lock, ticket: ticket, type: "payment", price: price },
   ];
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const handleSubmit = () => {
     setIsOpen();
     if (onClick) onClick();
   };
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) return null;
 

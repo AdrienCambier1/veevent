@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { User, Calendar, Mail, Lock } from "iconoir-react";
 
 export default function SettingsModal({ isOpen, setIsOpen, type = "name" }) {
+  const [mounted, setMounted] = useState(false);
   const [formValues, setFormValues] = useState({
     firstName: "",
     lastName: "",
@@ -13,11 +14,6 @@ export default function SettingsModal({ isOpen, setIsOpen, type = "name" }) {
     password: "",
     birthdate: "",
   });
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const modalConfig = {
     name: {
@@ -105,6 +101,10 @@ export default function SettingsModal({ isOpen, setIsOpen, type = "name" }) {
     });
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) return null;
 

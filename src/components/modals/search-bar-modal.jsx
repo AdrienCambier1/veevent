@@ -6,6 +6,7 @@ import ModalBg from "./modal-bg";
 import ReactFocusLock from "react-focus-lock";
 
 export default function SearchBarModal({ isOpen, setIsOpen }) {
+  const [mounted, setMounted] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("events");
   const [searchDropdown, setSearchDropdown] = useState(false);
@@ -89,6 +90,12 @@ export default function SearchBarModal({ isOpen, setIsOpen }) {
       }, 100);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <>

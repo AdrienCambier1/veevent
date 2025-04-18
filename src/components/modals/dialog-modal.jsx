@@ -16,12 +16,8 @@ export default function DialogModal({
   onClick,
   href,
 }) {
-  const router = useRouter();
   const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,6 +28,10 @@ export default function DialogModal({
       router.push(href);
     }
   };
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) return null;
 
