@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
-  const login = async (credentials) => {
+  const login = async (credentials, redirectPath = "/") => {
     try {
       // En production: Appel API pour s'authentifier et récupérer un JWT
       // const response = await fetch('/api/auth/login', {
@@ -90,10 +90,12 @@ export function AuthProvider({ children }) {
       setUser(fakePayload);
       setIsAuthenticated(true);
       setSecureCookie("auth_token", fakeToken, 24 * 60 * 60);
+      window.location.href = redirectPath;
 
       return true;
     } catch (error) {
       console.error("Erreur d'authentification:", error);
+
       return false;
     }
   };
@@ -119,6 +121,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     handleLogout();
     window.location.href = "/";
+
     return true;
   };
 

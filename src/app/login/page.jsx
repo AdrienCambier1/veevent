@@ -9,13 +9,12 @@ import {
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Eye, EyeClosed } from "iconoir-react";
 import { useAuth } from "@/contexts/auth-context";
 
 function LoginPageContent() {
   const { login } = useAuth();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -33,9 +32,8 @@ function LoginPageContent() {
     e.preventDefault();
 
     if (formData.email && formData.password) {
-      login();
       const redirectPath = searchParams.get("redirect") || "/";
-      router.push(redirectPath);
+      login(formData, redirectPath);
     }
   };
 
