@@ -8,6 +8,18 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+const setSecureCookie = (name, value, maxAge) => {
+  const encodedValue = encodeURIComponent(value);
+
+  let cookieStr = `${name}=${encodedValue}; path=/; max-age=${maxAge}; SameSite=Lax`;
+
+  if (typeof window !== "undefined" && window.location.protocol === "https:") {
+    cookieStr += "; Secure";
+  }
+
+  document.cookie = cookieStr;
+};
+
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -29,10 +41,11 @@ export function AuthProvider({ children }) {
             setToken(storedToken);
             setUser(decodedToken);
             setIsAuthenticated(true);
-
-            document.cookie = `auth_token=${storedToken}; path=/; max-age=${
+            setSecureCookie(
+              "auth_token",
+              storedToken,
               decodedToken.exp - currentTime
-            }; SameSite=Lax`;
+            );
           }
         }
       } catch (error) {
@@ -64,19 +77,19 @@ export function AuthProvider({ children }) {
         iat: Math.floor(Date.now() / 1000),
       };
 
-      const fakeToken = `eyJhbGciOiJIUzI1NiJ9.${btoa(
-        JSON.stringify(fakePayload)
-      )}.SIGNATURE`;
+      const payloadBase64 = btoa(JSON.stringify(fakePayload))
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+      const fakeToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
 
       localStorage.setItem("token", fakeToken);
-
-      document.cookie = `auth_token=${fakeToken}; path=/; max-age=${
-        24 * 60 * 60
-      }; SameSite=Lax`;
 
       setToken(fakeToken);
       setUser(fakePayload);
       setIsAuthenticated(true);
+      setSecureCookie("auth_token", fakeToken, 24 * 60 * 60);
 
       return true;
     } catch (error) {
@@ -90,7 +103,17 @@ export function AuthProvider({ children }) {
     setUser(null);
     setToken(null);
     localStorage.removeItem("token");
-    document.cookie = "auth_token=; path=/; max-age=0; SameSite=Lax";
+
+    const baseCookieStr =
+      "auth_token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax";
+    document.cookie = baseCookieStr;
+
+    if (
+      typeof window !== "undefined" &&
+      window.location.protocol === "https:"
+    ) {
+      document.cookie = baseCookieStr + "; Secure";
+    }
   };
 
   const logout = () => {
