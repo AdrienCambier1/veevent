@@ -1,6 +1,5 @@
 import MainTitle from "@/components/titles/main-title";
-import CustomNav from "@/components/navigations/custom-nav";
-import ProtectedRoute from "@/components/navigations/protected-route";
+import CustomNav from "@/components/custom-nav";
 
 export default function SubscriptionsLayout({ children }) {
   const navigation = [
@@ -9,18 +8,16 @@ export default function SubscriptionsLayout({ children }) {
   ];
 
   return (
-    <ProtectedRoute>
-      <main>
-        <section className="container items-center">
-          <MainTitle title="Mes abonnements" />
-          <p className="text-center">
-            Retrouvez l’intégralité des événements des organisateurs auxquels
-            vous êtes abonné.
-          </p>
-          <CustomNav navigation={navigation} />
-        </section>
-        {children}
-      </main>
-    </ProtectedRoute>
+    <main>
+      <section className="container items-center">
+        <MainTitle title="Mes abonnements" />
+        <p className="text-center">
+          Retrouvez l’intégralité des événements des organisateurs auxquels vous
+          êtes abonné.
+        </p>
+        <CustomNav navigation={navigation} />
+      </section>
+      {children}
+    </main>
   );
 }

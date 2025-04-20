@@ -645,7 +645,7 @@ textarea,
 /*********************/
 
 .loader-container {
-  @apply absolute inset-0 flex items-center justify-center bg-[var(--background)] z-[999];
+  @apply w-full h-screen flex items-center justify-center;
 }
 
 .loader {

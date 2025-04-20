@@ -6,7 +6,6 @@ import { ArrowLeft } from "iconoir-react";
 import ImagePicker from "@/components/buttons/image-picker";
 import MultiDropdownButton from "@/components/buttons/multi-dropdown-button";
 import Link from "next/link";
-import ProtectedRoute from "@/components/navigations/protected-route";
 
 export default function CreatePage() {
   const [step, setStep] = useState(1);
@@ -203,39 +202,37 @@ export default function CreatePage() {
   };
 
   return (
-    <ProtectedRoute>
-      <main>
-        <section className="container items-center">
-          <MainTitle title="Créer votre événement" />
-          <StepIndicator currentStep={step} steps={steps} />
-        </section>
-        <section className="container items-center">
-          <form onSubmit={handleFormSubmit}>
-            {renderStep()}
-            <button
-              type="submit"
-              disabled={!isStepValid()}
-              className="primary-form-btn"
-            >
-              <span>Continuer</span>
-            </button>
-            <Link href="/" className="secondary-form-btn">
-              <span>Annuler</span>
-            </Link>
-            {step > 1 && (
-              <div className="w-full flex justify-center">
-                <button
-                  type="button"
-                  onClick={handlePreviousStep}
-                  className="back-form-btn"
-                >
-                  <ArrowLeft />
-                </button>
-              </div>
-            )}
-          </form>
-        </section>
-      </main>
-    </ProtectedRoute>
+    <main>
+      <section className="container items-center">
+        <MainTitle title="Créer votre événement" />
+        <StepIndicator currentStep={step} steps={steps} />
+      </section>
+      <section className="container items-center">
+        <form onSubmit={handleFormSubmit}>
+          {renderStep()}
+          <button
+            type="submit"
+            disabled={!isStepValid()}
+            className="primary-form-btn"
+          >
+            <span>Continuer</span>
+          </button>
+          <Link href="/" className="secondary-form-btn">
+            <span>Annuler</span>
+          </Link>
+          {step > 1 && (
+            <div className="w-full flex justify-center">
+              <button
+                type="button"
+                onClick={handlePreviousStep}
+                className="back-form-btn"
+              >
+                <ArrowLeft />
+              </button>
+            </div>
+          )}
+        </form>
+      </section>
+    </main>
   );
 }
