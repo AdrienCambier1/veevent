@@ -82,7 +82,6 @@ export default function ProfilBtn({ reverse, onClick }) {
         action="Se déconnecter"
         icon={LogOut}
         onClick={() => {
-          handleClose();
           logout();
         }}
       />
