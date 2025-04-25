@@ -562,16 +562,16 @@ textarea,
 }
 
 .ticket-card {
-  @apply bg-[var(--primary-blue)] relative overflow-hidden w-full;
-}
-
-.ticket-card .corner {
-  @apply bg-[var(--background)] h-10 w-10 absolute rounded-full;
+  @apply bg-[var(--primary-blue)] relative rounded-2xl overflow-hidden w-full;
 }
 
 .ticket-card h3,
 .ticket-card p {
   @apply text-white;
+}
+
+.ticket-card .bg-circle {
+  @apply bg-white/10 rounded-full absolute;
 }
 
 .ticket-card .primary-btn {
