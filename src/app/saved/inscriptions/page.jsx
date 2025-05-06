@@ -7,6 +7,7 @@ export default function InscriptionsPage() {
       description="Evenements"
       showFilters={true}
       showSort={true}
+      isRegistered={true}
     />
   );
 }

@@ -1,5 +1,13 @@
 "use client";
-import { Bookmark, MoreHoriz, Trash } from "iconoir-react";
+import {
+  Bookmark,
+  Check,
+  DoubleCheck,
+  MoreHoriz,
+  Trash,
+  UserBadgeCheck,
+  UserXmark,
+} from "iconoir-react";
 import profilPicture from "@/assets/images/profil-pic.jpg";
 import RatingStar from "../rating-stars";
 import ThemeTags from "../theme-tags";
@@ -10,29 +18,41 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import DialogModal from "../modals/dialog-modal";
 
-export default function EventCard({ canEdit }) {
+export default function EventCard({ canEdit, isRegistered }) {
   const [editDropdown, setEditDropdown] = useState(false);
+  const [registeredDropdown, setRegisteredDropdown] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [unsubscribeModal, setUnsubscribeModal] = useState(false);
   const editDropdownRef = useRef(null);
+  const registeredDropdownRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         editDropdownRef.current &&
-        !editDropdownRef.current.contains(event.target)
+        !editDropdownRef.current.contains(event.target) &&
+        editDropdown
       ) {
         setEditDropdown(false);
       }
+
+      if (
+        registeredDropdownRef.current &&
+        !registeredDropdownRef.current.contains(event.target) &&
+        registeredDropdown
+      ) {
+        setRegisteredDropdown(false);
+      }
     };
 
-    if (editDropdown) {
+    if (editDropdown || registeredDropdown) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [editDropdown]);
+  }, [editDropdown, registeredDropdown]);
 
   const eventCardContent = () => {
     return (
@@ -47,7 +67,11 @@ export default function EventCard({ canEdit }) {
             <h3 className="text-[var(--secondary-blue)]">
               Atelier fresque végétal
             </h3>
-            <Bookmark className="text-[var(--primary-blue)] h-6 w-6 flex-shrink-0" />
+            {isRegistered ? (
+              <UserBadgeCheck className="text-[var(--primary-blue)] h-6 w-6 flex-shrink-0" />
+            ) : (
+              <Bookmark className="text-[var(--primary-blue)] h-6 w-6 flex-shrink-0" />
+            )}
           </div>
           <div className="flex items-center gap-4">
             <Image
@@ -109,6 +133,47 @@ export default function EventCard({ canEdit }) {
                 </div>
               </div>
             )}
+            {isRegistered && (
+              <div className="relative" ref={registeredDropdownRef}>
+                <button
+                  className="more-btn"
+                  onClick={() => setRegisteredDropdown(!registeredDropdown)}
+                >
+                  <MoreHoriz />
+                </button>
+                <div
+                  className={`${
+                    registeredDropdown
+                      ? "visible opacity-100"
+                      : "invisible opacity-0"
+                  } dropdown-parent right-0`}
+                >
+                  <Link
+                    href="/events/1"
+                    className="dropdown-child"
+                    onClick={() => setRegisteredDropdown(false)}
+                  >
+                    Voir l'événement
+                  </Link>
+                  <button
+                    className="dropdown-child"
+                    onClick={() => setRegisteredDropdown(false)}
+                  >
+                    Consulter le billet
+                  </button>
+                  <button
+                    className="dropdown-dangerous"
+                    onClick={() => {
+                      setRegisteredDropdown(false);
+                      setUnsubscribeModal(true);
+                    }}
+                  >
+                    <span>Se désincrire</span>
+                    <UserXmark />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </>
@@ -117,7 +182,7 @@ export default function EventCard({ canEdit }) {
 
   return (
     <>
-      {canEdit ? (
+      {canEdit || isRegistered ? (
         <div className="white-card">{eventCardContent()}</div>
       ) : (
         <Link href="/events/1" className="white-card">
@@ -138,6 +203,22 @@ export default function EventCard({ canEdit }) {
           </>
         }
         onClick={() => setDeleteModal(false)}
+        isDangerous={true}
+      />
+      <DialogModal
+        icon={UserXmark}
+        isOpen={unsubscribeModal}
+        setIsOpen={() => setUnsubscribeModal(false)}
+        title="Se désinscrire de l'événement"
+        action="Se désinscrire"
+        description={
+          <>
+            Souhaitez vous vraiment annuler votre inscription à l'événement{" "}
+            <span className="dark-text">Atelier fresque végétal</span>, votre
+            inscription sera remboursée.
+          </>
+        }
+        onClick={() => setUnsubscribeModal(false)}
         isDangerous={true}
       />
     </>

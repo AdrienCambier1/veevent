@@ -14,6 +14,7 @@ function EventListContent({
   showFilters,
   showCreateButton,
   canEdit,
+  isRegistered,
 }) {
   const { useSearchParams } = require("next/navigation");
   const searchParams = useSearchParams();
@@ -104,10 +105,10 @@ function EventListContent({
         </div>
       </div>
       <div className="cards-grid">
-        <EventCard canEdit={canEdit} />
-        <EventCard canEdit={canEdit} />
-        <EventCard canEdit={canEdit} />
-        <EventCard canEdit={canEdit} />
+        <EventCard canEdit={canEdit} isRegistered={isRegistered} />
+        <EventCard canEdit={canEdit} isRegistered={isRegistered} />
+        <EventCard canEdit={canEdit} isRegistered={isRegistered} />
+        <EventCard canEdit={canEdit} isRegistered={isRegistered} />
       </div>
     </section>
   );
