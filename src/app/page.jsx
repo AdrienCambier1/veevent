@@ -51,8 +51,8 @@ export default function Home() {
         <section className="container">
           <CustomTitle title="Recommandé pour vous" description="Evenements" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <EventCard />
-            <EventCard />
+            <EventCard isTrending={true} />
+            <EventCard isTrending={true} />
             <EventCard />
           </div>
           <Link href="/subscriptions/events" className="blue-rounded-btn">

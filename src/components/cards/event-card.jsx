@@ -18,7 +18,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import DialogModal from "../modals/dialog-modal";
 
-export default function EventCard({ canEdit, isRegistered }) {
+export default function EventCard({ canEdit, isRegistered, isTrending }) {
   const [editDropdown, setEditDropdown] = useState(false);
   const [registeredDropdown, setRegisteredDropdown] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -57,11 +57,14 @@ export default function EventCard({ canEdit, isRegistered }) {
   const eventCardContent = () => {
     return (
       <>
-        <Image
-          src={niceImage}
-          alt="Event image"
-          className="object-cover rounded-t-xl aspect-[16/9]"
-        />
+        <div className="relative">
+          <Image
+            src={niceImage}
+            alt="Event image"
+            className="object-cover rounded-t-xl aspect-[16/9]"
+          />
+          {isTrending && <div className="trending-tag">Tendance</div>}
+        </div>
         <div className="flex flex-col gap-4 p-4">
           <div className="flex justify-between items-center">
             <h3 className="text-[var(--secondary-blue)]">

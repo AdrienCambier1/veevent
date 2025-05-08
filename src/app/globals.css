@@ -461,6 +461,23 @@ p {
   @apply bg-[rgba(var(--primary-green-rgb),0.1)] text-[var(--primary-green)];
 }
 
+.trending-tag {
+  @apply absolute top-4 -left-2 bg-[var(--primary-red)] px-4 py-1.5 text-white rounded-tl-lg rounded-r-lg;
+}
+
+.trending-tag::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-top: 8px solid var(--primary-red);
+  filter: brightness(0.85);
+  z-index: -999;
+}
+
 /**********/
 /* Inputs */
 /**********/
