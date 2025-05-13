@@ -462,7 +462,7 @@ p {
 }
 
 .trending-tag {
-  @apply absolute top-4 -left-2 bg-[var(--primary-red)] px-4 py-1.5 text-white rounded-tl-lg rounded-r-lg;
+  @apply absolute top-4 -left-2 bg-[var(--primary-blue)] px-4 py-1.5 text-white rounded-tl-lg rounded-r-lg;
 }
 
 .trending-tag::before {
@@ -473,7 +473,7 @@ p {
   width: 0;
   height: 0;
   border-left: 8px solid transparent;
-  border-top: 8px solid var(--primary-red);
+  border-top: 8px solid var(--primary-blue);
   filter: brightness(0.85);
   z-index: -999;
 }
