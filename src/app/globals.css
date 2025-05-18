@@ -94,14 +94,48 @@ form label {
   @apply flex flex-col w-fit items-center md:items-start;
 }
 
+.mask-top {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 40px,
+    black 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 40px,
+    black 100%
+  );
+}
+
 .mask-bottom {
   mask-image: linear-gradient(
     to bottom,
+    black 0%,
     black calc(100% - 40px),
     transparent 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
+    black 0%,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+}
+
+.mask-both {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 40px,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 40px,
     black calc(100% - 40px),
     transparent 100%
   );
@@ -575,7 +609,7 @@ textarea,
 }
 
 .overflow-card {
-  @apply relative rounded-xl pb-6 max-h-72 w-full mask-bottom overflow-y-auto scrollbar-hide;
+  @apply relative py-0 max-h-72 w-full overflow-y-auto scrollbar-hide;
 }
 
 .ticket-card {

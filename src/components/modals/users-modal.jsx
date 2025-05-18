@@ -2,7 +2,7 @@
 import ReactFocusLock from "react-focus-lock";
 import ModalBg from "./modal-bg";
 import ReactDOM from "react-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Group } from "iconoir-react";
 import UserElement from "../user-element";
 
@@ -13,6 +13,9 @@ export default function UsersModal({
   canEdit = false,
 }) {
   const [mounted, setMounted] = useState(false);
+  const [isAtTop, setIsAtTop] = useState(true);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const scrollContainerRef = useRef(null);
 
   const modalConfig = {
     participants: {
@@ -54,9 +57,25 @@ export default function UsersModal({
 
   const config = modalConfig[type] || modalConfig.participants;
 
+  const checkScrollPosition = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    setIsAtTop(container.scrollTop <= 0);
+
+    const isBottom =
+      Math.ceil(container.scrollTop + container.clientHeight) >=
+      container.scrollHeight;
+    setIsAtBottom(isBottom);
+  };
+
   useEffect(() => {
     setMounted(true);
-  }, []);
+
+    if (isOpen) {
+      checkScrollPosition();
+    }
+  }, [isOpen, checkScrollPosition]);
 
   if (!mounted) return null;
 
@@ -75,7 +94,19 @@ export default function UsersModal({
             <h3 className="text-center">{config.title}</h3>
           </div>
           {users.length > 0 ? (
-            <div className="overflow-card flex flex-col gap-2 ">
+            <div
+              ref={scrollContainerRef}
+              onScroll={checkScrollPosition}
+              className={`overflow-card flex flex-col gap-2 ${
+                !isAtTop && !isAtBottom
+                  ? "mask-both"
+                  : !isAtTop
+                  ? "mask-top"
+                  : !isAtBottom
+                  ? "mask-bottom"
+                  : ""
+              }`}
+            >
               {users.map((user, index) => (
                 <UserElement name={user.name} key={index} id={user.id} />
               ))}
