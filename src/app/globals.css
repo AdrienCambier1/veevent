@@ -575,7 +575,7 @@ textarea,
 }
 
 .overflow-card {
-  @apply relative rounded-t-xl pb-6 max-h-72 w-full mask-bottom overflow-y-auto scrollbar-hide;
+  @apply relative rounded-xl pb-6 max-h-72 w-full mask-bottom overflow-y-auto scrollbar-hide;
 }
 
 .ticket-card {
