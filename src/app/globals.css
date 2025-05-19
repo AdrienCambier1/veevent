@@ -534,6 +534,14 @@ textarea,
   @apply h-fit border-none outline-none bg-transparent p-0 rounded-none;
 }
 
+.credit-card input {
+  @apply border-none p-0 rounded-none !bg-transparent text-white placeholder:text-white/50;
+}
+
+.modal-content input {
+  @apply bg-[rgba(var(--primary-border-col-rgb),0.2)] border-[var(--primary-border-col)];
+}
+
 /***********/
 /* Shadows */
 /***********/
@@ -638,10 +646,6 @@ textarea,
   @apply text-white;
 }
 
-.credit-card input {
-  @apply border-none p-0 rounded-none !bg-transparent text-white placeholder:text-white/50;
-}
-
 /*********/
 /* Grids */
 /*********/
@@ -685,10 +689,6 @@ textarea,
 
 .modal-wrapper {
   @apply min-h-full flex items-center justify-center p-4;
-}
-
-.modal-content input {
-  @apply bg-[rgba(var(--primary-border-col-rgb),0.2)] border-[var(--primary-border-col)];
 }
 
 /*********************/
