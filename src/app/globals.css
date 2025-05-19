@@ -98,13 +98,13 @@ form label {
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    black 20px,
+    black 30px,
     black 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    black 20px,
+    black 30px,
     black 100%
   );
 }
@@ -113,13 +113,13 @@ form label {
   mask-image: linear-gradient(
     to bottom,
     black 0%,
-    black calc(100% - 20px),
+    black calc(100% - 30px),
     transparent 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     black 0%,
-    black calc(100% - 20px),
+    black calc(100% - 30px),
     transparent 100%
   );
 }
@@ -129,14 +129,14 @@ form label {
     to bottom,
     transparent 0%,
     black 20px,
-    black calc(100% - 20px),
+    black calc(100% - 30px),
     transparent 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
     black 20px,
-    black calc(100% - 20px),
+    black calc(100% - 30px),
     transparent 100%
   );
 }
@@ -676,7 +676,7 @@ textarea,
 }
 
 .modal-container {
-  @apply p-2 flex items-center justify-center fixed inset-0 z-50 pointer-events-none overflow-auto;
+  @apply p-2 flex items-center justify-center fixed inset-0 z-50 pointer-events-none;
 }
 
 .modal-content {

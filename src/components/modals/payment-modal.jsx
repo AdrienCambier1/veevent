@@ -15,7 +15,6 @@ export default function PaymentModal({
   price,
 }) {
   const [mounted, setMounted] = useState(false);
-  const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
   const scrollContainerRef = useRef(null);
 
@@ -32,8 +31,6 @@ export default function PaymentModal({
   const checkScrollPosition = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
-
-    setIsAtTop(container.scrollTop <= 0);
 
     const isBottom =
       Math.ceil(container.scrollTop + container.clientHeight) >=
@@ -68,14 +65,8 @@ export default function PaymentModal({
           <div
             ref={scrollContainerRef}
             onScroll={checkScrollPosition}
-            className={`overflow-card flex flex-col gap-8 ${
-              !isAtTop && !isAtBottom
-                ? "mask-both"
-                : !isAtTop
-                ? "mask-top"
-                : !isAtBottom
-                ? "mask-bottom"
-                : ""
+            className={`overflow-card rounded-t-2xl flex flex-col gap-8 ${
+              !isAtBottom && "mask-bottom"
             }`}
           >
             <div className="flex flex-col gap-4 ">
