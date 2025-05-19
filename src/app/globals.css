@@ -676,11 +676,11 @@ textarea,
 }
 
 .modal-container {
-  @apply flex items-end sm:items-center justify-center sm:p-6 fixed inset-0 z-50 pointer-events-none overflow-auto;
+  @apply flex items-end sm:items-center justify-center p-2 fixed inset-0 z-50 pointer-events-none overflow-auto;
 }
 
 .modal-content {
-  @apply bg-white h-fit w-full rounded-t-2xl sm:max-w-[30rem] sm:rounded-2xl p-6 pointer-events-auto flex flex-col items-center gap-8 transition;
+  @apply bg-white h-fit w-full rounded-2xl sm:max-w-[30rem] p-8 pointer-events-auto flex flex-col items-center gap-8 transition;
 }
 
 .modal-wrapper {
