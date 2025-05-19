@@ -39,15 +39,15 @@ body {
 }
 
 header {
-  @apply top-0 fixed px-4 sm:px-8 w-full bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
+  @apply top-0 fixed px-6 w-full bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
 }
 
 main {
-  @apply mt-16 px-4 sm:px-8 top-0 flex flex-col relative;
+  @apply mt-16 px-6 top-0 flex flex-col relative;
 }
 
 footer {
-  @apply bg-white !py-8 p-4 sm:p-8 !pt-0 mt-20 relative;
+  @apply bg-white p-6 !pt-0 mt-20 relative;
 }
 
 .logo {
@@ -59,7 +59,7 @@ footer {
 }
 
 section {
-  @apply flex flex-col gap-6 mt-16 relative;
+  @apply flex flex-col gap-6 mt-20 relative;
 }
 
 .transition {
@@ -668,19 +668,19 @@ textarea,
 }
 
 .menu-modal {
-  @apply bg-white h-full w-full sm:max-w-[30rem] fixed !py-8 p-4 sm:p-8 !pt-0 lg:px-36 left-0 top-0 z-40 flex flex-col justify-between gap-8 overflow-y-auto;
+  @apply bg-white h-full max-w-full fixed p-6 !pt-0 lg:px-36 left-0 top-0 z-40 flex flex-col justify-between gap-8 overflow-y-auto;
 }
 
 .modal-bg {
-  @apply inset-0 fixed bg-black/50 z-30 backdrop-blur-[2px] cursor-pointer;
+  @apply inset-0 fixed bg-black/50 z-30 backdrop-blur-[2px] cursor-pointer transition;
 }
 
 .modal-container {
-  @apply flex items-end sm:items-center justify-center sm:p-8 fixed inset-0 z-50 pointer-events-none overflow-auto;
+  @apply flex items-end sm:items-center justify-center sm:p-6 fixed inset-0 z-50 pointer-events-none overflow-auto;
 }
 
 .modal-content {
-  @apply bg-white h-fit w-full rounded-t-2xl sm:max-w-[30rem] sm:rounded-2xl p-8 pointer-events-auto flex flex-col items-center gap-8 transition;
+  @apply bg-white h-fit w-full rounded-t-2xl sm:max-w-[30rem] sm:rounded-2xl p-6 pointer-events-auto flex flex-col items-center gap-8 transition;
 }
 
 .modal-wrapper {

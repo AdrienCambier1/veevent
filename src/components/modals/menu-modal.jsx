@@ -24,7 +24,7 @@ export default function MenuModal({ isOpen, setIsOpen }) {
         } menu-modal lg:hidden`}
       >
         <div className="flex flex-col gap-8">
-          <div className="w-full flex gap-8 justify-between items-center h-16">
+          <div className="w-full flex gap-12 justify-between items-center h-16">
             <Link
               href="/"
               className="logo"
@@ -41,7 +41,7 @@ export default function MenuModal({ isOpen, setIsOpen }) {
               v<span>ee</span>vent
             </Link>
             <button className="blue-rounded-btn" onClick={setIsOpen}>
-              <span>Menu</span>
+              <span>Fermer</span>
               <Xmark className="hamburger-menu" />
             </button>
           </div>
