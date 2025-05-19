@@ -103,7 +103,7 @@ export default function SearchBarModal({ isOpen, setIsOpen }) {
         ref={modalRef}
         className={`${
           isOpen ? "visible" : "invisible"
-        } modal-container p-8 !items-start`}
+        } modal-container !py-8 p-4 sm:p-8 !items-start`}
       >
         <div
           className={`${

@@ -39,15 +39,15 @@ body {
 }
 
 header {
-  @apply top-0 fixed px-8 w-screen bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
+  @apply top-0 fixed px-4 sm:px-8 w-full bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
 }
 
 main {
-  @apply mt-16 px-8 top-0 flex flex-col relative;
+  @apply mt-16 px-4 sm:px-8 top-0 flex flex-col relative;
 }
 
 footer {
-  @apply bg-white p-8 pt-0 mt-20 relative;
+  @apply bg-white !py-8 p-4 sm:p-8 !pt-0 mt-20 relative;
 }
 
 .logo {
@@ -668,7 +668,7 @@ textarea,
 }
 
 .menu-modal {
-  @apply bg-white h-full w-full max-w-[30rem] fixed p-8 pt-0 lg:px-36 left-0 top-0 z-40 flex flex-col justify-between gap-8 overflow-y-auto;
+  @apply bg-white h-full w-full sm:max-w-[30rem] fixed !py-8 p-4 sm:p-8 !pt-0 lg:px-36 left-0 top-0 z-40 flex flex-col justify-between gap-8 overflow-y-auto;
 }
 
 .modal-bg {
