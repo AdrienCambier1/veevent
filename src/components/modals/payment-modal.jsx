@@ -2,7 +2,7 @@
 import ReactFocusLock from "react-focus-lock";
 import ModalBg from "./modal-bg";
 import ReactDOM from "react-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Euro, Lock } from "iconoir-react";
 import ItemList from "../lists/item-list";
 import CreditCard from "../cards/credit-card";
@@ -15,6 +15,9 @@ export default function PaymentModal({
   price,
 }) {
   const [mounted, setMounted] = useState(false);
+  const [isAtTop, setIsAtTop] = useState(true);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const scrollContainerRef = useRef(null);
 
   const paymentInfos = [
     { icon: Lock, value: "Paiement sécurisé" },
@@ -26,9 +29,25 @@ export default function PaymentModal({
     if (onClick) onClick();
   };
 
+  const checkScrollPosition = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    setIsAtTop(container.scrollTop <= 0);
+
+    const isBottom =
+      Math.ceil(container.scrollTop + container.clientHeight) >=
+      container.scrollHeight;
+    setIsAtBottom(isBottom);
+  };
+
   useEffect(() => {
     setMounted(true);
-  }, []);
+
+    if (isOpen) {
+      checkScrollPosition();
+    }
+  }, [isOpen, checkScrollPosition]);
 
   if (!mounted) return null;
 
@@ -46,7 +65,19 @@ export default function PaymentModal({
             </div>
             <h3 className="text-center">Votre commande</h3>
           </div>
-          <div className="overflow-card flex flex-col gap-8">
+          <div
+            ref={scrollContainerRef}
+            onScroll={checkScrollPosition}
+            className={`overflow-card flex flex-col gap-8 ${
+              !isAtTop && !isAtBottom
+                ? "mask-both"
+                : !isAtTop
+                ? "mask-top"
+                : !isAtBottom
+                ? "mask-bottom"
+                : ""
+            }`}
+          >
             <div className="flex flex-col gap-4 ">
               <CreditCard />
               <p>
