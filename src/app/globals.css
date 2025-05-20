@@ -154,16 +154,10 @@ form label {
   display: none;
 }
 
-/* app/globals.css */
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background-color: transparent; /* Fond transparent */
-}
+/*****************/
+/* Styles mobile */
+/*****************/
 
-/* Ajustements pour les "safe areas" (iOS) */
 body {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
@@ -171,7 +165,6 @@ body {
   padding-right: env(safe-area-inset-right);
 }
 
-/* Fallback pour anciens navigateurs */
 @supports (padding-bottom: constant(safe-area-inset-bottom)) {
   body {
     padding-bottom: constant(safe-area-inset-bottom);
