@@ -4,11 +4,12 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { AuthProvider } from "@/contexts/auth-context";
 import { CityProvider } from "@/contexts/city-context";
+import Head from "next/head";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">
-      <head>
+      <Head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -19,7 +20,7 @@ export default function RootLayout({ children }) {
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"
         />
-      </head>
+      </Head>
       <body>
         <AuthProvider>
           <CityProvider>

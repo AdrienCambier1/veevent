@@ -154,6 +154,19 @@ form label {
   display: none;
 }
 
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    min-height: 100vh;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  footer {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px) !important;
+    margin-bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
+    background-color: transparent !important;
+  }
+}
+
 /**************/
 /* Navigation */
 /**************/
