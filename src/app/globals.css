@@ -154,16 +154,27 @@ form label {
   display: none;
 }
 
-@supports (padding: env(safe-area-inset-bottom)) {
-  body {
-    min-height: 100vh;
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
+/* app/globals.css */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: transparent; /* Fond transparent */
+}
 
-  footer {
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px) !important;
-    margin-bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
-    background-color: transparent !important;
+/* Ajustements pour les "safe areas" (iOS) */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Fallback pour anciens navigateurs */
+@supports (padding-bottom: constant(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: constant(safe-area-inset-bottom);
   }
 }
 
