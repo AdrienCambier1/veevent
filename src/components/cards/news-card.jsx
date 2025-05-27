@@ -1,0 +1,39 @@
+import Image from "next/image";
+import niceImage from "@/assets/images/nice.jpg";
+import Link from "next/link";
+import { useRef, useEffect, useState } from "react";
+
+export default function NewsCard({ title, date, description, imageUrl }) {
+  const contentRef = useRef(null);
+  const [isTruncated, setIsTruncated] = useState(false);
+
+  useEffect(() => {
+    const checkTruncation = () => {
+      if (contentRef.current) {
+        const element = contentRef.current;
+        setIsTruncated(element.scrollHeight > element.clientHeight);
+      }
+    };
+
+    checkTruncation();
+
+    window.addEventListener("resize", checkTruncation);
+    return () => window.removeEventListener("resize", checkTruncation);
+  }, [description]);
+
+  return (
+    <div className="bg-white news-card">
+      <Image src={niceImage} alt="News image" className="banner" />
+      <p className="date">{date}</p>
+      <h3>{title}</h3>
+      <p ref={contentRef} className="line-clamp-4">
+        {description}
+      </p>
+      {isTruncated && (
+        <Link href="#" className="more-btn">
+          En lire plus
+        </Link>
+      )}
+    </div>
+  );
+}

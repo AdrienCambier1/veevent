@@ -1,4 +1,8 @@
-import { Bookmark, Pin, Calendar } from "iconoir-react";
+import { Bookmark, MapPin, Calendar } from "iconoir-react";
+import Image from "next/image";
+import niceImage from "@/assets/images/nice.jpg";
+import ThemeTags from "../theme-tags";
+import ProfilImages from "../profil-images";
 
 export default function EventCard({
   title,
@@ -10,15 +14,18 @@ export default function EventCard({
 }) {
   return (
     <div className="event-card">
+      <div className="image-container">
+        <ThemeTags theme={["musique", "sponsorisé", "sport", "learning"]} />
+        <Image src={niceImage} className="banner" alt="Event image" />
+      </div>
       <div className="flex flex-col gap-2 p-2">
         <div className="flex items-center justify-between gap-2">
-          <p className="title">{title}</p>
+          <h3>{title}</h3>
           <Bookmark />
         </div>
-
         <div className="flex flex-wrap gap-2">
           <div className="tag">
-            <Pin />
+            <MapPin />
             <span>{location}</span>
           </div>
           <div className="tag">
@@ -26,10 +33,10 @@ export default function EventCard({
             <span>{date}</span>
           </div>
         </div>
-        <p className="line-clamp-2 text-sm">{description}</p>
+        <p className="line-clamp-2">{description}</p>
         <div className="flex items-center justify-between gap-2">
-          <p>image</p>
-          <p className="description">
+          <ProfilImages totalCount={8} />
+          <p className="price">
             À partir de <span>{price} €</span>
           </p>
         </div>
