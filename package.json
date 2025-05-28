@@ -16,6 +16,7 @@
     "@svgr/webpack": "^8.1.0",
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.15.0",
     "gsap": "^3.12.7",
     "iconoir-react": "^7.10.1",
     "jwt-decode": "^4.0.0",

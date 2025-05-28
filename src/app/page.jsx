@@ -8,6 +8,8 @@ import CustomTitle from "@/components/custom-title";
 import TrustpilotCard from "@/components/cards/trustpilot-card";
 import { ArrowUpRight, Group, Plus, Search } from "iconoir-react";
 import ReviewCard from "@/components/cards/review-card";
+import TrendingCard from "@/components/cards/trending-card";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -93,17 +95,24 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
       </div>
 
       {/* Code à déplacer dans un composant plus tard */}
-      <div className="shortcut">
+      <Link href="#" className="shortcut">
         <Group className="icon" />
         <p>Trouver un événement</p>
         <ArrowUpRight />
-      </div>
+      </Link>
 
-      <div className="slogan">
-        <p>
-          Vivez <span className="">avec</span> veevent
-        </p>
-      </div>
+      <TrendingCard
+        organizer="Mike Shinoda"
+        city="Paris"
+        description="Pour la première fois en France"
+      />
+
+      <Link href="#" className="search-btn">
+        <div className="container">
+          <Search className="" />
+          <p>Concert de rock à Ni|</p>
+        </div>
+      </Link>
     </main>
   );
 }

@@ -19,6 +19,15 @@
     --secondary-green: #15a500;
     --light-gray: #d9d9d9;
     --dark-gray: #818181;
+    --rainbow: linear-gradient(
+      90deg,
+      #ff6567 0%,
+      #cd00e1 20%,
+      #0f58ee 40%,
+      #07d01d 60%,
+      #feee08 80%,
+      #ff9d34 100%
+    );
   }
 
   /*****************/
@@ -34,11 +43,11 @@
   }
 
   header {
-    @apply top-0 fixed px-6 w-full bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
+    @apply top-0 fixed px-4 py-2 w-full bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
   }
 
   main {
-    @apply mt-16 px-6 top-0 flex flex-col relative;
+    @apply mt-16 px-4 top-0 flex flex-col relative;
   }
 
   .scrollbar-hide {
@@ -85,7 +94,7 @@
   /****************/
 
   .logo {
-    @apply text-[var(--fourth-blue)] text-2xl font-extrabold -tracking-[0.1em] w-fit;
+    @apply text-[var(--fourth-blue)] text-2xl font-extrabold uppercase -tracking-[0.1em] w-fit;
   }
 
   .logo span {
@@ -98,13 +107,8 @@
     @apply flex items-center gap-2 text-[var(--secondary-blue)] font-bold text-base;
   }
 
-  .slogan {
-    @apply p-2 bg-[var(--secondary-blue)] text-[var(--primary-green)] text-xl uppercase font-extrabold -tracking-[0.1em];
-  }
-
-  .slogan span {
-    margin: 0;
-    -webkit-text-stroke: 1px red;
+  .shortcut p {
+    @apply truncate;
   }
 
   /*********/
@@ -127,7 +131,7 @@
   }
 
   .event-card {
-    @apply flex flex-col bg-white shadow-md border-2 border-[var(--fourth-blue)] rounded-lg overflow-hidden;
+    @apply shadow-md flex flex-col bg-white border-2 border-[var(--fourth-blue)] rounded-lg overflow-hidden;
     @apply max-w-96; /* à enlever plus tard */
   }
 
@@ -203,6 +207,23 @@
     @apply border-2 border-white rounded-lg object-cover h-10 w-10 rotate-6;
   }
 
+  .city-card svg {
+    @apply text-white;
+  }
+
+  .trending-card {
+    @apply text-white rounded-lg flex items-center justify-center overflow-hidden relative;
+    @apply max-w-96; /* à enlever plus tard */
+  }
+
+  .trending-card img {
+    @apply object-cover w-full h-full;
+  }
+
+  .trending-card .container {
+    @apply p-2 h-44 w-full flex flex-col justify-between z-10;
+  }
+
   /********/
   /* Tags */
   /********/
@@ -250,6 +271,16 @@
     @apply font-medium text-[var(--primary-blue)] text-sm;
   }
 
+  .search-btn {
+    background: var(--rainbow);
+    @apply shadow-md relative rounded-full border-2 border-transparent;
+    @apply w-fit; /* à enlever plus tard */
+  }
+
+  .search-btn .container {
+    @apply flex items-center gap-2 bg-white h-10 px-4 text-[var(--dark-gray)] rounded-full;
+  }
+
   /**********/
   /* Inputs */
   /**********/
@@ -272,7 +303,8 @@
     @apply rounded-lg;
   }
 
-  .search-input svg {
+  .search-input svg,
+  .search-btn svg {
     @apply text-[var(--fourth-blue)] icon-small;
   }
 
