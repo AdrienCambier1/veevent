@@ -22,7 +22,7 @@ export default function NewsCard({ title, date, description, imageUrl }) {
   }, [description]);
 
   return (
-    <div className="bg-white news-card">
+    <div className="news-card">
       <Image src={niceImage} alt="News image" className="banner" />
       <p className="date">{date}</p>
       <h3>{title}</h3>

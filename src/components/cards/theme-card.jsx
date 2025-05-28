@@ -19,7 +19,7 @@ export default function ThemeCard({ theme = "musique" }) {
     const normalizedName = getNormalizedKey(themeName);
     const IconComponent = themeIcons[normalizedName];
 
-    return IconComponent && <IconComponent />;
+    return IconComponent && <IconComponent className="logo" />;
   };
 
   return (

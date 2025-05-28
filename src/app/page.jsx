@@ -5,7 +5,9 @@ import EventCard from "@/components/cards/event-card";
 import NewsCard from "@/components/cards/news-card";
 import ThemeCard from "@/components/cards/theme-card";
 import CustomTitle from "@/components/custom-title";
-import { Search } from "iconoir-react";
+import TrustpilotCard from "@/components/cards/trustpilot-card";
+import { ArrowUpRight, Group, Plus, Search } from "iconoir-react";
+import ReviewCard from "@/components/cards/review-card";
 
 export default function Home() {
   return (
@@ -60,6 +62,48 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
       />
 
       <CityCard city="Nice" events={24} />
+
+      <TrustpilotCard
+        note={3}
+        reviews_number={1394}
+        description="Iam non est dolere adipiscing potuit expetendum quem eo est non non
+      numitorium parte eo publicae fregellanum accessit igitur. Eius nostrae
+      illis animus constructio non ipsum sed ipsum virtutes avia tecum
+      ciceronem."
+      />
+
+      <ReviewCard
+        author="Jean Dupont"
+        note={3}
+        title="Je recommande cette platefomre pour trouver des artistes locaux"
+        description="Sed non triarius nata consectetur est homines esse dolor voluptatem in iam ipsum viros est est est instrumento itaque iste epicuro. Isto triarius iste habent abducas atque et igitur se."
+        type="pop rock"
+        place="Maison 13"
+        city="Cannes"
+      />
+
+      <button className="secondary-btn">Voir tous les avis</button>
+
+      {/* Code à déplacer dans un composant plus tard */}
+      <div className="faq-card">
+        <div className="flex items-center gap-2 justify-between">
+          <p>Comment acheté un billet de concert ?</p>
+          <Plus className="icon-small" />
+        </div>
+      </div>
+
+      {/* Code à déplacer dans un composant plus tard */}
+      <div className="shortcut">
+        <Group className="icon" />
+        <p>Trouver un événement</p>
+        <ArrowUpRight />
+      </div>
+
+      <div className="slogan">
+        <p>
+          Vivez <span className="">avec</span> veevent
+        </p>
+      </div>
     </main>
   );
 }

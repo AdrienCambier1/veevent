@@ -76,6 +76,10 @@
     @apply h-4 w-4 shrink-0;
   }
 
+  .icon-very-small {
+    @apply h-3 w-3 shrink-0;
+  }
+
   /****************/
   /* Veevent logo */
   /****************/
@@ -90,17 +94,35 @@
 }
 
 @layer components {
+  .shortcut {
+    @apply flex items-center gap-2 text-[var(--secondary-blue)] font-bold text-base;
+  }
+
+  .slogan {
+    @apply p-2 bg-[var(--secondary-blue)] text-[var(--primary-green)] text-xl uppercase font-extrabold -tracking-[0.1em];
+  }
+
+  .slogan span {
+    margin: 0;
+    -webkit-text-stroke: 1px red;
+  }
+
   /*********/
   /* Cards */
   /*********/
 
   .theme-card {
-    @apply flex flex-col justify-center items-center gap-2 bg-[var(--primary-blue)] p-4 rounded-lg text-[var(--primary-green)] font-bold;
+    @apply flex flex-col justify-center items-center gap-2 bg-[var(--primary-blue)] p-4 rounded-lg font-bold;
     @apply h-28 w-28; /* à enlever plus tard */
   }
 
-  .theme-card svg,
-  .event-card svg {
+  .theme-card .logo,
+  .theme-card span {
+    @apply text-[var(--primary-green)];
+  }
+
+  .theme-card .logo,
+  .event-card .logo {
     @apply icon;
   }
 
@@ -143,9 +165,20 @@
     @apply font-bold text-lg;
   }
 
-  .news-card {
+  .news-card,
+  .trustpilot-card,
+  .review-card,
+  .faq-card {
     @apply flex flex-col gap-2 p-2 bg-white rounded-lg;
     @apply max-w-96; /* à enlever plus tard */
+  }
+
+  .review-card .participation {
+    @apply p-2 w-full bg-[var(--primary-blue)] rounded-lg text-white;
+  }
+
+  .review-card .participation span {
+    @apply font-medium text-[var(--primary-green)];
   }
 
   .news-card .banner {
@@ -253,5 +286,9 @@
 
   .profil-pic-sm {
     @apply h-8 w-8 rounded-full object-cover border-2 border-[var(--primary-blue)];
+  }
+
+  .profil-pic {
+    @apply h-10 w-10 rounded-full object-cover;
   }
 }

@@ -3,6 +3,7 @@ import Image from "next/image";
 import niceImage from "@/assets/images/nice.jpg";
 import ThemeTags from "../theme-tags";
 import ProfilImages from "../profil-images";
+import ProfilImg from "../profil-img";
 
 export default function EventCard({
   title,
@@ -21,8 +22,9 @@ export default function EventCard({
       <div className="flex flex-col gap-2 p-2">
         <div className="flex items-center justify-between gap-2">
           <h3>{title}</h3>
-          <Bookmark />
+          <Bookmark className="logo" />
         </div>
+        <ProfilImg name="Marie N." note={4} />
         <div className="flex flex-wrap gap-2">
           <div className="tag">
             <MapPin />
