@@ -1,0 +1,32 @@
+header {
+  @apply top-0 fixed pt-4 py-6 px-2 w-full z-30 grid grid-cols-3 text-base;
+  background: linear-gradient(
+    180deg,
+    #f7f7f7 79.53%,
+    rgba(247, 247, 247, 0) 100%
+  );
+
+  .left-column {
+    @apply flex items-center justify-start;
+
+    .back-button {
+      @apply flex items-center text-[var(--primary-blue)];
+    }
+  }
+
+  .middle-column {
+    @apply flex items-center justify-center;
+  }
+
+  .right-column {
+    @apply flex items-center justify-end;
+  }
+
+  .city-selector {
+    @apply flex text-base font-bold items-center text-[var(--primary-blue)] gap-1;
+
+    span {
+      @apply flex items-center;
+    }
+  }
+}

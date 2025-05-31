@@ -42,10 +42,6 @@
     @apply bg-[var(--background)] font-[Syne] font-normal text-sm antialiased;
   }
 
-  header {
-    @apply top-0 fixed px-4 py-2 w-full bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
-  }
-
   main {
     @apply mt-16 px-4 top-0 flex flex-col relative;
   }
