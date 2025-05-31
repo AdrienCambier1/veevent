@@ -21,7 +21,7 @@ export default function Home() {
         description="Description personnalisée"
       />
 
-      {false && <SidebarMenu />}
+      {true && <SidebarMenu />}
 
       <ThemeCard theme="musique" />
       <ThemeCard theme="sport" />

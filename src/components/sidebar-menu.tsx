@@ -1,20 +1,46 @@
 import "@/assets/styles/sidebar-menu.scss";
 import { Xmark, City, MapPin } from "iconoir-react";
 import CityCard from "@/components/cards/city-card";
+import { useState, useEffect } from "react";
 
-interface CityType {
-  name: string;
+interface NearestCitiesResponse {
+  success: boolean;
+  data?: {
+    currentCity: string;
+    nearbyCities: string[];
+    userLocation: {
+      latitude: number;
+      longitude: number;
+    };
+  };
+  error?: string;
 }
 
 export default function SidebarMenu(): JSX.Element {
-  const cities: CityType[] = [
-    { name: "Nice" },
-    { name: "Cannes" },
-    { name: "Marseille" },
-    { name: "Lyon" },
-  ];
+  // Villes par défaut
+  const defaultCities = ["Nice", "Cannes", "Marseille", "Lyon"];
 
-  const currentCity: string = "Nice";
+  const [cities, setCities] = useState<string[]>(defaultCities);
+  const [currentCity, setCurrentCity] = useState<string>("Nice");
+
+  useEffect(() => {
+    fetchNearestCities();
+  }, []);
+
+  const fetchNearestCities = async () => {
+    try {
+      const response = await fetch("/api/nearest-city");
+      const data: NearestCitiesResponse = await response.json();
+
+      if (data.success && data.data) {
+        setCurrentCity(data.data.currentCity);
+        setCities(data.data.nearbyCities);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des villes:", error);
+      // Garder les valeurs par défaut en cas d'erreur
+    }
+  };
 
   return (
     <>
@@ -32,7 +58,7 @@ export default function SidebarMenu(): JSX.Element {
         <ul className="sidebar-list">
           <p className="sidebar-list-title">Explorer par ville</p>
           {cities.map((city) => (
-            <CityCard key={city.name} city={city.name} isCard={false} />
+            <CityCard key={city} city={city} isCard={false} />
           ))}
           <button className="primary-btn">
             <span className="flex gap-2">
