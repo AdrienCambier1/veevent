@@ -31,7 +31,7 @@
     @apply flex items-center justify-between;
 
     .geo-button {
-      @apply flex w-full items-center justify-center gap-1 text-[var(--primary-blue)] cursor-pointer;
+      @apply flex w-full items-center justify-center gap-1 text-[var(--primary-blue)] cursor-pointer font-semibold;
     }
   }
 }

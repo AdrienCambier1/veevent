@@ -6,7 +6,7 @@ import "@/assets/styles/header.scss";
 
 export default function Header({ hideCitySelector = false }) {
   return (
-    <header>
+    <header className={` ${hideCitySelector ? 'is-hide' : ''}`}>
       <div className="left-column">
         {hideCitySelector ? (
           <Link href="javascript:history.back()">

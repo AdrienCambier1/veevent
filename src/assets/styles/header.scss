@@ -1,10 +1,18 @@
 header {
-  @apply top-0 fixed pt-4 py-6 px-2 w-full z-30 grid grid-cols-3 text-base;
+  @apply top-0 fixed pt-4 py-6 px-2 w-full z-30 grid grid-cols-2 text-base;
   background: linear-gradient(
     180deg,
     #f7f7f7 79.53%,
     rgba(247, 247, 247, 0) 100%
   );
+
+  &.is-hide {
+    @apply grid-cols-3;
+
+    .middle-column {
+      @apply flex items-center justify-center;
+    }
+  }
 
   .left-column {
     @apply flex items-center justify-start;
@@ -15,7 +23,7 @@ header {
   }
 
   .middle-column {
-    @apply flex items-center justify-center;
+    display: none;
   }
 
   .right-column {
