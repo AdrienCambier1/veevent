@@ -21,7 +21,7 @@ export default function Home() {
         description="Description personnalisée"
       />
 
-      {false && (<SidebarMenu />)}
+      {false && <SidebarMenu />}
 
       <ThemeCard theme="musique" />
       <ThemeCard theme="sport" />
@@ -34,7 +34,7 @@ export default function Home() {
           semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
           congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
           consectetur. "
-        price="59"
+        price={59}
       />
 
       <p>ceci est un texte de base</p>

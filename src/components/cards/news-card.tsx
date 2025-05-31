@@ -3,9 +3,21 @@ import niceImage from "@/assets/images/nice.jpg";
 import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 
-export default function NewsCard({ title, date, description, imageUrl }) {
-  const contentRef = useRef(null);
-  const [isTruncated, setIsTruncated] = useState(false);
+interface NewsCardProps {
+  title: string;
+  date: string;
+  description: string;
+  imageUrl?: string; // Made optional since it's not used in the component
+}
+
+export default function NewsCard({
+  title,
+  date,
+  description,
+  imageUrl,
+}: NewsCardProps) {
+  const contentRef = useRef<HTMLParagraphElement | null>(null);
+  const [isTruncated, setIsTruncated] = useState<boolean>(false);
 
   useEffect(() => {
     const checkTruncation = () => {

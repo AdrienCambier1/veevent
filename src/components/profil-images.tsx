@@ -1,14 +1,23 @@
 import Image from "next/image";
 import profilPicture from "@/assets/images/profil-pic.jpg";
+import { StaticImageData } from "next/image";
+
+interface ProfilImagesProps {
+  images?: (StaticImageData | string)[];
+  totalCount?: number;
+}
 
 export default function ProfilImages({
   images = [profilPicture, profilPicture, profilPicture],
-  totalCount = images.length,
-}) {
+  totalCount,
+}: ProfilImagesProps) {
   const visibleImages = images.slice(0, 3);
+  const actualTotalCount = totalCount ?? images.length;
 
   const remaining =
-    totalCount > visibleImages.length ? totalCount - visibleImages.length : 0;
+    actualTotalCount > visibleImages.length
+      ? actualTotalCount - visibleImages.length
+      : 0;
 
   return (
     <div className="flex items-center gap-2 relative">

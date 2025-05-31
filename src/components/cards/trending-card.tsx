@@ -3,7 +3,17 @@ import Image from "next/image";
 import niceImage from "@/assets/images/nice.jpg";
 import { ArrowUpRightCircleSolid } from "iconoir-react";
 
-export default function TrendingCard({ organizer, city, description }) {
+interface TrendingCardProps {
+  organizer: string;
+  city: string;
+  description: string;
+}
+
+export default function TrendingCard({
+  organizer,
+  city,
+  description,
+}: TrendingCardProps) {
   return (
     <Link href="#" className="trending-card group">
       <Image src={niceImage} alt="Trending image" fill />
