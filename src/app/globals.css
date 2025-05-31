@@ -189,24 +189,6 @@
     @apply text-xs font-bold text-[var(--primary-blue)];
   }
 
-  .city-card {
-    @apply rounded-lg p-4 bg-[var(--primary-blue)] flex flex-col gap-2;
-    @apply w-fit; /* à enlever plus tard */
-  }
-
-  .city-card .title {
-    @apply text-white text-2xl font-extrabold -tracking-[0.1em];
-  }
-
-  .city-card .city-img {
-    box-shadow: -4px 5px 10px 2px var(--primary-blue);
-    @apply border-2 border-white rounded-lg object-cover h-10 w-10 rotate-6;
-  }
-
-  .city-card svg {
-    @apply text-white;
-  }
-
   .trending-card {
     @apply text-white rounded-lg flex items-center justify-center overflow-hidden relative;
     @apply max-w-96; /* à enlever plus tard */

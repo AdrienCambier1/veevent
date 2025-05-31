@@ -10,6 +10,7 @@ import { ArrowUpRight, Group, Plus, Search } from "iconoir-react";
 import ReviewCard from "@/components/cards/review-card";
 import TrendingCard from "@/components/cards/trending-card";
 import Link from "next/link";
+import SidebarMenu from "@/components/sidebar-menu";
 
 export default function Home() {
   return (
@@ -19,6 +20,8 @@ export default function Home() {
         title="Titre personnalisé"
         description="Description personnalisée"
       />
+
+      {true && (<SidebarMenu />)}
 
       <ThemeCard theme="musique" />
       <ThemeCard theme="sport" />
