@@ -34,6 +34,7 @@ export default function Home() {
           semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
           congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
           consectetur. "
+        minify={false}
         price={59}
       />
 

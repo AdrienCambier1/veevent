@@ -1,16 +1,18 @@
-import { Bookmark, MapPin, Calendar } from "iconoir-react";
+import { Bookmark, MapPin, Calendar, ArrowUpRight } from "iconoir-react";
 import Image from "next/image";
 import niceImage from "@/assets/images/nice.jpg";
 import ThemeTags from "../theme-tags";
 import ProfilImages from "../profil-images";
 import ProfilImg from "../profil-img";
+import "@/assets/styles/event-card.scss";
 
 interface EventCardProps {
   title: string;
-  description: string;
+  description?: string;
   location: string;
   date: string;
   price: number;
+  minify?: boolean;
   imageUrl?: string; // Optional since it's not being used currently
 }
 
@@ -20,17 +22,18 @@ export default function EventCard({
   location,
   date,
   price,
+  minify,
   imageUrl,
 }: EventCardProps) {
   return (
-    <div className="event-card">
+    <div className={`event-card ${minify ? "minify" : ""}`}>
       <div className="image-container">
         <ThemeTags theme={["musique", "sponsorisé", "sport", "learning"]} />
         <Image src={niceImage} className="banner" alt="Event image" />
       </div>
       <div className="flex flex-col gap-2 p-2">
         <div className="flex items-center justify-between gap-2">
-          <h3>{title}</h3>
+          <div className="title">{title}</div>
           <Bookmark className="logo" />
         </div>
         <ProfilImg name="Marie N." note={4} />
@@ -44,12 +47,15 @@ export default function EventCard({
             <span>{date}</span>
           </div>
         </div>
-        <p className="line-clamp-2">{description}</p>
+        {!minify && description && (
+          <p className="line-clamp-2">{description}</p>
+        )}
         <div className="flex items-center justify-between gap-2">
-          <ProfilImages totalCount={8} />
+          {!minify && <ProfilImages totalCount={8} />}
           <p className="price">
             À partir de <span>{price} €</span>
           </p>
+          {minify && <ArrowUpRight className="text-lg" />}
         </div>
       </div>
     </div>

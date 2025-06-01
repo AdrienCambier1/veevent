@@ -44,6 +44,7 @@
       #feee08 80%,
       #ff9d34 100%
     );
+    --vv-border-radius: 10px;
   }
 
   /*****************/
@@ -130,43 +131,9 @@
     @apply icon;
   }
 
-  .event-card {
-    @apply shadow-md flex flex-col bg-white border-2 border-primary-800 rounded-lg overflow-hidden;
-    @apply max-w-96; /* à enlever plus tard */
-  }
-
   .event-card .banner,
   .news-card .banner {
-    @apply aspect-[16/9] object-cover w-full;
-  }
-
-  .event-card .image-container {
-    @apply relative;
-  }
-
-  .event-card .image-container::before {
-    content: "";
-    @apply absolute inset-0 bg-gradient-to-b from-50% from-transparent to-white;
-  }
-
-  .event-card svg {
-    @apply text-primary-600;
-  }
-
-  .event-card .tag {
-    @apply flex items-center gap-1 text-sm font-medium;
-  }
-
-  .event-card .tag svg {
-    @apply icon-small text-primary-600;
-  }
-
-  .event-card .price {
-    @apply text-primary-600 text-sm;
-  }
-
-  .event-card .price span {
-    @apply font-bold text-lg;
+    @apply aspect-[21/9] object-cover w-full;
   }
 
   .news-card,
