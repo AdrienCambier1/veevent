@@ -2,49 +2,22 @@
 import "@/assets/styles/sidebar-menu.scss";
 import { Xmark, City, MapPin } from "iconoir-react";
 import CityCard from "@/components/cards/city-card";
-import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSidebar } from "@/contexts/SidebarContext";
-
-interface NearestCitiesResponse {
-  success: boolean;
-  data?: {
-    currentCity: string;
-    nearbyCities: string[];
-    userLocation: {
-      latitude: number;
-      longitude: number;
-    };
-  };
-  error?: string;
-}
+import { useCity } from "@/contexts/city-context";
 
 export default function SidebarMenu(): JSX.Element {
   const { isOpen, closeSidebar } = useSidebar();
+  const { currentCity, nearbyCities, geoLoading, changeCity } = useCity();
 
-  // Villes par défaut
-  const defaultCities = ["Nice", "Cannes", "Marseille", "Lyon"];
-
-  const [cities, setCities] = useState<string[]>(defaultCities);
-  const [currentCity, setCurrentCity] = useState<string>("Nice");
-
-  useEffect(() => {
-    fetchNearestCities();
-  }, []);
-
-  const fetchNearestCities = async () => {
-    try {
-      const response = await fetch("/api/nearest-city");
-      const data: NearestCitiesResponse = await response.json();
-
-      if (data.success && data.data) {
-        setCurrentCity(data.data.currentCity);
-        setCities(data.data.nearbyCities);
-      }
-    } catch (error) {
-      console.error("Erreur lors de la récupération des villes:", error);
-      // Garder les valeurs par défaut en cas d'erreur
-    }
+  const handleCitySelect = (cityName: string) => {
+    // Convertir le nom de ville en objet City
+    const cityObject = {
+      name: cityName,
+      value: cityName.toLowerCase().replace(/\s+/g, "-"),
+    };
+    changeCity(cityObject);
+    closeSidebar();
   };
 
   // Animations iOS-style
@@ -140,7 +113,7 @@ export default function SidebarMenu(): JSX.Element {
               </button>
               <div className="city-selector">
                 <City strokeWidth={2} />
-                <span>{currentCity}</span>
+                <span>{geoLoading ? "Localisation..." : currentCity}</span>
               </div>
             </motion.div>
 
@@ -152,11 +125,19 @@ export default function SidebarMenu(): JSX.Element {
               exit="hidden"
             >
               <motion.p className="sidebar-list-title" variants={itemVariants}>
-                Explorer par ville
+                {nearbyCities.length > 0
+                  ? "Villes à proximité"
+                  : "Explorer par ville"}
               </motion.p>
 
-              {cities.map((city, index) => (
-                <motion.div key={city} variants={itemVariants} custom={index}>
+              {nearbyCities.map((city, index) => (
+                <motion.div
+                  key={city}
+                  variants={itemVariants}
+                  custom={index}
+                  onClick={() => handleCitySelect(city)}
+                  style={{ cursor: "pointer" }}
+                >
                   <CityCard city={city} isCard={false} />
                 </motion.div>
               ))}
@@ -178,7 +159,9 @@ export default function SidebarMenu(): JSX.Element {
             >
               <button className="geo-button">
                 <MapPin />
-                Activer la géolocalisation
+                {geoLoading
+                  ? "Localisation en cours..."
+                  : "Actualiser la géolocalisation"}
               </button>
             </motion.div>
           </motion.div>

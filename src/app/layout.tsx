@@ -28,12 +28,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="fr">
       <body>
         <AuthProvider>
-          <SidebarProvider>
-            <CityProvider>
+          <CityProvider>
+            <SidebarProvider>
               <Header hideCitySelector={false} />
               {children}
-            </CityProvider>
-          </SidebarProvider>
+            </SidebarProvider>
+          </CityProvider>
         </AuthProvider>
       </body>
     </html>

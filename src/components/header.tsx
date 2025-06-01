@@ -6,6 +6,7 @@ import logo from "@/assets/images/veevent.svg";
 import "@/assets/styles/header.scss";
 import React from "react";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { useCity } from "@/contexts/city-context";
 
 interface HeaderProps {
   hideCitySelector: boolean;
@@ -13,6 +14,7 @@ interface HeaderProps {
 
 export default function Header({ hideCitySelector }: HeaderProps) {
   const { openSidebar } = useSidebar();
+  const { currentCity, geoLoading } = useCity();
 
   return (
     <header className={hideCitySelector ? "is-hide" : ""}>
@@ -50,7 +52,7 @@ export default function Header({ hideCitySelector }: HeaderProps) {
           <button className="city-selector" onClick={openSidebar} type="button">
             <City strokeWidth={2} />
             <span>
-              Nice
+              {geoLoading ? "Localisation..." : currentCity}
               <NavArrowDown className="text-xs" />
             </span>
           </button>
