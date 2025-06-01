@@ -18,7 +18,7 @@ header {
     @apply flex items-center justify-start;
 
     .back-button {
-      @apply flex items-center text-[var(--primary-blue)];
+      @apply flex items-center text-primary-600;
     }
   }
 
@@ -31,7 +31,7 @@ header {
   }
 
   .city-selector {
-    @apply flex text-base font-bold items-center text-[var(--primary-blue)] gap-1 cursor-pointer  px-4 py-2 rounded-xl;
+    @apply flex text-base font-bold items-center text-primary-600 gap-1 cursor-pointer  px-4 py-2 rounded-xl;
     background: none;
     transition: background-color 0.2s;
     border: none;

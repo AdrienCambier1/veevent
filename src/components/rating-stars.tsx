@@ -22,15 +22,9 @@ const RatingStars: FC<RatingStarsProps> = ({ note = 0, size = "base" }) => {
     <div className="flex items-center">
       {stars.map((star) =>
         star <= note ? (
-          <StarSolid
-            key={star}
-            className={`${iconSize} text-[var(--primary-blue)]`}
-          />
+          <StarSolid key={star} className={`${iconSize} text-primary-600`} />
         ) : (
-          <Star
-            key={star}
-            className={`${iconSize} text-[var(--primary-blue)]`}
-          />
+          <Star key={star} className={`${iconSize} text-primary-600`} />
         )
       )}
     </div>

@@ -22,7 +22,7 @@ export default function CityCard({
         <Image src={niceImage} alt={`${city} image`} className="city-img" />
       </div>
       {events && events > 0 && (
-        <div className="flex items-center justify-between gap-4 text-[var(--primary-green)]">
+        <div className="flex items-center justify-between gap-4 text-secondary-400">
           <p>{events} événements</p>
           <ArrowUpRight className="icon" />
         </div>

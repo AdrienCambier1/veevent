@@ -33,9 +33,7 @@ export default function ProfilImages({
       </div>
 
       {remaining > 0 && (
-        <p className="text-[var(--primary-blue)] font-bold text-sm">
-          + {remaining}
-        </p>
+        <p className="text-primary-600 font-bold text-sm">+ {remaining}</p>
       )}
     </div>
   );

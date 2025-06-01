@@ -11,12 +11,28 @@
   :root {
     --background: #f7f7f7;
     --background-rgb: 247, 247, 247;
-    --primary-blue: #3b32ff;
-    --secondary-blue: #120abd;
-    --third-blue: #171291;
-    --fourth-blue: #1e1a78;
-    --primary-green: #20ff00;
-    --secondary-green: #15a500;
+    --primary-50: #ebf1ff;
+    --primary-100: #dbe4ff;
+    --primary-200: #beceff;
+    --primary-300: #97acff;
+    --primary-400: #6e7eff;
+    --primary-500: #4c52ff;
+    --primary-600: #3b32ff; /* couleur principale */
+    --primary-700: #2d20e2;
+    --primary-800: #241db6;
+    --primary-900: #23208f;
+    --primary-950: #161353;
+    --secondary-50: #ebffe4;
+    --secondary-100: #d1ffc4;
+    --secondary-200: #a6ff90;
+    --secondary-300: #6cff50;
+    --secondary-400: #20ff00; /* couleur secondaire */
+    --secondary-500: #17e600;
+    --secondary-600: #00b807;
+    --secondary-700: #0a8b00;
+    --secondary-800: #0d6d07;
+    --secondary-900: #0f5c0b;
+    --secondary-950: #003400;
     --light-gray: #d9d9d9;
     --dark-gray: #818181;
     --rainbow: linear-gradient(
@@ -62,11 +78,11 @@
   /**********/
 
   h2 {
-    @apply text-xl font-bold text-[var(--primary-blue)];
+    @apply text-xl font-bold text-primary-600;
   }
 
   h3 {
-    @apply text-lg text-[var(--fourth-blue)] font-bold;
+    @apply text-lg text-primary-600 font-bold;
   }
 
   /*********/
@@ -84,23 +100,11 @@
   .icon-very-small {
     @apply h-3 w-3 shrink-0;
   }
-
-  /****************/
-  /* Veevent logo */
-  /****************/
-
-  .logo {
-    @apply text-[var(--fourth-blue)] text-2xl font-extrabold uppercase -tracking-[0.1em] w-fit;
-  }
-
-  .logo span {
-    @apply text-[var(--primary-blue)];
-  }
 }
 
 @layer components {
   .shortcut {
-    @apply flex items-center gap-2 text-[var(--secondary-blue)] font-bold text-base;
+    @apply flex items-center gap-2 text-primary-600 font-bold text-base;
   }
 
   .shortcut p {
@@ -112,13 +116,13 @@
   /*********/
 
   .theme-card {
-    @apply flex flex-col justify-center items-center gap-2 bg-[var(--primary-blue)] p-4 rounded-lg font-bold;
+    @apply flex flex-col justify-center items-center gap-2 bg-primary-600 p-4 rounded-lg font-bold;
     @apply h-28 w-28; /* à enlever plus tard */
   }
 
   .theme-card .logo,
   .theme-card span {
-    @apply text-[var(--primary-green)];
+    @apply text-secondary-400;
   }
 
   .theme-card .logo,
@@ -127,7 +131,7 @@
   }
 
   .event-card {
-    @apply shadow-md flex flex-col bg-white border-2 border-[var(--fourth-blue)] rounded-lg overflow-hidden;
+    @apply shadow-md flex flex-col bg-white border-2 border-primary-800 rounded-lg overflow-hidden;
     @apply max-w-96; /* à enlever plus tard */
   }
 
@@ -146,7 +150,7 @@
   }
 
   .event-card svg {
-    @apply text-[var(--primary-blue)];
+    @apply text-primary-600;
   }
 
   .event-card .tag {
@@ -154,11 +158,11 @@
   }
 
   .event-card .tag svg {
-    @apply icon-small text-[var(--primary-blue)];
+    @apply icon-small text-primary-600;
   }
 
   .event-card .price {
-    @apply text-[var(--primary-blue)] text-sm;
+    @apply text-primary-600 text-sm;
   }
 
   .event-card .price span {
@@ -174,11 +178,11 @@
   }
 
   .review-card .participation {
-    @apply p-2 w-full bg-[var(--primary-blue)] rounded-lg text-white;
+    @apply p-2 w-full bg-primary-600 rounded-lg text-white;
   }
 
   .review-card .participation span {
-    @apply font-medium text-[var(--primary-green)];
+    @apply font-medium text-secondary-400;
   }
 
   .news-card .banner {
@@ -186,7 +190,7 @@
   }
 
   .news-card .date {
-    @apply text-xs font-bold text-[var(--primary-blue)];
+    @apply text-xs font-bold text-primary-600;
   }
 
   .trending-card {
@@ -207,7 +211,7 @@
   /********/
 
   .green-tag {
-    @apply bg-[var(--primary-green)] border border-[var(--primary-blue)] text-[var(--primary-blue)] px-2 py-0.5 rounded-full w-fit flex items-center gap-1;
+    @apply bg-secondary-400 border border-primary-600 text-primary-600 px-2 py-0.5 rounded-full w-fit flex items-center gap-1;
   }
 
   .green-tag svg {
@@ -228,7 +232,7 @@
   }
 
   .primary-btn {
-    @apply text-white relative flex items-center justify-center;
+    @apply text-primary-50 relative flex items-center justify-center;
   }
 
   .primary-btn span {
@@ -238,15 +242,15 @@
   .primary-btn::before {
     content: "";
     box-shadow: inset 0 8px 10px 0 #3f37ff;
-    @apply absolute inset-0 w-full h-full rounded-full bg-[var(--secondary-blue)] border-b-[5px] border-[#19139D];
+    @apply absolute inset-0 w-full h-full rounded-full bg-[#120ABD] border-b-[5px] border-[#19139D];
   }
 
   .secondary-btn {
-    @apply border-2 border-[var(--primary-blue)] text-[var(--primary-blue)];
+    @apply border-2 border-primary-600 text-primary-600;
   }
 
   .more-btn {
-    @apply font-medium text-[var(--primary-blue)] text-sm;
+    @apply font-medium text-primary-600 text-sm;
   }
 
   .search-btn {
@@ -267,7 +271,7 @@
   input[type="text"],
   input[type="email"],
   input[type="password"] {
-    @apply flex items-center gap-2 border-2 border-[var(--secondary-blue)] bg-white h-10 px-4 placeholder:text-[var(--dark-gray)] text-black outline-none focus:outline-none focus:ring-0;
+    @apply flex items-center gap-2 border-2 border-primary-600 bg-white h-10 px-4 placeholder:text-[var(--dark-gray)] text-primary-950 outline-none focus:outline-none focus:ring-0;
     @apply w-fit; /* à enlever plus tard */
   }
 
@@ -283,11 +287,11 @@
 
   .search-input svg,
   .search-btn svg {
-    @apply text-[var(--fourth-blue)] icon-small;
+    @apply text-primary-600 icon-small;
   }
 
   .search-input input {
-    @apply placeholder:text-[var(--dark-gray)] text-black w-full bg-transparent border-none outline-none focus:outline-none focus:ring-0;
+    @apply placeholder:text-[var(--dark-gray)] text-primary-950 w-full bg-transparent border-none outline-none focus:outline-none focus:ring-0;
   }
 
   /**************/
@@ -295,7 +299,7 @@
   /**************/
 
   .profil-pic-sm {
-    @apply h-8 w-8 rounded-full object-cover border-2 border-[var(--primary-blue)];
+    @apply h-8 w-8 rounded-full object-cover border-2 border-primary-600;
   }
 
   .profil-pic {

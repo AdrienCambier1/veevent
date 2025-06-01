@@ -30,7 +30,7 @@ export default function TrendingCard({
         </div>
       </div>
 
-      <div className="absolute bg-gradient-to-tr from-transparent to-[var(--secondary-blue)] opacity-50 inset-0" />
+      <div className="absolute bg-gradient-to-tr from-transparent to-primary-950 opacity-50 inset-0" />
       <div className="absolute bg-gradient-to-bl from-transparent to-black opacity-50 inset-0" />
     </Link>
   );

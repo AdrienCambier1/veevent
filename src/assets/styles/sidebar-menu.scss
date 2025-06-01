@@ -9,7 +9,7 @@
     @apply flex items-center justify-between px-4;
 
     .close-button {
-      @apply text-[var(--primary-blue)] cursor-pointer text-lg p-2 rounded-[50%];
+      @apply text-primary-600 cursor-pointer text-lg p-2 rounded-[50%];
       background: none;
       border: none;
       /* border-radius: 50%; */
@@ -20,7 +20,7 @@
       }
     }
     .city-selector {
-      @apply flex text-base font-bold items-center text-[var(--primary-blue)] gap-1;
+      @apply flex text-base font-bold items-center text-primary-600 gap-1;
       background: none;
       transition: background-color 0.2s;
       border: none;
@@ -35,7 +35,7 @@
     @apply flex flex-col gap-2 p-4 w-full items-center justify-between h-2/3;
 
     .sidebar-list-title {
-      @apply text-[var(--primary-blue)] text-xl font-bold;
+      @apply text-primary-600 text-xl font-bold;
     }
   }
 
@@ -43,7 +43,7 @@
     @apply flex items-center justify-between;
 
     .geo-button {
-      @apply flex w-full items-center justify-center gap-1 text-[var(--primary-blue)] cursor-pointer font-semibold;
+      @apply flex w-full items-center justify-center gap-1 text-primary-600 cursor-pointer font-semibold;
     }
   }
 }
