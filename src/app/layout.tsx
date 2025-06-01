@@ -2,6 +2,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import { AuthProvider } from "@/contexts/auth-context";
 import { CityProvider } from "@/contexts/city-context";
+import { SidebarProvider } from "@/contexts/SidebarContext";
 import { ReactNode } from "react";
 
 export const metadata = {
@@ -27,10 +28,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="fr">
       <body>
         <AuthProvider>
-          <CityProvider>
-            <Header hideCitySelector={false} />
-            {children}
-          </CityProvider>
+          <SidebarProvider>
+            <CityProvider>
+              <Header hideCitySelector={false} />
+              {children}
+            </CityProvider>
+          </SidebarProvider>
         </AuthProvider>
       </body>
     </html>

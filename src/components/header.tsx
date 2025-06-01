@@ -1,15 +1,19 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { City, NavArrowDown, NavArrowLeft } from "iconoir-react";
 import logo from "@/assets/images/veevent.svg";
 import "@/assets/styles/header.scss";
 import React from "react";
+import { useSidebar } from "@/contexts/SidebarContext";
 
 interface HeaderProps {
   hideCitySelector: boolean;
 }
 
 export default function Header({ hideCitySelector }: HeaderProps) {
+  const { openSidebar } = useSidebar();
+
   return (
     <header className={hideCitySelector ? "is-hide" : ""}>
       <div className="left-column">
@@ -43,13 +47,13 @@ export default function Header({ hideCitySelector }: HeaderProps) {
 
       <div className="right-column">
         {!hideCitySelector && (
-          <div className="city-selector">
+          <button className="city-selector" onClick={openSidebar} type="button">
             <City strokeWidth={2} />
             <span>
               Nice
               <NavArrowDown className="text-xs" />
             </span>
-          </div>
+          </button>
         )}
       </div>
     </header>

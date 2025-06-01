@@ -31,7 +31,14 @@ header {
   }
 
   .city-selector {
-    @apply flex text-base font-bold items-center text-[var(--primary-blue)] gap-1;
+    @apply flex text-base font-bold items-center text-[var(--primary-blue)] gap-1 cursor-pointer  px-4 py-2 rounded-xl;
+    background: none;
+    transition: background-color 0.2s;
+    border: none;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
 
     span {
       @apply flex items-center;

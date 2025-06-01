@@ -1,7 +1,10 @@
+"use client";
 import "@/assets/styles/sidebar-menu.scss";
 import { Xmark, City, MapPin } from "iconoir-react";
 import CityCard from "@/components/cards/city-card";
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useSidebar } from "@/contexts/SidebarContext";
 
 interface NearestCitiesResponse {
   success: boolean;
@@ -17,6 +20,8 @@ interface NearestCitiesResponse {
 }
 
 export default function SidebarMenu(): JSX.Element {
+  const { isOpen, closeSidebar } = useSidebar();
+
   // Villes par défaut
   const defaultCities = ["Nice", "Cannes", "Marseille", "Lyon"];
 
@@ -42,38 +47,143 @@ export default function SidebarMenu(): JSX.Element {
     }
   };
 
+  // Animations iOS-style
+  const overlayVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
+
+  const sidebarVariants = {
+    hidden: {
+      x: "100%",
+      transition: {
+        type: "spring",
+        damping: 30,
+        stiffness: 300,
+      },
+    },
+    visible: {
+      x: "0%",
+      transition: {
+        type: "spring",
+        damping: 30,
+        stiffness: 300,
+      },
+    },
+  };
+
+  const containerVariants = {
+    hidden: {
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+      },
+    },
+    visible: {
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      x: 20,
+      transition: {
+        type: "spring",
+        damping: 25,
+        stiffness: 400,
+      },
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring",
+        damping: 25,
+        stiffness: 400,
+      },
+    },
+  };
+
   return (
-    <>
-      <div className="sidebar-overlay"> </div>
-      <div className="sidebar">
-        <div className="sidebar-header">
-          <div className="close-button">
-            <Xmark strokeWidth={2} />
-          </div>
-          <div className="city-selector">
-            <City strokeWidth={2} />
-            <span>{currentCity}</span>
-          </div>
-        </div>
-        <ul className="sidebar-list">
-          <p className="sidebar-list-title">Explorer par ville</p>
-          {cities.map((city) => (
-            <CityCard key={city} city={city} isCard={false} />
-          ))}
-          <button className="primary-btn">
-            <span className="flex gap-2">
-              <City strokeWidth={2} />
-              Toutes les villes
-            </span>
-          </button>
-        </ul>
-        <div className="sidebar-footer">
-          <button className="geo-button">
-            <MapPin />
-            Activer la géolocalisation
-          </button>
-        </div>
-      </div>
-    </>
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            className="sidebar-overlay"
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={closeSidebar}
+            transition={{ duration: 0.3 }}
+          />
+          <motion.div
+            className="sidebar"
+            variants={sidebarVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+          >
+            <motion.div
+              className="sidebar-header"
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <button className="close-button" onClick={closeSidebar}>
+                <Xmark strokeWidth={2} />
+              </button>
+              <div className="city-selector">
+                <City strokeWidth={2} />
+                <span>{currentCity}</span>
+              </div>
+            </motion.div>
+
+            <motion.ul
+              className="sidebar-list"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <motion.p className="sidebar-list-title" variants={itemVariants}>
+                Explorer par ville
+              </motion.p>
+
+              {cities.map((city, index) => (
+                <motion.div key={city} variants={itemVariants} custom={index}>
+                  <CityCard city={city} isCard={false} />
+                </motion.div>
+              ))}
+
+              <motion.button className="primary-btn" variants={itemVariants}>
+                <span className="flex gap-2">
+                  <City strokeWidth={2} />
+                  Toutes les villes
+                </span>
+              </motion.button>
+            </motion.ul>
+
+            <motion.div
+              className="sidebar-footer"
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <button className="geo-button">
+                <MapPin />
+                Activer la géolocalisation
+              </button>
+            </motion.div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
