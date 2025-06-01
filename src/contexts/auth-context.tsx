@@ -1,14 +1,44 @@
 "use client";
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { jwtDecode } from "jwt-decode";
 
-const AuthContext = createContext();
-
-export function useAuth() {
-  return useContext(AuthContext);
+interface User {
+  sub: string;
+  name: string;
+  email: string;
+  exp: number;
+  iat: number;
 }
 
-const setSecureCookie = (name, value, maxAge) => {
+interface AuthContextType {
+  isAuthenticated: boolean;
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  login: (
+    credentials: Record<string, unknown>,
+    redirectPath?: string
+  ) => Promise<boolean>;
+  logout: () => boolean;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function useAuth(): AuthContextType {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+}
+
+const setSecureCookie = (name: string, value: string, maxAge: number): void => {
   const encodedValue = encodeURIComponent(value);
 
   let cookieStr = `${name}=${encodedValue}; path=/; max-age=${maxAge}; SameSite=Lax`;
@@ -20,19 +50,23 @@ const setSecureCookie = (name, value, maxAge) => {
   document.cookie = cookieStr;
 };
 
-export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = (): void => {
       try {
         const storedToken = localStorage.getItem("token");
 
         if (storedToken) {
-          const decodedToken = jwtDecode(storedToken);
+          const decodedToken = jwtDecode<User>(storedToken);
 
           const currentTime = Date.now() / 1000;
           if (decodedToken.exp < currentTime) {
@@ -59,7 +93,10 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
-  const login = async (credentials, redirectPath = "/") => {
+  const login = async (
+    credentials: Record<string, unknown>,
+    redirectPath = "/"
+  ): Promise<boolean> => {
     try {
       // En production: Appel API pour s'authentifier et récupérer un JWT
       // const response = await fetch('/api/auth/login', {
@@ -69,7 +106,7 @@ export function AuthProvider({ children }) {
       // const data = await response.json();
       // const receivedToken = data.token;
 
-      const fakePayload = {
+      const fakePayload: User = {
         sub: "@jeanclaudedu06",
         name: "Jean Claude",
         email: "jeanclaudedu06@example.com",
@@ -95,12 +132,11 @@ export function AuthProvider({ children }) {
       return true;
     } catch (error) {
       console.error("Erreur d'authentification:", error);
-
       return false;
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     setIsAuthenticated(false);
     setUser(null);
     setToken(null);
@@ -118,14 +154,13 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => {
+  const logout = (): boolean => {
     handleLogout();
     window.location.href = "/";
-
     return true;
   };
 
-  const value = {
+  const value: AuthContextType = {
     isAuthenticated,
     user,
     token,

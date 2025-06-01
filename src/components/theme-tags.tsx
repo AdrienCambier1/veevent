@@ -1,21 +1,32 @@
 import { Headset, Megaphone, Basketball, Book } from "iconoir-react";
+import { ReactNode } from "react";
 
-export default function ThemeTags({ theme = [] }) {
-  const themeIcons = {
+type ThemeItem = string | { name: string; [key: string]: any };
+
+interface ThemeTagsProps {
+  theme?: ThemeItem[];
+}
+
+interface ThemeIcons {
+  [key: string]: ReactNode;
+}
+
+export default function ThemeTags({ theme = [] }: ThemeTagsProps) {
+  const themeIcons: ThemeIcons = {
     musique: <Headset />,
     sponsorisé: <Megaphone />,
     sport: <Basketball />,
     learning: <Book />,
   };
 
-  const getNormalizedKey = (themeName) => {
+  const getNormalizedKey = (themeName: string): string => {
     return themeName
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "");
   };
 
-  const getThemeIcon = (themeName) => {
+  const getThemeIcon = (themeName: string): ReactNode => {
     const normalizedName = getNormalizedKey(themeName);
     return themeIcons[normalizedName] || null;
   };

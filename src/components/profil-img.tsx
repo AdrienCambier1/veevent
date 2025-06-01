@@ -2,12 +2,18 @@ import Image from "next/image";
 import profilPicture from "@/assets/images/profil-pic.jpg";
 import RatingStars from "./rating-stars";
 
-export default function ProfilImg({ imageUrl, name, note }) {
+interface ProfilImgProps {
+  imageUrl?: string;
+  name: string;
+  note: number;
+}
+
+export default function ProfilImg({ imageUrl, name, note }: ProfilImgProps) {
   return (
     <div className="flex items-center gap-2">
       <Image
-        src={profilPicture}
-        alt={`Profil picture`}
+        src={imageUrl || profilPicture}
+        alt={`Profile picture of ${name}`}
         className="profil-pic"
       />
       <div className="flex flex-col justify-center">

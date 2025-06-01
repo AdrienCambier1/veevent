@@ -1,5 +1,15 @@
 import ProfilImg from "../profil-img";
 
+interface ReviewCardProps {
+  author: string;
+  note: number;
+  title: string;
+  description: string;
+  type: string;
+  place: string;
+  city: string;
+}
+
 export default function ReviewCard({
   author,
   note,
@@ -8,7 +18,7 @@ export default function ReviewCard({
   type,
   place,
   city,
-}) {
+}: ReviewCardProps) {
   return (
     <div className="review-card">
       <ProfilImg name={author} note={note} />

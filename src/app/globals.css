@@ -42,10 +42,6 @@
     @apply bg-[var(--background)] font-[Syne] font-normal text-sm antialiased;
   }
 
-  header {
-    @apply top-0 fixed px-4 py-2 w-full bg-[rgba(var(--background-rgb),0.75)] backdrop-blur-md z-30;
-  }
-
   main {
     @apply mt-16 px-4 top-0 flex flex-col relative;
   }
@@ -191,24 +187,6 @@
 
   .news-card .date {
     @apply text-xs font-bold text-[var(--primary-blue)];
-  }
-
-  .city-card {
-    @apply rounded-lg p-4 bg-[var(--primary-blue)] flex flex-col gap-2;
-    @apply w-fit; /* à enlever plus tard */
-  }
-
-  .city-card .title {
-    @apply text-white text-2xl font-extrabold -tracking-[0.1em];
-  }
-
-  .city-card .city-img {
-    box-shadow: -4px 5px 10px 2px var(--primary-blue);
-    @apply border-2 border-white rounded-lg object-cover h-10 w-10 rotate-6;
-  }
-
-  .city-card svg {
-    @apply text-white;
   }
 
   .trending-card {

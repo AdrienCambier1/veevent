@@ -25,13 +25,18 @@
     "react-datepicker": "^8.3.0",
     "react-dom": "^19.0.0",
     "react-focus-lock": "^2.13.6",
+    "request-ip": "^3.3.0",
     "swiper": "^11.2.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/node": "^22.15.29",
+    "@types/react": "^19.1.6",
+    "@types/request-ip": "^0.0.41",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3"
   }
 }

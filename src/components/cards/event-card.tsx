@@ -5,6 +5,15 @@ import ThemeTags from "../theme-tags";
 import ProfilImages from "../profil-images";
 import ProfilImg from "../profil-img";
 
+interface EventCardProps {
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+  price: number;
+  imageUrl?: string; // Optional since it's not being used currently
+}
+
 export default function EventCard({
   title,
   description,
@@ -12,7 +21,7 @@ export default function EventCard({
   date,
   price,
   imageUrl,
-}) {
+}: EventCardProps) {
   return (
     <div className="event-card">
       <div className="image-container">

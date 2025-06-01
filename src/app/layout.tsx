@@ -2,11 +2,13 @@ import "./globals.css";
 import Header from "@/components/header";
 import { AuthProvider } from "@/contexts/auth-context";
 import { CityProvider } from "@/contexts/city-context";
+import { SidebarProvider } from "@/contexts/SidebarContext";
+import { ReactNode } from "react";
 
 export const metadata = {
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "black-translucent" as const,
   },
 };
 
@@ -14,17 +16,23 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: "transparent",
-  viewportFit: "cover",
+  viewportFit: "cover" as const,
 };
 
-export default function RootLayout({ children }) {
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="fr">
       <body>
         <AuthProvider>
           <CityProvider>
-            <Header />
-            {children}
+            <SidebarProvider>
+              <Header hideCitySelector={false} />
+              {children}
+            </SidebarProvider>
           </CityProvider>
         </AuthProvider>
       </body>

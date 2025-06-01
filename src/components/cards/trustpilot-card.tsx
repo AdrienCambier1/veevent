@@ -2,7 +2,17 @@ import RatingStars from "@/components/rating-stars";
 import Image from "next/image";
 import Trustpilot from "@/assets/images/trustpilot.png";
 
-export default function TrustpilotCard({ note, reviews_number, description }) {
+interface TrustpilotCardProps {
+  note: number;
+  reviews_number: number;
+  description: string;
+}
+
+export default function TrustpilotCard({
+  note,
+  reviews_number,
+  description,
+}: TrustpilotCardProps) {
   return (
     <div className="trustpilot-card">
       <div className="flex items-center gap-4">

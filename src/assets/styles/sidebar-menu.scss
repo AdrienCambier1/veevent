@@ -1,0 +1,49 @@
+.sidebar-overlay {
+  @apply fixed top-0 left-0 w-full h-full z-30 bg-black bg-opacity-20;
+  backdrop-filter: blur(2px);
+}
+.sidebar {
+  @apply fixed top-0 right-0 max-w-80 w-full h-full py-6 bg-[var(--background)] shadow-lg z-40 justify-between flex flex-col;
+
+  .sidebar-header {
+    @apply flex items-center justify-between px-4;
+
+    .close-button {
+      @apply text-[var(--primary-blue)] cursor-pointer text-lg p-2 rounded-[50%];
+      background: none;
+      border: none;
+      /* border-radius: 50%; */
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+    .city-selector {
+      @apply flex text-base font-bold items-center text-[var(--primary-blue)] gap-1;
+      background: none;
+      transition: background-color 0.2s;
+      border: none;
+
+      span {
+        @apply flex items-center;
+      }
+    }
+  }
+
+  .sidebar-list {
+    @apply flex flex-col gap-2 p-4 w-full items-center justify-between h-2/3;
+
+    .sidebar-list-title {
+      @apply text-[var(--primary-blue)] text-xl font-bold;
+    }
+  }
+
+  .sidebar-footer {
+    @apply flex items-center justify-between;
+
+    .geo-button {
+      @apply flex w-full items-center justify-center gap-1 text-[var(--primary-blue)] cursor-pointer font-semibold;
+    }
+  }
+}
