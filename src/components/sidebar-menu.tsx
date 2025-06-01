@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSidebar } from "@/contexts/SidebarContext";
 import { useCity } from "@/contexts/city-context";
 
-export default function SidebarMenu(): JSX.Element {
+export default function SidebarMenu() {
   const { isOpen, closeSidebar } = useSidebar();
   const { currentCity, nearbyCities, geoLoading, changeCity } = useCity();
 
