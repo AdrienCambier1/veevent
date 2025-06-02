@@ -1,6 +1,5 @@
 import "./globals.css";
 import Header from "@/components/header";
-import { AuthProvider } from "@/contexts/auth-context";
 import { CityProvider } from "@/contexts/city-context";
 import { SidebarProvider } from "@/contexts/SidebarContext";
 import { ReactNode } from "react";
