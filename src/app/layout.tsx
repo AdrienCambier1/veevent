@@ -26,14 +26,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="fr">
       <body>
-        <AuthProvider>
-          <CityProvider>
-            <SidebarProvider>
-              <Header hideCitySelector={false} />
-              {children}
-            </SidebarProvider>
-          </CityProvider>
-        </AuthProvider>
+        <CityProvider>
+          <SidebarProvider>
+            <Header hideCitySelector={false} />
+            {children}
+          </SidebarProvider>
+        </CityProvider>
       </body>
     </html>
   );
