@@ -12,6 +12,8 @@ import TrendingCard from "@/components/cards/trending-card";
 import Link from "next/link";
 import SidebarMenu from "@/components/sidebar-menu";
 import FloratingMenu from "@/components/floating-menu/floating-menu";
+import BarMenu from "@/components/bar-menu/bar-menu";
+import BarMenuItem from "@/components/bar-menu/bar-menu-item";
 
 export default function Home() {
   return (
@@ -39,6 +41,12 @@ export default function Home() {
         minify={false}
         price={59}
       />
+
+      <BarMenu>
+        <BarMenuItem label="Évènements" isActive={false} />
+        <BarMenuItem label="Lieux" isActive={false} />
+        <BarMenuItem label="Organisateurs" isActive={false} />
+      </BarMenu>
 
       <p>ceci est un texte de base</p>
 

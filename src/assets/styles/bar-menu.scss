@@ -1,0 +1,11 @@
+.bar-menu {
+  @apply flex w-full border-b border-gray-600 overflow-y-scroll;
+
+  .bar-menu-item {
+    @apply text-gray-500 font-bold text-center cursor-pointer py-2 px-3 text-nowrap;
+
+    &.active {
+      @apply bg-primary-600 text-white rounded-t-lg;
+    }
+  }
+}
