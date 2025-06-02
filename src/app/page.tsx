@@ -11,10 +11,12 @@ import ReviewCard from "@/components/cards/review-card";
 import TrendingCard from "@/components/cards/trending-card";
 import Link from "next/link";
 import SidebarMenu from "@/components/sidebar-menu";
+import FloratingMenu from "@/components/floating-menu/floating-menu";
 
 export default function Home() {
   return (
     <main className="flex flex-col gap-8 p-4">
+      <FloratingMenu />
       <h2>Exemple h2</h2>
       <CustomTitle
         title="Titre personnalisé"
