@@ -14,6 +14,7 @@ import SidebarMenu from "@/components/sidebar-menu";
 import FloratingMenu from "@/components/floating-menu/floating-menu";
 import BarMenu from "@/components/bar-menu/bar-menu";
 import BarMenuItem from "@/components/bar-menu/bar-menu-item";
+import PlaceCard from "@/components/cards/place-card";
 
 export default function Home() {
   return (
@@ -121,6 +122,29 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           city="Paris"
           description="Pour la première fois en France"
         />
+
+        <PlaceCard
+          name="Place carré"
+          number={1}
+          location="Nice"
+          category="Thèatre"
+        />
+        <PlaceCard name="Scène 55" location="Mougins" category="Salle" />
+
+        <Link href="#" className="search-btn">
+          <div className="container">
+            <Search className="" />
+            <p>Concert de rock à Ni|</p>
+          </div>
+        </Link>
+
+        <PlaceCard
+          name="Place carré"
+          number={1}
+          location="Nice"
+          category="Thèatre"
+        />
+        <PlaceCard name="Scène 55" location="Mougins" category="Salle" />
 
         <Link href="#" className="search-btn">
           <div className="container">
