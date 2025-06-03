@@ -14,10 +14,10 @@ interface ThemeIcons {
 
 export default function ThemeTags({ theme = [] }: ThemeTagsProps) {
   const themeIcons: ThemeIcons = {
-    musique: <Headset />,
-    sponsorisé: <Megaphone />,
-    sport: <Basketball />,
-    learning: <Book />,
+    musique: <Headset className="icon-small" />,
+    sponsorisé: <Megaphone className="icon-small" />,
+    sport: <Basketball className="icon-small" />,
+    learning: <Book className="icon-small" />,
   };
 
   const getNormalizedKey = (themeName: string): string => {

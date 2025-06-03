@@ -10,16 +10,11 @@ import { ArrowUpRight, Group, Plus, Search } from "iconoir-react";
 import ReviewCard from "@/components/cards/review-card/review-card";
 import TrendingCard from "@/components/cards/trending-card/trending-card";
 import Link from "next/link";
-import SidebarMenu from "@/components/menu/sidebar-menu/sidebar-menu";
 import FloratingMenu from "@/components/menu/floating-menu/floating-menu";
 import BarMenu from "@/components/menu/bar-menu/bar-menu";
 import BarMenuItem from "@/components/menu/bar-menu/bar-menu-item";
 import Shortcut from "@/components/common/shortcut/shortcut";
 import FaqCard from "@/components/cards/faq-card/faq-card";
-import SidebarMenu from "@/components/sidebar-menu";
-import FloratingMenu from "@/components/floating-menu/floating-menu";
-import BarMenu from "@/components/bar-menu/bar-menu";
-import BarMenuItem from "@/components/bar-menu/bar-menu-item";
 import PlaceCard from "@/components/cards/place-card";
 import PlacesMapList from "@/components/places-map-list/places-map-list";
 
