@@ -60,7 +60,7 @@
   }
 
   main {
-    @apply pt-16 px-4 top-0 flex flex-col relative;
+    @apply pt-16 p-4 top-0 flex flex-col relative;
   }
 
   .wrapper {
@@ -68,11 +68,11 @@
   }
 
   section {
-    @apply flex flex-col gap-6 mt-6 relative;
+    @apply flex flex-col gap-8 mt-6 relative;
   }
 
   form {
-    @apply flex flex-col gap-4 w-full max-w-[600px] mx-auto;
+    @apply flex flex-col gap-4 w-full max-w-[500px] mx-auto;
   }
 
   .scrollbar-hide {
@@ -235,7 +235,7 @@
   input[type="email"],
   input[type="password"],
   textarea {
-    @apply flex items-center gap-2 border-2 border-primary-600 bg-white  p-3 placeholder:text-[var(--dark-gray)] text-primary-950 outline-none focus:outline-none focus:ring-0;
+    @apply flex items-center gap-2 border-2 border-primary-600 bg-white p-3 placeholder:text-gray-400 text-primary-950 outline-none focus:outline-none focus:ring-0;
   }
 
   .search-input {
@@ -244,9 +244,14 @@
 
   input[type="text"],
   input[type="email"],
-  input[type="password"],
+  input[type="password"] {
+    @apply rounded-lg;
+  }
+
   textarea {
-    @apply rounded-lg resize-none;
+    @apply resize-none rounded-lg min-h-24;
+    overflow-y: hidden;
+    field-sizing: content;
   }
 
   .search-input svg,

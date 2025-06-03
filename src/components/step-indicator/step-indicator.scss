@@ -1,0 +1,26 @@
+.step-indicator {
+  @apply flex items-center gap-2;
+
+  button {
+    @apply text-gray-300 box-border border border-gray-300 h-8 w-8 rounded-full font-medium;
+
+    &.completed {
+      @apply text-white bg-primary-600 border-primary-600;
+    }
+  }
+
+  p {
+    @apply font-medium text-sm text-gray-300;
+
+    &.completed {
+      @apply text-primary-600;
+    }
+  }
+  .line {
+    @apply w-12 h-[1px] bg-gray-300;
+
+    &.previous {
+      @apply bg-[var(--primary-600)];
+    }
+  }
+}
