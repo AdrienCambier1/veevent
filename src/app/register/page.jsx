@@ -5,11 +5,16 @@ import { useState } from "react";
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
 
+  const handleNextStep = (e) => {
+    e.preventDefault();
+    setStep(step + 1);
+  };
+
   const renderStep = () => {
     switch (step) {
       case 1:
         return (
-          <form>
+          <form onSubmit={handleNextStep}>
             <div className="flex flex-col gap-2">
               <label>Adresse mail*</label>
               <input
@@ -30,7 +35,7 @@ export default function RegisterPage() {
               <label>Confirmer le mot de passe*</label>
               <input className="input" type="password" placeholder="******" />
             </div>
-            <button className="primary-btn" onClick={() => setStep(step + 1)}>
+            <button className="primary-btn" type="submit">
               <span>Suivant</span>
             </button>
           </form>
@@ -38,7 +43,7 @@ export default function RegisterPage() {
 
       case 2:
         return (
-          <form>
+          <>
             <div className="flex flex-col gap-2">
               <label>Prénom*</label>
               <input className="input" type="text" placeholder="John" />
@@ -59,10 +64,7 @@ export default function RegisterPage() {
               <label>Description</label>
               <textarea placeholder="Quelques mots pour vous décrire..." />
             </div>
-            <button className="primary-btn" onClick={() => setStep(step + 1)}>
-              <span>Suivant</span>
-            </button>
-          </form>
+          </>
         );
     }
   };
@@ -74,7 +76,12 @@ export default function RegisterPage() {
           Bienvenue sur{" "}
           <span className="text-[var(--primary-600)]">veevent</span>
         </p>
-        {renderStep()}
+        <form onSubmit={handleNextStep}>
+          {renderStep()}
+          <button className="primary-btn" type="submit">
+            <span>Suivant</span>
+          </button>
+        </form>
         <p className="font-bold">
           Vous avez déjà un compte ?{" "}
           <Link className="text-[var(--primary-600)]" href="/register">
