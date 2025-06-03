@@ -2,7 +2,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { City, NavArrowDown, NavArrowLeft } from "iconoir-react";
-import logo from "@/assets/images/veevent.svg";
 import "@/assets/styles/header.scss";
 import React from "react";
 import { useSidebar } from "@/contexts/SidebarContext";
