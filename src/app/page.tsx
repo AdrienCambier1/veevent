@@ -1,19 +1,21 @@
 "use client";
 
-import CityCard from "@/components/cards/city-card";
-import EventCard from "@/components/cards/event-card";
-import NewsCard from "@/components/cards/news-card";
-import ThemeCard from "@/components/cards/theme-card";
-import CustomTitle from "@/components/custom-title";
-import TrustpilotCard from "@/components/cards/trustpilot-card";
+import CityCard from "@/components/cards/city-card/city-card";
+import EventCard from "@/components/cards/event-card/event-card";
+import NewsCard from "@/components/cards/news-card/news-card";
+import ThemeCard from "@/components/cards/theme-card/theme-card";
+import CustomTitle from "@/components/common/custom-title/custom-title";
+import TrustpilotCard from "@/components/cards/trustpilot-card/trustpilot-card";
 import { ArrowUpRight, Group, Plus, Search } from "iconoir-react";
-import ReviewCard from "@/components/cards/review-card";
-import TrendingCard from "@/components/cards/trending-card";
+import ReviewCard from "@/components/cards/review-card/review-card";
+import TrendingCard from "@/components/cards/trending-card/trending-card";
 import Link from "next/link";
-import SidebarMenu from "@/components/sidebar-menu";
-import FloratingMenu from "@/components/floating-menu/floating-menu";
-import BarMenu from "@/components/bar-menu/bar-menu";
-import BarMenuItem from "@/components/bar-menu/bar-menu-item";
+import SidebarMenu from "@/components/menu/sidebar-menu/sidebar-menu";
+import FloratingMenu from "@/components/menu/floating-menu/floating-menu";
+import BarMenu from "@/components/menu/bar-menu/bar-menu";
+import BarMenuItem from "@/components/menu/bar-menu/bar-menu-item";
+import Shortcut from "@/components/common/shortcut/shortcut";
+import FaqCard from "@/components/cards/faq-card/faq-card";
 
 export default function Home() {
   return (
@@ -25,8 +27,6 @@ export default function Home() {
           title="Titre personnalisé"
           description="Description personnalisée"
         />
-
-        {true && <SidebarMenu />}
 
         <ThemeCard theme="musique" />
         <ThemeCard theme="sport" />
@@ -51,9 +51,9 @@ export default function Home() {
 
         <p>ceci est un texte de base</p>
 
-        <button className="primary-btn">
-          <span>Primary btn</span>
-        </button>
+        <Link href="/login" className="primary-btn">
+          <span>Se connecter</span>
+        </Link>
 
         <button className="secondary-btn">Secondary btn</button>
 
@@ -101,20 +101,9 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
 
         <button className="secondary-btn">Voir tous les avis</button>
 
-        {/* Code à déplacer dans un composant plus tard */}
-        <div className="faq-card">
-          <div className="flex items-center gap-2 justify-between">
-            <p>Comment acheté un billet de concert ?</p>
-            <Plus className="icon-small" />
-          </div>
-        </div>
+        <FaqCard label="Comment acheté un billet de concert ?" />
 
-        {/* Code à déplacer dans un composant plus tard */}
-        <Link href="#" className="shortcut">
-          <Group className="icon" />
-          <p>Trouver un événement</p>
-          <ArrowUpRight />
-        </Link>
+        <Shortcut link="#" label="Trouver un événement" />
 
         <TrendingCard
           organizer="Mike Shinoda"
@@ -123,7 +112,7 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
         />
 
         <Link href="#" className="search-btn">
-          <div className="container">
+          <div className="content">
             <Search className="" />
             <p>Concert de rock à Ni|</p>
           </div>

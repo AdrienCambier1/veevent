@@ -1,0 +1,15 @@
+.theme-tags {
+  @apply flex flex-wrap gap-2 absolute top-2 left-2;
+
+  .tag {
+    @apply bg-secondary-400 border border-primary-600 text-primary-600 px-2 py-0.5 rounded-full w-fit flex items-center gap-1;
+
+    svg {
+      @apply icon-small;
+    }
+
+    span {
+      @apply font-bold text-sm;
+    }
+  }
+}

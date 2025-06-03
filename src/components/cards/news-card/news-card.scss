@@ -1,0 +1,11 @@
+.news-card {
+  @apply flex flex-col gap-2 p-2 bg-white rounded-lg;
+
+  .banner {
+    @apply rounded-lg;
+  }
+
+  .date {
+    @apply text-xs font-bold text-primary-600;
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
-import SelectorThemeTags from "@/components/selector-theme-tags/selector-theme-tags";
-import StepIndicator from "@/components/step-indicator/step-indictator";
+import SelectorThemeTags from "@/components/tags/selector-theme-tags/selector-theme-tags";
+import StepIndicator from "@/components/common/step-indicator/step-indictator";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 

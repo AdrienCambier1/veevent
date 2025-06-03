@@ -1,7 +1,7 @@
-import "./globals.css";
-import Header from "@/components/header";
+import "./globals.scss";
+import Header from "@/components/header/header";
 import { CityProvider } from "@/contexts/city-context";
-import { SidebarProvider } from "@/contexts/SidebarContext";
+import { SidebarProvider } from "@/contexts/sidebar-context";
 import { ReactNode } from "react";
 
 export const metadata = {

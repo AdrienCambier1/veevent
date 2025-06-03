@@ -1,0 +1,26 @@
+header {
+  @apply bg-background/75 backdrop-blur-sm top-0 fixed h-16 px-4 w-full z-30 flex items-center text-base;
+
+  .wrapper {
+    @apply flex items-center w-full relative;
+
+    .back-button {
+      @apply left-0 absolute flex items-center text-primary-600;
+    }
+
+    .city-selector {
+      @apply flex text-base font-bold items-center text-primary-600 gap-1 cursor-pointer  px-4 py-2 rounded-xl;
+      background: none;
+      transition: background-color 0.2s;
+      border: none;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      span {
+        @apply flex items-center;
+      }
+    }
+  }
+}

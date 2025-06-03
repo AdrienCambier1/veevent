@@ -1,0 +1,7 @@
+.shortcut {
+  @apply flex items-center gap-2 text-primary-600 font-bold text-base;
+
+  p {
+    @apply truncate;
+  }
+}

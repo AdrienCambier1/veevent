@@ -1,0 +1,24 @@
+.trending-card {
+  @apply text-white rounded-lg flex items-center justify-center overflow-hidden relative;
+  @apply max-w-96; /* à enlever plus tard */
+
+  img {
+    @apply object-cover w-full h-full;
+  }
+
+  .content {
+    @apply p-2 h-44 w-full flex flex-col justify-between z-10;
+  }
+
+  .gradient {
+    @apply absolute from-transparent opacity-50 inset-0;
+
+    &.blue {
+      @apply bg-gradient-to-tr to-primary-600;
+    }
+
+    &.black {
+      @apply bg-gradient-to-bl to-black;
+    }
+  }
+}
