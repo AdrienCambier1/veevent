@@ -1,5 +1,5 @@
 .floating-menu {
-  @apply fixed bottom-5 left-1/2 z-50 flex gap-2 justify-between border-[0.5px] border-gray-500 bg-gray-200/80 backdrop-blur-sm rounded-3xl p-2 transform -translate-x-1/2;
+  @apply fixed bottom-5 left-1/2 z-30 flex gap-2 justify-between border-[0.5px] border-gray-500 bg-gray-200/80 backdrop-blur-sm rounded-3xl p-2 transform -translate-x-1/2;
 
   .floating-menu-item {
     @apply border border-transparent bg-white/70 text-gray-500 px-2 py-2 rounded-2xl font-bold min-w-[100px];
