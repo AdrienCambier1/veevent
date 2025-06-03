@@ -1,10 +1,14 @@
 header {
-  @apply top-0 fixed pt-4 py-6 px-2 w-full z-30 grid grid-cols-2 text-base;
+  @apply top-0 fixed h-16 px-4 w-full z-30 flex items-center text-base;
   background: linear-gradient(
     180deg,
     #f7f7f7 79.53%,
     rgba(247, 247, 247, 0) 100%
   );
+
+  > .wrapper {
+    @apply flex items-center justify-between w-full;
+  }
 
   &.is-hide {
     @apply grid-cols-3;

@@ -18,45 +18,51 @@ export default function Header({ hideCitySelector }: HeaderProps) {
 
   return (
     <header className={hideCitySelector ? "is-hide" : ""}>
-      <div className="left-column">
-        {hideCitySelector ? (
-          <Link
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              window.history.back();
-            }}
-          >
-            <div className="back-button">
-              <NavArrowLeft />
-              Retour
-            </div>
-          </Link>
-        ) : (
-          <Link href="/" className="logo">
-            <Image src={logo} alt="Veevent Logo" />
-          </Link>
-        )}
-      </div>
+      <div className="wrapper">
+        <div className="left-column">
+          {hideCitySelector ? (
+            <Link
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.back();
+              }}
+            >
+              <div className="back-button">
+                <NavArrowLeft />
+                Retour
+              </div>
+            </Link>
+          ) : (
+            <Link href="/" className="logo">
+              <Image src={logo} alt="Veevent Logo" />
+            </Link>
+          )}
+        </div>
 
-      <div className="middle-column">
-        {hideCitySelector && (
-          <Link href="/" className="logo">
-            <Image src={logo} alt="Veevent Logo" />
-          </Link>
-        )}
-      </div>
+        <div className="middle-column">
+          {hideCitySelector && (
+            <Link href="/" className="logo">
+              <Image src={logo} alt="Veevent Logo" />
+            </Link>
+          )}
+        </div>
 
-      <div className="right-column">
-        {!hideCitySelector && (
-          <button className="city-selector" onClick={openSidebar} type="button">
-            <City strokeWidth={2} />
-            <span>
-              {geoLoading ? "Localisation..." : currentCity}
-              <NavArrowDown className="text-xs" />
-            </span>
-          </button>
-        )}
+        <div className="right-column">
+          {!hideCitySelector && (
+            <button
+              className="city-selector"
+              onClick={openSidebar}
+              type="button"
+            >
+              <City strokeWidth={2} />
+              <span>
+                {geoLoading ? "Localisation..." : currentCity}
+                <NavArrowDown className="text-xs" />
+              </span>
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );
