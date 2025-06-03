@@ -35,7 +35,7 @@ export default function Header({ hideCitySelector }: HeaderProps) {
             </Link>
           ) : (
             <Link href="/" className="logo">
-              <Image src={logo} alt="Veevent Logo" />
+              <img src="/veevent.svg" alt="Veevent Logo" />
             </Link>
           )}
         </div>
