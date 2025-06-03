@@ -36,3 +36,18 @@ export interface NearestCitiesResponse {
   };
   error?: string;
 }
+
+export interface Place {
+  id: string;
+  name: string;
+  address: string;
+  location: location;
+  category: string;
+  eventsCount: number;
+  imageUrl: string;
+}
+
+interface location {
+  lat: number;
+  lng: number;
+}

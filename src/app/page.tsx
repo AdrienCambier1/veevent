@@ -14,6 +14,8 @@ import SidebarMenu from "@/components/sidebar-menu";
 import FloratingMenu from "@/components/floating-menu/floating-menu";
 import BarMenu from "@/components/bar-menu/bar-menu";
 import BarMenuItem from "@/components/bar-menu/bar-menu-item";
+import PlaceCard from "@/components/cards/place-card";
+import PlacesMapList from "@/components/places-map-list/places-map-list";
 
 export default function Home() {
   return (
@@ -42,6 +44,8 @@ export default function Home() {
           minify={false}
           price={59}
         />
+
+        <PlacesMapList />
 
         <BarMenu>
           <BarMenuItem label="Évènements" isActive={false} />
@@ -120,6 +124,21 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           organizer="Mike Shinoda"
           city="Paris"
           description="Pour la première fois en France"
+        />
+
+        <PlaceCard
+          place={{
+            id: "1",
+            name: "Bar des artistes",
+            address: "Antibes",
+            category: "Bar",
+            location: {
+              lat: 43.5803,
+              lng: 7.1251,
+            },
+            imageUrl: "/images/nice.jpg",
+            eventsCount: 5,
+          }}
         />
 
         <Link href="#" className="search-btn">
