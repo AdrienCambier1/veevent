@@ -1,5 +1,6 @@
 import { Headset, Megaphone, Basketball, Book } from "iconoir-react";
 import { ReactNode } from "react";
+import "@/assets/styles/tag.scss";
 
 type ThemeItem = string | { name: string; [key: string]: any };
 

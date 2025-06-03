@@ -7,7 +7,7 @@ export default function LoginPage() {
         <p className="font-semibold text-base">Connexion</p>
         <form>
           <div className="flex flex-col gap-2">
-            <label>Connexion mail</label>
+            <label>Adresse mail ou pseudo</label>
             <input
               className="input"
               type="text"
