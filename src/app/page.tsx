@@ -15,6 +15,7 @@ import FloratingMenu from "@/components/floating-menu/floating-menu";
 import BarMenu from "@/components/bar-menu/bar-menu";
 import BarMenuItem from "@/components/bar-menu/bar-menu-item";
 import PlaceCard from "@/components/cards/place-card";
+import PlacesMapList from "@/components/places-map-list/places-map-list";
 
 export default function Home() {
   return (
@@ -43,6 +44,8 @@ export default function Home() {
           minify={false}
           price={59}
         />
+
+        <PlacesMapList />
 
         <BarMenu>
           <BarMenuItem label="Évènements" isActive={false} />
@@ -124,27 +127,19 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
         />
 
         <PlaceCard
-          name="Place carré"
-          number={1}
-          location="Nice"
-          category="Thèatre"
+          place={{
+            id: "1",
+            name: "Bar des artistes",
+            address: "Antibes",
+            category: "Bar",
+            location: {
+              lat: 43.5803,
+              lng: 7.1251,
+            },
+            imageUrl: "/images/nice.jpg",
+            eventsCount: 5,
+          }}
         />
-        <PlaceCard name="Scène 55" location="Mougins" category="Salle" />
-
-        <Link href="#" className="search-btn">
-          <div className="container">
-            <Search className="" />
-            <p>Concert de rock à Ni|</p>
-          </div>
-        </Link>
-
-        <PlaceCard
-          name="Place carré"
-          number={1}
-          location="Nice"
-          category="Thèatre"
-        />
-        <PlaceCard name="Scène 55" location="Mougins" category="Salle" />
 
         <Link href="#" className="search-btn">
           <div className="container">
