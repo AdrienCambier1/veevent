@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
 import { City, NavArrowDown, NavArrowLeft } from "iconoir-react";
 import "@/assets/styles/header.scss";
 import React from "react";
@@ -42,7 +41,7 @@ export default function Header({ hideCitySelector }: HeaderProps) {
         <div className="middle-column">
           {hideCitySelector && (
             <Link href="/" className="logo">
-              <Image src={logo} alt="Veevent Logo" />
+              <img src="/veevent.svg" alt="Veevent Logo" />
             </Link>
           )}
         </div>
