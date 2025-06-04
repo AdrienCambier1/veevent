@@ -15,7 +15,7 @@ import BarMenu from "@/components/menu/bar-menu/bar-menu";
 import BarMenuItem from "@/components/menu/bar-menu/bar-menu-item";
 import Shortcut from "@/components/common/shortcut/shortcut";
 import FaqCard from "@/components/cards/faq-card/faq-card";
-import PlaceCard from "@/components/cards/place-card";
+import PlaceCard from "@/components/cards/place-card/place-card";
 import PlacesMapList from "@/components/common/places-map-list/places-map-list";
 
 export default function Home() {

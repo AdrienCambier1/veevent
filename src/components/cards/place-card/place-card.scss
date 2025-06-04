@@ -1,0 +1,45 @@
+.place-card {
+  @apply flex w-full bg-white rounded-[var(--vv-border-radius)] overflow-hidden items-center p-[6px] cursor-pointer;
+
+  .number {
+    @apply text-primary-600 font-bold text-2xl pl-2 w-12;
+  }
+
+  .place-card-container {
+    @apply flex gap-4;
+
+    .place-card-image {
+      @apply w-1/3 h-full relative;
+
+      img {
+        @apply w-full h-full rounded-[var(--vv-border-radius)] object-cover;
+        object-fit: cover;
+        aspect-ratio: 1 / 1;
+      }
+    }
+
+    .place-card-content {
+      @apply flex flex-col w-2/3 gap-1 justify-center  text-primary-600;
+
+      .place-card-name {
+        @apply text-base font-extrabold text-ellipsis overflow-hidden whitespace-nowrap;
+      }
+
+      .place-card-specs {
+        @apply flex flex-wrap gap-2;
+
+        .place-card-specs-item {
+          @apply flex items-center gap-1 text-xs font-medium;
+        }
+      }
+
+      .place-card-events {
+        @apply text-primary-950;
+      }
+
+      .place-card-link {
+        @apply font-semibold;
+      }
+    }
+  }
+}

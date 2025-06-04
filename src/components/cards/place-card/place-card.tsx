@@ -1,4 +1,4 @@
-import "@/assets/styles/place-card.scss";
+import "./place-card.scss";
 import { Place } from "@/types";
 import { MapPin, Shop } from "iconoir-react";
 import Image from "next/image";

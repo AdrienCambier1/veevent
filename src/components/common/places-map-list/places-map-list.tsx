@@ -1,4 +1,4 @@
-import PlaceCard from "@/components/cards/place-card";
+import PlaceCard from "@/components/cards/place-card/place-card";
 import Gmaps from "./gmap";
 import { Place } from "@/types";
 import img from "@/assets/images/nice.jpg";

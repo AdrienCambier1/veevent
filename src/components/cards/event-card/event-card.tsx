@@ -39,11 +39,11 @@ export default function EventCard({
         <ProfilImg name="Marie N." note={4} />
         <div className="flex flex-wrap gap-2">
           <div className="info">
-            <MapPin />
+            <MapPin className="icon-small" />
             <span>{location}</span>
           </div>
           <div className="info">
-            <Calendar />
+            <Calendar className="icon-small" />
             <span>{date}</span>
           </div>
         </div>
