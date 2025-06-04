@@ -74,6 +74,10 @@
   form {
     @apply flex flex-col gap-4 w-full max-w-[500px] mx-auto;
   }
+
+  a {
+    @apply text-primary-800 hover:text-primary-700 transition-colors cursor-pointer;
+  }
 }
 
 @layer components {

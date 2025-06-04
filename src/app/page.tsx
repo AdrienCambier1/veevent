@@ -18,6 +18,7 @@ import FaqCard from "@/components/cards/faq-card/faq-card";
 import PlaceCard from "@/components/cards/place-card/place-card";
 import PlacesMapList from "@/components/common/places-map-list/places-map-list";
 import EventsAgenda from "@/components/common/events-agenda/events-agenda";
+import Welcome from "@/components/common/welcome/welcome";
 
 export default function Home() {
   return (
@@ -32,6 +33,8 @@ export default function Home() {
 
         <ThemeCard theme="musique" />
         <ThemeCard theme="sport" />
+
+        <Welcome  />
 
         <EventCard
           title="Atelier fresque végétal"

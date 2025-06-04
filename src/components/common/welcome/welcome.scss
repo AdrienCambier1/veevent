@@ -1,0 +1,23 @@
+.welcome {
+  @apply flex flex-col gap-3;
+
+  .hello {
+    @apply text-xl font-bold text-primary-950;
+  }
+
+  .welcome-links {
+    @apply flex gap-2 items-center text-base;
+
+    a {
+      @apply font-semibold;
+    }
+  }
+
+  .user-actions {
+    @apply flex gap-2;
+
+    a {
+      @apply flex gap-2 flex-grow justify-center px-4 py-2 bg-primary-600 text-white rounded-[var(--vv-border-radius)] hover:bg-primary-700 transition-colors text-base;
+    }
+  }
+}
