@@ -1,0 +1,19 @@
+.events-agenda {
+  @apply rounded-[var(--vv-border-radius)] bg-white shadow-sm overflow-hidden px-1 py-4 flex flex-col gap-4;
+
+  .events-agenda-item {
+    @apply flex gap-1;
+
+    .item-date {
+      @apply flex flex-col gap-2 items-center text-center text-primary-600 font-bold py-1 px-3 border-r border-primary-600;
+      .item-day {
+        @apply text-3xl;
+        line-height: 0.8;
+      }
+      .item-month {
+        @apply text-xl;
+        line-height: 1;
+      }
+    }
+  }
+}

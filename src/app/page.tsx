@@ -17,6 +17,7 @@ import Shortcut from "@/components/common/shortcut/shortcut";
 import FaqCard from "@/components/cards/faq-card/faq-card";
 import PlaceCard from "@/components/cards/place-card/place-card";
 import PlacesMapList from "@/components/common/places-map-list/places-map-list";
+import EventsAgenda from "@/components/common/events-agenda/events-agenda";
 
 export default function Home() {
   return (
@@ -80,6 +81,8 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           description="description courte le bouton ne s'affiche pas à voir si ça redirige vers une page ou ça affiche tout le texte"
           date="25/04/2025"
         />
+
+        <EventsAgenda />
 
         <CityCard city="Nice" events={24} />
 
