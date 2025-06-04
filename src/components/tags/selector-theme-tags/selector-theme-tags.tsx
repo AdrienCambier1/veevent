@@ -23,10 +23,10 @@ export default function SelectorThemeTags({
     useState<string[]>(selectedThemes);
 
   const themeIcons: ThemeIcons = {
-    musique: <Headset />,
-    sponsorise: <Megaphone />,
-    sport: <Basketball />,
-    learning: <Book />,
+    musique: <Headset className="icon-small" />,
+    sponsorise: <Megaphone className="icon-small" />,
+    sport: <Basketball className="icon-small" />,
+    learning: <Book className="icon-small" />,
   };
 
   const getNormalizedKey = (themeName: string): string => {

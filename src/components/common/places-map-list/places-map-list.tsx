@@ -56,9 +56,9 @@ export default function PlacesMapList() {
   };
 
   return (
-    <div className="places-map-list flex flex-col gap-4 bg-white pb-2 rounded-[var(--vv-border-radius)] shadow-sm">
+    <div className="places-map-list">
       <Gmaps locations={locations} onMarkerClick={handleMarkerClick} />
-      <div className="places-list flex flex-col gap-2">
+      <div className="places-list">
         {locations.map((place, index) => (
           <div
             key={place.id}

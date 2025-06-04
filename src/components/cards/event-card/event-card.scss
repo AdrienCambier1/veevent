@@ -24,11 +24,11 @@
     @apply text-primary-600;
   }
 
-  .tag {
+  .info {
     @apply flex items-center gap-1 text-sm font-medium;
   }
 
-  .tag svg {
+  .info svg {
     @apply icon-small text-primary-600;
   }
 

@@ -1,5 +1,6 @@
 import { Star, StarSolid } from "iconoir-react";
 import { FC } from "react";
+import "./rating-stars.scss";
 
 type SizeOption = "base" | "sm" | "xs";
 
@@ -14,21 +15,22 @@ const sizeMap: Record<SizeOption, string> = {
   xs: "icon-very-small",
 };
 
-const RatingStars: FC<RatingStarsProps> = ({ note = 0, size = "base" }) => {
+export default function RatingStars({
+  note = 0,
+  size = "base",
+}: RatingStarsProps) {
   const stars = [1, 2, 3, 4, 5];
   const iconSize = sizeMap[size];
 
   return (
-    <div className="flex items-center">
+    <div className="rating-stars">
       {stars.map((star) =>
         star <= note ? (
-          <StarSolid key={star} className={`${iconSize} text-primary-600`} />
+          <StarSolid key={star} className={`${iconSize}`} />
         ) : (
-          <Star key={star} className={`${iconSize} text-primary-600`} />
+          <Star key={star} className={`${iconSize} `} />
         )
       )}
     </div>
   );
-};
-
-export default RatingStars;
+}

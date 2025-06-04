@@ -6,7 +6,7 @@ import NewsCard from "@/components/cards/news-card/news-card";
 import ThemeCard from "@/components/cards/theme-card/theme-card";
 import CustomTitle from "@/components/common/custom-title/custom-title";
 import TrustpilotCard from "@/components/cards/trustpilot-card/trustpilot-card";
-import { ArrowUpRight, Group, Plus, Search } from "iconoir-react";
+import { Search } from "iconoir-react";
 import ReviewCard from "@/components/cards/review-card/review-card";
 import TrendingCard from "@/components/cards/trending-card/trending-card";
 import Link from "next/link";
@@ -16,7 +16,7 @@ import BarMenuItem from "@/components/menu/bar-menu/bar-menu-item";
 import Shortcut from "@/components/common/shortcut/shortcut";
 import FaqCard from "@/components/cards/faq-card/faq-card";
 import PlaceCard from "@/components/cards/place-card";
-import PlacesMapList from "@/components/places-map-list/places-map-list";
+import PlacesMapList from "@/components/common/places-map-list/places-map-list";
 
 export default function Home() {
   return (
