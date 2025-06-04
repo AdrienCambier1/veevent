@@ -59,9 +59,7 @@ export default function EventCard({
             <span>{date}</span>
           </div>
         </div>
-        {!minify && description && (
-          <p className="line-clamp-2">{description}</p>
-        )}
+        {!minify && description && <p className="description">{description}</p>}
         <div className="flex items-center justify-between gap-2">
           {!minify && <ProfilImages totalCount={8} />}
           <p className="price">

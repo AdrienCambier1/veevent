@@ -22,7 +22,7 @@
       @apply flex flex-col w-2/3 gap-1 justify-center  text-primary-600;
 
       .place-card-name {
-        @apply text-base font-extrabold text-ellipsis overflow-hidden whitespace-nowrap;
+        @apply font-extrabold text-ellipsis overflow-hidden whitespace-nowrap;
       }
 
       .place-card-specs {
@@ -34,7 +34,7 @@
       }
 
       .place-card-events {
-        @apply text-primary-950;
+        @apply text-primary-950 text-sm;
       }
 
       .place-card-link {

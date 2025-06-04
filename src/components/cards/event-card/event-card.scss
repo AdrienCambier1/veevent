@@ -29,18 +29,22 @@
   }
 
   .info {
-    @apply flex items-center gap-1 text-sm font-medium;
+    @apply flex items-center gap-1 font-medium;
+
+    svg {
+      @apply text-primary-600;
+    }
   }
 
-  .info svg {
-    @apply text-primary-600;
+  .description {
+    @apply line-clamp-2 text-sm;
   }
 
   .price {
     @apply text-primary-600 text-sm;
-  }
 
-  .price span {
-    @apply font-bold text-xl;
+    span {
+      @apply font-bold text-xl;
+    }
   }
 }

@@ -8,4 +8,12 @@
       @apply font-medium text-secondary-400;
     }
   }
+
+  .title {
+    @apply font-medium;
+  }
+
+  .description {
+    @apply text-sm;
+  }
 }

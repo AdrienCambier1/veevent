@@ -23,7 +23,7 @@ export default function TrustpilotCard({
         </p>
         <Image className="h-8 w-auto" src={Trustpilot} alt="Trustpilot logo" />
       </div>
-      <p>{description}</p>
+      <p className="description">{description}</p>
     </div>
   );
 }

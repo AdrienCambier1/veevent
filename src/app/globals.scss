@@ -56,7 +56,7 @@
   }
 
   body {
-    @apply bg-[var(--background)] font-[Syne] font-normal text-sm antialiased;
+    @apply bg-[var(--background)] font-[Syne] font-normal  antialiased;
   }
 
   main {
@@ -129,7 +129,7 @@
   }
 
   .more-btn {
-    @apply font-medium text-primary-600 text-sm;
+    @apply font-medium text-primary-600;
   }
 
   /**********/
