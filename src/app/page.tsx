@@ -21,6 +21,7 @@ import EventsAgenda from "@/components/common/events-agenda/events-agenda";
 import Welcome from "@/components/common/welcome/welcome";
 import ProfileHead from "@/components/profile-head/profile-head";
 import SearchBtn from "@/components/common/search-btn/search-btn";
+import TabList from "@/components/common/tab-list/tab-list";
 
 export default function Home() {
   return (
@@ -113,6 +114,17 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           organizer="Mike Shinoda"
           city="Paris"
           description="Pour la première fois en France"
+        />
+
+        <TabList
+          title="Alpes-Maritimes"
+          items={[]}
+          generateHref={(city) => `/cities/${city.toLowerCase()}`}
+        />
+        <TabList
+          title="Var"
+          items={[]}
+          generateHref={(city) => `/cities/${city.toLowerCase()}`}
         />
 
         <ProfileHead isMe={true} />

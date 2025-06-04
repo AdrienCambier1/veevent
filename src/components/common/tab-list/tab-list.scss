@@ -1,0 +1,21 @@
+.tab-list {
+  @apply bg-white w-full flex flex-col gap-2 rounded-[var(--vv-border-radius)];
+
+  .list-head {
+    @apply bg-primary-600 text-white px-2 py-1 rounded-t-[var(--vv-border-radius)] flex items-center justify-between font-medium;
+    line-height: 0.8;
+    transition: border-radius 0.3s ease-in-out;
+
+    &.closed {
+      @apply rounded-[var(--vv-border-radius)];
+    }
+
+    span {
+      @apply text-lg;
+    }
+  }
+
+  .list-content {
+    @apply grid grid-cols-2 px-2 pb-2 text-primary-600 text-sm gap-[3px];
+  }
+}
