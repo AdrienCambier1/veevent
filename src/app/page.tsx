@@ -6,7 +6,7 @@ import NewsCard from "@/components/cards/news-card/news-card";
 import ThemeCard from "@/components/cards/theme-card/theme-card";
 import CustomTitle from "@/components/common/custom-title/custom-title";
 import TrustpilotCard from "@/components/cards/trustpilot-card/trustpilot-card";
-import { Search } from "iconoir-react";
+import { Medal, Search } from "iconoir-react";
 import ReviewCard from "@/components/cards/review-card/review-card";
 import TrendingCard from "@/components/cards/trending-card/trending-card";
 import Link from "next/link";
@@ -19,6 +19,7 @@ import PlaceCard from "@/components/cards/place-card/place-card";
 import PlacesMapList from "@/components/common/places-map-list/places-map-list";
 import EventsAgenda from "@/components/common/events-agenda/events-agenda";
 import Welcome from "@/components/common/welcome/welcome";
+import ProfileHead from "@/components/profile-head/profile-head";
 
 export default function Home() {
   return (
@@ -31,10 +32,14 @@ export default function Home() {
           description="Description personnalisée"
         />
 
-        <ThemeCard theme="musique" />
-        <ThemeCard theme="sport" />
+        <ThemeCard category="music" />
+        <ThemeCard category="sport" name="Aquaponey" />
+        <ThemeCard>
+          <Medal />
+          Test
+        </ThemeCard>
 
-        <Welcome  />
+        <Welcome />
 
         <EventCard
           title="Atelier fresque végétal"
@@ -119,6 +124,8 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           city="Paris"
           description="Pour la première fois en France"
         />
+
+        <ProfileHead isMe={true} />
 
         <PlaceCard
           place={{

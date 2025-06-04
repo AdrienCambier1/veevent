@@ -1,17 +1,10 @@
-import { Headset, Megaphone, Basketball, Book } from "iconoir-react";
-import { ReactNode, useState } from "react";
-import "./selector-theme-tags.scss";
-
-type ThemeItem = string | { name: string; [key: string]: any };
+import { useState } from "react";
+import ThemeTag from "../theme-tag/theme-tag";
 
 interface SelectorThemeTagsProps {
-  availableThemes?: ThemeItem[];
+  availableThemes?: string[];
   selectedThemes?: string[];
   onSelectionChange?: (selectedThemes: string[]) => void;
-}
-
-interface ThemeIcons {
-  [key: string]: ReactNode;
 }
 
 export default function SelectorThemeTags({
@@ -22,34 +15,12 @@ export default function SelectorThemeTags({
   const [internalSelected, setInternalSelected] =
     useState<string[]>(selectedThemes);
 
-  const themeIcons: ThemeIcons = {
-    musique: <Headset className="icon-small" />,
-    sponsorise: <Megaphone className="icon-small" />,
-    sport: <Basketball className="icon-small" />,
-    learning: <Book className="icon-small" />,
-  };
-
-  const getNormalizedKey = (themeName: string): string => {
-    return themeName
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-  };
-
-  const getThemeIcon = (themeName: string): ReactNode => {
-    const normalizedName = getNormalizedKey(themeName);
-    return themeIcons[normalizedName] || null;
-  };
-
   const handleTagClick = (themeName: string) => {
     let newSelection: string[];
 
     if (internalSelected.includes(themeName)) {
-      // Désélectionner le tag
       newSelection = internalSelected.filter((theme) => theme !== themeName);
     } else {
-      // Sélectionner le tag (avec limite optionnelle)
-
       newSelection = [...internalSelected, themeName];
     }
 
@@ -62,23 +33,16 @@ export default function SelectorThemeTags({
   };
 
   return (
-    <div className="selector-theme-tags">
+    <div className="flex flex-wrap gap-2 justify-center">
       {availableThemes.map((item, index) => {
-        const themeName = typeof item === "string" ? item : item.name;
-        const selected = isSelected(themeName);
-
+        const selected = isSelected(item);
         return (
           <button
             key={index}
             type="button"
-            onClick={() => handleTagClick(themeName)}
-            className={`
-              ${selected && "selected"} 
-              tag
-            `}
+            onClick={() => handleTagClick(item)}
           >
-            {getThemeIcon(themeName)}
-            <span>{themeName}</span>
+            <ThemeTag category={item} name={item} isSelected={selected} />
           </button>
         );
       })}

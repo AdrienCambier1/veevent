@@ -7,7 +7,7 @@ type SizeOption = "base" | "sm" | "xs";
 interface ProfilImgProps {
   imageUrl?: string;
   name: string;
-  note: number;
+  note?: number;
   size?: SizeOption;
 }
 
@@ -32,10 +32,12 @@ export default function ProfilImg({
         alt={`Profile picture of ${name}`}
         className="profil-pic"
       />
-      <div className="flex flex-col justify-center">
-        <p className="text-base font-medium">{name}</p>
-        <RatingStars note={note} size="xs" />
-      </div>
+      {note && (
+        <div className="flex flex-col justify-center">
+          <p className="text-base font-medium">{name}</p>
+          <RatingStars note={note} size="xs" />
+        </div>
+      )}
     </div>
   );
 }

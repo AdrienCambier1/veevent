@@ -1,9 +1,9 @@
-import { Bookmark, MapPin, Calendar, ArrowUpRight } from "iconoir-react";
-import Image from "next/image";
 import niceImage from "@/assets/images/nice.jpg";
-import ThemeTags from "@/components/tags/theme-tags/theme-tags";
 import ProfilImages from "@/components/images/profil-images/profil-images";
 import ProfilImg from "@/components/images/profil-img/profil-img";
+import ThemeTag from "@/components/tags/theme-tag/theme-tag";
+import { ArrowUpRight, Bookmark, Calendar, MapPin } from "iconoir-react";
+import Image from "next/image";
 import "./event-card.scss";
 
 interface EventCardProps {
@@ -15,6 +15,14 @@ interface EventCardProps {
   minify?: boolean;
   imageUrl?: string; // Optional since it's not being used currently
 }
+
+const themes: string[] = [
+  "live_music",
+  "cinema",
+  "sport",
+  "education",
+  "sponsored",
+];
 
 export default function EventCard({
   title,
@@ -28,7 +36,11 @@ export default function EventCard({
   return (
     <div className={`event-card ${minify ? "minify" : ""}`}>
       <div className="image-container">
-        <ThemeTags theme={["musique", "sponsorisé", "sport", "learning"]} />
+        <div className="theme-tags">
+          {themes.map((theme, index) => {
+            return <ThemeTag key={index} category={theme} onEventCard={true} />;
+          })}
+        </div>
         <Image src={niceImage} className="banner" alt="Event image" />
       </div>
       <div className="flex flex-col gap-2 p-2">

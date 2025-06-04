@@ -1,41 +1,42 @@
-import Link from "next/link";
-import { Headset, Basketball, Book } from "iconoir-react";
-import { FC, SVGProps } from "react";
+import themeIcons from "../../tags/theme-tag/themes";
 import "./theme-card.scss";
 
-type ThemeType = "musique" | "sport" | "learning";
-
-type IconoirIconType = FC<SVGProps<SVGSVGElement>>;
-
 interface ThemeCardProps {
-  theme?: ThemeType;
+  category?: string;
+  name?: string;
+  children?: React.ReactNode;
 }
 
-export default function ThemeCard({ theme = "musique" }: ThemeCardProps) {
-  const themeIcons: Record<string, IconoirIconType> = {
-    musique: Headset,
-    sport: Basketball,
-    learning: Book,
-  };
+export default function ThemeCard({
+  category,
+  name,
+  children,
+}: ThemeCardProps) {
+  if (category) {
+    const themeIcon = themeIcons[category] || themeIcons.default;
+    const displayName = name || themeIcon.name;
 
-  const getNormalizedKey = (themeName: string): string => {
-    return themeName
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-  };
+    return (
+      <div className="theme-card">
+        <div className="theme-card-icon">{themeIcon.icon}</div>
+        <span className="theme-card-label">{displayName}</span>
+        {children}
+      </div>
+    );
+  }
 
-  const getThemeIcon = (themeName: string) => {
-    const normalizedName = getNormalizedKey(themeName);
-    const IconComponent = themeIcons[normalizedName];
+  if (name) {
+    return (
+      <div className="theme-card">
+        <div className="theme-card-icon"> {themeIcons.default.icon}</div>
+        <span className="theme-card-label">
+          {" "}
+          {children}
+          {name}
+        </span>
+      </div>
+    );
+  }
 
-    return IconComponent ? <IconComponent className="icon" /> : null;
-  };
-
-  return (
-    <Link href="#" className="theme-card">
-      {getThemeIcon(theme)}
-      <span>{theme}</span>
-    </Link>
-  );
+  return <span className="theme-card">{children}</span>;
 }
