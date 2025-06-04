@@ -6,7 +6,7 @@ import NewsCard from "@/components/cards/news-card/news-card";
 import ThemeCard from "@/components/cards/theme-card/theme-card";
 import CustomTitle from "@/components/common/custom-title/custom-title";
 import TrustpilotCard from "@/components/cards/trustpilot-card/trustpilot-card";
-import { Medal, Search } from "iconoir-react";
+import { Medal } from "iconoir-react";
 import ReviewCard from "@/components/cards/review-card/review-card";
 import TrendingCard from "@/components/cards/trending-card/trending-card";
 import Link from "next/link";
@@ -20,12 +20,12 @@ import PlacesMapList from "@/components/common/places-map-list/places-map-list";
 import EventsAgenda from "@/components/common/events-agenda/events-agenda";
 import Welcome from "@/components/common/welcome/welcome";
 import ProfileHead from "@/components/profile-head/profile-head";
+import SearchBtn from "@/components/common/search-btn/search-btn";
 
 export default function Home() {
   return (
     <main>
       <section className="wrapper">
-        <FloratingMenu />
         <h2>Exemple h2</h2>
         <CustomTitle
           title="Titre personnalisé"
@@ -41,6 +41,8 @@ export default function Home() {
 
         <Welcome />
 
+        <SearchBtn />
+
         <EventCard
           title="Atelier fresque végétal"
           location="Antibes"
@@ -55,12 +57,6 @@ export default function Home() {
 
         <PlacesMapList />
 
-        <BarMenu>
-          <BarMenuItem label="Évènements" isActive={false} />
-          <BarMenuItem label="Lieux" isActive={false} />
-          <BarMenuItem label="Organisateurs" isActive={false} />
-        </BarMenu>
-
         <p>ceci est un texte de base</p>
 
         <Link href="/login" className="primary-btn">
@@ -68,12 +64,6 @@ export default function Home() {
         </Link>
 
         <button className="secondary-btn">Secondary btn</button>
-
-        {/* Code à déplacer dans un composant plus tard */}
-        <div className="search-input">
-          <Search className="" />
-          <input type="search" placeholder="text input" />
-        </div>
 
         <input type="text" placeholder="text input" />
 
@@ -141,13 +131,6 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
             eventsCount: 5,
           }}
         />
-
-        <Link href="#" className="search-btn">
-          <div className="content">
-            <Search className="" />
-            <p>Concert de rock à Ni|</p>
-          </div>
-        </Link>
       </section>
     </main>
   );

@@ -5,6 +5,10 @@
     @apply rounded-lg;
   }
 
+  .title {
+    @apply text-lg text-primary-600 font-bold;
+  }
+
   .date {
     @apply text-xs font-bold text-primary-600;
   }

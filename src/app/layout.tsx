@@ -3,6 +3,7 @@ import Header from "@/components/header/header";
 import { CityProvider } from "@/contexts/city-context";
 import { SidebarProvider } from "@/contexts/sidebar-context";
 import { ReactNode } from "react";
+import FloatingMenu from "@/components/menu/floating-menu/floating-menu";
 
 export const metadata = {
   appleWebApp: {
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <SidebarProvider>
             <Header hideCitySelector={false} />
             {children}
+            <FloatingMenu />
           </SidebarProvider>
         </CityProvider>
       </body>

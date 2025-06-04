@@ -5,6 +5,7 @@ import CityCard from "@/components/cards/city-card/city-card";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSidebar } from "@/contexts/sidebar-context";
 import { useCity } from "@/contexts/city-context";
+import Link from "next/link";
 
 export default function SidebarMenu() {
   const { isOpen, closeSidebar } = useSidebar();
@@ -142,12 +143,16 @@ export default function SidebarMenu() {
                 </motion.div>
               ))}
 
-              <motion.button className="primary-btn" variants={itemVariants}>
-                <span className="flex gap-2">
-                  <City strokeWidth={2} />
-                  Toutes les villes
-                </span>
-              </motion.button>
+              <motion.div variants={itemVariants}>
+                <Link
+                  href="/cities"
+                  className="primary-btn"
+                  onClick={closeSidebar}
+                >
+                  <City className="!text-white" />
+                  <span>Toutes les villes</span>
+                </Link>
+              </motion.div>
             </motion.ul>
 
             <motion.div
