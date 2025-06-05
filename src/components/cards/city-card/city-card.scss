@@ -1,6 +1,5 @@
 .city-card {
-  @apply rounded-lg flex flex-col gap-2;
-  @apply w-fit; /* à enlever plus tard */
+  @apply rounded-lg flex flex-col items-center gap-2;
 
   &.is-card {
     @apply bg-primary-600 shadow-lg p-4;

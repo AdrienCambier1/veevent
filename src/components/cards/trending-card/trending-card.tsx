@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import niceImage from "@/assets/images/nice.jpg";
-import { ArrowUpRightCircleSolid } from "iconoir-react";
+import { ArrowUpRight } from "iconoir-react";
 import "./trending-card.scss";
 
 interface TrendingCardProps {
@@ -27,7 +27,7 @@ export default function TrendingCard({
 
         <div className="flex items-end gap-8">
           <p className="text-lg font-semibold flex-1">{description}</p>
-          <ArrowUpRightCircleSolid className="group-hover:-translate-y-1 transition icon" />
+          <ArrowUpRight className="group-hover:-translate-y-1 transition icon" />
         </div>
       </div>
 

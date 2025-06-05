@@ -37,11 +37,11 @@
   }
 
   .description {
-    @apply line-clamp-2 text-sm;
+    @apply line-clamp-2;
   }
 
   .price {
-    @apply text-primary-600 text-sm;
+    @apply text-primary-600;
 
     span {
       @apply font-bold text-xl;

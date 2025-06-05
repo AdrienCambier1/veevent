@@ -24,7 +24,7 @@ export default function ReviewCard({
     <div className="review-card">
       <ProfilImg name={author} note={note} />
       <p className="title">{title}</p>
-      <p className="description">{description}</p>
+      <p>{description}</p>
       <div className="participation">
         Concert {type} à{" "}
         <span>

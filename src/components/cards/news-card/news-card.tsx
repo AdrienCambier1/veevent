@@ -39,7 +39,7 @@ export default function NewsCard({
       <Image src={niceImage} alt="News image" className="banner" />
       <p className="date">{date}</p>
       <p className="title">{title}</p>
-      <p ref={contentRef} className="line-clamp-4 description">
+      <p ref={contentRef} className="line-clamp-4">
         {description}
       </p>
       {isTruncated && (

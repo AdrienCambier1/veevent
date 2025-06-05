@@ -56,7 +56,7 @@
   }
 
   body {
-    @apply bg-[var(--background)] font-[Syne] font-normal  antialiased;
+    @apply bg-[var(--background)] font-[Syne] font-normal text-sm antialiased;
   }
 
   main {
@@ -68,7 +68,7 @@
   }
 
   section {
-    @apply flex flex-col gap-8 mt-6 relative;
+    @apply flex flex-col gap-4 mt-6 relative;
   }
 
   form {
