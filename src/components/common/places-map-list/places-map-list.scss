@@ -1,0 +1,7 @@
+.places-map-list {
+  @apply flex flex-col gap-4 bg-white pb-2 rounded-[var(--vv-border-radius)] shadow-sm;
+
+  .places-list {
+    @apply flex flex-col gap-2;
+  }
+}

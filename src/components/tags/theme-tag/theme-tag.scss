@@ -1,0 +1,11 @@
+.theme-tag {
+  @apply transition border border-primary-600 text-primary-600 px-2 py-0.5 rounded-full w-fit flex items-center gap-1 font-bold;
+
+  &.on-event-card {
+    @apply bg-secondary-400;
+  }
+
+  &.selected {
+    @apply bg-primary-600 text-secondary-500;
+  }
+}

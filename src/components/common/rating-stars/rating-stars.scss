@@ -1,0 +1,7 @@
+.rating-stars {
+  @apply flex items-center;
+
+  svg {
+    @apply text-primary-600;
+  }
+}

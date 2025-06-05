@@ -1,0 +1,50 @@
+.event-card {
+  @apply shadow-md flex flex-col bg-white border-2 border-primary-800 rounded-[var(--vv-border-radius)] overflow-hidden text-primary-950;
+
+  &.minify {
+    .banner {
+      @apply aspect-[32/9];
+    }
+  }
+
+  .image-container {
+    @apply relative;
+
+    &::before {
+      content: "";
+      @apply absolute inset-0 bg-gradient-to-b from-50% from-transparent to-white border-none top-[1px] h-full;
+    }
+
+    .theme-tags {
+      @apply flex flex-wrap gap-2 absolute top-2 left-2;
+    }
+  }
+
+  .title {
+    @apply text-xl font-bold text-primary-800;
+  }
+
+  svg {
+    @apply text-primary-600;
+  }
+
+  .info {
+    @apply flex items-center gap-1 font-medium;
+
+    svg {
+      @apply text-primary-600;
+    }
+  }
+
+  .description {
+    @apply line-clamp-2;
+  }
+
+  .price {
+    @apply text-primary-600;
+
+    span {
+      @apply font-bold text-xl;
+    }
+  }
+}

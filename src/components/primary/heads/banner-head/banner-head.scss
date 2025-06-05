@@ -1,0 +1,15 @@
+.banner-img {
+  @apply relative;
+
+  .gradient {
+    @apply inset-0 absolute opacity-50 bg-gradient-to-r from-primary-600 via-transparent to-primary-600;
+  }
+
+  .content {
+    @apply absolute bottom-0 w-full;
+
+    .city {
+      @apply text-background text-7xl font-extrabold absolute bottom-0 left-4 leading-[0.6];
+    }
+  }
+}

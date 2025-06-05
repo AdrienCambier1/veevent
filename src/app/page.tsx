@@ -1,0 +1,143 @@
+"use client";
+
+import CityCard from "@/components/cards/city-card/city-card";
+import EventCard from "@/components/cards/event-card/event-card";
+import NewsCard from "@/components/cards/news-card/news-card";
+import ThemeCard from "@/components/cards/theme-card/theme-card";
+import CustomTitle from "@/components/common/custom-title/custom-title";
+import TrustpilotCard from "@/components/cards/trustpilot-card/trustpilot-card";
+import { Medal } from "iconoir-react";
+import ReviewCard from "@/components/cards/review-card/review-card";
+import TrendingCard from "@/components/cards/trending-card/trending-card";
+import Link from "next/link";
+import Shortcut from "@/components/common/shortcut/shortcut";
+import PlaceCard from "@/components/cards/place-card/place-card";
+import PlacesMapList from "@/components/common/places-map-list/places-map-list";
+import EventsAgenda from "@/components/common/events-agenda/events-agenda";
+import Welcome from "@/components/common/welcome/welcome";
+import ProfileHead from "@/components/primary/heads/profile-head/profile-head";
+import SearchBtn from "@/components/common/search-btn/search-btn";
+import TabList from "@/components/common/tab-list/tab-list";
+
+export default function Home() {
+  return (
+    <main>
+      <section className="wrapper">
+        <h2>Exemple h2</h2>
+        <CustomTitle
+          title="Titre personnalisé"
+          description="Description personnalisée"
+        />
+
+        <ThemeCard category="music" />
+        <ThemeCard category="sport" name="Aquaponey" />
+        <ThemeCard>
+          <Medal />
+          Test
+        </ThemeCard>
+
+        <Welcome />
+
+        <SearchBtn />
+
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+          semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+          congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+          consectetur. "
+          minify={false}
+          price={59}
+        />
+
+        <PlacesMapList />
+
+        <p>ceci est un texte de base</p>
+
+        <Link href="/login" className="primary-btn">
+          <span>Se connecter</span>
+        </Link>
+
+        <button className="secondary-btn">Secondary btn</button>
+
+        <input type="text" placeholder="text input" />
+
+        <NewsCard
+          title="Les 5 artistes émergeants qui font le show sur la Côte d’Azur"
+          description="Magis reges hoc pertinacior inquam nulla arcesilas nata hoc diodorus erit coercendi maximas quod. Et effectrix tanto est quid est modo voluptatem autem tanto familiares actione et credo si.
+Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pullum constructio atqui etiam istud iste... En lire plus"
+          date="25/04/2025"
+        />
+
+        <NewsCard
+          title="Les 5 artistes émergeants qui font le show sur la Côte d’Azur"
+          description="description courte le bouton ne s'affiche pas à voir si ça redirige vers une page ou ça affiche tout le texte"
+          date="25/04/2025"
+        />
+
+        <EventsAgenda />
+
+        <CityCard city="Nice" events={24} />
+
+        <TrustpilotCard
+          note={3}
+          reviews_number={1394}
+          description="Iam non est dolere adipiscing potuit expetendum quem eo est non non
+      numitorium parte eo publicae fregellanum accessit igitur. Eius nostrae
+      illis animus constructio non ipsum sed ipsum virtutes avia tecum
+      ciceronem."
+        />
+
+        <ReviewCard
+          author="Jean Dupont"
+          note={3}
+          title="Je recommande cette platefomre pour trouver des artistes locaux"
+          description="Sed non triarius nata consectetur est homines esse dolor voluptatem in iam ipsum viros est est est instrumento itaque iste epicuro. Isto triarius iste habent abducas atque et igitur se."
+          type="pop rock"
+          place="Maison 13"
+          city="Cannes"
+        />
+
+        <button className="secondary-btn">Voir tous les avis</button>
+
+        <Shortcut link="#" label="Trouver un événement" />
+
+        <TrendingCard
+          organizer="Mike Shinoda"
+          city="Paris"
+          description="Pour la première fois en France"
+        />
+
+        <TabList
+          title="Alpes-Maritimes"
+          items={[]}
+          generateHref={(city) => `/cities/${city.toLowerCase()}`}
+        />
+        <TabList
+          title="Var"
+          items={[]}
+          generateHref={(city) => `/cities/${city.toLowerCase()}`}
+        />
+
+        <ProfileHead isMe={true} />
+
+        <PlaceCard
+          place={{
+            id: "1",
+            name: "Bar des artistes",
+            address: "Antibes",
+            category: "Bar",
+            location: {
+              lat: 43.5803,
+              lng: 7.1251,
+            },
+            imageUrl: "/images/nice.jpg",
+            eventsCount: 5,
+          }}
+        />
+      </section>
+    </main>
+  );
+}
