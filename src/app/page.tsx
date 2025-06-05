@@ -10,16 +10,12 @@ import { Medal } from "iconoir-react";
 import ReviewCard from "@/components/cards/review-card/review-card";
 import TrendingCard from "@/components/cards/trending-card/trending-card";
 import Link from "next/link";
-import FloratingMenu from "@/components/menu/floating-menu/floating-menu";
-import BarMenu from "@/components/menu/bar-menu/bar-menu";
-import BarMenuItem from "@/components/menu/bar-menu/bar-menu-item";
 import Shortcut from "@/components/common/shortcut/shortcut";
-import FaqCard from "@/components/cards/faq-card/faq-card";
 import PlaceCard from "@/components/cards/place-card/place-card";
 import PlacesMapList from "@/components/common/places-map-list/places-map-list";
 import EventsAgenda from "@/components/common/events-agenda/events-agenda";
 import Welcome from "@/components/common/welcome/welcome";
-import ProfileHead from "@/components/profile-head/profile-head";
+import ProfileHead from "@/components/primary/heads/profile-head/profile-head";
 import SearchBtn from "@/components/common/search-btn/search-btn";
 import TabList from "@/components/common/tab-list/tab-list";
 
@@ -105,8 +101,6 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
         />
 
         <button className="secondary-btn">Voir tous les avis</button>
-
-        <FaqCard label="Comment acheté un billet de concert ?" />
 
         <Shortcut link="#" label="Trouver un événement" />
 

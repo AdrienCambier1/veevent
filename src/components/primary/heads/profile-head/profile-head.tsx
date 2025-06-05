@@ -1,5 +1,5 @@
 import { CinemaOld, LogOut, Settings, SoccerBall } from "iconoir-react";
-import ProfilImg from "../images/profil-img/profil-img";
+import ProfileImg from "../../../images/profile-img/profile-img";
 import "./profile-head.scss";
 import Link from "next/link";
 import ThemeTag from "@/components/tags/theme-tag/theme-tag";
@@ -13,7 +13,7 @@ export default function ProfileHead({ isMe }: ProfileHeadProps) {
     <div className="profile-head">
       <div className="grid gap-2 grid-cols-[auto,1fr] items-center">
         <div className="profile-image">
-          <ProfilImg name="Jean-Baptiste" size="base" />
+          <ProfileImg name="Jean-Baptiste" size="base" />
         </div>
         <div className="profile-info">
           <div className="name">Jean-Baptiste Sainte-Beuve</div>

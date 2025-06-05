@@ -5,7 +5,7 @@ import "./header.scss";
 import React from "react";
 import { useSidebar } from "@/contexts/sidebar-context";
 import { useCity } from "@/contexts/city-context";
-import SidebarMenu from "../menu/sidebar-menu/sidebar-menu";
+import SidebarMenu from "../../menu/sidebar-menu/sidebar-menu";
 
 interface HeaderProps {
   hideCitySelector: boolean;

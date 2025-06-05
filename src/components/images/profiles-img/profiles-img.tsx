@@ -1,16 +1,16 @@
 import Image from "next/image";
-import profilPicture from "@/assets/images/profil-pic.jpg";
+import profilePicture from "@/assets/images/profile-pic.jpg";
 import { StaticImageData } from "next/image";
 
-interface ProfilImagesProps {
+interface ProfilesImgProps {
   images?: (StaticImageData | string)[];
   totalCount?: number;
 }
 
-export default function ProfilImages({
-  images = [profilPicture, profilPicture, profilPicture],
+export default function ProfilesImg({
+  images = [profilePicture, profilePicture, profilePicture],
   totalCount,
-}: ProfilImagesProps) {
+}: ProfilesImgProps) {
   const visibleImages = images.slice(0, 3);
   const actualTotalCount = totalCount ?? images.length;
 
@@ -26,8 +26,8 @@ export default function ProfilImages({
           <Image
             key={index}
             src={src}
-            alt={`Profil picture ${index + 1}`}
-            className="profil-pic-sm"
+            alt={`Profile picture ${index + 1}`}
+            className="profile-pic-sm"
           />
         ))}
       </div>

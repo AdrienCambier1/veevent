@@ -1,5 +1,5 @@
 import "./globals.scss";
-import Header from "@/components/header/header";
+import Header from "@/components/primary/header/header";
 import { CityProvider } from "@/contexts/city-context";
 import { SidebarProvider } from "@/contexts/sidebar-context";
 import { ReactNode } from "react";

@@ -83,6 +83,10 @@
   /* Titles */
   /**********/
 
+  h1 {
+    @apply text-2xl font-bold text-primary-600;
+  }
+
   h2 {
     @apply text-xl font-bold text-primary-600;
   }
@@ -103,11 +107,11 @@
 
   .primary-btn,
   .secondary-btn {
-    @apply rounded-full w-full font-bold p-3;
+    @apply rounded-full w-full font-bold p-3 flex gap-2 items-center justify-center;
   }
 
   .primary-btn {
-    @apply text-primary-50 relative flex gap-2 items-center justify-center;
+    @apply text-primary-50 relative;
 
     svg {
       @apply icon z-10;
@@ -157,11 +161,11 @@
   /* Profil pic */
   /**************/
 
-  .profil-pic-sm {
+  .profile-pic-sm {
     @apply h-8 w-8 rounded-full object-cover border-2 border-primary-600;
   }
 
-  .profil-pic {
+  .profile-pic {
     @apply h-10 w-10 rounded-full object-cover;
   }
 }

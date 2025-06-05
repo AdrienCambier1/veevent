@@ -5,8 +5,8 @@ import { useRef, useEffect, useState } from "react";
 import "./news-card.scss";
 
 interface NewsCardProps {
-  title: string;
-  date: string;
+  title?: string;
+  date?: string;
   description: string;
   imageUrl?: string; // Made optional since it's not used in the component
 }
@@ -37,8 +37,8 @@ export default function NewsCard({
   return (
     <div className="news-card">
       <Image src={niceImage} alt="News image" className="banner" />
-      <p className="date">{date}</p>
-      <p className="title">{title}</p>
+      {date && <p className="date">{date}</p>}
+      {title && <p className="title">{title}</p>}
       <p ref={contentRef} className="line-clamp-4">
         {description}
       </p>

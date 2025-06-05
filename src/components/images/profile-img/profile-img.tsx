@@ -1,10 +1,10 @@
 import Image from "next/image";
-import profilPicture from "@/assets/images/profil-pic.jpg";
+import profilePicture from "@/assets/images/profile-pic.jpg";
 import RatingStars from "@/components/common/rating-stars/rating-stars";
 
 type SizeOption = "base" | "sm" | "xs";
 
-interface ProfilImgProps {
+interface ProfileImgProps {
   imageUrl?: string;
   name: string;
   note?: number;
@@ -17,20 +17,20 @@ const sizeMap: Record<SizeOption, string> = {
   xs: "icon-very-small",
 };
 
-export default function ProfilImg({
+export default function ProfileImg({
   imageUrl,
   name,
   note,
   size = "base",
-}: ProfilImgProps) {
+}: ProfileImgProps) {
   const iconSize = sizeMap[size];
 
   return (
     <div className="flex items-center gap-2">
       <Image
-        src={imageUrl || profilPicture}
+        src={imageUrl || profilePicture}
         alt={`Profile picture of ${name}`}
-        className="profil-pic"
+        className="profile-pic"
       />
       {note && (
         <div className="flex flex-col justify-center">

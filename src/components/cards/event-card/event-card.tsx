@@ -1,6 +1,6 @@
 import niceImage from "@/assets/images/nice.jpg";
-import ProfilImages from "@/components/images/profil-images/profil-images";
-import ProfilImg from "@/components/images/profil-img/profil-img";
+import ProfilesImg from "@/components/images/profiles-img/profiles-img";
+import ProfileImg from "@/components/images/profile-img/profile-img";
 import ThemeTag from "@/components/tags/theme-tag/theme-tag";
 import { ArrowUpRight, Bookmark, Calendar, MapPin } from "iconoir-react";
 import Image from "next/image";
@@ -48,7 +48,7 @@ export default function EventCard({
           <div className="title">{title}</div>
           <Bookmark className="icon" />
         </div>
-        <ProfilImg name="Marie N." note={4} />
+        <ProfileImg name="Marie N." note={4} />
         <div className="flex flex-wrap gap-2">
           <div className="info">
             <MapPin className="icon-small" />
@@ -61,7 +61,7 @@ export default function EventCard({
         </div>
         {!minify && description && <p className="description">{description}</p>}
         <div className="flex items-center justify-between gap-2">
-          {!minify && <ProfilImages totalCount={8} />}
+          {!minify && <ProfilesImg totalCount={8} />}
           <p className="price">
             À partir de <span>{price} €</span>
           </p>

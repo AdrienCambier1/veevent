@@ -142,7 +142,7 @@ export default function RegisterPage() {
         </form>
         <p className="font-bold">
           Vous avez déjà un compte ?{" "}
-          <Link className="text-[var(--primary-600)]" href="/login">
+          <Link className="text-primary-600" href="/login">
             Connectez-vous
           </Link>
         </p>

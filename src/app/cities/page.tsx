@@ -11,7 +11,7 @@ export default function CitiesPage() {
   return (
     <main>
       <section className="wrapper">
-        <h2>Explorez les villes disponibles sur veevent</h2>
+        <h1>Explorez les villes disponibles sur veevent</h1>
         <h3>Rechercher une ville</h3>
         <SearchInput
           value={searchTerm}
@@ -23,27 +23,23 @@ export default function CitiesPage() {
       </section>
       <section className="wrapper">
         <h3>Parcourir les villes populaires</h3>
-        <div className="flex flex-col gap-2">
-          <CityCard city="Nice" events={24} />
-          <CityCard city="Cannes" events={24} />
-          <CityCard city="Antibes" events={24} />
-          <CityCard city="Mougins" events={24} />
-        </div>
+        <CityCard city="Nice" events={24} />
+        <CityCard city="Cannes" events={24} />
+        <CityCard city="Antibes" events={24} />
+        <CityCard city="Mougins" events={24} />
       </section>
       <section className="wrapper">
         <h3>Parcourir les villes populaires</h3>
-        <div className="flex flex-col gap-2">
-          <TabList
-            title="Alpes-Maritimes"
-            items={[]}
-            generateHref={(city) => `/cities/${city.toLowerCase()}`}
-          />
-          <TabList
-            title="Var"
-            items={[]}
-            generateHref={(city) => `/cities/${city.toLowerCase()}`}
-          />
-        </div>
+        <TabList
+          title="Alpes-Maritimes"
+          items={[]}
+          generateHref={(city) => `/cities/${city.toLowerCase()}`}
+        />
+        <TabList
+          title="Var"
+          items={[]}
+          generateHref={(city) => `/cities/${city.toLowerCase()}`}
+        />
       </section>
       <section className="wrapper">
         <CustomTitle

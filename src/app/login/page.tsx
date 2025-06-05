@@ -31,7 +31,7 @@ export default function LoginPage() {
         </form>
         <p className="font-bold">
           Pas encore de compte ?{" "}
-          <Link className="text-[var(--primary-600)]" href="/register">
+          <Link className="text-primary-600" href="/register">
             Inscrivez-vous
           </Link>
         </p>

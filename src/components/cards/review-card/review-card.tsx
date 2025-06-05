@@ -1,4 +1,4 @@
-import ProfilImg from "@/components/images/profil-img/profil-img";
+import ProfilImg from "@/components/images/profile-img/profile-img";
 import "./review-card.scss";
 
 interface ReviewCardProps {

@@ -1,12 +1,12 @@
 import Image from "next/image";
 import nice4k from "@/assets/images/nice4k.jpg";
-import "./banner-img.scss";
+import "./banner-head.scss";
 
-interface BannerImgProps {
+interface BannerHeadProps {
   city?: string;
 }
 
-export default function BannerImg({ city }: BannerImgProps) {
+export default function BannerHead({ city }: BannerHeadProps) {
   return (
     <div className="banner-img">
       <div className="gradient" />

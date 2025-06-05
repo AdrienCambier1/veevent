@@ -2,7 +2,11 @@
 import { useState, ReactNode } from "react";
 import SearchInput from "@/components/inputs/search-input/search-input";
 import BarMenu from "@/components/menu/bar-menu/bar-menu";
-import BannerImg from "@/components/images/banner-img/banner-img";
+import BannerHead from "@/components/primary/heads/banner-head/banner-head";
+import CustomTitle from "@/components/common/custom-title/custom-title";
+import FaqCard from "@/components/cards/faq-card/faq-card";
+import ReviewCard from "@/components/cards/review-card/review-card";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 interface CitiesLayoutProps {
@@ -22,9 +26,9 @@ export default function CitiesLayout({ children }: CitiesLayoutProps) {
 
   return (
     <main>
-      <BannerImg city={city} />
+      <BannerHead city={city} />
       <section className="wrapper">
-        <h2>Évènements et activités proche de la ville de {city}</h2>
+        <h1>Évènements et activités proche de la ville de {city}</h1>
         <h3>Rechercher un évènement à {city}</h3>
         <SearchInput
           value={searchTerm}
@@ -36,6 +40,42 @@ export default function CitiesLayout({ children }: CitiesLayoutProps) {
         <BarMenu navigation={navigation} />
       </section>
       {children}
+      <section className="wrapper">
+        <CustomTitle
+          title="Nos utilisateurs parlent de leur expérience à Nice"
+          description="Avis"
+        />
+        <ReviewCard
+          author="Jean Dupont"
+          note={3}
+          title="Je recommande cette platefomre pour trouver des artistes locaux"
+          description="Sed non triarius nata consectetur est homines esse dolor voluptatem in iam ipsum viros est est est instrumento itaque iste epicuro. Isto triarius iste habent abducas atque et igitur se."
+          type="pop rock"
+          place="Maison 13"
+          city="Cannes"
+        />
+        <ReviewCard
+          author="Jean Dupont"
+          note={3}
+          title="Je recommande cette platefomre pour trouver des artistes locaux"
+          description="Sed non triarius nata consectetur est homines esse dolor voluptatem in iam ipsum viros est est est instrumento itaque iste epicuro. Isto triarius iste habent abducas atque et igitur se."
+          type="pop rock"
+          place="Maison 13"
+          city="Cannes"
+        />
+        <Link href="#" className="secondary-btn">
+          <span>Voir plus d'avis</span>
+        </Link>
+      </section>
+      <section className="wrapper">
+        <CustomTitle
+          title="Questions fréquentes de nos utilisateurs"
+          description="FAQ"
+        />
+        <FaqCard label="Comment acheter un billet de concert ?" />
+        <FaqCard label="Comment acheter un billet de concert ?" />
+        <FaqCard label="Comment acheter un billet de concert ?" />
+      </section>
     </main>
   );
 }
