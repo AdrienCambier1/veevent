@@ -3,6 +3,7 @@ import Gmaps from "./gmap";
 import { Place } from "@/types";
 import img from "@/assets/images/nice.jpg";
 import { useRef, useState } from "react";
+import "./places-map-list.scss";
 
 const locations: Place[] = [
   {

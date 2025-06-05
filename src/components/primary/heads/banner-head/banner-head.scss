@@ -9,7 +9,12 @@
     @apply absolute bottom-0 w-full;
 
     .city {
-      @apply text-background text-7xl font-extrabold absolute bottom-0 left-4 leading-[0.6];
+      @apply text-background font-extrabold absolute bottom-0 left-0 leading-[0.6] w-full px-4;
+      font-size: clamp(2rem, 12vw, 6rem);
+      text-align: left;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      hyphens: auto;
     }
   }
 }
