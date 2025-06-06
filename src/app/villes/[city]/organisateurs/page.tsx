@@ -5,6 +5,7 @@ import EventCard from "@/components/cards/event-card/event-card";
 import Link from "next/link";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
+import HorizontalList from "@/components/horizontal-list/horizontal-list";
 
 export default function OrganisateursPage() {
   const { city } = useParams() as { city: string };
@@ -43,20 +44,30 @@ export default function OrganisateursPage() {
           <span>Voir les prochains évènements</span>
         </Link>
       </section>
-      <section className="wrapper">
-        <h2>Les évènements populaires à Nice</h2>
+      <HorizontalList title={`Les évènements populaires à ${city}`}>
         <EventCard
           title="Atelier fresque végétal"
           location="Antibes"
           date="vendredi 14 mai 2025 • 19h00"
           description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                              consectetur. "
-          minify={true}
+                            semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                            congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                            consectetur. "
+          minify={false}
           price={59}
         />
-      </section>
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                            semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                            congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                            consectetur. "
+          minify={false}
+          price={59}
+        />
+      </HorizontalList>
     </>
   );
 }

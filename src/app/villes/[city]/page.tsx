@@ -5,26 +5,59 @@ import NewsCard from "@/components/cards/news-card/news-card";
 import CustomTitle from "@/components/common/custom-title/custom-title";
 import TabList from "@/components/common/tab-list/tab-list";
 import Link from "next/link";
+import HorizontalList from "@/components/horizontal-list/horizontal-list";
 
 export default function CityPage() {
   const { city } = useParams() as { city: string };
 
   return (
     <>
-      <section className="wrapper">
-        <h2>Les événements populaires à {city}</h2>
+      <HorizontalList title={`Les évènements populaires à ${city}`}>
         <EventCard
           title="Atelier fresque végétal"
           location="Antibes"
           date="vendredi 14 mai 2025 • 19h00"
           description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                      semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                      congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                      consectetur. "
+                            semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                            congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                            consectetur. "
           minify={false}
           price={59}
         />
-      </section>
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                            semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                            congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                            consectetur. "
+          minify={false}
+          price={59}
+        />
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                            semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                            congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                            consectetur. "
+          minify={false}
+          price={59}
+        />
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                            semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                            congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                            consectetur. "
+          minify={false}
+          price={59}
+        />
+      </HorizontalList>
       <section className="wrapper">
         <h2>Découvrir la ville de {city}</h2>
         <NewsCard description="Nice ville de fou ça" />

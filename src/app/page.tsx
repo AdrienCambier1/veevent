@@ -21,6 +21,7 @@ import TabList from "@/components/common/tab-list/tab-list";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
+import HorizontalList from "@/components/horizontal-list/horizontal-list";
 
 export default function Home() {
   return (
@@ -44,17 +45,74 @@ export default function Home() {
         <SearchBtn />
         <OrganizerCard name="Jean-Baptiste" />
 
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-          semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-          congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-          consectetur. "
-          minify={false}
-          price={59}
-        />
+        <HorizontalList title={`Les évènements populaires`}>
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+        </HorizontalList>
 
         <PlacesMapList />
 
