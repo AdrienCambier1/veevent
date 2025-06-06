@@ -2,7 +2,7 @@ header {
   @apply bg-background/75 backdrop-blur-sm top-0 fixed h-16 w-full z-30 flex items-center text-base;
 
   .wrapper {
-    @apply flex items-center w-full relative;
+    @apply flex items-center w-full relative pb-0;
 
     .back-button {
       @apply left-0 absolute flex items-center text-primary-600;

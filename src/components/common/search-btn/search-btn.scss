@@ -1,12 +1,14 @@
 .search-btn {
   @apply relative rounded-full border-2 border-transparent opacity-90;
   background: var(--rainbow);
+  background-size: 200% 200%;
   animation: rainbowFlow 6s ease-in-out infinite;
 
   &::before {
     content: "";
     @apply rounded-full absolute inset-0 top-0 left-0 blur-sm opacity-40 -z-10;
     background: var(--rainbow);
+    background-size: 200% 200%;
     animation: rainbowFlow 6s ease-in-out infinite;
     transition: all 0.3s ease-in-out;
   }
@@ -39,13 +41,31 @@
 
 @keyframes rainbowFlow {
   0% {
-    background-position: 0% 50%;
+    background-position: 50% 0%;
   }
-  50% {
+  12.5% {
+    background-position: 85% 15%;
+  }
+  25% {
     background-position: 100% 50%;
   }
-  100% {
+  37.5% {
+    background-position: 85% 85%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  62.5% {
+    background-position: 15% 85%;
+  }
+  75% {
     background-position: 0% 50%;
+  }
+  87.5% {
+    background-position: 15% 15%;
+  }
+  100% {
+    background-position: 50% 0%;
   }
 }
 
