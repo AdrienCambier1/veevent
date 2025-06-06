@@ -1,9 +1,8 @@
-// BarMenu avec hook personnalisé
 "use client";
 import BarMenuItem from "@/components/menu/bar-menu/bar-menu-item";
 import "./bar-menu.scss";
 import { usePathname } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useHorizontalScroll } from "@/hooks/useHorizontalScroll";
 
 interface BarMenuProps {
@@ -17,7 +16,7 @@ interface BarMenuProps {
 
 export default function BarMenu({ navigation }: BarMenuProps) {
   const pathname = usePathname();
-  const { scrollRef, handleScroll, isAtLeft, isAtRight } =
+  const { scrollRef, handleScroll, isAtLeft, isAtRight, scrollToActiveItem } =
     useHorizontalScroll();
 
   const isActiveLink = useCallback(
@@ -28,19 +27,28 @@ export default function BarMenu({ navigation }: BarMenuProps) {
     [pathname]
   );
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollToActiveItem();
+    }, 150);
+
+    return () => clearTimeout(timer);
+  }, [pathname, scrollToActiveItem]);
+
+  const maskClasses =
+    !isAtLeft && !isAtRight
+      ? "mask-both"
+      : !isAtLeft
+      ? "mask-left"
+      : !isAtRight
+      ? "mask-right"
+      : "";
+
   return (
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className={`bar-menu scrollbar-hide ${
-        !isAtLeft && !isAtRight
-          ? "mask-both"
-          : !isAtLeft
-          ? "mask-left"
-          : !isAtRight
-          ? "mask-right"
-          : ""
-      }`}
+      className={`bar-menu scrollbar-hide ${maskClasses}`}
     >
       {navigation.map((item) => (
         <BarMenuItem
