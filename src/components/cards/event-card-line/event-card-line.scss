@@ -1,26 +1,35 @@
 .event-card-line {
-  @apply flex w-full bg-white rounded-[var(--vv-border-radius)] overflow-hidden items-center p-[6px] cursor-pointer gap-2;
+  @apply flex w-full bg-white rounded-[var(--vv-border-radius)] overflow-hidden items-center p-[6px] cursor-pointer gap-2 justify-center;
 
   .card-image {
-    @apply w-1/3 h-full relative;
+    @apply w-1/3 h-full relative max-w-[150px] flex-shrink-0;
 
     img {
-      @apply w-full h-full rounded-[var(--vv-border-radius)] object-cover max-h-10;
+      @apply w-full h-full rounded-[var(--vv-border-radius)] object-cover max-h-12;
       object-fit: cover;
       aspect-ratio: 16 / 9;
     }
   }
 
   .card-content {
-    @apply flex flex-col w-2/3 justify-around text-primary-950 text-base;
-    line-height: 1.2;
+    @apply flex flex-col w-2/3 justify-between text-primary-950 text-base;
+    line-height: 1.4;
 
     .card-title {
       @apply font-bold text-ellipsis overflow-hidden whitespace-nowrap text-primary-600;
     }
 
     .card-specs {
-      @apply flex gap-2;
+      @apply flex gap-2 text-xs text-ellipsis overflow-hidden whitespace-nowrap flex-grow w-full;
+
+      li {
+        @apply flex items-center gap-1;
+
+        &:not(:last-child)::after {
+          content: "•";
+          @apply mx-1;
+        }
+      }
     }
   }
 

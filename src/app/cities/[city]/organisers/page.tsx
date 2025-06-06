@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
 import Link from "next/link";
 import CityCard from "@/components/cards/city-card/city-card";
-import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
+// import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 
 export default function OrganisersPage() {
   const { city } = useParams() as { city: string };
@@ -33,7 +33,7 @@ export default function OrganisersPage() {
       </section>
       <section className="wrapper">
         <h2>Ils organisent bientôt leurs évènements</h2>
-        <OrganizerCard name="JB" date="24.05.2025" />
+        {/* <OrganizerCard name="JB" date="24.05.2025" /> */}
         <Link href="#" className="primary-btn">
           <span>Voir les prochains évènements</span>
         </Link>

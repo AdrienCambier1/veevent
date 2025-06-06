@@ -18,6 +18,7 @@ import Welcome from "@/components/common/welcome/welcome";
 import ProfileHead from "@/components/primary/heads/profile-head/profile-head";
 import SearchBtn from "@/components/common/search-btn/search-btn";
 import TabList from "@/components/common/tab-list/tab-list";
+import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 
 export default function Home() {
   return (
@@ -39,6 +40,7 @@ export default function Home() {
         <Welcome />
 
         <SearchBtn />
+        <OrganizerCard name="Jean-Baptiste" />
 
         <EventCard
           title="Atelier fresque végétal"
