@@ -2,7 +2,7 @@
 import EventCard from "@/components/cards/event-card/event-card";
 import { useParams } from "next/navigation";
 
-export default function EventsPage() {
+export default function EvenementsPage() {
   const { city } = useParams() as { city: string };
 
   return (

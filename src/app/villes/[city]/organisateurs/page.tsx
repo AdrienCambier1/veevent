@@ -6,7 +6,7 @@ import Link from "next/link";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
 
-export default function OrganisersPage() {
+export default function OrganisateursPage() {
   const { city } = useParams() as { city: string };
 
   return (

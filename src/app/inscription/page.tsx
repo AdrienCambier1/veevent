@@ -4,7 +4,7 @@ import StepIndicator from "@/components/common/step-indicator/step-indictator";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 
-export default function RegisterPage() {
+export default function InscriptionPage() {
   const [step, setStep] = useState(1);
 
   const handleNextStep = (e: FormEvent<HTMLFormElement>) => {

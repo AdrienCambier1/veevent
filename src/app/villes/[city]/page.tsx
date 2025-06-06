@@ -6,7 +6,7 @@ import CustomTitle from "@/components/common/custom-title/custom-title";
 import TabList from "@/components/common/tab-list/tab-list";
 import Link from "next/link";
 
-export default function CitiesPage() {
+export default function CityPage() {
   const { city } = useParams() as { city: string };
 
   return (

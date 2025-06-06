@@ -6,7 +6,7 @@ import CustomTitle from "@/components/common/custom-title/custom-title";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
 
-export default function CitiesPage() {
+export default function VillesPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   return (

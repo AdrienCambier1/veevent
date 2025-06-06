@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function ConnexionPage() {
   return (
     <main>
       <section className="wrapper flex items-center">

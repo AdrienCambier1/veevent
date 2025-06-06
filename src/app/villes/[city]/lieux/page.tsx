@@ -6,7 +6,7 @@ import TabList from "@/components/common/tab-list/tab-list";
 import NewsCard from "@/components/cards/news-card/news-card";
 import Link from "next/link";
 
-export default function PlacesPage() {
+export default function LieuxPage() {
   const { city } = useParams() as { city: string };
 
   return (

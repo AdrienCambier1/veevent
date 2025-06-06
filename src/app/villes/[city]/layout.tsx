@@ -13,7 +13,7 @@ interface CitiesLayoutProps {
   children: ReactNode;
 }
 
-export default function CitiesLayout({ children }: CitiesLayoutProps) {
+export default function CityLayout({ children }: CitiesLayoutProps) {
   const { city } = useParams() as { city: string };
   const [searchTerm, setSearchTerm] = useState("");
 
