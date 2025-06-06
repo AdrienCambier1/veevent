@@ -1,6 +1,27 @@
 .search-btn {
   background: var(--rainbow);
-  @apply shadow-md relative rounded-full border-2 border-transparent;
+  opacity: 90%;
+  background-size: 200% 200%;
+  animation: rainbowFlow 6s ease-in-out infinite; // Changé de 3s à 6s
+  @apply relative rounded-full border-2 border-transparent;
+
+  /* Élément pour le shadow multicolore */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--rainbow);
+    background-size: 100% 100%;
+    border-radius: 9999px;
+    filter: blur(60px);
+    opacity: 0.5;
+    z-index: -1;
+    animation: rainbowFlow 6s ease-in-out infinite;
+    transition: all 0.3s ease-in-out;
+  }
 
   .content {
     @apply flex items-center gap-2 bg-white p-3 text-gray-400 rounded-full !w-full;
@@ -16,6 +37,27 @@
     .cursor {
       animation: blink 1s infinite ease-in-out;
     }
+  }
+
+  &:hover {
+    animation-duration: 3s;
+
+    &::before {
+      animation-duration: 3s;
+      opacity: 0.8;
+    }
+  }
+}
+
+@keyframes rainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 

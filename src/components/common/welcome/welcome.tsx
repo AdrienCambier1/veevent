@@ -14,11 +14,11 @@ export default function Welcome({ user }: WelcomeProps) {
       <div className="hello">Bonjour {user && user.name} !</div>
       {!user && (
         <div className="welcome-links">
-          <Link href="/login">
+          <Link href="/connexion">
             <span>Connectez-vous</span>
           </Link>
           ou
-          <Link href="/register">
+          <Link href="/inscription">
             <span>Inscrivez-vous</span>
           </Link>
         </div>

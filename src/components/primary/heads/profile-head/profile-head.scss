@@ -1,9 +1,9 @@
 .profile-head {
-  @apply flex flex-col gap-4;
+  @apply flex flex-col gap-5;
 
   .profile-image {
     @apply w-16 rounded-full object-cover border-2 border-primary-600;
-    .profil-pic {
+    .profile-pic {
       @apply w-full h-auto object-cover;
     }
   }
@@ -12,7 +12,7 @@
     @apply flex flex-col w-full;
 
     .name {
-      @apply text-xl font-bold text-primary-950;
+      @apply text-lg font-bold text-primary-950;
       line-height: 1.2;
     }
 
@@ -22,13 +22,14 @@
   }
 
   .profile-stats {
-    @apply flex gap-4 justify-around text-sm text-center;
+    @apply flex text-xs text-center;
     div {
-      @apply flex flex-col gap-1 text-gray-500 border-r-2 border-gray-200 pr-4;
+      @apply flex flex-col gap-1 text-gray-500 flex-1 relative;
       line-height: 0.8;
 
-      &:last-child {
-        @apply border-r-0 pr-0;
+      &:not(:last-child)::after {
+        content: "";
+        @apply absolute right-0 top-0 bottom-0 w-px bg-gray-300;
       }
 
       span {

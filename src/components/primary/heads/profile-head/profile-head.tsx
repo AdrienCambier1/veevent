@@ -42,6 +42,13 @@ export default function ProfileHead({ isMe }: ProfileHeadProps) {
           congue vitae, lacinia vel nunc.
         </p>
       </div>
+      <div className="profile-themes">
+        <ThemeTag category="cinema" />
+        <ThemeTag category="soccer" name="FootSalle" />
+        <ThemeTag category="blabla" name="FootSalle" />
+        <ThemeTag category="yoga" />
+        <ThemeTag>Aquaponey</ThemeTag>
+      </div>
       {isMe && (
         <div className="profile-actions">
           <div className="flex gap-2 items-center">
@@ -55,14 +62,6 @@ export default function ProfileHead({ isMe }: ProfileHeadProps) {
           </div>
         </div>
       )}
-
-      <div className="profile-themes">
-        <ThemeTag category="cinema" />
-        <ThemeTag category="soccer" name="FootSalle" />
-        <ThemeTag category="blabla" name="FootSalle" />
-        <ThemeTag category="yoga" />
-        <ThemeTag>Aquaponey</ThemeTag>
-      </div>
     </div>
   );
 }

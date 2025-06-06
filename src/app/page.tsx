@@ -1,6 +1,6 @@
 "use client";
 
-import CityCard from "@/components/cards/city-card/city-card";
+import CityCard from "@/components/cards/text-image-card/text-image-card";
 import EventCard from "@/components/cards/event-card/event-card";
 import NewsCard from "@/components/cards/news-card/news-card";
 import ThemeCard from "@/components/cards/theme-card/theme-card";
@@ -18,6 +18,10 @@ import Welcome from "@/components/common/welcome/welcome";
 import ProfileHead from "@/components/primary/heads/profile-head/profile-head";
 import SearchBtn from "@/components/common/search-btn/search-btn";
 import TabList from "@/components/common/tab-list/tab-list";
+import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
+import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import img from "@/assets/images/nice.jpg";
+import HorizontalList from "@/components/horizontal-list/horizontal-list";
 
 export default function Home() {
   return (
@@ -39,28 +43,88 @@ export default function Home() {
         <Welcome />
 
         <SearchBtn />
+        <OrganizerCard name="Jean-Baptiste" />
 
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-          semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-          congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-          consectetur. "
-          minify={false}
-          price={59}
-        />
+        <HorizontalList title={`Les évènements populaires`}>
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+          <EventCard
+            title="Atelier fresque végétal"
+            location="Antibes"
+            date="vendredi 14 mai 2025 • 19h00"
+            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                              consectetur. "
+            minify={false}
+            price={59}
+          />
+        </HorizontalList>
 
         <PlacesMapList />
 
         <p>ceci est un texte de base</p>
 
-        <Link href="/login" className="primary-btn">
+        <Link href="/connexion" className="primary-btn">
           <span>Se connecter</span>
         </Link>
 
-        <button className="secondary-btn">Secondary btn</button>
+        <button className="secondary-btn">
+          <span>Secondary btn</span>
+        </button>
 
         <input type="text" placeholder="text input" />
 
@@ -79,7 +143,13 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
 
         <EventsAgenda />
 
-        <CityCard city="Nice" events={24} />
+        <TextImageCard
+          title="Nice"
+          subtitle={"24 évenèments"}
+          image={img}
+          href={`./villes/${"Nice".toLocaleLowerCase()}`}
+          isCard={true}
+        />
 
         <TrustpilotCard
           note={3}
@@ -100,7 +170,9 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           city="Cannes"
         />
 
-        <button className="secondary-btn">Voir tous les avis</button>
+        <button className="secondary-btn">
+          <span>Voir tous les avis</span>
+        </button>
 
         <Shortcut link="#" label="Trouver un événement" />
 

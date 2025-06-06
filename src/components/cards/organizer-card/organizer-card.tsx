@@ -4,30 +4,37 @@ import niceImage from "@/assets/images/nice.jpg";
 import "./organizer-card.scss";
 import React from "react";
 import Link from "next/link";
+import ProfileImg from "@/components/images/profile-img/profile-img";
+import EventCardLine from "../event-card-line/event-card-line";
 
 interface OrganizerCardProps {
   name: string;
-  date: string;
 }
 
-export default function OrganizerCard({ name, date }: OrganizerCardProps) {
+export default function OrganizerCard({ name }: OrganizerCardProps) {
   return (
-    <Link
-      href={`/organisateurs/${name.toLocaleLowerCase()}`}
-      className="organizer-card group"
-    >
-      <div className="flex items-center">
-        <p className="title">{name}</p>
-        <Image
-          src={niceImage}
-          alt={`${name} image`}
-          className="organizer-img"
-        />
-      </div>
+    <Link href={`/organisateurs/${name.toLocaleLowerCase()}`}>
+      <div className="organizer-card">
+        <ProfileImg name={name} note={4} />
+        <div className="profile-stats">
+          <div>
+            <span>28</span> abonnements
+          </div>
+          <div>
+            <span>12</span> abonnés
+          </div>
+          <div>
+            <span>3 </span>événements
+          </div>
+        </div>
+        <div className="flex flex-col w-full">
+          <EventCardLine />
+          <EventCardLine />
+        </div>
 
-      <div className="flex items-center justify-between gap-2 text-secondary-400">
-        <p>le {date}</p>
-        <ArrowUpRight className="group-hover:-translate-y-1 transition icon" />
+        <span className="text-primary-600 font-medium underline">
+          Voir le profil
+        </span>
       </div>
     </Link>
   );

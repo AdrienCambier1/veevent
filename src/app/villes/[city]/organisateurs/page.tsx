@@ -3,10 +3,11 @@ import CustomTitle from "@/components/common/custom-title/custom-title";
 import { useParams } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
 import Link from "next/link";
-import CityCard from "@/components/cards/city-card/city-card";
-import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
+import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import img from "@/assets/images/nice.jpg";
+import HorizontalList from "@/components/horizontal-list/horizontal-list";
 
-export default function OrganisersPage() {
+export default function OrganisateursPage() {
   const { city } = useParams() as { city: string };
 
   return (
@@ -33,25 +34,40 @@ export default function OrganisersPage() {
       </section>
       <section className="wrapper">
         <h2>Ils organisent bientôt leurs évènements</h2>
-        <OrganizerCard name="JB" date="24.05.2025" />
+        <TextImageCard
+          title="JB"
+          subtitle="24.05.2025"
+          href={`/organisateurs/${"JB".toLocaleLowerCase()}`}
+          image={img}
+        />
         <Link href="#" className="primary-btn">
           <span>Voir les prochains évènements</span>
         </Link>
       </section>
-      <section className="wrapper">
-        <h2>Les évènements populaires à Nice</h2>
+      <HorizontalList title={`Les évènements populaires à ${city}`}>
         <EventCard
           title="Atelier fresque végétal"
           location="Antibes"
           date="vendredi 14 mai 2025 • 19h00"
           description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                              consectetur. "
-          minify={true}
+                            semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                            congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                            consectetur. "
+          minify={false}
           price={59}
         />
-      </section>
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                            semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                            congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                            consectetur. "
+          minify={false}
+          price={59}
+        />
+      </HorizontalList>
     </>
   );
 }

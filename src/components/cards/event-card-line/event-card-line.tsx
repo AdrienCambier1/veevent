@@ -11,10 +11,10 @@ export default function EventCardLine() {
       </div>
       <div className="card-content">
         <div className="card-title">Concert de rock à Nice</div>
-        <div className="card-specs">
-          <div className="card-organizer">Mégane R.</div>
-          <div className="card-price">À partir de 79€</div>
-        </div>
+        <ul className="card-specs">
+          <li className="card-organizer">Mégane R.</li>
+          <li className="card-price">À partir de 79€</li>
+        </ul>
       </div>
       <ArrowUpRight strokeWidth={2} />
     </div>

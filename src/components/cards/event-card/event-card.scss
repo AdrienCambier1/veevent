@@ -1,5 +1,20 @@
 .event-card {
-  @apply shadow-md flex flex-col bg-white border-2 border-primary-800 rounded-[var(--vv-border-radius)] overflow-hidden text-primary-950;
+  @apply shadow-md flex flex-col bg-white border-2 border-primary-800 rounded-[var(--vv-border-radius)] overflow-hidden text-primary-950 min-w-[320px] snap-start;
+  scroll-snap-align: start;
+  scroll-margin-left: 1rem;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  &:hover {
+    transform: scale(1.008);
+  }
+
+  @media (min-width: 640px) and (max-width: 1199px) {
+    scroll-margin-left: 2rem;
+  }
+
+  @media (min-width: 1200px) {
+    scroll-margin-left: calc((100vw - 1200px) / 2 + 0.5rem);
+  }
 
   &.minify {
     .banner {
