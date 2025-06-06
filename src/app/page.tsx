@@ -64,7 +64,9 @@ export default function Home() {
           <span>Se connecter</span>
         </Link>
 
-        <button className="secondary-btn">Secondary btn</button>
+        <button className="secondary-btn">
+          <span>Secondary btn</span>
+        </button>
 
         <input type="text" placeholder="text input" />
 
@@ -110,7 +112,9 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           city="Cannes"
         />
 
-        <button className="secondary-btn">Voir tous les avis</button>
+        <button className="secondary-btn">
+          <span>Voir tous les avis</span>
+        </button>
 
         <Shortcut link="#" label="Trouver un événement" />
 
