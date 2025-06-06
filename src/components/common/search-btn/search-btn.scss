@@ -1,24 +1,12 @@
 .search-btn {
+  @apply relative rounded-full border-2 border-transparent opacity-90;
   background: var(--rainbow);
-  opacity: 90%;
-  background-size: 200% 200%;
-  animation: rainbowFlow 6s ease-in-out infinite; // Changé de 3s à 6s
-  @apply relative rounded-full border-2 border-transparent;
+  animation: rainbowFlow 6s ease-in-out infinite;
 
-  /* Élément pour le shadow multicolore */
   &::before {
     content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    @apply rounded-full absolute inset-0 top-0 left-0 blur-sm opacity-40 -z-10;
     background: var(--rainbow);
-    background-size: 100% 100%;
-    border-radius: 9999px;
-    filter: blur(60px);
-    opacity: 0.5;
-    z-index: -1;
     animation: rainbowFlow 6s ease-in-out infinite;
     transition: all 0.3s ease-in-out;
   }
@@ -43,8 +31,8 @@
     animation-duration: 3s;
 
     &::before {
+      @apply blur-md opacity-60;
       animation-duration: 3s;
-      opacity: 0.8;
     }
   }
 }

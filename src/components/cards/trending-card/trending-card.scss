@@ -1,5 +1,5 @@
 .trending-card {
-  @apply text-white rounded-lg flex items-center justify-center overflow-hidden relative;
+  @apply shadow-sm text-white rounded-lg flex items-center justify-center overflow-hidden relative;
   @apply max-w-96; /* à enlever plus tard */
 
   img {

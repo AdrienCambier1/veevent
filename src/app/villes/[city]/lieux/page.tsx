@@ -2,10 +2,10 @@
 import CustomTitle from "@/components/common/custom-title/custom-title";
 import { useParams } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
-import TabList from "@/components/common/tab-list/tab-list";
+import TabList from "@/components/lists/tab-list/tab-list";
 import NewsCard from "@/components/cards/news-card/news-card";
 import Link from "next/link";
-import HorizontalList from "@/components/horizontal-list/horizontal-list";
+import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 
 export default function LieuxPage() {
   const { city } = useParams() as { city: string };

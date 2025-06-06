@@ -1,5 +1,5 @@
 .review-card {
-  @apply flex flex-col gap-2 p-2 bg-white rounded-lg;
+  @apply shadow-sm flex flex-col gap-2 p-2 bg-white rounded-lg;
 
   .participation {
     @apply p-2 w-full bg-primary-600 rounded-lg text-white;

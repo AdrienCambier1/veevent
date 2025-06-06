@@ -1,0 +1,11 @@
+.horizontal-list {
+  @apply relative;
+
+  .scroll-container {
+    @apply overflow-y-visible overflow-x-scroll scroll-smooth snap-x snap-mandatory;
+
+    .scroll-content {
+      @apply flex gap-4 py-3 pl-4 pr-4 sm:pl-4 sm:pr-4 xl:pl-[calc((100vw-1200px)/2+0.5rem)] xl:pr-[calc((100vw-1200px)/2+1rem)] min-w-fit select-none;
+    }
+  }
+}

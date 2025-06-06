@@ -1,12 +1,16 @@
 import { useRef, useState } from "react";
+import CustomTitle from "@/components/common/custom-title/custom-title";
+import "./horizontal-list.scss";
 
 interface HorizontalListProps {
   children?: React.ReactNode;
-  title?: string;
+  title: string;
+  description?: string;
 }
 
 export default function HorizontalList({
   title,
+  description,
   children,
 }: HorizontalListProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -38,13 +42,17 @@ export default function HorizontalList({
   };
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="horizontal-list gap-0">
       <div className="wrapper">
-        <h2>{title}</h2>
+        {description ? (
+          <CustomTitle title={title} description={description} />
+        ) : (
+          <h2>{title}</h2>
+        )}
       </div>
       <div
         ref={scrollRef}
-        className={`overflow-x-auto overflow-y-hidden scrollbar-hide scroll-smooth snap-x snap-mandatory ${
+        className={`scroll-container scrollbar-hide ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         onMouseDown={handleMouseDown}
@@ -52,9 +60,7 @@ export default function HorizontalList({
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="flex gap-4 pl-4 pr-4 sm:pl-4 sm:pr-4 xl:pl-[calc((100vw-1200px)/2+0.5rem)] py-1 xl:pr-[calc((100vw-1200px)/2+1rem)] min-w-fit select-none">
-          {children}
-        </div>
+        <div className="scroll-content">{children}</div>
       </div>
     </section>
   );

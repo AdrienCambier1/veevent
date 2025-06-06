@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import SearchInput from "@/components/inputs/search-input/search-input";
-import TabList from "@/components/common/tab-list/tab-list";
+import TabList from "@/components/lists/tab-list/tab-list";
 import CustomTitle from "@/components/common/custom-title/custom-title";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";

@@ -1,6 +1,6 @@
 "use client";
 import EventCard from "@/components/cards/event-card/event-card";
-import HorizontalList from "@/components/horizontal-list/horizontal-list";
+import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import { useParams } from "next/navigation";
 
 export default function EvenementsPage() {

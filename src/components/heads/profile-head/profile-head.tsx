@@ -1,5 +1,5 @@
 import { CinemaOld, LogOut, Settings, SoccerBall } from "iconoir-react";
-import ProfileImg from "../../../images/profile-img/profile-img";
+import ProfileImg from "@/components/images/profile-img/profile-img";
 import "./profile-head.scss";
 import Link from "next/link";
 import ThemeTag from "@/components/tags/theme-tag/theme-tag";

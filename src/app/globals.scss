@@ -56,7 +56,7 @@
   }
 
   body {
-    @apply bg-[var(--background)] font-[Syne] font-normal text-sm antialiased;
+    @apply bg-[var(--background)] font-[Syne] font-normal text-sm text-gray-950 antialiased;
   }
 
   main {
@@ -153,7 +153,7 @@
   }
 
   .primary-btn {
-    @apply text-primary-50 relative;
+    @apply text-primary-50 relative hover:opacity-75 transition;
 
     svg {
       @apply icon z-10;

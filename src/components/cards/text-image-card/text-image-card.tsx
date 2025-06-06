@@ -19,10 +19,13 @@ export default function TextImageCard({
   isCard = true,
 }: TextImageCardProps) {
   return (
-    <Link href={href} className={`city-card group ${isCard ? "is-card" : ""}`}>
+    <Link
+      href={href}
+      className={`text-image-card group ${isCard ? "is-card" : ""}`}
+    >
       <div className="flex items-center">
         <p className="title">{title}</p>
-        <Image src={image} alt={`${title} image`} className="city-img" />
+        <Image src={image} alt={`${title} image`} />
       </div>
       {subtitle && (
         <div className="flex items-center justify-between gap-2 text-secondary-400">

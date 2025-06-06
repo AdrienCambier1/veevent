@@ -5,7 +5,7 @@ import EventCard from "@/components/cards/event-card/event-card";
 import Link from "next/link";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
-import HorizontalList from "@/components/horizontal-list/horizontal-list";
+import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 
 export default function OrganisateursPage() {
   const { city } = useParams() as { city: string };

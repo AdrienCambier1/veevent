@@ -1,6 +1,4 @@
 "use client";
-
-import CityCard from "@/components/cards/text-image-card/text-image-card";
 import EventCard from "@/components/cards/event-card/event-card";
 import NewsCard from "@/components/cards/news-card/news-card";
 import ThemeCard from "@/components/cards/theme-card/theme-card";
@@ -12,137 +10,158 @@ import TrendingCard from "@/components/cards/trending-card/trending-card";
 import Link from "next/link";
 import Shortcut from "@/components/common/shortcut/shortcut";
 import PlaceCard from "@/components/cards/place-card/place-card";
-import PlacesMapList from "@/components/common/places-map-list/places-map-list";
+import PlacesMapList from "@/components/lists/places-map-list/places-map-list";
 import EventsAgenda from "@/components/common/events-agenda/events-agenda";
 import Welcome from "@/components/common/welcome/welcome";
-import ProfileHead from "@/components/primary/heads/profile-head/profile-head";
+import ProfileHead from "@/components/heads/profile-head/profile-head";
 import SearchBtn from "@/components/common/search-btn/search-btn";
-import TabList from "@/components/common/tab-list/tab-list";
+import TabList from "@/components/lists/tab-list/tab-list";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
-import HorizontalList from "@/components/horizontal-list/horizontal-list";
+import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
+import FaqCard from "@/components/cards/faq-card/faq-card";
 
 export default function Home() {
   return (
     <main>
       <section className="wrapper">
-        <h2>Exemple h2</h2>
-        <CustomTitle
-          title="Titre personnalisé"
-          description="Description personnalisée"
+        <Welcome />
+      </section>
+      <section className="wrapper">
+        <p className="text-lg font-bold text-center">
+          Un concert 🎸qui fait vibrer. Un atelier qui inspire. Un festival 🎪 à
+          ne pas manquer. Tout est ici. Découvrez, réservez, profitez. 🗓️
+        </p>
+      </section>
+      <section className="wrapper">
+        <div className="flex flex-col gap-2">
+          <p className="font-medium">Recherchez ce qui vous intéresse</p>
+          <SearchBtn />
+        </div>
+      </section>
+      <HorizontalList title="Les évènements populaires">
+        <TrendingCard
+          organizer="Mike Shinoda"
+          city="Paris"
+          description="Pour la première fois en France"
         />
-
+        <TrendingCard
+          organizer="Mike Shinoda"
+          city="Paris"
+          description="Pour la première fois en France"
+        />
+      </HorizontalList>
+      <HorizontalList title="Envie d'une sortie">
         <ThemeCard category="music" />
         <ThemeCard category="sport" name="Aquaponey" />
         <ThemeCard>
           <Medal />
           Test
         </ThemeCard>
-
-        <Welcome />
-
-        <SearchBtn />
-        <OrganizerCard name="Jean-Baptiste" />
-
-        <HorizontalList title={`Les évènements populaires`}>
-          <EventCard
-            title="Atelier fresque végétal"
-            location="Antibes"
-            date="vendredi 14 mai 2025 • 19h00"
-            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+      </HorizontalList>
+      <HorizontalList title="Proche de chez vous">
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
                               semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
                               congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
                               consectetur. "
-            minify={false}
-            price={59}
-          />
-          <EventCard
-            title="Atelier fresque végétal"
-            location="Antibes"
-            date="vendredi 14 mai 2025 • 19h00"
-            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+          minify={false}
+          price={59}
+        />
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
                               semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
                               congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
                               consectetur. "
-            minify={false}
-            price={59}
-          />
-          <EventCard
-            title="Atelier fresque végétal"
-            location="Antibes"
-            date="vendredi 14 mai 2025 • 19h00"
-            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+          minify={false}
+          price={59}
+        />
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
                               semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
                               congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
                               consectetur. "
-            minify={false}
-            price={59}
-          />
-          <EventCard
-            title="Atelier fresque végétal"
-            location="Antibes"
-            date="vendredi 14 mai 2025 • 19h00"
-            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+          minify={false}
+          price={59}
+        />
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
                               semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
                               congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
                               consectetur. "
-            minify={false}
-            price={59}
-          />
-          <EventCard
-            title="Atelier fresque végétal"
-            location="Antibes"
-            date="vendredi 14 mai 2025 • 19h00"
-            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+          minify={false}
+          price={59}
+        />
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
                               semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
                               congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
                               consectetur. "
-            minify={false}
-            price={59}
-          />
-          <EventCard
-            title="Atelier fresque végétal"
-            location="Antibes"
-            date="vendredi 14 mai 2025 • 19h00"
-            description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+          minify={false}
+          price={59}
+        />
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
                               semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
                               congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
                               consectetur. "
-            minify={false}
-            price={59}
-          />
-        </HorizontalList>
-
-        <PlacesMapList />
-
-        <p>ceci est un texte de base</p>
-
+          minify={false}
+          price={59}
+        />
+      </HorizontalList>
+      <section className="wrapper">
+        <h2>Gérer vos évènements facilement</h2>
+        <p>
+          Créer un compte ou connectez-vous pour rester informer sur vos
+          évènements et notifications.
+        </p>
         <Link href="/connexion" className="primary-btn">
-          <span>Se connecter</span>
+          <span>S'inscrire'</span>
         </Link>
-
-        <button className="secondary-btn">
-          <span>Secondary btn</span>
-        </button>
-
-        <input type="text" placeholder="text input" />
-
+        <Link href="/inscription" className="secondary-btn">
+          <span>Se conneter</span>
+        </Link>
+      </section>
+      <section className="wrapper">
+        <CustomTitle
+          description="Actualités"
+          title="Les sorties qui font la une"
+        />
         <NewsCard
           title="Les 5 artistes émergeants qui font le show sur la Côte d’Azur"
           description="Magis reges hoc pertinacior inquam nulla arcesilas nata hoc diodorus erit coercendi maximas quod. Et effectrix tanto est quid est modo voluptatem autem tanto familiares actione et credo si.
 Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pullum constructio atqui etiam istud iste... En lire plus"
           date="25/04/2025"
         />
-
         <NewsCard
           title="Les 5 artistes émergeants qui font le show sur la Côte d’Azur"
           description="description courte le bouton ne s'affiche pas à voir si ça redirige vers une page ou ça affiche tout le texte"
           date="25/04/2025"
         />
-
-        <EventsAgenda />
-
+        <Link href="/actualites" className="secondary-btn">
+          <span>Voir les actualités des évènements</span>
+        </Link>
+      </section>
+      <HorizontalList title="Destinations tendances" description="Villes">
         <TextImageCard
           title="Nice"
           subtitle={"24 évenèments"}
@@ -150,7 +169,20 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           href={`./villes/${"Nice".toLocaleLowerCase()}`}
           isCard={true}
         />
+        <TextImageCard
+          title="Nice"
+          subtitle={"24 évenèments"}
+          image={img}
+          href={`./villes/${"Nice".toLocaleLowerCase()}`}
+          isCard={true}
+        />
+      </HorizontalList>
 
+      <section className="wrapper">
+        <CustomTitle
+          description="Avis"
+          title="Ils conseillent veevent pour des évènements"
+        />
         <TrustpilotCard
           note={3}
           reviews_number={1394}
@@ -169,18 +201,60 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           place="Maison 13"
           city="Cannes"
         />
-
-        <button className="secondary-btn">
+        <Link href="#" className="secondary-btn">
           <span>Voir tous les avis</span>
+        </Link>
+      </section>
+      <section className="wrapper">
+        <CustomTitle
+          title="Questions fréquentes de nos utilisateurs"
+          description="FAQ"
+        />
+        <FaqCard label="Comment acheter un billet de concert ?" />
+        <FaqCard label="Comment acheter un billet de concert ?" />
+        <FaqCard label="Comment acheter un billet de concert ?" />
+      </section>
+      <section className="wrapper">
+        <CustomTitle
+          description="Lieux"
+          title="Les lieux populaires proche de chez vous"
+        />
+        <PlacesMapList />
+      </section>
+      <section className="wrapper">
+        <CustomTitle
+          description="Newsletter"
+          title="Ne ratez rien des derniers évènements locaux"
+        />
+        <p>
+          Abonnez-vous à notre newsletter pour recevoir les dernières
+          informations sur les événements locaux.
+        </p>
+        <div className="flex flex-col gap-2">
+          <label>Adresse mail </label>
+          <input type="text" placeholder="text input" />
+        </div>
+        <p className="text-gray-500">
+          En vous inscrivant, vous acceptez notre politique de confidentialité
+          et consentez à recevoir des mises à jour.
+        </p>
+        <button className="primary-btn">
+          <span>S’inscrire à la newsletter</span>
         </button>
+      </section>
+      <section className="wrapper">
+        <CustomTitle
+          description="Organisateurs populaires"
+          title="Découvrez leurs derniers évènements"
+        />
+        <OrganizerCard name="Jean-Baptiste" />
+      </section>
+
+      {/* Composants random */}
+      <section className="wrapper">
+        <EventsAgenda />
 
         <Shortcut link="#" label="Trouver un événement" />
-
-        <TrendingCard
-          organizer="Mike Shinoda"
-          city="Paris"
-          description="Pour la première fois en France"
-        />
 
         <TabList
           title="Alpes-Maritimes"
