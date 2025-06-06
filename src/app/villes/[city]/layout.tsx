@@ -18,10 +18,10 @@ export default function CitiesLayout({ children }: CitiesLayoutProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigation = [
-    { isHome: true, href: `/cities/${city}`, label: "Accueil" },
-    { label: "Evenements", href: `/cities/${city}/events` },
-    { label: "Lieux", href: `/cities/${city}/places` },
-    { label: "Organisateurs", href: `/cities/${city}/organisers` },
+    { isHome: true, href: `/villes/${city}`, label: "Accueil" },
+    { label: "Evenements", href: `/villes/${city}/evenements` },
+    { label: "Lieux", href: `/villes/${city}/lieux` },
+    { label: "Organisateurs", href: `/villes/${city}/organisateurs` },
   ];
 
   return (

@@ -1,11 +1,12 @@
 "use client";
 import "./sidebar-menu.scss";
 import { Xmark, City, MapPin } from "iconoir-react";
-import CityCard from "@/components/cards/city-card/city-card";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSidebar } from "@/contexts/sidebar-context";
 import { useCity } from "@/contexts/city-context";
 import Link from "next/link";
+import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import img from "@/assets/images/nice.jpg";
 
 export default function SidebarMenu() {
   const { isOpen, closeSidebar } = useSidebar();
@@ -139,13 +140,18 @@ export default function SidebarMenu() {
                   onClick={() => handleCitySelect(city)}
                   style={{ cursor: "pointer" }}
                 >
-                  <CityCard city={city} isCard={false} />
+                  <TextImageCard
+                    title={city}
+                    href={`/villes/${city}`}
+                    isCard={false}
+                    image={img}
+                  />
                 </motion.div>
               ))}
 
               <motion.div variants={itemVariants}>
                 <Link
-                  href="/cities"
+                  href="/villes"
                   className="primary-btn"
                   onClick={closeSidebar}
                 >

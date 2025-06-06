@@ -3,8 +3,8 @@ import CustomTitle from "@/components/common/custom-title/custom-title";
 import { useParams } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
 import Link from "next/link";
-import CityCard from "@/components/cards/city-card/city-card";
-// import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
+import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import img from "@/assets/images/nice.jpg";
 
 export default function OrganisersPage() {
   const { city } = useParams() as { city: string };
@@ -33,7 +33,12 @@ export default function OrganisersPage() {
       </section>
       <section className="wrapper">
         <h2>Ils organisent bientôt leurs évènements</h2>
-        {/* <OrganizerCard name="JB" date="24.05.2025" /> */}
+        <TextImageCard
+          title="JB"
+          subtitle="24.05.2025"
+          href={`/organisateurs/${"JB".toLocaleLowerCase()}`}
+          image={img}
+        />
         <Link href="#" className="primary-btn">
           <span>Voir les prochains évènements</span>
         </Link>

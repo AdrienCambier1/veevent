@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import SearchInput from "@/components/inputs/search-input/search-input";
-import CityCard from "@/components/cards/city-card/city-card";
 import TabList from "@/components/common/tab-list/tab-list";
 import CustomTitle from "@/components/common/custom-title/custom-title";
+import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import img from "@/assets/images/nice.jpg";
 
 export default function CitiesPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,22 +24,46 @@ export default function CitiesPage() {
       </section>
       <section className="wrapper">
         <h3>Parcourir les villes populaires</h3>
-        <CityCard city="Nice" events={24} />
-        <CityCard city="Cannes" events={24} />
-        <CityCard city="Antibes" events={24} />
-        <CityCard city="Mougins" events={24} />
+        <TextImageCard
+          title="Nice"
+          subtitle={"24 évenèments"}
+          image={img}
+          href={`./villes/${"Nice".toLocaleLowerCase()}`}
+          isCard={true}
+        />
+        <TextImageCard
+          title="Cannes"
+          subtitle={"12 évenèments"}
+          image={img}
+          href={`./villes/${"Cannes".toLocaleLowerCase()}`}
+          isCard={true}
+        />
+        <TextImageCard
+          title="Antibes"
+          subtitle={"8 évenèments"}
+          image={img}
+          href={`./villes/${"Antibes".toLocaleLowerCase()}`}
+          isCard={true}
+        />
+        <TextImageCard
+          title="Grasse"
+          subtitle={"5 évenèments"}
+          image={img}
+          href={`/villes/${"Grasse".toLocaleLowerCase()}`}
+          isCard={true}
+        />
       </section>
       <section className="wrapper">
         <h3>Parcourir les villes populaires</h3>
         <TabList
           title="Alpes-Maritimes"
           items={[]}
-          generateHref={(city) => `/cities/${city.toLowerCase()}`}
+          generateHref={(city) => `/villes/${city.toLowerCase()}`}
         />
         <TabList
           title="Var"
           items={[]}
-          generateHref={(city) => `/cities/${city.toLowerCase()}`}
+          generateHref={(city) => `/villes/${city.toLowerCase()}`}
         />
       </section>
       <section className="wrapper">

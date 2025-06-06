@@ -18,7 +18,7 @@ export default function LoginPage() {
           <div className="flex flex-col gap-2">
             <label>Mot de passe</label>
             <input className="input" type="password" placeholder="******" />
-            <Link href="/register" className="">
+            <Link href="/inscription" className="">
               Mot de passe oublié ?
             </Link>
           </div>
@@ -31,7 +31,7 @@ export default function LoginPage() {
         </form>
         <p className="font-bold">
           Pas encore de compte ?{" "}
-          <Link className="text-primary-600" href="/register">
+          <Link className="text-primary-600" href="/inscription">
             Inscrivez-vous
           </Link>
         </p>

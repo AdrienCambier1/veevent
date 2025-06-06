@@ -1,21 +1,33 @@
 "use client";
-import CustomTitle from "@/components/common/custom-title/custom-title";
 import { useParams } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
-import TabList from "@/components/common/tab-list/tab-list";
 import NewsCard from "@/components/cards/news-card/news-card";
+import CustomTitle from "@/components/common/custom-title/custom-title";
+import TabList from "@/components/common/tab-list/tab-list";
 import Link from "next/link";
 
-export default function PlacesPage() {
+export default function CitiesPage() {
   const { city } = useParams() as { city: string };
 
   return (
     <>
       <section className="wrapper">
-        <CustomTitle
-          title={`Les lieux populaires à ${city}`}
-          description="Lieux"
+        <h2>Les événements populaires à {city}</h2>
+        <EventCard
+          title="Atelier fresque végétal"
+          location="Antibes"
+          date="vendredi 14 mai 2025 • 19h00"
+          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                      semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
+                      congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
+                      consectetur. "
+          minify={false}
+          price={59}
         />
+      </section>
+      <section className="wrapper">
+        <h2>Découvrir la ville de {city}</h2>
+        <NewsCard description="Nice ville de fou ça" />
       </section>
       <section className="wrapper">
         <h2>Les évènements populaires à Nice</h2>
@@ -34,17 +46,17 @@ export default function PlacesPage() {
         <TabList
           title="Alpes-Maritimes"
           items={[]}
-          generateHref={(city) => `/cities/${city.toLowerCase()}`}
+          generateHref={(city) => `/villes/${city.toLowerCase()}`}
         />
         <TabList
           title="Var"
           items={[]}
-          generateHref={(city) => `/cities/${city.toLowerCase()}`}
+          generateHref={(city) => `/villes/${city.toLowerCase()}`}
         />
       </section>
       <section className="wrapper">
         <CustomTitle
-          title="Les lieux qui font parler à Nice et ses alentours"
+          title="Les évènement à ne pas manquer à Nice et ses alentours"
           description="Actualités"
         />
         <NewsCard

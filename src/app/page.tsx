@@ -1,6 +1,6 @@
 "use client";
 
-import CityCard from "@/components/cards/city-card/city-card";
+import CityCard from "@/components/cards/text-image-card/text-image-card";
 import EventCard from "@/components/cards/event-card/event-card";
 import NewsCard from "@/components/cards/news-card/news-card";
 import ThemeCard from "@/components/cards/theme-card/theme-card";
@@ -19,6 +19,8 @@ import ProfileHead from "@/components/primary/heads/profile-head/profile-head";
 import SearchBtn from "@/components/common/search-btn/search-btn";
 import TabList from "@/components/common/tab-list/tab-list";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
+import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import img from "@/assets/images/nice.jpg";
 
 export default function Home() {
   return (
@@ -58,7 +60,7 @@ export default function Home() {
 
         <p>ceci est un texte de base</p>
 
-        <Link href="/login" className="primary-btn">
+        <Link href="/connexion" className="primary-btn">
           <span>Se connecter</span>
         </Link>
 
@@ -81,7 +83,13 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
 
         <EventsAgenda />
 
-        <CityCard city="Nice" events={24} />
+        <TextImageCard
+          title="Nice"
+          subtitle={"24 évenèments"}
+          image={img}
+          href={`./villes/${"Nice".toLocaleLowerCase()}`}
+          isCard={true}
+        />
 
         <TrustpilotCard
           note={3}
