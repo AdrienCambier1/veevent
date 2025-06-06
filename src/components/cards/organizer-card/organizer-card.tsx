@@ -32,7 +32,9 @@ export default function OrganizerCard({ name }: OrganizerCardProps) {
           <EventCardLine />
         </div>
 
-        <span className="text-primary-600 underline">Voir le profil</span>
+        <span className="text-primary-600 font-medium underline">
+          Voir le profil
+        </span>
       </div>
     </Link>
   );

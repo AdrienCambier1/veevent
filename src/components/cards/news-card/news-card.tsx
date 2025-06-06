@@ -43,7 +43,7 @@ export default function NewsCard({
         {description}
       </p>
       {isTruncated && (
-        <Link href="#" className="more-btn">
+        <Link href="#" className="text-primary-600 font-medium">
           En lire plus
         </Link>
       )}

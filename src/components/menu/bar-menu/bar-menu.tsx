@@ -32,8 +32,14 @@ export default function BarMenu({ navigation }: BarMenuProps) {
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className={`bar-menu scrollbar-hide ${!isAtLeft ? "mask-left" : ""} ${
-        !isAtRight ? "mask-right" : ""
+      className={`bar-menu scrollbar-hide ${
+        !isAtLeft && !isAtRight
+          ? "mask-both"
+          : !isAtLeft
+          ? "mask-left"
+          : !isAtRight
+          ? "mask-right"
+          : ""
       }`}
     >
       {navigation.map((item) => (
