@@ -1,0 +1,15 @@
+.filters {
+  @apply relative bg-[var(--background)];
+
+  .title {
+    @apply text-lg font-semibold text-primary-950;
+  }
+
+  .subtitle {
+    @apply text-gray-500;
+  }
+
+  .filters-item {
+    @apply border-b-2 border-gray-300 py-4 last:border-b-0;
+  }
+}
