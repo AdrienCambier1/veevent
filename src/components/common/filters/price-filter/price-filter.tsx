@@ -180,15 +180,13 @@ export default function PriceFilter() {
   const percentage = Math.round((count / total) * 100);
 
   return (
-    <div
-      className={`price-filter ${showOnlyFree ? "price-filter--disabled" : ""}`}
-    >
+    <div className={`price-filter ${showOnlyFree ? "disabled" : ""}`}>
       <div className="flex flex-col">
-        <h2 className="price-filter__title">Fourchette de prix</h2>
-        <p className="price-filter__subtitle">Prix par billet</p>
+        <h2 className="title">Fourchette de prix</h2>
+        <p className="subtitle">Prix par billet</p>
       </div>
 
-      <div className="price-filter__histogram">
+      <div className="histogram">
         {priceData.map((value, index) => {
           const barHeight = (value / maxValue) * 100;
           const currentPrice = index * PRICE_STEP;
@@ -204,9 +202,7 @@ export default function PriceFilter() {
                 opacity: showOnlyFree ? 0.3 : 1,
               }}
               transition={{ duration: 0.5, delay: index * 0.02 }}
-              className={`price-filter__bar ${
-                isBetween ? "price-filter__bar--selected" : ""
-              }`}
+              className={`bar ${isBetween ? "selected" : ""}`}
               style={{
                 left: `${(index / priceData.length) * 100}%`,
                 height: showOnlyFree ? "0%" : `${barHeight}%`,
@@ -216,60 +212,52 @@ export default function PriceFilter() {
         })}
       </div>
 
-      <div ref={sliderRef} className="price-filter__slider">
-        <div className="price-filter__track" onClick={handleSliderClick}>
+      <div ref={sliderRef} className="slider">
+        <div className="track" onClick={handleSliderClick}>
           <div
-            className="price-filter__range"
+            className="range"
             style={{ width: `${rangeWidth}%`, left: `${rangeLeft}%` }}
           />
         </div>
 
         <div
-          className={`price-filter__handle price-filter__handle--min ${
-            isDragging === "min" ? "price-filter__handle--dragging" : ""
-          }`}
+          className={`handle min ${isDragging === "min" ? "dragging" : ""}`}
           style={{ left: `calc(${rangeLeft}% - 12px)` }}
           onMouseDown={handleMouseDown("min")}
           onTouchStart={handleTouchStart("min")}
         >
-          <div className="price-filter__handle-touch" />
+          <div className="touch-area" />
         </div>
 
         <div
-          className={`price-filter__handle price-filter__handle--max ${
-            isDragging === "max" ? "price-filter__handle--dragging" : ""
-          }`}
+          className={`handle max ${isDragging === "max" ? "dragging" : ""}`}
           style={{ left: `calc(${(maxPrice / MAX_PRICE) * 100}% - 12px)` }}
           onMouseDown={handleMouseDown("max")}
           onTouchStart={handleTouchStart("max")}
         >
-          <div className="price-filter__handle-touch" />
+          <div className="touch-area" />
         </div>
       </div>
 
-      <div className="price-filter__labels">
-        <span className="price-filter__label">{minPrice}€</span>
-        <span className="price-filter__label">{maxPrice}€</span>
+      <div className="labels">
+        <span className="label">{minPrice}€</span>
+        <span className="label">{maxPrice}€</span>
       </div>
 
-      <label className="price-filter__checkbox">
-        <div className="price-filter__checkbox-wrapper">
+      <label className="checkbox">
+        <div className="checkbox-wrapper">
           <input
             type="checkbox"
-            className="price-filter__checkbox-input"
+            className="checkbox-input"
             checked={showOnlyFree}
             onChange={() => setShowOnlyFree(!showOnlyFree)}
           />
-          <div
-            className={`price-filter__checkbox-box ${
-              showOnlyFree ? "price-filter__checkbox-box--checked" : ""
-            }`}
-          >
+          <div className={`checkbox-box ${showOnlyFree ? "checked" : ""}`}>
             {showOnlyFree && (
               <motion.svg
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="price-filter__checkbox-icon"
+                className="checkbox-icon"
                 viewBox="0 0 20 20"
               >
                 <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
@@ -277,9 +265,7 @@ export default function PriceFilter() {
             )}
           </div>
         </div>
-        <span className="price-filter__checkbox-text">
-          Événements gratuits uniquements
-        </span>
+        <span className="checkbox-text">Événements gratuits uniquements</span>
       </label>
     </div>
   );

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Filters from "./filters";
+import FilterFooter from "./filter-footer/filter-footer";
 
 interface FilterBottomSheetProps {
   isOpen: boolean;
@@ -41,11 +42,20 @@ export default function FilterBottomSheet({
     }
   };
 
+  const handleShowResults = () => {
+    onClose();
+    // Logique pour appliquer les filtres et afficher les résultats
+  };
+
+  const handleClearAll = () => {
+    // Logique pour effacer tous les filtres
+    console.log("Effacer tous les filtres");
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -56,7 +66,6 @@ export default function FilterBottomSheet({
             style={{ overscrollBehavior: "none" }}
           />
 
-          {/* Bottom Sheet */}
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: dragY }}
@@ -67,7 +76,7 @@ export default function FilterBottomSheet({
               stiffness: 300,
               mass: 0.8,
             }}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--background)] rounded-t-3xl shadow-2xl max-h-[85vh] overflow-hidden"
+            className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--background)] rounded-t-3xl shadow-2xl max-h-[85vh] overflow-hidden flex flex-col"
             style={{ overscrollBehavior: "none" }}
           >
             <motion.div
@@ -93,14 +102,18 @@ export default function FilterBottomSheet({
               <div className="w-10 h-1 bg-gray-300 rounded-full pointer-events-none" />
             </motion.div>
 
-            {/* Content - Pas de drag */}
             <div
               ref={contentRef}
-              className="overflow-y-auto max-h-[calc(85vh-60px)] overscroll-contain"
+              className="overflow-y-auto flex-1 pb-20 overscroll-contain mask-top"
               style={{ overscrollBehavior: "contain" }}
             >
               <Filters />
             </div>
+
+            <FilterFooter
+              onShowResults={handleShowResults}
+              onClearAll={handleClearAll}
+            />
           </motion.div>
         </>
       )}

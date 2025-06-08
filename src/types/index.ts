@@ -51,3 +51,9 @@ interface location {
   lat: number;
   lng: number;
 }
+
+export interface SearchFilterOption {
+  name: string;
+  eventCount: number;
+  id?: string | number;
+}

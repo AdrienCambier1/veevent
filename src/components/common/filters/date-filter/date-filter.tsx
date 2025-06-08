@@ -74,10 +74,7 @@ export default function DateFilter() {
 
     for (let i = 0; i < firstDayIndex; i++) {
       dayElements.push(
-        <div
-          key={`empty-${i}`}
-          className="date-filter__calendar-day date-filter__calendar-day--empty"
-        ></div>
+        <div key={`empty-${i}`} className="calendar-day empty"></div>
       );
     }
 
@@ -99,13 +96,9 @@ export default function DateFilter() {
       dayElements.push(
         <div
           key={day}
-          className={`date-filter__calendar-day ${
-            isToday ? "date-filter__calendar-day--today" : ""
-          } ${isSelected ? "date-filter__calendar-day--selected" : ""} ${
-            isInRange && !isSelected
-              ? "date-filter__calendar-day--in-range"
-              : ""
-          }`}
+          className={`calendar-day ${isToday ? "today" : ""} ${
+            isSelected ? "selected" : ""
+          } ${isInRange && !isSelected ? "in-range" : ""}`}
           onClick={() => handleDateSelect(date)}
         >
           {day}
@@ -145,19 +138,19 @@ export default function DateFilter() {
   return (
     <div className="date-filter">
       <div className="flex flex-col">
-        <h2 className="date-filter__title">Plage de dates</h2>
-        <p className="date-filter__subtitle">Sélectionnez une plage de dates</p>
+        <h2 className="title">Plage de dates</h2>
+        <p className="subtitle">Sélectionnez une plage de dates</p>
       </div>
 
       <div>
-        <div className="date-filter__inputs">
+        <div className="inputs">
           <div
-            className="date-filter__input-container"
+            className="input-container"
             onClick={() => setCalendarOpen("start")}
           >
             <input
               type="text"
-              className="date-filter__input"
+              className="input"
               placeholder="Du..."
               value={startDate ? formatDate(startDate) : ""}
               readOnly
@@ -165,12 +158,12 @@ export default function DateFilter() {
             <Calendar />
           </div>
           <div
-            className="date-filter__input-container"
+            className="input-container"
             onClick={() => setCalendarOpen("end")}
           >
             <input
               type="text"
-              className="date-filter__input"
+              className="input"
               placeholder="Au..."
               value={endDate ? formatDate(endDate) : ""}
               readOnly
@@ -182,27 +175,25 @@ export default function DateFilter() {
         <AnimatePresence>
           {calendarOpen && (
             <motion.div
-              className="date-filter__calendar-wrapper"
+              className="calendar-wrapper"
               ref={calendarRef}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
             >
-              <div className="date-filter__calendar">
-                <div className="date-filter__calendar-header">
+              <div className="calendar">
+                <div className="calendar-header">
                   <button
-                    className="date-filter__calendar-nav"
+                    className="calendar-nav"
                     onClick={prevMonth}
                     aria-label="Mois précédent"
                   >
                     <NavArrowLeft />
                   </button>
-                  <span className="date-filter__calendar-month">
-                    {currentMonthName}
-                  </span>
+                  <span className="calendar-month">{currentMonthName}</span>
                   <button
-                    className="date-filter__calendar-nav"
+                    className="calendar-nav"
                     onClick={nextMonth}
                     aria-label="Mois suivant"
                   >
@@ -210,7 +201,7 @@ export default function DateFilter() {
                   </button>
                 </div>
 
-                <div className="date-filter__calendar-weekdays">
+                <div className="calendar-weekdays">
                   <span>Lu</span>
                   <span>Ma</span>
                   <span>Me</span>
@@ -220,9 +211,7 @@ export default function DateFilter() {
                   <span>Di</span>
                 </div>
 
-                <div className="date-filter__calendar-days">
-                  {generateDays()}
-                </div>
+                <div className="calendar-days">{generateDays()}</div>
               </div>
             </motion.div>
           )}
