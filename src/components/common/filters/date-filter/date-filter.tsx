@@ -1,104 +1,112 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./date-filter.scss";
 import { Calendar, NavArrowLeft, NavArrowRight } from "iconoir-react";
+import { JSX } from "react";
 
-type DateType = Date | null;
+type CalendarState = "start" | "end" | null;
 
 export default function DateFilter() {
-  const [startDate, setStartDate] = useState<DateType>(null);
-  const [endDate, setEndDate] = useState<DateType>(null);
-  const [calendarOpen, setCalendarOpen] = useState<"start" | "end" | null>(
-    null
-  );
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [calendarOpen, setCalendarOpen] = useState<CalendarState>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  // Formatter les dates
-  const formatDate = (date: Date): string => {
+  // ✅ Fonctions utilitaires pures (évitent les mutations)
+  const isSameDay = useCallback((date1: Date | null, date2: Date): boolean => {
+    if (!date1) return false;
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  }, []);
+
+  const isInDateRange = useCallback(
+    (date: Date, start: Date | null, end: Date | null): boolean => {
+      if (!start || !end) return false;
+      return date >= start && date <= end;
+    },
+    []
+  );
+
+  const formatDate = useCallback((date: Date): string => {
     return date.toLocaleDateString("fr-FR", {
       day: "numeric",
       month: "numeric",
       year: "numeric",
     });
-  };
+  }, []);
 
-  // Passer au mois précédent
-  const prevMonth = (): void => {
+  // ✅ Navigation mois optimisée
+  const prevMonth = useCallback((): void => {
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1)
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1)
     );
-  };
+  }, []);
 
-  // Passer au mois suivant
-  const nextMonth = (): void => {
+  const nextMonth = useCallback((): void => {
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1)
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1)
     );
-  };
+  }, []);
 
-  // Gérer la sélection d'une date
-  const handleDateSelect = (date: Date): void => {
-    if (calendarOpen === "start") {
-      setStartDate(date);
-      if (!endDate || date > endDate) {
-        setEndDate(null);
-        setCalendarOpen("end");
-      } else {
+  // ✅ Sélection de date optimisée
+  const handleDateSelect = useCallback(
+    (date: Date): void => {
+      if (calendarOpen === "start") {
+        setStartDate(date);
+        if (!endDate || date > endDate) {
+          setEndDate(null);
+          setCalendarOpen("end");
+        } else {
+          setCalendarOpen(null);
+        }
+      } else if (calendarOpen === "end") {
+        if (startDate && date < startDate) {
+          setEndDate(startDate);
+          setStartDate(date);
+        } else {
+          setEndDate(date);
+        }
         setCalendarOpen(null);
       }
-    } else if (calendarOpen === "end") {
-      if (startDate && date < startDate) {
-        setEndDate(startDate);
-        setStartDate(date);
-      } else {
-        setEndDate(date);
-      }
-      setCalendarOpen(null);
-    }
-  };
+    },
+    [calendarOpen, endDate, startDate]
+  );
 
-  // Générer les jours du mois
-  const generateDays = (): JSX.Element[] => {
+  // ✅ Génération des jours avec useMemo (évite recalculs inutiles)
+  const calendarDays = useMemo(() => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
+    const today = new Date();
 
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0);
+    const firstDayIndex = (firstDayOfMonth.getDay() + 6) % 7; // Lundi = 0
 
-    const dayElements: JSX.Element[] = [];
+    const days: JSX.Element[] = [];
 
-    // Ajouter les jours vides avant le premier jour du mois
-    const firstDay = firstDayOfMonth.getDay(); // 0 = Dimanche
-    const firstDayIndex = firstDay === 0 ? 6 : firstDay - 1; // 0 = Lundi
-
+    // Jours vides
     for (let i = 0; i < firstDayIndex; i++) {
-      dayElements.push(
-        <div key={`empty-${i}`} className="calendar-day empty"></div>
-      );
+      days.push(<div key={`empty-${i}`} className="calendar-day empty" />);
     }
 
-    // Ajouter les jours du mois
+    // Jours du mois
     for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
       const date = new Date(year, month, day);
-      const isToday =
-        new Date().setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0);
-      const isSelected =
-        (startDate &&
-          startDate.setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0)) ||
-        (endDate && endDate.setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0));
-      const isInRange =
-        startDate &&
-        endDate &&
-        date >= new Date(startDate.setHours(0, 0, 0, 0)) &&
-        date <= new Date(endDate.setHours(0, 0, 0, 0));
 
-      dayElements.push(
+      const isToday = isSameDay(today, date);
+      const isSelected = isSameDay(startDate, date) || isSameDay(endDate, date);
+      const isInRange = isInDateRange(date, startDate, endDate) && !isSelected;
+
+      days.push(
         <div
           key={day}
           className={`calendar-day ${isToday ? "today" : ""} ${
             isSelected ? "selected" : ""
-          } ${isInRange && !isSelected ? "in-range" : ""}`}
+          } ${isInRange ? "in-range" : ""}`}
           onClick={() => handleDateSelect(date)}
         >
           {day}
@@ -106,10 +114,25 @@ export default function DateFilter() {
       );
     }
 
-    return dayElements;
-  };
+    return days;
+  }, [
+    currentMonth,
+    startDate,
+    endDate,
+    isSameDay,
+    isInDateRange,
+    handleDateSelect,
+  ]);
 
-  // Fermer le calendrier si on clique à l'extérieur
+  // ✅ Nom du mois avec useMemo
+  const currentMonthName = useMemo(() => {
+    return currentMonth.toLocaleDateString("fr-FR", {
+      month: "long",
+      year: "numeric",
+    });
+  }, [currentMonth]);
+
+  // ✅ Click extérieur optimisé
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (
@@ -122,18 +145,14 @@ export default function DateFilter() {
 
     if (calendarOpen) {
       document.addEventListener("mousedown", handleOutsideClick);
+      return () =>
+        document.removeEventListener("mousedown", handleOutsideClick);
     }
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
   }, [calendarOpen]);
 
-  // Nom du mois courant
-  const currentMonthName = currentMonth.toLocaleDateString("fr-FR", {
-    month: "long",
-    year: "numeric",
-  });
+  // ✅ Handlers pour les inputs
+  const handleStartDateClick = useCallback(() => setCalendarOpen("start"), []);
+  const handleEndDateClick = useCallback(() => setCalendarOpen("end"), []);
 
   return (
     <div className="date-filter">
@@ -144,10 +163,7 @@ export default function DateFilter() {
 
       <div>
         <div className="inputs">
-          <div
-            className="input-container"
-            onClick={() => setCalendarOpen("start")}
-          >
+          <div className="input-container" onClick={handleStartDateClick}>
             <input
               type="text"
               className="input"
@@ -157,10 +173,7 @@ export default function DateFilter() {
             />
             <Calendar />
           </div>
-          <div
-            className="input-container"
-            onClick={() => setCalendarOpen("end")}
-          >
+          <div className="input-container" onClick={handleEndDateClick}>
             <input
               type="text"
               className="input"
@@ -202,16 +215,12 @@ export default function DateFilter() {
                 </div>
 
                 <div className="calendar-weekdays">
-                  <span>Lu</span>
-                  <span>Ma</span>
-                  <span>Me</span>
-                  <span>Je</span>
-                  <span>Ve</span>
-                  <span>Sa</span>
-                  <span>Di</span>
+                  {["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"].map((day) => (
+                    <span key={day}>{day}</span>
+                  ))}
                 </div>
 
-                <div className="calendar-days">{generateDays()}</div>
+                <div className="calendar-days">{calendarDays}</div>
               </div>
             </motion.div>
           )}
