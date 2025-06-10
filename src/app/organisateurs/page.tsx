@@ -1,17 +1,17 @@
 "use client";
 import SearchInput from "@/components/inputs/search-input/search-input";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import CustomTitle from "@/components/common/custom-title/custom-title";
 
-export default function OrganisateursPage() {
-  const searchParams = useSearchParams() || new URLSearchParams();
+function OrganisateursPageContent() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const urlSearch = searchParams.get("search");
+    const urlSearch = searchParams?.get("search");
     if (urlSearch) {
       setSearchTerm(urlSearch);
     }
@@ -53,5 +53,13 @@ export default function OrganisateursPage() {
         <OrganizerCard name="Jean-Baptiste" />
       </section>
     </main>
+  );
+}
+
+export default function OrganisateursPage() {
+  return (
+    <Suspense fallback={<></>}>
+      <OrganisateursPageContent />
+    </Suspense>
   );
 }

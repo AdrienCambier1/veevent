@@ -1,17 +1,17 @@
 "use client";
 import SearchInput from "@/components/inputs/search-input/search-input";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 
-export default function EvenementsPage() {
-  const searchParams = useSearchParams() || new URLSearchParams();
+function EvenementsPageContent() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const urlSearch = searchParams.get("search");
+    const urlSearch = searchParams?.get("search");
     if (urlSearch) {
       setSearchTerm(urlSearch);
     }
@@ -116,5 +116,13 @@ export default function EvenementsPage() {
         />
       </HorizontalList>
     </main>
+  );
+}
+
+export default function EvenementsPage() {
+  return (
+    <Suspense fallback={<></>}>
+      <EvenementsPageContent />
+    </Suspense>
   );
 }
