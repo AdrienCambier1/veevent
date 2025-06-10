@@ -17,6 +17,7 @@ export default function VillesPage() {
         <SearchInput
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Nice, Cannes, Antibes..."
         />
         <button className="primary-btn">
           <span>Rechercher</span>
