@@ -5,6 +5,7 @@ import { SidebarProvider } from "@/contexts/sidebar-context";
 import { ReactNode } from "react";
 import FloatingMenu from "@/components/menu/floating-menu/floating-menu";
 import { Metadata } from "next";
+import { AuthProvider } from "@/contexts/auth-context";
 
 export const metadata: Metadata = {
   appleWebApp: {
@@ -29,13 +30,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="fr">
       <body>
-        <CityProvider>
-          <SidebarProvider>
-            <Header hideCitySelector={false} />
-            {children}
-            <FloatingMenu />
-          </SidebarProvider>
-        </CityProvider>
+        <AuthProvider>
+          <CityProvider>
+            <SidebarProvider>
+              <Header hideCitySelector={false} />
+              {children}
+              <FloatingMenu />
+            </SidebarProvider>
+          </CityProvider>
+        </AuthProvider>
       </body>
     </html>
   );

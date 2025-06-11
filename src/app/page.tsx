@@ -21,12 +21,24 @@ import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import FaqCard from "@/components/cards/faq-card/faq-card";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function Home() {
+  const { login, loading, isAuthenticated, logout } = useAuth();
+
   return (
     <main>
       <section className="wrapper">
-        <Welcome />
+        {!isAuthenticated ? (
+          <Welcome />
+        ) : (
+          <>
+            <p>salut toi</p>
+            <button onClick={() => logout()} className="secondary-btn">
+              tiens stv te déconnecter
+            </button>
+          </>
+        )}
       </section>
       <section className="wrapper">
         <p className="text-lg font-bold text-center">

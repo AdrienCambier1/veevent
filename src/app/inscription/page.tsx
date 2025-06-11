@@ -142,7 +142,7 @@ export default function InscriptionPage() {
         </form>
         <p className="font-bold">
           Vous avez déjà un compte ?{" "}
-          <Link className="text-primary-600" href="/login">
+          <Link className="text-primary-600" href="/connexion">
             Connectez-vous
           </Link>
         </p>
