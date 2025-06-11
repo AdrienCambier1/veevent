@@ -33,6 +33,7 @@ export default function Home() {
           <Welcome />
         ) : (
           <>
+            {/* à modifier directement dans le composant welcome je pense soit on affiche le nom de l'utilisateur soit on affiche un bouton de déconnexion */}
             <p>salut toi</p>
             <button onClick={() => logout()} className="secondary-btn">
               tiens stv te déconnecter
@@ -140,19 +141,22 @@ export default function Home() {
           price={59}
         />
       </HorizontalList>
-      <section className="wrapper">
-        <h2>Gérer vos évènements facilement</h2>
-        <p>
-          Créer un compte ou connectez-vous pour rester informer sur vos
-          évènements et notifications.
-        </p>
-        <Link href="/connexion" className="primary-btn">
-          <span>S'inscrire'</span>
-        </Link>
-        <Link href="/inscription" className="secondary-btn">
-          <span>Se conneter</span>
-        </Link>
-      </section>
+      {!isAuthenticated && (
+        <section className="wrapper">
+          <h2>Gérer vos évènements facilement</h2>
+          <p>
+            Créer un compte ou connectez-vous pour rester informer sur vos
+            évènements et notifications.
+          </p>
+          <Link href="/connexion" className="primary-btn">
+            <span>S'inscrire</span>
+          </Link>
+          <Link href="/inscription" className="secondary-btn">
+            <span>Se connecter</span>
+          </Link>
+        </section>
+      )}
+
       <section className="wrapper">
         <CustomTitle
           description="Actualités"
