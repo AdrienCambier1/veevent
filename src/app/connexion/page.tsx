@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useSearchParams } from "next/navigation";
 
-export default function ConnexionPage() {
+function ConnexionPageContent() {
   const { login, loading, isAuthenticated } = useAuth();
   const searchParams = useSearchParams();
 
@@ -93,5 +93,13 @@ export default function ConnexionPage() {
         </p>
       </section>
     </main>
+  );
+}
+
+export default function ConnexionPage() {
+  return (
+    <Suspense fallback={<></>}>
+      <ConnexionPageContent />
+    </Suspense>
   );
 }
