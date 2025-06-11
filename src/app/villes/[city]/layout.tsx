@@ -37,6 +37,8 @@ export default function CityLayout({ children }: CitiesLayoutProps) {
         <button className="primary-btn">
           <span>Rechercher</span>
         </button>
+      </section>
+      <section className="wrapper">
         <BarMenu navigation={navigation} />
       </section>
       {children}

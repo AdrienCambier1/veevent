@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function ConnexionPage() {
   const { login, loading, isAuthenticated } = useAuth();
+  const searchParams = useSearchParams();
 
   const [credentials, setCredentials] = useState({
     email: "",
@@ -15,11 +16,10 @@ export default function ConnexionPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!credentials.email || !credentials.password) {
-      return;
+    if (credentials.email && credentials.password) {
+      const redirectPath = searchParams?.get("redirect") || "/";
+      login(credentials, redirectPath);
     }
-
-    login(credentials);
   };
 
   const handleInputChange =

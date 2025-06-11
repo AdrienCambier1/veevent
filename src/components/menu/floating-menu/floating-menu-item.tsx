@@ -1,15 +1,22 @@
+import Link from "next/link";
+
 interface FloatingMenuItemProps {
   label: string;
   isActive: boolean;
+  link?: string;
 }
 
 export default function FloatingMenuItem({
   label,
   isActive,
+  link = "#",
 }: FloatingMenuItemProps) {
   return (
-    <div className={`floating-menu-item ${isActive ? "is-active" : ""}`}>
+    <Link
+      href={link}
+      className={`floating-menu-item ${isActive ? "is-active" : ""}`}
+    >
       {label}
-    </div>
+    </Link>
   );
 }

@@ -3,12 +3,15 @@ import ProfileImg from "@/components/images/profile-img/profile-img";
 import "./profile-head.scss";
 import Link from "next/link";
 import ThemeTag from "@/components/tags/theme-tag/theme-tag";
+import { useAuth } from "@/contexts/auth-context";
 
 interface ProfileHeadProps {
   isMe?: boolean;
 }
 
 export default function ProfileHead({ isMe }: ProfileHeadProps) {
+  const { logout } = useAuth();
+
   return (
     <div className="profile-head">
       <div className="grid gap-2 grid-cols-[auto,1fr] items-center">
@@ -52,14 +55,14 @@ export default function ProfileHead({ isMe }: ProfileHeadProps) {
       {isMe && (
         <div className="profile-actions">
           <div className="flex gap-2 items-center">
-            <Link href={"/profile/edit"}>Modifier le profil</Link>
-            <Link href="/settings">
+            <Link href={"/compte/modifier"}>Modifier le profil</Link>
+            <Link href="/compte/parametres">
               <Settings /> Paramètres
             </Link>
           </div>
-          <div className="logout">
+          <button onClick={logout} className="logout">
             <LogOut /> Se déconnecter
-          </div>
+          </button>
         </div>
       )}
     </div>

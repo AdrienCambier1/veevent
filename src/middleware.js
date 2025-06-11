@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
 
-const protectedRoutes = [
-  "/account",
-  "/saved",
-  "/subscriptions",
-  "/events/create",
-];
+const protectedRoutes = ["/compte"];
 
 const authRoutes = ["/connexion", "/inscription"];
 
