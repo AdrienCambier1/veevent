@@ -57,6 +57,13 @@
 
   body {
     @apply bg-[var(--background)] font-[Syne] font-normal text-sm text-gray-950 antialiased;
+
+    &:not(.loaded) * {
+      @apply opacity-0;
+    }
+    &.loaded * {
+      @apply opacity-100 transition-opacity duration-300 ease-in-out;
+    }
   }
 
   main {
@@ -192,6 +199,19 @@
 
   .secondary-btn {
     @apply border-2 border-primary-600 hover:bg-primary-600 text-primary-600 hover:text-white relative overflow-hidden transition;
+  }
+
+  .user-btn,
+  .user-btn-variant {
+    @apply h-10 px-3 flex items-center justify-center gap-2 rounded-[var(--vv-border-radius)] transition;
+  }
+
+  .user-btn {
+    @apply bg-primary-600 text-white hover:opacity-75;
+  }
+
+  .user-btn-variant {
+    @apply border-2 border-primary-600  font-semibold w-full text-center hover:bg-primary-600 hover:text-white;
   }
 
   /**********/

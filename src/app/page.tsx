@@ -29,17 +29,7 @@ export default function Home() {
   return (
     <main>
       <section className="wrapper">
-        {!isAuthenticated ? (
-          <Welcome />
-        ) : (
-          <>
-            {/* à modifier directement dans le composant welcome je pense soit on affiche le nom de l'utilisateur soit on affiche un bouton de déconnexion */}
-            <p>salut toi</p>
-            <button onClick={() => logout()} className="secondary-btn">
-              tiens stv te déconnecter
-            </button>
-          </>
-        )}
+        <Welcome />
       </section>
       <section className="wrapper">
         <p className="text-lg font-bold text-center">

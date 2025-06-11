@@ -13,7 +13,6 @@ export default function SidebarMenu() {
   const { currentCity, nearbyCities, geoLoading, changeCity } = useCity();
 
   const handleCitySelect = (cityName: string) => {
-    // Convertir le nom de ville en objet City
     const cityObject = {
       name: cityName,
       value: cityName.toLowerCase().replace(/\s+/g, "-"),
@@ -22,7 +21,6 @@ export default function SidebarMenu() {
     closeSidebar();
   };
 
-  // Animations iOS-style
   const overlayVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },

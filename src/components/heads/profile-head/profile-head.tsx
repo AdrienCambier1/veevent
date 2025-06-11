@@ -55,12 +55,14 @@ export default function ProfileHead({ isMe }: ProfileHeadProps) {
       {isMe && (
         <div className="profile-actions">
           <div className="flex gap-2 items-center">
-            <Link href={"/compte/modifier"}>Modifier le profil</Link>
-            <Link href="/compte/parametres">
+            <Link href={"/compte/modifier"} className="user-btn-variant">
+              Modifier le profil
+            </Link>
+            <Link href="/compte/parametres" className="user-btn-variant">
               <Settings /> Paramètres
             </Link>
           </div>
-          <button onClick={logout} className="logout">
+          <button onClick={logout} className="user-btn">
             <LogOut /> Se déconnecter
           </button>
         </div>

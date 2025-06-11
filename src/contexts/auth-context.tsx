@@ -69,7 +69,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// ✅ Fonctions utilitaires - parfaites
+// ✅ Fonctions utilitaires
 const setSecureCookie = (name: string, value: string, maxAge: number) => {
   if (typeof window === "undefined") return;
 
@@ -100,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Fetch user data - sans throw
   const fetchUserData = useCallback(
     async (authToken: string): Promise<User | null> => {
       try {
@@ -107,6 +108,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // const response = await fetch('/api/user/profile', {
         //   headers: { Authorization: `Bearer ${authToken}` }
         // });
+        // if (!response.ok) {
+        //   console.error('Erreur API user profile:', response.status);
+        //   return null;
+        // }
         // return await response.json();
 
         // 🗑️ SIMULATION
@@ -138,15 +143,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         return fakeUserData;
       } catch (error) {
-        throw new Error(
-          "Erreur lors de la récupération des données utilisateur : " +
-            (error as Error).message
-        );
+        console.error("Erreur récupération données utilisateur:", error);
+        return null; // ✅ Return null au lieu de throw
       }
     },
     []
   );
 
+  // ✅ Logout function
   const handleLogout = useCallback(() => {
     setIsAuthenticated(false);
     setUser(null);
@@ -158,6 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // ✅ Check auth au démarrage - sans throw
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -170,6 +175,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const currentTime = Date.now() / 1000;
 
         if (decodedToken.exp < currentTime) {
+          console.log("Token expiré, déconnexion automatique");
           handleLogout();
         } else {
           const userData = await fetchUserData(storedToken);
@@ -184,23 +190,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               Math.floor(decodedToken.exp - currentTime)
             );
           } else {
+            console.log(
+              "Impossible de récupérer les données utilisateur, déconnexion"
+            );
             handleLogout();
           }
         }
       } catch (error) {
-        handleLogout();
-        throw new Error(
-          "Erreur lors de la vérification du token : " +
-            (error as Error).message
-        );
+        console.error("Erreur vérification token:", error);
+        handleLogout(); // ✅ Logout silencieux au lieu de throw
       } finally {
-        setLoading(false);
+        setLoading(false); // ✅ TOUJOURS exécuté
       }
     };
 
     checkAuth();
   }, [handleLogout, fetchUserData]);
 
+  // ✅ Login function - sans throw
   const login = useCallback(
     async (
       credentials: LoginCredentials,
@@ -210,7 +217,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(true);
 
         if (!credentials.email || !credentials.password) {
-          throw new Error("Email et mot de passe requis");
+          console.error("Email et mot de passe requis");
+          return false; // ✅ Return false au lieu de throw
         }
 
         // 🔄 BACKEND: Décommenter quand API prête
@@ -219,6 +227,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         //   headers: { 'Content-Type': 'application/json' },
         //   body: JSON.stringify(credentials)
         // });
+        //
+        // if (!response.ok) {
+        //   console.error('Erreur login:', response.status);
+        //   return false;
+        // }
+        //
         // const { token: authToken } = await response.json();
 
         // 🗑️ SIMULATION
@@ -242,7 +256,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const userData = await fetchUserData(simulatedToken);
 
         if (!userData) {
-          throw new Error("Impossible de récupérer les données utilisateur");
+          console.error("Impossible de récupérer les données utilisateur");
+          return false; // ✅ Return false au lieu de throw
         }
 
         localStorage.setItem("token", simulatedToken);
@@ -258,14 +273,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         return true;
       } catch (error) {
-        throw new Error("Erreur de connexion : " + (error as Error).message);
+        console.error("Erreur connexion:", error);
+        return false; // ✅ Return false au lieu de throw
       } finally {
-        setLoading(false);
+        setLoading(false); // ✅ TOUJOURS exécuté
       }
     },
     [fetchUserData]
   );
 
+  // ✅ Register function - sans throw
   const register = useCallback(
     async (
       data: RegisterData,
@@ -275,13 +292,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(true);
 
         if (!data.email || !data.password || !data.name || !data.firstName) {
-          throw new Error("Tous les champs sont requis");
+          console.error("Tous les champs sont requis");
+          return false; // ✅ Return false au lieu de throw
         }
 
         if (data.password.length < 6) {
-          throw new Error(
-            "Le mot de passe doit contenir au moins 6 caractères"
-          );
+          console.error("Le mot de passe doit contenir au moins 6 caractères");
+          return false; // ✅ Return false au lieu de throw
         }
 
         // 🔄 BACKEND: Décommenter quand API prête
@@ -290,6 +307,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         //   headers: { 'Content-Type': 'application/json' },
         //   body: JSON.stringify(data)
         // });
+        //
+        // if (!response.ok) {
+        //   console.error('Erreur register:', response.status);
+        //   return false;
+        // }
 
         // 🗑️ SIMULATION
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -340,14 +362,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         return true;
       } catch (error) {
-        throw new Error("Erreur d'inscription : " + (error as Error).message);
+        console.error("Erreur inscription:", error);
+        return false; // ✅ Return false au lieu de throw
       } finally {
-        setLoading(false);
+        setLoading(false); // ✅ TOUJOURS exécuté
       }
     },
     []
   );
 
+  // ✅ Logout function
   const logout = useCallback(() => {
     handleLogout();
     if (typeof window !== "undefined") {
@@ -360,7 +384,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     token,
     loading,
-
     login,
     register,
     logout,

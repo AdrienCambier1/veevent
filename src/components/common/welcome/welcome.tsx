@@ -1,34 +1,33 @@
 import { BellNotification, ScanQrCode } from "iconoir-react";
 import Link from "next/link";
 import "./welcome.scss";
+import { useAuth } from "@/contexts/auth-context";
 
-interface WelcomeProps {
-  user?: {
-    name: string;
-  };
-}
+export default function Welcome() {
+  const { loading, isAuthenticated, user } = useAuth();
 
-export default function Welcome({ user }: WelcomeProps) {
   return (
-    <div className="welcome">
-      <div className="hello">Bonjour {user && user.name} !</div>
-      {!user && (
-        <div className="welcome-links">
+    <div className={`welcome ${!loading && "welcome-visible"}`}>
+      <p className="hello">
+        Bonjour {isAuthenticated ? user?.fistName || user?.name : "visiteur"} !
+      </p>
+
+      {!isAuthenticated ? (
+        <p className="welcome-links">
           <Link href="/connexion">
             <span>Connectez-vous</span>
-          </Link>
-          ou
+          </Link>{" "}
+          ou{" "}
           <Link href="/inscription">
             <span>Inscrivez-vous</span>
           </Link>
-        </div>
-      )}
-      {user && (
-        <div className="user-actions">
-          <Link href="/profile">
+        </p>
+      ) : (
+        <div className="user-buttons">
+          <Link href="/compte/notifications" className="user-btn flex-1">
             <BellNotification /> Notifications
           </Link>
-          <Link href="/profile">
+          <Link href="/compte/tickets" className="user-btn flex-1">
             <ScanQrCode /> Mes Billets
           </Link>
         </div>
