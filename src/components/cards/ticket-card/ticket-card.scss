@@ -1,0 +1,57 @@
+.ticket-card {
+  @apply relative left-0 top-0 overflow-hidden;
+  height: 456px;
+  width: 300px;
+  .ticket-body {
+    width: 300px;
+    height: auto;
+    position: absolute;
+  }
+  .ticket-container {
+    @apply flex flex-col  absolute p-4 w-full justify-between h-full;
+    z-index: 2;
+
+    .event-name {
+      @apply text-lg font-semibold text-primary-950;
+    }
+
+    .event-place {
+      @apply text-base text-gray-600 font-medium;
+    }
+
+    .event-city {
+      @apply text-sm text-gray-600;
+    }
+
+    .event-date {
+      @apply text-lg font-semibold text-primary-600 flex justify-between my-1;
+    }
+
+    .ticket-footer {
+      @apply flex flex-col gap-4 items-center justify-end pb-2;
+
+      .barcode {
+        @apply flex flex-col items-center gap-2 relative;
+
+        .barcode-lines {
+          @apply flex gap-1 items-end;
+          height: 50px;
+
+          .barcode-line {
+            @apply bg-primary-200;
+            height: 100%;
+          }
+        }
+
+        .barcode-text {
+          @apply text-primary-600 font-bold absolute translate-y-1/2 bottom-1/2;
+          letter-spacing: -0.4px;
+        }
+      }
+
+      .logo {
+        @apply w-24 h-auto;
+      }
+    }
+  }
+}

@@ -21,6 +21,7 @@ import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import FaqCard from "@/components/cards/faq-card/faq-card";
+import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import { useAuth } from "@/contexts/auth-context";
 
 export default function Home() {
@@ -273,6 +274,8 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
         />
 
         <ProfileHead isMe={true} />
+
+        <TicketCard />
 
         <PlaceCard
           place={{
