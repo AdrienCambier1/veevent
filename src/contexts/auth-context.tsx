@@ -279,8 +279,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error("Erreur connexion:", error);
         return false;
-      } finally {
-        setAuthLoading(false);
       }
     },
     [fetchUserData]
@@ -364,8 +362,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error("Erreur inscription:", error);
         return false;
-      } finally {
-        setAuthLoading(false);
       }
     },
     []

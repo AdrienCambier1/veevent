@@ -1,11 +1,49 @@
 .horizontal-list {
-  @apply relative;
+  @apply relative overflow-hidden;
 
-  .scroll-container {
-    @apply overflow-y-visible overflow-x-scroll scroll-smooth snap-x snap-mandatory;
+  .swiper-container {
+    @apply overflow-visible;
 
-    .scroll-content {
-      @apply flex gap-4 py-3 pl-4 pr-4 sm:pl-4 sm:pr-4 xl:pl-[calc((100vw-1200px)/2+0.5rem)] xl:pr-[calc((100vw-1200px)/2+1rem)] min-w-fit select-none;
+    .event-card {
+      @apply max-w-80;
     }
+
+    .horizontal-swiper {
+      @apply overflow-visible py-3;
+
+      .swiper-wrapper {
+        @apply flex py-0 pl-4 pr-4 sm:pl-4 sm:pr-4 xl:pl-[calc((100vw-1200px)/2+0.5rem)] xl:pr-[calc((100vw-1200px)/2+1rem)] min-w-fit select-none;
+
+        align-items: flex-start;
+      }
+
+      .swiper-slide {
+        @apply w-auto flex-shrink-0;
+
+        height: auto;
+        display: flex;
+        align-items: stretch;
+
+        > * {
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+}
+
+.horizontal-swiper {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  touch-action: pan-x;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  .swiper-wrapper {
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 }

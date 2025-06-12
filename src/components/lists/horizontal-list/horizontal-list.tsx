@@ -1,5 +1,10 @@
-import { useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Mousewheel, Keyboard } from "swiper/modules";
 import CustomTitle from "@/components/common/custom-title/custom-title";
+import React from "react";
+
+import "swiper/css";
+import "swiper/css/free-mode";
 import "./horizontal-list.scss";
 
 interface HorizontalListProps {
@@ -13,33 +18,7 @@ export default function HorizontalList({
   description,
   children,
 }: HorizontalListProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!scrollRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - scrollRef.current.offsetLeft);
-    setScrollLeft(scrollRef.current.scrollLeft);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 4; // Vitesse de défilement
-    scrollRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-  };
+  const childrenArray = React.Children.toArray(children);
 
   return (
     <section className="horizontal-list gap-0">
@@ -50,17 +29,42 @@ export default function HorizontalList({
           <h2>{title}</h2>
         )}
       </div>
-      <div
-        ref={scrollRef}
-        className={`scroll-container scrollbar-hide ${
-          isDragging ? "cursor-grabbing" : "cursor-grab"
-        }`}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
-      >
-        <div className="scroll-content">{children}</div>
+
+      <div className="swiper-container">
+        <Swiper
+          modules={[FreeMode, Mousewheel, Keyboard]}
+          spaceBetween={16}
+          slidesPerView="auto"
+          freeMode={{
+            enabled: true,
+            sticky: true,
+            momentumRatio: 0.6,
+            momentumVelocityRatio: 0.6,
+            minimumVelocity: 0.02,
+          }}
+          mousewheel={{
+            forceToAxis: true,
+            sensitivity: 0.8,
+            releaseOnEdges: true,
+            thresholdDelta: 50,
+            thresholdTime: 150,
+          }}
+          keyboard={{
+            enabled: true,
+            onlyInViewport: true,
+          }}
+          speed={400}
+          resistance={true}
+          resistanceRatio={0.9}
+          grabCursor={true}
+          className="horizontal-swiper scrollbar-hide"
+        >
+          {childrenArray.map((child, index) => (
+            <SwiperSlide key={index} className="swiper-slide-auto">
+              {child}
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </section>
   );

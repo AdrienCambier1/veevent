@@ -1,4 +1,4 @@
 .theme-card {
   @apply shadow-sm flex flex-col justify-center items-center gap-2 bg-primary-600 text-secondary-400 p-4 rounded-lg font-bold;
-  @apply h-28 w-28; /* à enlever plus tard */
+  @apply min-h-32 min-w-32; /* à enlever plus tard */
 }
