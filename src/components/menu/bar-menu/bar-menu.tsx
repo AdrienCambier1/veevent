@@ -2,8 +2,7 @@
 import BarMenuItem from "@/components/menu/bar-menu/bar-menu-item";
 import "./bar-menu.scss";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect } from "react";
-import { useHorizontalScroll } from "@/hooks/useHorizontalScroll";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface BarMenuProps {
   navigation: {
@@ -16,8 +15,9 @@ interface BarMenuProps {
 
 export default function BarMenu({ navigation }: BarMenuProps) {
   const pathname = usePathname();
-  const { scrollRef, handleScroll, isAtLeft, isAtRight, scrollToActiveItem } =
-    useHorizontalScroll();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isAtLeft, setIsAtLeft] = useState(true);
+  const [isAtRight, setIsAtRight] = useState(false);
 
   const isActiveLink = useCallback(
     (href: string, isHome?: boolean) => {
@@ -27,6 +27,33 @@ export default function BarMenu({ navigation }: BarMenuProps) {
     [pathname]
   );
 
+  const handleScroll = useCallback(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const { scrollLeft, clientWidth, scrollWidth } = container;
+    const tolerance = 2;
+
+    setIsAtLeft(scrollLeft <= tolerance);
+    setIsAtRight(scrollLeft + clientWidth >= scrollWidth - tolerance);
+  }, []);
+
+  const scrollToActiveItem = useCallback(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const activeItem = container.querySelector(
+      ".bar-menu-item.active"
+    ) as HTMLElement;
+    if (!activeItem) return;
+
+    activeItem.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       scrollToActiveItem();
@@ -34,6 +61,10 @@ export default function BarMenu({ navigation }: BarMenuProps) {
 
     return () => clearTimeout(timer);
   }, [pathname, scrollToActiveItem]);
+
+  useEffect(() => {
+    handleScroll();
+  }, [handleScroll]);
 
   const maskClasses =
     !isAtLeft && !isAtRight
