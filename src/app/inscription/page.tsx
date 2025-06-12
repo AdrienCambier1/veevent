@@ -2,10 +2,18 @@
 import SelectorThemeTags from "@/components/tags/selector-theme-tags/selector-theme-tags";
 import StepIndicator from "@/components/common/step-indicator/step-indictator";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
+import { useHeader } from "@/contexts/header-context";
 
 export default function InscriptionPage() {
   const [step, setStep] = useState(1);
+  const { setHideCitySelector } = useHeader();
+
+  useEffect(() => {
+    setHideCitySelector(true);
+
+    return () => setHideCitySelector(false);
+  }, [setHideCitySelector]);
 
   const handleNextStep = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

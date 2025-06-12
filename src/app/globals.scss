@@ -57,13 +57,6 @@
 
   body {
     @apply bg-[var(--background)] font-[Syne] font-normal text-sm text-gray-950 antialiased;
-
-    &:not(.loaded) * {
-      @apply opacity-0;
-    }
-    &.loaded * {
-      @apply opacity-100 transition-opacity duration-300 ease-in-out;
-    }
   }
 
   main {

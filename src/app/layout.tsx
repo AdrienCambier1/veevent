@@ -7,6 +7,7 @@ import FloatingMenu from "@/components/menu/floating-menu/floating-menu";
 import { Metadata } from "next";
 import { AuthProvider } from "@/contexts/auth-context";
 import LoadingController from "@/components/common/loading-controller/loading-controller";
+import { HeaderProvider } from "@/contexts/header-context";
 
 export const metadata: Metadata = {
   appleWebApp: {
@@ -33,13 +34,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body>
         <AuthProvider>
           <LoadingController>
-            <CityProvider>
-              <SidebarProvider>
-                <Header hideCitySelector={false} />
-                {children}
-                <FloatingMenu />
-              </SidebarProvider>
-            </CityProvider>
+            <HeaderProvider>
+              <CityProvider>
+                <SidebarProvider>
+                  <Header />
+                  {children}
+                  <FloatingMenu />
+                </SidebarProvider>
+              </CityProvider>
+            </HeaderProvider>
           </LoadingController>
         </AuthProvider>
       </body>

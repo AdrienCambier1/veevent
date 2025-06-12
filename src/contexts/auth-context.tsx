@@ -209,10 +209,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // ✅ Login function - sans throw
   const login = useCallback(
-    async (
-      credentials: LoginCredentials,
-      redirectPath: string = "/"
-    ): Promise<boolean> => {
+    async (credentials: LoginCredentials): Promise<boolean> => {
       try {
         setLoading(true);
 
@@ -257,7 +254,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (!userData) {
           console.error("Impossible de récupérer les données utilisateur");
-          return false; // ✅ Return false au lieu de throw
+          return false;
         }
 
         localStorage.setItem("token", simulatedToken);
@@ -267,109 +264,95 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(userData);
         setIsAuthenticated(true);
 
-        if (typeof window !== "undefined") {
-          window.location.href = redirectPath;
-        }
-
         return true;
       } catch (error) {
         console.error("Erreur connexion:", error);
-        return false; // ✅ Return false au lieu de throw
+        return false;
       } finally {
-        setLoading(false); // ✅ TOUJOURS exécuté
+        setLoading(false);
       }
     },
     [fetchUserData]
   );
 
   // ✅ Register function - sans throw
-  const register = useCallback(
-    async (
-      data: RegisterData,
-      redirectPath: string = "/"
-    ): Promise<boolean> => {
-      try {
-        setLoading(true);
+  const register = useCallback(async (data: RegisterData): Promise<boolean> => {
+    try {
+      setLoading(true);
 
-        if (!data.email || !data.password || !data.name || !data.firstName) {
-          console.error("Tous les champs sont requis");
-          return false; // ✅ Return false au lieu de throw
-        }
-
-        if (data.password.length < 6) {
-          console.error("Le mot de passe doit contenir au moins 6 caractères");
-          return false; // ✅ Return false au lieu de throw
-        }
-
-        // 🔄 BACKEND: Décommenter quand API prête
-        // const response = await fetch('/api/auth/register', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify(data)
-        // });
-        //
-        // if (!response.ok) {
-        //   console.error('Erreur register:', response.status);
-        //   return false;
-        // }
-
-        // 🗑️ SIMULATION
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        const jwtPayload: JWTPayload = {
-          sub: data.email,
-          id: Math.floor(Math.random() * 1000),
-          email: data.email,
-          exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-          iat: Math.floor(Date.now() / 1000),
-        };
-
-        const payloadBase64 = btoa(JSON.stringify(jwtPayload))
-          .replace(/\+/g, "-")
-          .replace(/\//g, "_")
-          .replace(/=+$/, "");
-
-        const simulatedToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
-
-        const newUserData: User = {
-          id: jwtPayload.id,
-          name: data.name,
-          fistName: data.firstName,
-          pseudo: data.email.split("@")[0],
-          email: data.email,
-          phone: "",
-          isOrganizer: false,
-          eventPastCount: 0,
-          eventsCount: 0,
-          description: "",
-          imageUrl: "",
-          bannerImgUrl: "",
-          socials: { social: [] },
-          themes: [],
-          note: 0,
-        };
-
-        localStorage.setItem("token", simulatedToken);
-        setSecureCookie("auth_token", simulatedToken, 24 * 60 * 60);
-
-        setToken(simulatedToken);
-        setUser(newUserData);
-        setIsAuthenticated(true);
-
-        if (typeof window !== "undefined") {
-          window.location.href = redirectPath;
-        }
-
-        return true;
-      } catch (error) {
-        console.error("Erreur inscription:", error);
+      if (!data.email || !data.password || !data.name || !data.firstName) {
+        console.error("Tous les champs sont requis");
         return false; // ✅ Return false au lieu de throw
-      } finally {
-        setLoading(false); // ✅ TOUJOURS exécuté
       }
-    },
-    []
-  );
+
+      if (data.password.length < 6) {
+        console.error("Le mot de passe doit contenir au moins 6 caractères");
+        return false; // ✅ Return false au lieu de throw
+      }
+
+      // 🔄 BACKEND: Décommenter quand API prête
+      // const response = await fetch('/api/auth/register', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(data)
+      // });
+      //
+      // if (!response.ok) {
+      //   console.error('Erreur register:', response.status);
+      //   return false;
+      // }
+
+      // 🗑️ SIMULATION
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const jwtPayload: JWTPayload = {
+        sub: data.email,
+        id: Math.floor(Math.random() * 1000),
+        email: data.email,
+        exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
+        iat: Math.floor(Date.now() / 1000),
+      };
+
+      const payloadBase64 = btoa(JSON.stringify(jwtPayload))
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+      const simulatedToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
+
+      const newUserData: User = {
+        id: jwtPayload.id,
+        name: data.name,
+        fistName: data.firstName,
+        pseudo: data.email.split("@")[0],
+        email: data.email,
+        phone: "",
+        isOrganizer: false,
+        eventPastCount: 0,
+        eventsCount: 0,
+        description: "",
+        imageUrl: "",
+        bannerImgUrl: "",
+        socials: { social: [] },
+        themes: [],
+        note: 0,
+      };
+
+      localStorage.setItem("token", simulatedToken);
+      setSecureCookie("auth_token", simulatedToken, 24 * 60 * 60);
+
+      setToken(simulatedToken);
+      setUser(newUserData);
+      setIsAuthenticated(true);
+
+      return true;
+    } catch (error) {
+      console.error("Erreur inscription:", error);
+      return false; // ✅ Return false au lieu de throw
+    } finally {
+      setLoading(false); // ✅ TOUJOURS exécuté
+    }
+  }, []);
 
   // ✅ Logout function
   const logout = useCallback(() => {

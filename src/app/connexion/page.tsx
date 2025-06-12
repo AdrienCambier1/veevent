@@ -1,24 +1,38 @@
 "use client";
 import Link from "next/link";
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useAuth } from "@/contexts/auth-context";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useHeader } from "@/contexts/header-context";
 
 function ConnexionPageContent() {
   const { login, loading, isAuthenticated } = useAuth();
+  const { setHideCitySelector } = useHeader();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
 
+  useEffect(() => {
+    setHideCitySelector(true);
+    return () => setHideCitySelector(false);
+  }, [setHideCitySelector]);
+
+  useEffect(() => {
+    if (isAuthenticated && !loading) {
+      const redirectPath = searchParams?.get("redirect") || "/compte";
+      router.replace(redirectPath);
+    }
+  }, [isAuthenticated, loading, searchParams, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (credentials.email && credentials.password) {
-      const redirectPath = searchParams?.get("redirect") || "/";
-      login(credentials, redirectPath);
+      await login(credentials);
     }
   };
 
