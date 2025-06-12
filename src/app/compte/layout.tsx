@@ -8,7 +8,7 @@ import FaqCard from "@/components/cards/faq-card/faq-card";
 import ReviewCard from "@/components/cards/review-card/review-card";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import quentin from "@/assets/images/quentin.jpg";
+import banner from "@/assets/images/banner_profile.png";
 import ProfileHead from "@/components/heads/profile-head/profile-head";
 
 interface CompteLayoutProps {
@@ -25,7 +25,7 @@ export default function CompteLayout({ children }: CompteLayoutProps) {
 
   return (
     <main>
-      <BannerHead bannerImage={quentin} />
+      <BannerHead bannerImage={banner} />
       <section className="wrapper">
         <ProfileHead isMe={true} />
       </section>
