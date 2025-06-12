@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
 
 const protectedRoutes = ["/compte"];
+const authRoutes = ["/connexion", "/inscription"];
 
 export default function middleware(request) {
   const path = request.nextUrl.pathname;
@@ -20,6 +21,16 @@ export default function middleware(request) {
   };
 
   const hasValidToken = isValidToken();
+
+  const isAuthRoute = authRoutes.some(
+    (route) => path === route || path.startsWith(`${route}/`)
+  );
+
+  if (isAuthRoute && hasValidToken) {
+    const redirectParam = request.nextUrl.searchParams.get("redirect");
+    const redirectUrl = redirectParam || "/compte";
+    return NextResponse.redirect(new URL(redirectUrl, request.url));
+  }
 
   const isProtectedRoute = protectedRoutes.some(
     (route) => path === route || path.startsWith(`${route}/`)
