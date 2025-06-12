@@ -2,14 +2,13 @@
 import Link from "next/link";
 import { useState, Suspense, useEffect } from "react";
 import { useAuth } from "@/contexts/auth-context";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useHeader } from "@/contexts/header-context";
 
 function ConnexionPageContent() {
-  const { login, loading, isAuthenticated } = useAuth();
+  const { login, authLoading, isAuthenticated } = useAuth();
   const { setHideCitySelector } = useHeader();
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const [credentials, setCredentials] = useState({
     email: "",
@@ -21,18 +20,12 @@ function ConnexionPageContent() {
     return () => setHideCitySelector(false);
   }, [setHideCitySelector]);
 
-  useEffect(() => {
-    if (isAuthenticated && !loading) {
-      const redirectPath = searchParams?.get("redirect") || "/compte";
-      router.replace(redirectPath);
-    }
-  }, [isAuthenticated, loading, searchParams, router]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (credentials.email && credentials.password) {
-      await login(credentials);
+      const redirectUrl = searchParams?.get("redirect") || "/compte";
+      await login(credentials, redirectUrl);
     }
   };
 
@@ -59,7 +52,7 @@ function ConnexionPageContent() {
               placeholder="exemple@mail.com"
               value={credentials.email}
               onChange={handleInputChange("email")}
-              disabled={loading}
+              disabled={authLoading}
             />
           </div>
 
@@ -71,7 +64,7 @@ function ConnexionPageContent() {
               placeholder="******"
               value={credentials.password}
               onChange={handleInputChange("password")}
-              disabled={loading}
+              disabled={authLoading}
             />
             <Link href="/mot-de-passe-oublie" className="text-primary-600">
               Mot de passe oublié ?
@@ -81,15 +74,19 @@ function ConnexionPageContent() {
           <button
             type="submit"
             className="primary-btn w-full"
-            disabled={loading || !credentials.email || !credentials.password}
+            disabled={
+              authLoading || !credentials.email || !credentials.password
+            }
           >
-            <span>{loading ? "Connexion en cours..." : "Se connecter"}</span>
+            <span>
+              {authLoading ? "Connexion en cours..." : "Se connecter"}
+            </span>
           </button>
 
           <button
             type="button"
             className="w-full border p-3 rounded-full border-black font-bold mt-4"
-            disabled={loading}
+            disabled={authLoading}
           >
             Sign in with apple
           </button>

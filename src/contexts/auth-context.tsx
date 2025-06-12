@@ -59,6 +59,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
+  authLoading: boolean;
   login: (
     credentials: LoginCredentials,
     redirectPath?: string
@@ -69,7 +70,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// ✅ Fonctions utilitaires
 const setSecureCookie = (name: string, value: string, maxAge: number) => {
   if (typeof window === "undefined") return;
 
@@ -99,6 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authLoading, setAuthLoading] = useState(false);
 
   // ✅ Fetch user data - sans throw
   const fetchUserData = useCallback(
@@ -144,13 +145,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return fakeUserData;
       } catch (error) {
         console.error("Erreur récupération données utilisateur:", error);
-        return null; // ✅ Return null au lieu de throw
+        return null;
       }
     },
     []
   );
 
-  // ✅ Logout function
   const handleLogout = useCallback(() => {
     setIsAuthenticated(false);
     setUser(null);
@@ -162,9 +162,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // ✅ Check auth au démarrage - sans throw
   useEffect(() => {
     const checkAuth = async () => {
+      const startTime = Date.now();
+
       try {
         if (typeof window === "undefined") return;
 
@@ -198,24 +199,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       } catch (error) {
         console.error("Erreur vérification token:", error);
-        handleLogout(); // ✅ Logout silencieux au lieu de throw
+        handleLogout();
       } finally {
-        setLoading(false); // ✅ TOUJOURS exécuté
+        const elapsed = Date.now() - startTime;
+        const minDelay = 1000;
+
+        if (elapsed < minDelay) {
+          setTimeout(() => setLoading(false), minDelay - elapsed);
+        } else {
+          setLoading(false);
+        }
       }
     };
 
     checkAuth();
   }, [handleLogout, fetchUserData]);
 
-  // ✅ Login function - sans throw
   const login = useCallback(
-    async (credentials: LoginCredentials): Promise<boolean> => {
+    async (
+      credentials: LoginCredentials,
+      redirectPath = "/"
+    ): Promise<boolean> => {
       try {
-        setLoading(true);
+        setAuthLoading(true);
 
         if (!credentials.email || !credentials.password) {
           console.error("Email et mot de passe requis");
-          return false; // ✅ Return false au lieu de throw
+          return false;
         }
 
         // 🔄 BACKEND: Décommenter quand API prête
@@ -231,9 +241,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // }
         //
         // const { token: authToken } = await response.json();
-
-        // 🗑️ SIMULATION
-        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const jwtPayload: JWTPayload = {
           sub: credentials.email,
@@ -264,97 +271,106 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(userData);
         setIsAuthenticated(true);
 
+        if (typeof window !== "undefined") {
+          window.location.href = redirectPath;
+        }
+
         return true;
       } catch (error) {
         console.error("Erreur connexion:", error);
         return false;
       } finally {
-        setLoading(false);
+        setAuthLoading(false);
       }
     },
     [fetchUserData]
   );
 
-  // ✅ Register function - sans throw
-  const register = useCallback(async (data: RegisterData): Promise<boolean> => {
-    try {
-      setLoading(true);
+  const register = useCallback(
+    async (data: RegisterData, redirectPath = "/"): Promise<boolean> => {
+      try {
+        setAuthLoading(true);
 
-      if (!data.email || !data.password || !data.name || !data.firstName) {
-        console.error("Tous les champs sont requis");
-        return false; // ✅ Return false au lieu de throw
+        if (!data.email || !data.password || !data.name || !data.firstName) {
+          console.error("Tous les champs sont requis");
+          return false;
+        }
+
+        if (data.password.length < 6) {
+          console.error("Le mot de passe doit contenir au moins 6 caractères");
+          return false;
+        }
+
+        // 🔄 BACKEND: Décommenter quand API prête
+        // const response = await fetch('/api/auth/register', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(data)
+        // });
+        //
+        // if (!response.ok) {
+        //   console.error('Erreur register:', response.status);
+        //   return false;
+        // }
+
+        // 🗑️ SIMULATION
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const jwtPayload: JWTPayload = {
+          sub: data.email,
+          id: Math.floor(Math.random() * 1000),
+          email: data.email,
+          exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
+          iat: Math.floor(Date.now() / 1000),
+        };
+
+        const payloadBase64 = btoa(JSON.stringify(jwtPayload))
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/, "");
+
+        const simulatedToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
+
+        const newUserData: User = {
+          id: jwtPayload.id,
+          name: data.name,
+          fistName: data.firstName,
+          pseudo: data.email.split("@")[0],
+          email: data.email,
+          phone: "",
+          isOrganizer: false,
+          eventPastCount: 0,
+          eventsCount: 0,
+          description: "",
+          imageUrl: "",
+          bannerImgUrl: "",
+          socials: { social: [] },
+          themes: [],
+          note: 0,
+        };
+
+        localStorage.setItem("token", simulatedToken);
+        setSecureCookie("auth_token", simulatedToken, 24 * 60 * 60);
+
+        setToken(simulatedToken);
+        setUser(newUserData);
+        setIsAuthenticated(true);
+
+        if (typeof window !== "undefined") {
+          window.location.href = redirectPath;
+        }
+
+        return true;
+      } catch (error) {
+        console.error("Erreur inscription:", error);
+        return false;
+      } finally {
+        setAuthLoading(false);
       }
+    },
+    []
+  );
 
-      if (data.password.length < 6) {
-        console.error("Le mot de passe doit contenir au moins 6 caractères");
-        return false; // ✅ Return false au lieu de throw
-      }
-
-      // 🔄 BACKEND: Décommenter quand API prête
-      // const response = await fetch('/api/auth/register', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data)
-      // });
-      //
-      // if (!response.ok) {
-      //   console.error('Erreur register:', response.status);
-      //   return false;
-      // }
-
-      // 🗑️ SIMULATION
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const jwtPayload: JWTPayload = {
-        sub: data.email,
-        id: Math.floor(Math.random() * 1000),
-        email: data.email,
-        exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-        iat: Math.floor(Date.now() / 1000),
-      };
-
-      const payloadBase64 = btoa(JSON.stringify(jwtPayload))
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
-
-      const simulatedToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
-
-      const newUserData: User = {
-        id: jwtPayload.id,
-        name: data.name,
-        fistName: data.firstName,
-        pseudo: data.email.split("@")[0],
-        email: data.email,
-        phone: "",
-        isOrganizer: false,
-        eventPastCount: 0,
-        eventsCount: 0,
-        description: "",
-        imageUrl: "",
-        bannerImgUrl: "",
-        socials: { social: [] },
-        themes: [],
-        note: 0,
-      };
-
-      localStorage.setItem("token", simulatedToken);
-      setSecureCookie("auth_token", simulatedToken, 24 * 60 * 60);
-
-      setToken(simulatedToken);
-      setUser(newUserData);
-      setIsAuthenticated(true);
-
-      return true;
-    } catch (error) {
-      console.error("Erreur inscription:", error);
-      return false; // ✅ Return false au lieu de throw
-    } finally {
-      setLoading(false); // ✅ TOUJOURS exécuté
-    }
-  }, []);
-
-  // ✅ Logout function
   const logout = useCallback(() => {
     handleLogout();
     if (typeof window !== "undefined") {
@@ -367,6 +383,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     token,
     loading,
+    authLoading,
     login,
     register,
     logout,
