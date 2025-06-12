@@ -5,6 +5,7 @@ import ThemeTag from "@/components/tags/theme-tag/theme-tag";
 import { ArrowUpRight, Bookmark, Calendar, MapPin } from "iconoir-react";
 import Image from "next/image";
 import "./event-card.scss";
+import Link from "next/link";
 
 interface EventCardProps {
   title: string;
@@ -14,6 +15,7 @@ interface EventCardProps {
   price: number;
   minify?: boolean;
   imageUrl?: string; // Optional since it's not being used currently
+  link?: string; // Optional for linking to event details
 }
 
 const themes: string[] = [
@@ -32,9 +34,10 @@ export default function EventCard({
   price,
   minify,
   imageUrl,
+  link = "/evenements/1",
 }: EventCardProps) {
   return (
-    <div className={`event-card ${minify ? "minify" : ""}`}>
+    <Link href={link} className={`event-card ${minify ? "minify" : ""}`}>
       <div className="image-container">
         <div className="theme-tags">
           {themes.map((theme, index) => {
@@ -68,6 +71,6 @@ export default function EventCard({
           {minify && <ArrowUpRight className="text-lg" />}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

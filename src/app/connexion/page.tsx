@@ -31,10 +31,6 @@ function ConnexionPageContent() {
       }));
     };
 
-  if (isAuthenticated) {
-    return null;
-  }
-
   return (
     <main>
       <section className="wrapper flex items-center">

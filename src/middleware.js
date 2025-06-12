@@ -28,7 +28,7 @@ export default function middleware(request) {
   );
 
   if (isAuthRoute && hasValidToken) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/compte", request.url));
   }
 
   const isProtectedRoute = protectedRoutes.some(

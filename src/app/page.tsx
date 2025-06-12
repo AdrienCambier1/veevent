@@ -58,10 +58,9 @@ export default function Home() {
       <HorizontalList title="Envie d'une sortie">
         <ThemeCard category="music" />
         <ThemeCard category="sport" name="Aquaponey" />
-        <ThemeCard>
-          <Medal />
-          Test
-        </ThemeCard>
+        <ThemeCard category="sport" name="Aquaponey" />
+        <ThemeCard category="sport" name="Aquaponey" />
+        <ThemeCard category="sport" name="Aquaponey" />
       </HorizontalList>
       <HorizontalList title="Proche de chez vous">
         <EventCard

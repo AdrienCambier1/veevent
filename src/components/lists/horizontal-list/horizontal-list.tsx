@@ -43,7 +43,7 @@ export default function HorizontalList({
 
   return (
     <section className="horizontal-list gap-0">
-      <div className="wrapper">
+      <div className="wrapper pb-0">
         {description ? (
           <CustomTitle title={title} description={description} />
         ) : (

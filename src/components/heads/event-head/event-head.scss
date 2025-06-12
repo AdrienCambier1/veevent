@@ -1,0 +1,17 @@
+.event-head {
+  .info {
+    @apply flex items-center gap-1 font-medium;
+
+    svg {
+      @apply text-primary-600;
+    }
+  }
+
+  .interested {
+    @apply text-center;
+
+    span {
+      @apply text-primary-600;
+    }
+  }
+}
