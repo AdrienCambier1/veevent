@@ -29,7 +29,7 @@ export default function HorizontalList({
     if (!isDragging || !scrollRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Vitesse de défilement
+    const walk = (x - startX) * 4; // Vitesse de défilement
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
