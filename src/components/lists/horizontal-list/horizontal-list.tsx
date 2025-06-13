@@ -36,28 +36,21 @@ export default function HorizontalList({
           spaceBetween={16}
           slidesPerView="auto"
           freeMode={{
-            enabled: true,
-            sticky: true,
-            momentumRatio: 0.6,
-            momentumVelocityRatio: 0.6,
-            minimumVelocity: 0.02,
+            enabled: false,
           }}
           mousewheel={{
             forceToAxis: true,
-            sensitivity: 0.8,
+            sensitivity: 0.3,
             releaseOnEdges: true,
-            thresholdDelta: 50,
-            thresholdTime: 150,
+            thresholdDelta: 100,
+            thresholdTime: 300,
           }}
-          keyboard={{
-            enabled: true,
-            onlyInViewport: true,
-          }}
+          slidesPerGroup={1}
           speed={400}
           resistance={true}
-          resistanceRatio={0.9}
+          resistanceRatio={0.5}
           grabCursor={true}
-          className="horizontal-swiper scrollbar-hide"
+          className="horizontal-swiper "
         >
           {childrenArray.map((child, index) => (
             <SwiperSlide key={index} className="swiper-slide-auto">

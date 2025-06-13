@@ -2,7 +2,7 @@
   @apply relative overflow-hidden;
 
   .swiper-container {
-    @apply overflow-visible;
+    @apply overflow-visible pl-4 pr-4 sm:pl-4 sm:pr-4 xl:pl-[calc((100vw-1200px)/2+0.5rem)] xl:pr-[calc((100vw-1200px)/2+1rem)];
 
     .event-card {
       @apply max-w-80;
@@ -11,10 +11,20 @@
     .horizontal-swiper {
       @apply overflow-visible py-3;
 
-      .swiper-wrapper {
-        @apply flex py-0 pl-4 pr-4 sm:pl-4 sm:pr-4 xl:pl-[calc((100vw-1200px)/2+0.5rem)] xl:pr-[calc((100vw-1200px)/2+1rem)] min-w-fit select-none;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      touch-action: pan-x pan-y;
+      cursor: grab;
 
+      &:active {
+        cursor: grabbing;
+      }
+
+      .swiper-wrapper {
+        @apply flex py-0 min-w-fit select-none;
         align-items: flex-start;
+        transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
 
       .swiper-slide {
@@ -29,21 +39,5 @@
         }
       }
     }
-  }
-}
-
-.horizontal-swiper {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-  touch-action: pan-x;
-  cursor: grab;
-
-  &:active {
-    cursor: grabbing;
-  }
-
-  .swiper-wrapper {
-    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 }
