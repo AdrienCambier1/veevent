@@ -1,6 +1,12 @@
 "use client";
 
-import { motion, AnimatePresence, PanInfo, useTransform, useMotionValue } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  PanInfo,
+  useTransform,
+  useMotionValue,
+} from "framer-motion";
 import { useEffect, useState, ReactNode } from "react";
 
 interface BottomSheetProps {
@@ -20,7 +26,7 @@ export default function BottomSheet({
 }: BottomSheetProps) {
   const DRAG_THRESHOLD = 100;
   const [dragY, setDragY] = useState(0);
-  
+
   // Motion values pour l'animation fluide
   const y = useMotionValue(0);
   const opacity = useTransform(y, [0, 150], [1, 0]);
@@ -113,8 +119,8 @@ export default function BottomSheet({
             </motion.div>
 
             {title && (
-              <div className="px-6 pb-4">
-                <h2 className="text-xl font-semibold text-primary-950">{title}</h2>
+              <div className="text-xl text-center font-bold text-primary-950">
+                {title}
               </div>
             )}
 

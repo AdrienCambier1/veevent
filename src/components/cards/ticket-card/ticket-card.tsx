@@ -5,19 +5,24 @@ import Image from "next/image";
 import img from "@/assets/images/nice.jpg";
 import { useState } from "react";
 import BottomSheet from "@/components/common/bottom-sheet/bottom-sheet";
+import QRCode from "@/components/common/qr-code/qr-code";
+import Link from "next/link";
 
 export default function TicketCard() {
   const [isQRCodeOpen, setIsQRCodeOpen] = useState(false);
 
   // Identifiant unique du ticket (à remplacer par les vraies données)
   const ticketId = "TKT-2025-MORGAN-001";
+  const eventName = "morgan"; // Nom de l'événement, utilisé dans le lien
 
-  const handleShowQRCode = () => {
+  const handleShowQRCode = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setIsQRCodeOpen(true);
   };
 
   return (
-    <>
+    <Link href={`/evenements/${eventName.toLowerCase()}`}>
       <div className="ticket-card">
         <div className="ticket-container">
           <div className="flex flex-col gap-1">
@@ -48,10 +53,10 @@ export default function TicketCard() {
                 ))}
               </div>
               <button
-                className="barcode-text cursor-pointer hover:text-primary-700 transition-colors"
+                className="barcode-text cursor-pointer "
                 onClick={handleShowQRCode}
               >
-                Voir le code barre
+                Voir le code QR
               </button>
             </div>
             <img src={"/veevent.svg"} alt="Veevent Logo" className="logo" />
@@ -67,11 +72,23 @@ export default function TicketCard() {
       <BottomSheet
         isOpen={isQRCodeOpen}
         onClose={() => setIsQRCodeOpen(false)}
-        maxHeight="70vh"
+        maxHeight="75vh"
         title="Code QR du billet"
       >
-        <div>TEST</div>
+        <div
+          className="flex flex-col items-center justify-center p-4 gap-3"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsQRCodeOpen(false);
+          }}
+        >
+          <QRCode value={ticketId} size={250} />
+          <div className="primary-btn">
+            <span>Fermer</span>
+          </div>
+        </div>
       </BottomSheet>
-    </>
+    </Link>
   );
 }
