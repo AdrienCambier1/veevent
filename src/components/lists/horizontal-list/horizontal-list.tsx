@@ -37,25 +37,23 @@ export default function HorizontalList({
           freeMode={{
             enabled: true,
             sticky: true,
-            momentumRatio: 0.75,
-            momentumVelocityRatio: 0.75,
+            momentumRatio: 0.3,
+            momentumVelocityRatio: 0.3,
             momentumBounce: true,
-            momentumBounceRatio: 0.2,
-            minimumVelocity: 0.02,
+            momentumBounceRatio: 0.1,
+            minimumVelocity: 0.005,
           }}
           mousewheel={{
             forceToAxis: true,
-            sensitivity: 0.6,
+            sensitivity: 0.5,
             releaseOnEdges: true,
-            thresholdDelta: 60,
-            thresholdTime: 250,
+            thresholdDelta: 50,
+            thresholdTime: 200,
           }}
-          speed={350}
-          resistance={true}
-          resistanceRatio={0.8}
-          touchRatio={1}
-          followFinger={true}
+          speed={400}
+          touchRatio={0.7}
           grabCursor={true}
+          followFinger={true}
           className="horizontal-swiper"
         >
           {childrenArray.map((child, index) => (
