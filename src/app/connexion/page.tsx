@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useHeader } from "@/contexts/header-context";
 
 function ConnexionPageContent() {
-  const { login, authLoading, isAuthenticated } = useAuth();
+  const { login, loading, isAuthenticated } = useAuth();
   const { setHideCitySelector } = useHeader();
   const searchParams = useSearchParams();
 
@@ -52,7 +52,7 @@ function ConnexionPageContent() {
               placeholder="exemple@mail.com"
               value={credentials.email}
               onChange={handleInputChange("email")}
-              disabled={authLoading}
+              disabled={loading}
             />
           </div>
 
@@ -64,7 +64,7 @@ function ConnexionPageContent() {
               placeholder="******"
               value={credentials.password}
               onChange={handleInputChange("password")}
-              disabled={authLoading}
+              disabled={loading}
             />
             <Link href="/mot-de-passe-oublie" className="text-primary-600">
               Mot de passe oublié ?
@@ -74,19 +74,15 @@ function ConnexionPageContent() {
           <button
             type="submit"
             className="primary-btn w-full"
-            disabled={
-              authLoading || !credentials.email || !credentials.password
-            }
+            disabled={loading || !credentials.email || !credentials.password}
           >
-            <span>
-              {authLoading ? "Connexion en cours..." : "Se connecter"}
-            </span>
+            <span>{loading ? "Connexion en cours..." : "Se connecter"}</span>
           </button>
 
           <button
             type="button"
             className="w-full border p-3 rounded-full border-black font-bold mt-4"
-            disabled={authLoading}
+            disabled={loading}
           >
             Sign in with apple
           </button>

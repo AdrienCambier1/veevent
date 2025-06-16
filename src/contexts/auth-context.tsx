@@ -59,7 +59,6 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
-  authLoading: boolean;
   login: (
     credentials: LoginCredentials,
     redirectPath?: string
@@ -99,7 +98,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [authLoading, setAuthLoading] = useState(false);
 
   // ✅ Fetch user data - sans throw
   const fetchUserData = useCallback(
@@ -221,7 +219,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       redirectPath = "/"
     ): Promise<boolean> => {
       try {
-        setAuthLoading(true);
+        setLoading(true);
 
         if (!credentials.email || !credentials.password) {
           console.error("Email et mot de passe requis");
@@ -287,7 +285,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = useCallback(
     async (data: RegisterData, redirectPath = "/"): Promise<boolean> => {
       try {
-        setAuthLoading(true);
+        setLoading(true);
 
         if (!data.email || !data.password || !data.name || !data.firstName) {
           console.error("Tous les champs sont requis");
@@ -379,7 +377,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     token,
     loading,
-    authLoading,
     login,
     register,
     logout,

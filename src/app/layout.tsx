@@ -6,7 +6,6 @@ import { ReactNode } from "react";
 import FloatingMenu from "@/components/menu/floating-menu/floating-menu";
 import { Metadata } from "next";
 import { AuthProvider } from "@/contexts/auth-context";
-import LoadingController from "@/components/common/loading-controller/loading-controller";
 import { HeaderProvider } from "@/contexts/header-context";
 
 export const metadata: Metadata = {
@@ -33,17 +32,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="fr">
       <body>
         <AuthProvider>
-          <LoadingController>
-            <HeaderProvider>
-              <CityProvider>
-                <SidebarProvider>
-                  <Header />
-                  {children}
-                  <FloatingMenu />
-                </SidebarProvider>
-              </CityProvider>
-            </HeaderProvider>
-          </LoadingController>
+          <HeaderProvider>
+            <CityProvider>
+              <SidebarProvider>
+                <Header />
+                {children}
+                <FloatingMenu />
+              </SidebarProvider>
+            </CityProvider>
+          </HeaderProvider>
         </AuthProvider>
       </body>
     </html>

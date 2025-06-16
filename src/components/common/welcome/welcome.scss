@@ -2,11 +2,19 @@
   @apply flex flex-col gap-3 transition;
 
   .hello {
-    @apply text-xl font-bold text-primary-950;
+    @apply text-xl font-bold text-primary-950 w-fit;
+
+    &.skeleton {
+      @apply text-gray-200 bg-gray-200 animate-pulse;
+    }
   }
 
   .welcome-links {
-    @apply items-center text-base;
+    @apply items-center text-base w-fit;
+
+    &.skeleton {
+      @apply text-gray-200 bg-gray-200 animate-pulse;
+    }
 
     a {
       @apply font-semibold text-primary-600;

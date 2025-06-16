@@ -2,7 +2,7 @@
   @apply relative overflow-hidden;
 
   .swiper-container {
-    @apply overflow-visible pl-4 pr-4 sm:pl-4 sm:pr-4 xl:pl-[calc((100vw-1200px)/2+0.5rem)] xl:pr-[calc((100vw-1200px)/2+1rem)];
+    @apply pl-4 pr-4 sm:pl-4 sm:pr-4 xl:pl-[calc((100vw-1200px)/2+0.5rem)] xl:pr-[calc((100vw-1200px)/2+1rem)];
 
     .event-card {
       @apply max-w-80;
@@ -33,6 +33,12 @@
         height: auto;
         display: flex;
         align-items: stretch;
+
+        margin-right: 1rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
 
         > * {
           flex-shrink: 0;

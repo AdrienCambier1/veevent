@@ -33,24 +33,30 @@ export default function HorizontalList({
       <div className="swiper-container">
         <Swiper
           modules={[FreeMode, Mousewheel, Keyboard]}
-          spaceBetween={16}
           slidesPerView="auto"
           freeMode={{
-            enabled: false,
+            enabled: true,
+            sticky: true,
+            momentumRatio: 0.75,
+            momentumVelocityRatio: 0.75,
+            momentumBounce: true,
+            momentumBounceRatio: 0.2,
+            minimumVelocity: 0.02,
           }}
           mousewheel={{
             forceToAxis: true,
-            sensitivity: 0.3,
+            sensitivity: 0.6,
             releaseOnEdges: true,
-            thresholdDelta: 100,
-            thresholdTime: 300,
+            thresholdDelta: 60,
+            thresholdTime: 250,
           }}
-          slidesPerGroup={1}
-          speed={400}
+          speed={350}
           resistance={true}
-          resistanceRatio={0.5}
+          resistanceRatio={0.8}
+          touchRatio={1}
+          followFinger={true}
           grabCursor={true}
-          className="horizontal-swiper "
+          className="horizontal-swiper"
         >
           {childrenArray.map((child, index) => (
             <SwiperSlide key={index} className="swiper-slide-auto">
