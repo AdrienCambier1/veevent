@@ -257,7 +257,11 @@
     display: none;
   }
 
-  .skeleton {
+  /*************/
+  /* Skeletons */
+  /*************/
+
+  .skeleton-text {
     @apply animate-pulse !text-gray-200 !bg-gray-200 !rounded-lg;
   }
 
