@@ -1,8 +1,4 @@
-import {
-  PlacesResponse,
-  Place,
-  SinglePlace,
-} from "@/types";
+import { PlacesResponse, Place, SinglePlace } from "@/types";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
 const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
@@ -100,7 +96,7 @@ export const placeService = {
   async getPopularPlaces(limit: number = 6): Promise<Place[]> {
     try {
       const places = await this.getPlaces();
-      
+
       // Trier par nombre d'événements (actuels + passés) et limiter
       const popularPlaces = places
         .sort((a, b) => {
@@ -120,10 +116,10 @@ export const placeService = {
   async getPlacesByCity(cityName: string): Promise<Place[]> {
     try {
       const places = await this.getPlaces();
-      
+
       // Filtrer par nom de ville
       const cityPlaces = places.filter(
-        place => place.cityName.toLowerCase() === cityName.toLowerCase()
+        (place) => place.cityName.toLowerCase() === cityName.toLowerCase()
       );
 
       return cityPlaces;
@@ -136,9 +132,9 @@ export const placeService = {
   async searchPlaces(searchTerm: string): Promise<Place[]> {
     try {
       const places = await this.getPlaces();
-      
+
       // Recherche dans le nom, l'adresse, le type et la ville
-      const filteredPlaces = places.filter(place => {
+      const filteredPlaces = places.filter((place) => {
         const searchLower = searchTerm.toLowerCase();
         return (
           place.name.toLowerCase().includes(searchLower) ||
