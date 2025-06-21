@@ -26,8 +26,8 @@ export const useCity = (cityName: string): UseCityReturn => {
       setError(null);
 
       // Récupérer les données de la ville
-      const cityData = await cityService.getCityByName(cityName);
-      
+      const cityData = await cityService.getCityByName(cityName.toLowerCase());
+
       if (!cityData) {
         throw new Error("Ville non trouvée");
       }
@@ -43,7 +43,6 @@ export const useCity = (cityName: string): UseCityReturn => {
         console.warn("Erreur lors du chargement des événements:", eventError);
         setEvents([]);
       }
-
     } catch (err) {
       setError(err as Error);
       setCity(null);

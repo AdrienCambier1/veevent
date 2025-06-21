@@ -81,30 +81,55 @@ export const cityService = {
         return mockCity || null;
       }
 
-      // Récupérer toutes les villes et trouver celle qui correspond au nom
-      const cities = await this.getCities();
-      const city = cities.find(
-        (city) => city.name.toLowerCase() === name.toLowerCase()
-      );
+      const response = await fetch(`${apiUrl}/cities?name=${name}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
 
-      if (!city) {
-        return null;
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error("Ville non trouvée");
+        }
+        throw new Error(`Erreur HTTP: ${response.status}`);
       }
 
       // Récupérer les détails complets de la ville
-      return await this.getCityById(city.id);
+      const result: CitiesResponse = await response.json();
+      const apiCity = result._embedded?.cityResponses?.[0] || null;
+
+      return apiCity;
     } catch (error) {
       console.error("❌ Error in getCityByName:", error);
       throw error;
     }
   },
-
   async getCitiesByRegion(region: string): Promise<City[]> {
     try {
-      const cities = await this.getCities();
-      return cities.filter((city) =>
-        city.region.toLowerCase().includes(region.toLowerCase())
-      );
+      if (useMockData) {
+        const mockCitiesByRegion = mockCities.filter(
+          (city) => city.region === region
+        );
+        return mockCitiesByRegion || [];
+      }
+
+      const response = await fetch(`${apiUrl}/cities?region=${region}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error("Ville non trouvée");
+        }
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+      const result: CitiesResponse = await response.json();
+      const apiCities = result._embedded?.cityResponses || [];
+      return apiCities;
     } catch (error) {
       console.error("❌ Error in getCitiesByRegion:", error);
       throw error;

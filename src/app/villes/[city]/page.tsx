@@ -20,10 +20,10 @@ export default function CityPage() {
   const { city: cityParam } = useParams() as { city: string };
 
   // Décoder le paramètre URL et capitaliser
-  const cityName = decodeURIComponent(cityParam)
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
+  const cityName = decodeURIComponent(cityParam);
+  // .split("-")
+  // .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+  // .join(" ");
 
   // Hook pour récupérer les données de la ville
   const { city, events, nearestCities, loading, error } = useCity(cityName);

@@ -60,24 +60,40 @@ export default function PlacesMapList({ locations }: PlaceMapListProps) {
     placeRefs.current[placeId] = ref;
   };
 
+  const filteredLocations = locations.filter(
+    (place) => place.location.latitude && place.location.longitude
+  );
+
   return (
     <div className="places-map-list">
-      <Gmaps locations={locations} onMarkerClick={handleMarkerClick} />
-      <div className="places-list">
-        {locations.map((place, index) => (
-          <div
-            key={place.id}
-            ref={(ref) => setPlaceRef(place.id, ref)}
-            className={
-              selectedPlaceId === place.id
-                ? "ring-2 ring-blue-500 rounded-[var(--vv-border-radius)]"
-                : ""
-            }
-          >
-            <PlaceCard index={index + 1} place={place} />
+      {filteredLocations.length > 0 && (
+        <>
+          <Gmaps
+            locations={filteredLocations}
+            onMarkerClick={handleMarkerClick}
+          />
+          <div className="places-list">
+            {locations.map(
+              (place, index) =>
+                // filter out places without a location
+                place.location.latitude &&
+                place.location.longitude && (
+                  <div
+                    key={place.id}
+                    ref={(ref) => setPlaceRef(place.id, ref)}
+                    className={
+                      selectedPlaceId === place.id
+                        ? "ring-2 ring-blue-500 rounded-[var(--vv-border-radius)]"
+                        : ""
+                    }
+                  >
+                    <PlaceCard index={index + 1} place={place} />
+                  </div>
+                )
+            )}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 }

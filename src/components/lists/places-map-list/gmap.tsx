@@ -126,25 +126,28 @@ const PoiMarkers = (props: {
 
   return (
     <>
-      {props.pois.map((poi: Place, index: number) => (
-        <AdvancedMarker
-          key={poi.id}
-          position={{
-            lat: poi.location.latitude ?? 0,
-            lng: poi.location.longitude ?? 0,
-          }}
-          ref={(marker) => setMarkerRef(marker, poi.id)}
-          clickable={true}
-          onClick={handleClick(poi.id)}
-        >
-          <Pin
-            background={"var(--secondary-400)"}
-            glyphColor={"var(--primary-600)"}
-            borderColor={"var(--primary-600)"}
-            glyph={`${index + 1}`}
-          />
-        </AdvancedMarker>
-      ))}
+      {props.pois.map((poi: Place, index: number) =>
+        poi.location.latitude == null ||
+        poi.location.longitude == null ? null : (
+          <AdvancedMarker
+            key={poi.id}
+            position={{
+              lat: poi.location.latitude ?? 0,
+              lng: poi.location.longitude ?? 0,
+            }}
+            ref={(marker) => setMarkerRef(marker, poi.id)}
+            clickable={true}
+            onClick={handleClick(poi.id)}
+          >
+            <Pin
+              background={"var(--secondary-400)"}
+              glyphColor={"var(--primary-600)"}
+              borderColor={"var(--primary-600)"}
+              glyph={`${index + 1}`}
+            />
+          </AdvancedMarker>
+        )
+      )}
     </>
   );
 };
