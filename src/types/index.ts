@@ -33,6 +33,7 @@ export interface NearestCitiesResponse {
       latitude: number;
       longitude: number;
     };
+    locationType?: "GPS" | "IP";
   };
   error?: string;
 }

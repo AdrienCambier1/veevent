@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import requestIp from "request-ip";
-import { City, GeolocationResponse, NearestCitiesResponse } from "../../types";
-import { cityService } from "../../services/cityService";
+import { cityService } from "@/services/cityService";
+import { City, GeolocationResponse, NearestCitiesResponse } from "@/types";
 
 // Fonction pour calculer la distance avec la formule de Haversine
 function calculateHaversineDistance(
@@ -35,6 +35,8 @@ async function getLocationFromIP(
     );
     const data: GeolocationResponse = await response.json();
 
+    console.log("🌐 Réponse de l'API de géolocalisation IP:", data);
+
     if (data.status === "success") {
       return data;
     }
@@ -49,8 +51,8 @@ async function getLocationFromIP(
 async function getCitiesFromAPI(): Promise<City[]> {
   try {
     const cities = await cityService.getCities();
+    console.log("Villes récupérées depuis l'API:", cities.length);
 
-    // Convertir les City en format attendu pour le calcul de distance
     return cities.filter(
       (city) => city.location.latitude && city.location.longitude
     );
@@ -67,7 +69,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<NearestCitiesResponse>
 ) {
-  if (req.method !== "GET") {
+  if (req.method !== "GET" && req.method !== "POST") {
     return res.status(405).json({
       success: false,
       error: "Méthode non autorisée",
@@ -75,35 +77,66 @@ export default async function handler(
   }
 
   try {
-    let clientIp = requestIp.getClientIp(req);
-    const testIp = req.query.testIp as string;
+    let userLocation: { lat: number; lon: number; source: "IP" | "GPS" };
 
-    if (process.env.NODE_ENV === "development" && testIp) {
-      clientIp = testIp;
-    }
+    // Si c'est une requête POST avec coordonnées GPS
+    if (req.method === "POST" && req.body.latitude && req.body.longitude) {
+      console.log("📍 Utilisation des coordonnées GPS précises");
+      userLocation = {
+        lat: req.body.latitude,
+        lon: req.body.longitude,
+        source: "GPS",
+      };
+    } else {
+      // Fallback vers géolocalisation IP
+      console.log("🌐 Utilisation de la géolocalisation IP");
 
-    if (
-      !clientIp ||
-      ((clientIp === "127.0.0.1" || clientIp === "::1") && !testIp)
-    ) {
-      if (process.env.NODE_ENV === "development") {
-        clientIp = "8.8.8.8";
-      } else {
+      let clientIp = requestIp.getClientIp(req);
+      const testIp = req.query.testIp as string;
+
+      // Gestion IP de développement
+      if (process.env.NODE_ENV === "development" && testIp) {
+        clientIp = testIp;
+      }
+
+      if (
+        !clientIp ||
+        ((clientIp === "127.0.0.1" || clientIp === "::1") && !testIp)
+      ) {
+        if (process.env.NODE_ENV === "development") {
+          clientIp = "8.8.8.8"; // IP de test pour le développement
+        } else {
+          return res.status(200).json({
+            success: false,
+            error: "Impossible de déterminer la localisation (IP locale)",
+          });
+        }
+      }
+
+      console.log("🌍 Géolocalisation pour IP:", clientIp);
+
+      // Récupérer la géolocalisation IP
+      const location = await getLocationFromIP(clientIp);
+
+      if (!location) {
         return res.status(200).json({
           success: false,
-          error: "Impossible de déterminer la localisation (IP locale)",
+          error: "Impossible de géolocaliser l'adresse IP",
         });
       }
+
+      userLocation = {
+        lat: location.lat,
+        lon: location.lon,
+        source: "IP",
+      };
     }
 
-    const location = await getLocationFromIP(clientIp);
-
-    if (!location) {
-      return res.status(200).json({
-        success: false,
-        error: "Impossible de géolocaliser l'adresse IP",
-      });
-    }
+    console.log(
+      `📍 Localisation ${userLocation.source}:`,
+      userLocation.lat,
+      userLocation.lon
+    );
 
     // Récupérer les villes depuis l'API
     const cities = await getCitiesFromAPI();
@@ -115,12 +148,12 @@ export default async function handler(
       });
     }
 
-    // Calculer les distances et trouver les 4 villes les plus proches (< 50km)
+    // Calculer les distances et trouver les villes proches
     const citiesWithDistance = cities.map((city) => ({
       ...city,
       distance: calculateHaversineDistance(
-        location.lat,
-        location.lon,
+        userLocation.lat,
+        userLocation.lon,
         city.location.latitude || 0,
         city.location.longitude || 0
       ),
@@ -141,19 +174,27 @@ export default async function handler(
     // Fallback si aucune ville proche trouvée
     const fallbackCities = ["Nice", "Cannes", "Marseille", "Lyon"];
 
+    console.log(
+      "🏙️ Ville la plus proche:",
+      nearestCity.name,
+      "(" + Math.round(nearestCity.distance) + "km)"
+    );
+    console.log("🎯 Villes proches:", nearbyCities);
+
     return res.status(200).json({
       success: true,
       data: {
         currentCity: nearestCity.name,
         nearbyCities: nearbyCities.length > 0 ? nearbyCities : fallbackCities,
         userLocation: {
-          latitude: location.lat,
-          longitude: location.lon,
+          latitude: userLocation.lat,
+          longitude: userLocation.lon,
         },
+        locationType: userLocation.source,
       },
     });
   } catch (error) {
-    console.error("Erreur dans l'API nearest-city:", error);
+    console.error("❌ Erreur dans l'API nearest-city:", error);
     return res.status(500).json({
       success: false,
       error: "Erreur interne du serveur",
