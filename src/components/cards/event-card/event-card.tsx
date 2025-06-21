@@ -37,7 +37,11 @@ export default function EventCard({ id, event, minify }: EventCardProps) {
         </div>
         <Image src={niceImage} className="banner" alt="Event image" />
       </div>
-      <div className="flex flex-col gap-1 flex-1 justify-between p-2">
+      <div
+        className={`flex flex-col flex-1 p-2 ${
+          minify ? "gap-1" : "justify-between gap-1"
+        }`}
+      >
         <div className="flex items-center justify-between gap-2">
           <div className="title">{event.name}</div>
           <Bookmark className="icon" />
@@ -49,7 +53,7 @@ export default function EventCard({ id, event, minify }: EventCardProps) {
           note={event.organizer.note}
           imageUrl={event.organizer.imageUrl}
         />
-        <div className="flex flex-wrap gap-2">
+        <div className={`flex flex-wrap ${minify ? "gap-1" : "gap-2"}`}>
           <div className="info">
             <MapPin className="icon-small" />
             <span>{event.address}</span>

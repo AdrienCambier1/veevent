@@ -1,5 +1,5 @@
 import ProfileImg from "@/components/images/profile-img/profile-img";
-import { SingleUser } from "@/types";
+import { BaseUser, SingleUser } from "@/types";
 import Link from "next/link";
 import EventCardLine from "../event-card-line/event-card-line";
 import { useOrganizerEvents } from "@/hooks/useOrganizerEvents";

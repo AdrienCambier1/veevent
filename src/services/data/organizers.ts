@@ -1,4 +1,6 @@
-export const mockOrganizers = [
+import { SingleUser } from "@/types";
+
+export const mockOrganizers: SingleUser[] = [
   {
     id: 10,
     lastName: "Martin",

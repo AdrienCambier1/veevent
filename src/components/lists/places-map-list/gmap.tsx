@@ -14,13 +14,16 @@ import { Place } from "@/types";
 
 interface GmapsProps {
   locations: Place[];
-  onMarkerClick?: (placeId: string) => void;
+  onMarkerClick?: (placeId: number) => void;
 }
 
 export default function Gmaps({ locations, onMarkerClick }: GmapsProps) {
   const defaultCenter =
     locations.length > 0
-      ? { lat: locations[0].location.lat, lng: locations[0].location.lng }
+      ? {
+          lat: locations[0].location.latitude ?? 0,
+          lng: locations[0].location.longitude ?? 0,
+        }
       : { lat: 0, lng: 0 };
 
   return (
@@ -41,14 +44,14 @@ export default function Gmaps({ locations, onMarkerClick }: GmapsProps) {
 
 const PoiMarkers = (props: {
   pois: Place[];
-  onMarkerClick?: (placeId: string) => void;
+  onMarkerClick?: (placeId: number) => void;
 }) => {
   const map = useMap();
   const [markers, setMarkers] = useState<{ [key: string]: Marker }>({});
   const clusterer = useRef<MarkerClusterer | null>(null);
 
   const handleClick = useCallback(
-    (placeId: string) => {
+    (placeId: number) => {
       return (ev: google.maps.MapMouseEvent) => {
         if (!map) return;
         if (!ev.latLng) return;
@@ -82,7 +85,12 @@ const PoiMarkers = (props: {
 
     // Ajouter tous les points à la bounds
     props.pois.forEach((poi) => {
-      bounds.extend(new google.maps.LatLng(poi.location.lat, poi.location.lng));
+      bounds.extend(
+        new google.maps.LatLng(
+          poi.location.latitude ?? 0,
+          poi.location.longitude ?? 0
+        )
+      );
     });
 
     // Ajuster la carte pour afficher tous les points
@@ -101,7 +109,7 @@ const PoiMarkers = (props: {
     );
   }, [map, props.pois]);
 
-  const setMarkerRef = (marker: Marker | null, key: string) => {
+  const setMarkerRef = (marker: Marker | null, key: number) => {
     if (marker && markers[key]) return;
     if (!marker && !markers[key]) return;
 
@@ -121,7 +129,10 @@ const PoiMarkers = (props: {
       {props.pois.map((poi: Place, index: number) => (
         <AdvancedMarker
           key={poi.id}
-          position={poi.location}
+          position={{
+            lat: poi.location.latitude ?? 0,
+            lng: poi.location.longitude ?? 0,
+          }}
           ref={(marker) => setMarkerRef(marker, poi.id)}
           clickable={true}
           onClick={handleClick(poi.id)}

@@ -7,11 +7,11 @@ import {
   SingleUser,
   EventStatus,
 } from "@/types";
-import mockEvents from "@/services/data/events.js";
-import { mockOrganizers } from "@/services/data/organizers.js";
+import mockEvents from "@/services/data/events";
+import { mockOrganizers } from "@/services/data/organizers";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
-const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true";
+const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
 
 // Fonction utilitaire pour formater la date
 const formatEventDate = (dateString: string): string => {

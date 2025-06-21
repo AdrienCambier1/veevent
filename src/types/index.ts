@@ -37,12 +37,6 @@ export interface NearestCitiesResponse {
   error?: string;
 }
 
-// Interface pour les coordonnées géographiques
-interface Location {
-  lat: number;
-  lng: number;
-}
-
 // Interface existante Place (pour usage local/UI)
 export interface PlaceWithLocation {
   id: string;
@@ -131,47 +125,68 @@ export interface EventFilters {
 
 // === INTERFACES POUR LES VILLES ===
 
+// Interface pour la localisation
+export interface Location {
+  latitude: number | null;
+  longitude: number | null;
+}
+
 // Interface de base pour une ville (propriétés communes API)
 export interface BaseCity {
   name: string;
   postalCode: string;
   region: string;
   country: string;
-  description: string;
+  bannerUrl?: string | null;
+  imageUrl?: string | null;
+  content?: string | null;
 }
 
-// Ville dans la liste API (sans id direct)
+// Ville dans la liste API (avec id et propriétés supplémentaires)
 export interface City extends BaseCity {
+  id: number;
+  location: Location;
+  eventsCount: number;
+  eventsPastCount: number;
+  nearestCities: string[];
   _links: {
     self: EventLink;
   };
 }
 
-// Ville détaillée (avec plus de liens)
+// Ville détaillée (structure similaire mais potentiellement avec plus de liens)
 export interface SingleCity extends BaseCity {
+  id: number;
+  location: Location;
+  eventsCount: number;
+  eventsPastCount: number;
+  nearestCities: string[];
   _links: {
     self: EventLink;
-    cities: EventLink;
-    places: EventLink;
-    events: EventLink;
+    cities?: EventLink;
+    places?: EventLink;
+    events?: EventLink;
   };
 }
 
 export interface CitiesEmbedded {
-  cities: City[]; // Corrigé: "cities" au lieu de "categories"
+  cityResponses: City[];
 }
 
 export interface CitiesResponse {
   _embedded: CitiesEmbedded;
   _links: {
     self: EventLink;
-    events: EventLink;
   };
 }
 
 // Interface pour l'objet City final unifié (sans métadonnées HATEOAS)
 export interface CityData extends BaseCity {
   id: string | number;
+  location?: Location;
+  eventsCount?: number;
+  eventsPastCount?: number;
+  nearestCities?: string[];
 }
 
 // === INTERFACES POUR LES LIEUX ===
@@ -179,20 +194,31 @@ export interface CityData extends BaseCity {
 // Interface de base pour un lieu (propriétés communes API)
 export interface BasePlace {
   name: string;
-  description: string;
   address: string;
+  type?: string | null;
+  location: Location;
+  eventsCount: number;
+  eventsPastCount: number;
+  cityName: string;
+  bannerUrl?: string | null;
+  imageUrl: string;
+  content?: string | null;
 }
 
-// Lieu dans la liste API (sans id direct)
+// Lieu dans la liste API (avec id)
 export interface Place extends BasePlace {
+  id: number;
   _links: {
     self: EventLink;
+    places: EventLink;
+    city: EventLink;
     events: EventLink;
   };
 }
 
-// Lieu détaillé (structure similaire à la liste mais avec plus de liens)
+// Lieu détaillé (même structure que Place pour cette API)
 export interface SinglePlace extends BasePlace {
+  id: number;
   _links: {
     self: EventLink;
     places: EventLink;
@@ -202,16 +228,19 @@ export interface SinglePlace extends BasePlace {
 }
 
 export interface PlacesEmbedded {
-  places: Place[];
+  placeResponses: Place[]; // Changé de "places" à "placeResponses"
 }
 
 export interface PlacesResponse {
   _embedded: PlacesEmbedded;
   _links: {
     self: EventLink;
-    cities: EventLink;
-    events: EventLink;
   };
+}
+
+// Interface pour l'objet Place final unifié (sans métadonnées HATEOAS)
+export interface PlaceData extends BasePlace {
+  id: string | number;
 }
 
 // === INTERFACES POUR LES CATÉGORIES ===
@@ -262,16 +291,7 @@ export interface BaseUser {
   imageUrl?: string | null;
   bannerUrl?: string | null;
   note?: number | null;
-}
-
-// Utilisateur dans la liste API (sans id direct)
-export interface User extends BaseUser {
-  isOrganizer: boolean;
-  socials: string | null;
-  role: UserRole;
-  _links: {
-    self: EventLink;
-  };
+  role?: UserRole;
 }
 
 // Utilisateur détaillé (avec id et champs supplémentaires)
@@ -284,15 +304,15 @@ export interface SingleUser extends BaseUser {
   organizer?: boolean; // Nommé différemment de isOrganizer
   _links?: {
     self: EventLink;
-    users: EventLink;
-    events: EventLink;
-    categories: EventLink;
-    invitations: EventLink;
+    users?: EventLink;
+    events?: EventLink;
+    categories?: EventLink;
+    invitations?: EventLink;
   };
 }
 
 export interface UsersEmbedded {
-  users: User[];
+  userResponses: SingleUser[]; // Changé pour correspondre à la réponse API
 }
 
 export interface UsersResponse {

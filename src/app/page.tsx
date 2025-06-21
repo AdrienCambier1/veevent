@@ -127,7 +127,7 @@ export default function Home() {
       return (
         <TrendingCard
           key={eventId}
-          organizer={event.organizer.pseudo}
+          organizer={event.organizer.pseudo || ""}
           city={event.address.split(",")[0] || event.address} // Extraction de la ville
           description={
             event.description.length > 50
@@ -274,7 +274,7 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           description="Lieux"
           title="Les lieux populaires proche de chez vous"
         />
-        <PlacesMapList />
+        {/* <PlacesMapList locations={locations} /> */}
       </section>
 
       <section className="wrapper">

@@ -17,6 +17,7 @@
   }
 
   &.minify {
+    @apply min-h-[260px] h-fit;
     .banner {
       @apply aspect-[32/9];
     }
