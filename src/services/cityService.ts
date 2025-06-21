@@ -9,7 +9,7 @@ import {
 import { mockCities } from "@/services/data/cities";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
-const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
+const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true";
 
 export const cityService = {
   async getCities(): Promise<City[]> {
