@@ -1,14 +1,50 @@
 "use client";
 import SearchInput from "@/components/inputs/search-input/search-input";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
+import { useEvents } from "@/hooks/useEvents";
+import { Event } from "@/types";
+
+// Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
+const extractIdFromSelfLink = (event: Event): string => {
+  const href = event._links.self.href;
+  const id = href.split("/").pop();
+  return id || "";
+};
 
 function EvenementsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
+
+  const {
+    events: popularEvents,
+    loading: popularLoading,
+    error: popularError,
+  } = useEvents("popular");
+  const {
+    events: dealEvents,
+    loading: dealLoading,
+    error: dealError,
+  } = useEvents("deals");
+  const {
+    events: freeEvents,
+    loading: freeLoading,
+    error: freeError,
+  } = useEvents("free");
+
+  // Filtrage des événements selon la recherche
+  const filteredEvents = useMemo(() => {
+    if (!searchTerm) return popularEvents;
+    return popularEvents.filter(
+      (event: Event) =>
+        event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.address?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [popularEvents, searchTerm]);
 
   useEffect(() => {
     const urlSearch = searchParams?.get("search");
@@ -29,6 +65,44 @@ function EvenementsPageContent() {
     setSearchTerm(e.target.value);
   };
 
+  const renderEventCards = (
+    events: Event[],
+    loading: boolean,
+    error: Error | null
+  ) => {
+    if (loading) {
+      return (
+        <div className="loading-skeleton">
+          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="error-message text-red-500 p-4">
+          Erreur lors du chargement des événements: {error.message}
+        </div>
+      );
+    }
+
+    if (!events || events.length === 0) {
+      return (
+        <div className="no-events text-gray-500 p-4">
+          Aucun événement trouvé
+        </div>
+      );
+    }
+
+    return events.map((event: Event) => {
+      const eventId = extractIdFromSelfLink(event);
+
+      return (
+        <EventCard key={eventId} id={eventId} event={event} minify={false} />
+      );
+    });
+  };
+
   return (
     <main>
       <section className="wrapper">
@@ -43,77 +117,17 @@ function EvenementsPageContent() {
           <span>Rechercher</span>
         </button>
       </section>
+
       <HorizontalList title="Les évènements populaires cette semaine">
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                                      semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                                      congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                                      consectetur. "
-          minify={false}
-          price={59}
-        />
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                                              consectetur. "
-          minify={false}
-          price={59}
-        />
+        {renderEventCards(filteredEvents, popularLoading, popularError)}
       </HorizontalList>
+
       <HorizontalList title="Les bonnes affaires de la semaine">
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                                      semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                                      congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                                      consectetur. "
-          minify={false}
-          price={59}
-        />
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                                              consectetur. "
-          minify={false}
-          price={59}
-        />
+        {renderEventCards(dealEvents, dealLoading, dealError)}
       </HorizontalList>
+
       <HorizontalList title="Sortez gratuitement ce week end">
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                                      semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                                      congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                                      consectetur. "
-          minify={false}
-          price={59}
-        />
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                                              consectetur. "
-          minify={false}
-          price={59}
-        />
+        {renderEventCards(freeEvents, freeLoading, freeError)}
       </HorizontalList>
     </main>
   );
@@ -121,7 +135,7 @@ function EvenementsPageContent() {
 
 export default function EvenementsPage() {
   return (
-    <Suspense fallback={<></>}>
+    <Suspense fallback={<div>Chargement de la page...</div>}>
       <EvenementsPageContent />
     </Suspense>
   );

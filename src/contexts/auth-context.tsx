@@ -8,31 +8,32 @@ import {
   useCallback,
 } from "react";
 import { jwtDecode } from "jwt-decode";
+import { UserData } from "@/types";
 
-interface Social {
-  name: string;
-  url: string;
-}
+// interface Social {
+//   name: string;
+//   url: string;
+// }
 
-interface User {
-  id: number;
-  name: string;
-  fistName: string;
-  pseudo: string;
-  email: string;
-  phone: string;
-  isOrganizer: boolean;
-  eventPastCount: number;
-  eventsCount: number;
-  description: string;
-  imageUrl: string;
-  bannerImgUrl: string;
-  socials: {
-    social: Social[];
-  };
-  themes: number[];
-  note: number;
-}
+// interface User {
+//   id: number;
+//   name: string;
+//   fistName: string;
+//   pseudo: string;
+//   email: string;
+//   phone: string;
+//   isOrganizer: boolean;
+//   eventPastCount: number;
+//   eventsCount: number;
+//   description: string;
+//   imageUrl: string;
+//   bannerImgUrl: string;
+//   socials: {
+//     social: Social[];
+//   };
+//   themes: number[];
+//   note: number;
+// }
 
 interface JWTPayload {
   sub: string;
@@ -56,7 +57,7 @@ interface RegisterData {
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: User | null;
+  user: UserData | null;
   token: string | null;
   loading: boolean;
   login: (
@@ -95,52 +96,55 @@ const clearSecureCookie = (name: string) => {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserData | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+
   // ✅ Fetch user data - sans throw
   const fetchUserData = useCallback(
-    async (authToken: string): Promise<User | null> => {
+    async (authToken: string): Promise<UserData | null> => {
       try {
         // 🔄 BACKEND: Décommenter quand API prête
-        // const response = await fetch('/api/user/profile', {
-        //   headers: { Authorization: `Bearer ${authToken}` }
-        // });
-        // if (!response.ok) {
-        //   console.error('Erreur API user profile:', response.status);
-        //   return null;
-        // }
-        // return await response.json();
+
+        const response = await fetch(`${apiUrl}/users/me`, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+        if (!response.ok) {
+          console.error("Erreur API user profile:", response.status);
+          return null;
+        }
+        return await response.json();
 
         // 🗑️ SIMULATION
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // await new Promise((resolve) => setTimeout(resolve, 500));
 
-        const fakeUserData: User = {
-          id: 1,
-          name: "Doe",
-          fistName: "John",
-          pseudo: "johndoe123",
-          email: "john.doe@mail.com",
-          phone: "+1234567890",
-          isOrganizer: true,
-          eventPastCount: 5,
-          eventsCount: 10,
-          description: "Je suis un organisateur d'événements passionné...",
-          imageUrl: "https://example.com/images/johndoe.jpg",
-          bannerImgUrl: "https://example.com/images/banner-johndoe.jpg",
-          socials: {
-            social: [
-              { name: "Facebook", url: "https://facebook.com/johndoe" },
-              { name: "Twitter", url: "https://twitter.com/johndoe" },
-              { name: "LinkedIn", url: "https://linkedin.com/in/johndoe" },
-            ],
-          },
-          themes: [1, 2, 3],
-          note: 4.5,
-        };
+        // const fakeUserData: UserData = {
+        //   id: 1,
+        //   lastName: "Doe",
+        //   firstName: "John",
+        //   pseudo: "johndoe123",
+        //   email: "john.doe@mail.com",
+        //   phone: "+1234567890",
+        //   isOrganizer: true,
+        //   eventPastCount: 5,
+        //   eventsCount: 10,
+        //   description: "Je suis un organisateur d'événements passionné...",
+        //   imageUrl: "https://example.com/images/johndoe.jpg",
+        //   bannerUrl: "https://example.com/images/banner-johndoe.jpg",
+        //   // socials: {
+        //   //   social: [
+        //   //     { name: "Facebook", url: "https://facebook.com/johndoe" },
+        //   //     { name: "Twitter", url: "https://twitter.com/johndoe" },
+        //   //     { name: "LinkedIn", url: "https://linkedin.com/in/johndoe" },
+        //   //   ],
+        //   // },
+        //   categories: [{ key: "music", name: "Concert", id: 1 }],
+        //   note: 4.5,
+        // };
 
-        return fakeUserData;
+        // return fakeUserData;
       } catch (error) {
         console.error("Erreur récupération données utilisateur:", error);
         return null;
@@ -227,45 +231,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         // 🔄 BACKEND: Décommenter quand API prête
-        // const response = await fetch('/api/auth/login', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify(credentials)
-        // });
-        //
-        // if (!response.ok) {
-        //   console.error('Erreur login:', response.status);
-        //   return false;
-        // }
-        //
-        // const { token: authToken } = await response.json();
+        const apiUrl =
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+        const response = await fetch(`${apiUrl}/api/v1/auth/authenticate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(credentials),
+        });
 
-        const jwtPayload: JWTPayload = {
-          sub: credentials.email,
-          id: 1,
-          email: credentials.email,
-          exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-          iat: Math.floor(Date.now() / 1000),
-        };
+        if (!response.ok) {
+          console.error("Erreur login:", response.status);
+          return false;
+        }
 
-        const payloadBase64 = btoa(JSON.stringify(jwtPayload))
-          .replace(/\+/g, "-")
-          .replace(/\//g, "_")
-          .replace(/=+$/, "");
+        const { token: authToken } = await response.json();
 
-        const simulatedToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
+        // const jwtPayload: JWTPayload = {
+        //   sub: credentials.email,
+        //   id: 1,
+        //   email: credentials.email,
+        //   exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
+        //   iat: Math.floor(Date.now() / 1000),
+        // };
 
-        const userData = await fetchUserData(simulatedToken);
+        // const payloadBase64 = btoa(JSON.stringify(jwtPayload))
+        //   .replace(/\+/g, "-")
+        //   .replace(/\//g, "_")
+        //   .replace(/=+$/, "");
+
+        // const simulatedToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
+
+        const userData = await fetchUserData(authToken);
 
         if (!userData) {
           console.error("Impossible de récupérer les données utilisateur");
           return false;
         }
 
-        localStorage.setItem("token", simulatedToken);
-        setSecureCookie("auth_token", simulatedToken, 24 * 60 * 60);
+        localStorage.setItem("token", authToken);
+        setSecureCookie("auth_token", authToken, 24 * 60 * 60);
 
-        setToken(simulatedToken);
+        setToken(authToken);
         setUser(userData);
         setIsAuthenticated(true);
 
@@ -298,59 +304,61 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         // 🔄 BACKEND: Décommenter quand API prête
-        // const response = await fetch('/api/auth/register', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify(data)
-        // });
-        //
-        // if (!response.ok) {
-        //   console.error('Erreur register:', response.status);
-        //   return false;
-        // }
+        const response = await fetch(`${apiUrl}/api/v1/auth/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          console.error("Erreur register:", response.status);
+          return false;
+        }
 
         // 🗑️ SIMULATION
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        const jwtPayload: JWTPayload = {
-          sub: data.email,
-          id: Math.floor(Math.random() * 1000),
-          email: data.email,
-          exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-          iat: Math.floor(Date.now() / 1000),
-        };
+        // const jwtPayload: JWTPayload = {
+        //   sub: data.email,
+        //   id: Math.floor(Math.random() * 1000),
+        //   email: data.email,
+        //   exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
+        //   iat: Math.floor(Date.now() / 1000),
+        // };
 
-        const payloadBase64 = btoa(JSON.stringify(jwtPayload))
-          .replace(/\+/g, "-")
-          .replace(/\//g, "_")
-          .replace(/=+$/, "");
+        // const payloadBase64 = btoa(JSON.stringify(jwtPayload))
+        //   .replace(/\+/g, "-")
+        //   .replace(/\//g, "_")
+        //   .replace(/=+$/, "");
 
-        const simulatedToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
+        // const simulatedToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
 
-        const newUserData: User = {
-          id: jwtPayload.id,
-          name: data.name,
-          fistName: data.firstName,
-          pseudo: data.email.split("@")[0],
-          email: data.email,
-          phone: "",
-          isOrganizer: false,
-          eventPastCount: 0,
-          eventsCount: 0,
-          description: "",
-          imageUrl: "",
-          bannerImgUrl: "",
-          socials: { social: [] },
-          themes: [],
-          note: 0,
-        };
+        const { token: authToken } = await response.json();
 
-        localStorage.setItem("token", simulatedToken);
-        setSecureCookie("auth_token", simulatedToken, 24 * 60 * 60);
+        // const newUserData: UserData = {
+        //   id: jwtPayload.id,
+        //   lastName: data.name,
+        //   firstName: data.firstName,
+        //   pseudo: data.email.split("@")[0],
+        //   email: data.email,
+        //   phone: "",
+        //   isOrganizer: false,
+        //   eventPastCount: 0,
+        //   eventsCount: 0,
+        //   description: "",
+        //   imageUrl: "",
+        //   bannerUrl: "",
+        //   // socials: { social: [] },
+        //   categories: [],
+        //   note: 0,
+        // };
 
-        setToken(simulatedToken);
-        setUser(newUserData);
-        setIsAuthenticated(true);
+        localStorage.setItem("token", authToken);
+        setSecureCookie("auth_token", authToken, 24 * 60 * 60);
+
+        setToken(authToken);
+        // setUser(newUserData);
+        setIsAuthenticated(false); // L'utilisateur n'est pas authentifié immédiatement après l'inscription
 
         if (typeof window !== "undefined") {
           window.location.href = redirectPath;

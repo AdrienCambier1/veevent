@@ -19,6 +19,10 @@ export default function ProfilesImg({
       ? actualTotalCount - visibleImages.length
       : 0;
 
+  if (totalCount === 0 || actualTotalCount === 0) {
+    return <p className="text-primary-600 font-medium ">Aucun participant</p>;
+  }
+
   return (
     <div className="flex items-center gap-2 relative">
       <div className="flex -space-x-2">

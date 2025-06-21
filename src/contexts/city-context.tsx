@@ -1,55 +1,35 @@
 "use client";
+import { City, NearestCitiesResponse } from "@/types";
+import { cityService } from "@/services/cityService";
+import { useGeolocation } from "@/hooks/useGeolocation";
 import {
   createContext,
   useContext,
   useState,
   useEffect,
   ReactNode,
+  useCallback,
 } from "react";
 
-interface City {
-  name: string;
-  value: string;
-  events?: number;
-}
-
-interface NearestCitiesResponse {
-  success: boolean;
-  data?: {
-    currentCity: string;
-    nearbyCities: string[];
-    userLocation: {
-      latitude: number;
-      longitude: number;
-    };
-  };
-  error?: string;
-}
-
 interface CityContextType {
-  cities: City[];
-  selectedCity: City;
-  currentCity: string;
+  selectedCity: City | undefined;
+  currentCity: string | undefined;
   nearbyCities: string[];
   changeCity: (city: City) => void;
   loading: boolean;
   geoLoading: boolean;
+  // ✅ Ajouter les erreurs et fonctions manquantes
+  geoError: string | null;
+  clearGeoError: () => void;
+  userLocation: { latitude: number; longitude: number } | undefined;
+  locationType: "GPS" | "IP" | undefined;
+  requestPreciseLocation: () => Promise<void>;
+  disablePreciseLocation: () => Promise<void>;
+  canUsePreciseLocation: boolean;
+  isGpsEnabled: boolean;
 }
 
 const CityContext = createContext<CityContextType | undefined>(undefined);
-
-const cityList: City[] = [
-  { name: "Toutes les villes", value: "all", events: 24 },
-  { name: "Paris", value: "paris", events: 10 },
-  { name: "Nice", value: "nice", events: 2 },
-  { name: "Marseille", value: "marseille", events: 5 },
-  { name: "Lille", value: "lille", events: 3 },
-  { name: "Lyon", value: "lyon", events: 4 },
-  { name: "Cannes", value: "cannes", events: 1 },
-  { name: "Boulogne-Billancourt", value: "boulogne-billancourt", events: 2 },
-  { name: "Toulouse", value: "toulouse", events: 3 },
-  { name: "Bordeaux", value: "bordeaux", events: 2 },
-];
 
 export function useCity(): CityContextType {
   const context = useContext(CityContext);
@@ -64,83 +44,249 @@ interface CityProviderProps {
 }
 
 export function CityProvider({ children }: CityProviderProps) {
-  const [selectedCity, setSelectedCity] = useState<City>({
-    name: "Toutes les villes",
-    value: "all",
-  });
-  const [currentCity, setCurrentCity] = useState<string>("Nice");
-  const [nearbyCities, setNearbyCities] = useState<string[]>([
-    "Nice",
-    "Cannes",
-    "Marseille",
-    "Lyon",
-  ]);
+  const [selectedCity, setSelectedCity] = useState<City | undefined>();
+  const [currentCity, setCurrentCity] = useState<string | undefined>();
+  const [nearbyCities, setNearbyCities] = useState<string[]>([]);
+  const [userLocation, setUserLocation] = useState<
+    { latitude: number; longitude: number } | undefined
+  >();
+  const [locationType, setLocationType] = useState<"GPS" | "IP" | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [geoLoading, setGeoLoading] = useState<boolean>(false);
+  const [isGpsEnabled, setIsGpsEnabled] = useState<boolean>(false);
+  const [geoError, setGeoError] = useState<string | null>(null);
 
-  // Fonction pour récupérer les villes à proximité
-  const fetchNearestCities = async () => {
+  const {
+    getCurrentPosition,
+    supported: canUsePreciseLocation,
+    loading: geoHookLoading,
+    error: geoErrorFromHook,
+    clearError,
+    position,
+  } = useGeolocation();
+
+  // Fonction pour récupérer les villes à proximité via géolocalisation GPS précise
+  const fetchNearestCitiesWithGPS = async (
+    latitude: number,
+    longitude: number
+  ) => {
     try {
-      setGeoLoading(true);
+      console.log("📍 Envoi des coordonnées GPS précises...");
+
+      const response = await fetch("/api/nearest-city", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ latitude, longitude }),
+      });
+
+      const data: NearestCitiesResponse = await response.json();
+      return data;
+    } catch (error) {
+      console.error("❌ Erreur lors de l'envoi des coordonnées GPS:", error);
+      return null;
+    }
+  };
+
+  // Fonction pour récupérer les villes à proximité via géolocalisation IP
+  const fetchNearestCitiesWithIP = async () => {
+    try {
+      console.log("🌐 Utilisation de la géolocalisation IP...");
+
       const response = await fetch("/api/nearest-city");
       const data: NearestCitiesResponse = await response.json();
+      return data;
+    } catch (error) {
+      console.error("❌ Erreur lors de la géolocalisation IP:", error);
+      return null;
+    }
+  };
 
-      if (data.success && data.data) {
-        setCurrentCity(data.data.currentCity);
-        setNearbyCities(data.data.nearbyCities);
+  // Fonction pour traiter la réponse de géolocalisation
+  const processLocationData = async (data: NearestCitiesResponse) => {
+    if (data.success && data.data) {
+      console.log("✅ Villes proches récupérées:", data.data);
 
-        // Mettre à jour la ville sélectionnée si elle correspond à une ville proche
-        const foundCity = cityList.find(
-          (city) =>
-            city.name.toLowerCase() === data.data!.currentCity.toLowerCase()
+      setCurrentCity(data.data.currentCity);
+      setNearbyCities(data.data.nearbyCities);
+      setUserLocation(data.data.userLocation);
+      setLocationType(data.data.locationType);
+
+      // Si une ville actuelle est détectée, essayer de la récupérer depuis l'API
+      if (data.data.currentCity) {
+        try {
+          const cityData = await cityService.getCityByName(
+            data.data.currentCity
+          );
+          if (cityData) {
+            console.log(
+              "🎯 Ville détectée sélectionnée automatiquement:",
+              cityData.name
+            );
+            setSelectedCity(cityData);
+            localStorage.setItem("selectedCity", JSON.stringify(cityData));
+          }
+        } catch (error) {
+          console.warn(
+            "⚠️ Impossible de récupérer les détails de la ville détectée:",
+            error
+          );
+        }
+      }
+    } else {
+      console.warn("⚠️ Géolocalisation échouée:", data.error);
+    }
+  };
+
+  // Fonction principale pour récupérer les villes proches (IP UNIQUEMENT)
+  const fetchNearestCities = async () => {
+    try {
+      setLoading(true);
+      console.log("🔍 Recherche des villes proches via IP...");
+
+      // Utiliser UNIQUEMENT la géolocalisation IP au chargement
+      const locationData = await fetchNearestCitiesWithIP();
+
+      if (locationData) {
+        await processLocationData(locationData);
+      }
+    } catch (error) {
+      console.error(
+        "❌ Erreur lors de la récupération des villes proches:",
+        error
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fonction pour demander une géolocalisation précise améliorée
+  const requestPreciseLocation = useCallback(async () => {
+    if (!canUsePreciseLocation) {
+      console.warn("⚠️ Géolocalisation GPS non disponible");
+      return;
+    }
+
+    try {
+      // ✅ Effacer les erreurs précédentes
+      clearError();
+
+      console.log("🎯 Demande de géolocalisation précise...");
+
+      const gpsPosition = await getCurrentPosition();
+
+      // ✅ Vérifier si on a une erreur du hook
+      if (!gpsPosition && geoErrorFromHook) {
+        console.error("❌ Erreur de géolocalisation:", geoErrorFromHook);
+        setGeoError(geoErrorFromHook);
+        return;
+      }
+
+      if (gpsPosition) {
+        const locationData = await fetchNearestCitiesWithGPS(
+          gpsPosition.latitude,
+          gpsPosition.longitude
         );
-        if (foundCity) {
-          setSelectedCity(foundCity);
-          localStorage.setItem("selectedCity", JSON.stringify(foundCity));
+
+        if (locationData && locationData.success) {
+          await processLocationData(locationData);
+          setIsGpsEnabled(true);
+          localStorage.setItem("gpsEnabled", "true");
+          console.log("✅ Géolocalisation GPS activée");
+        } else {
+          console.error("❌ Erreur API nearest-city:", locationData?.error);
         }
       }
     } catch (error) {
-      console.error("Erreur lors de la récupération des villes:", error);
-      // Garder les valeurs par défaut en cas d'erreur
+      console.error("❌ Erreur lors de la géolocalisation précise:", error);
+    }
+  }, [canUsePreciseLocation, getCurrentPosition, clearError, geoErrorFromHook]);
+
+  // Fonction pour désactiver la géolocalisation précise
+  const disablePreciseLocation = useCallback(async () => {
+    try {
+      setLoading(true);
+      console.log("🌐 Retour à la géolocalisation IP...");
+
+      // Revenir à la géolocalisation IP
+      const locationData = await fetchNearestCitiesWithIP();
+
+      if (locationData) {
+        await processLocationData(locationData);
+        setIsGpsEnabled(false);
+        localStorage.removeItem("gpsEnabled");
+        console.log("✅ Géolocalisation GPS désactivée, retour à l'IP");
+      }
+    } catch (error) {
+      console.error("❌ Erreur lors de la désactivation GPS:", error);
     } finally {
-      setGeoLoading(false);
+      setLoading(false);
+    }
+  }, []);
+
+  // Fonction pour restaurer la ville depuis localStorage
+  const restoreSelectedCity = async () => {
+    const storedCity = localStorage.getItem("selectedCity");
+    if (storedCity) {
+      try {
+        const parsedCity = JSON.parse(storedCity) as City;
+        console.log("💾 Ville restaurée depuis localStorage:", parsedCity.name);
+
+        const cityData = await cityService.getCityById(parsedCity.id);
+        if (cityData) {
+          setSelectedCity(parsedCity);
+        } else {
+          localStorage.removeItem("selectedCity");
+        }
+      } catch (error) {
+        console.error("❌ Erreur lors de la restauration de la ville:", error);
+        localStorage.removeItem("selectedCity");
+      }
     }
   };
 
   useEffect(() => {
-    const initializeCities = async () => {
-      // Récupérer la ville stockée
-      const storedCity = localStorage.getItem("selectedCity");
-      if (storedCity) {
-        try {
-          const parsedCity = JSON.parse(storedCity) as City;
-          setSelectedCity(parsedCity);
-        } catch (error) {
-          console.error("Erreur de parsing de la ville:", error);
-        }
-      }
+    const initializeCityContext = async () => {
+      console.log("🚀 Initialisation du contexte City...");
 
-      // Récupérer les villes à proximité
+      // Restaurer l'état GPS depuis localStorage
+      const gpsEnabled = localStorage.getItem("gpsEnabled") === "true";
+      setIsGpsEnabled(gpsEnabled);
+
+      // 1. Restaurer la ville sélectionnée depuis localStorage
+      await restoreSelectedCity();
+
+      // 2. Récupérer les villes proches via géolocalisation IP UNIQUEMENT
       await fetchNearestCities();
+
       setLoading(false);
+      console.log("✅ Contexte City initialisé");
     };
 
-    initializeCities();
+    initializeCityContext();
   }, []);
 
   const changeCity = (city: City): void => {
+    console.log("🔄 Changement de ville vers:", city.name);
     setSelectedCity(city);
     localStorage.setItem("selectedCity", JSON.stringify(city));
   };
 
   const value: CityContextType = {
-    cities: cityList,
     selectedCity,
     currentCity,
     nearbyCities,
+    userLocation,
+    locationType,
     changeCity,
     loading,
-    geoLoading,
+    geoLoading: geoHookLoading, // ✅ Utiliser le loading du hook
+    geoError, // ✅ Exposer les erreurs
+    clearGeoError: clearError, // ✅ Fonction de reset
+    requestPreciseLocation,
+    disablePreciseLocation,
+    canUsePreciseLocation,
+    isGpsEnabled,
   };
 
   return <CityContext.Provider value={value}>{children}</CityContext.Provider>;

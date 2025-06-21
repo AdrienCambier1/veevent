@@ -4,6 +4,7 @@ import BarMenu from "@/components/menu/bar-menu/bar-menu";
 import BannerHead from "@/components/heads/banner-head/banner-head";
 import banner from "@/assets/images/banner_profile.png";
 import ProfileHead from "@/components/heads/profile-head/profile-head";
+import { useAuth } from "@/contexts/auth-context";
 
 interface CompteLayoutProps {
   children: ReactNode;
@@ -17,11 +18,13 @@ export default function CompteLayout({ children }: CompteLayoutProps) {
     { label: "My Veevent", href: "/compte/my-veevent" },
   ];
 
+  const user = useAuth().user;
+
   return (
     <main>
       <BannerHead bannerImage={banner} />
       <section className="wrapper">
-        <ProfileHead isMe={true} />
+        <ProfileHead isMe={true} user={user} />
       </section>
       <section className="wrapper">
         <BarMenu navigation={navigation} />

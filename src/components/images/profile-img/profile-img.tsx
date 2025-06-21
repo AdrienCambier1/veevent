@@ -5,9 +5,9 @@ import RatingStars from "@/components/common/rating-stars/rating-stars";
 type SizeOption = "base" | "sm" | "xs";
 
 interface ProfileImgProps {
-  imageUrl?: string;
+  imageUrl?: string | null;
   name: string;
-  note?: number;
+  note?: number | null;
   size?: SizeOption;
 }
 
@@ -27,12 +27,21 @@ export default function ProfileImg({
 
   return (
     <div className="flex items-center gap-2">
-      <Image
-        src={imageUrl || profilePicture}
-        alt={`Profile picture of ${name}`}
-        className="profile-pic"
-      />
-      {note && (
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt="Profile picture"
+          className={`profile-pic ${iconSize}`}
+        />
+      )}
+      {!imageUrl && (
+        <Image
+          src={profilePicture}
+          alt={`Profile picture of ${name}`}
+          className="profile-pic"
+        />
+      )}
+      {note !== null && (
         <div className="flex flex-col justify-center">
           <p className="text-base font-medium">{name}</p>
           <RatingStars note={note} size="xs" />

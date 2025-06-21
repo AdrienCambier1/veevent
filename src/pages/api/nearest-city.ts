@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import requestIp from "request-ip";
-import { City, GeolocationResponse, NearestCitiesResponse } from "../../types";
+import { cityService } from "@/services/cityService";
+import { City, GeolocationResponse, NearestCitiesResponse } from "@/types";
 
 // Fonction pour calculer la distance avec la formule de Haversine
 function calculateHaversineDistance(
@@ -34,6 +35,8 @@ async function getLocationFromIP(
     );
     const data: GeolocationResponse = await response.json();
 
+    console.log("🌐 Réponse de l'API de géolocalisation IP:", data);
+
     if (data.status === "success") {
       return data;
     }
@@ -44,184 +47,29 @@ async function getLocationFromIP(
   }
 }
 
-async function getCitiesFromDatabase(): Promise<City[]> {
-  return [
-    {
-      id: "1",
-      name: "Paris",
-      latitude: 48.8566,
-      longitude: 2.3522,
-      country: "France",
-      region: "Île-de-France",
-    },
-    {
-      id: "2",
-      name: "Boulogne-Billancourt",
-      latitude: 48.8356,
-      longitude: 2.2395,
-      country: "France",
-      region: "Île-de-France",
-    },
-    {
-      id: "3",
-      name: "Versailles",
-      latitude: 48.8014,
-      longitude: 2.1301,
-      country: "France",
-      region: "Île-de-France",
-    },
-    {
-      id: "4",
-      name: "Saint-Denis",
-      latitude: 48.9362,
-      longitude: 2.3574,
-      country: "France",
-      region: "Île-de-France",
-    },
-    {
-      id: "5",
-      name: "Créteil",
-      latitude: 48.7909,
-      longitude: 2.4553,
-      country: "France",
-      region: "Île-de-France",
-    },
-    {
-      id: "6",
-      name: "Nanterre",
-      latitude: 48.8924,
-      longitude: 2.2069,
-      country: "France",
-      region: "Île-de-France",
-    },
-    {
-      id: "7",
-      name: "Meaux",
-      latitude: 48.9606,
-      longitude: 2.8779,
-      country: "France",
-      region: "Île-de-France",
-    },
-    {
-      id: "8",
-      name: "Melun",
-      latitude: 48.5394,
-      longitude: 2.6594,
-      country: "France",
-      region: "Île-de-France",
-    },
-    {
-      id: "9",
-      name: "Nice",
-      latitude: 43.7102,
-      longitude: 7.262,
-      country: "France",
-      region: "Provence-Alpes-Côte d'Azur",
-    },
-    {
-      id: "10",
-      name: "Cannes",
-      latitude: 43.5528,
-      longitude: 7.0174,
-      country: "France",
-      region: "Provence-Alpes-Côte d'Azur",
-    },
-    {
-      id: "11",
-      name: "Antibes",
-      latitude: 43.5804,
-      longitude: 7.1251,
-      country: "France",
-      region: "Provence-Alpes-Côte d'Azur",
-    },
-    {
-      id: "12",
-      name: "Monaco",
-      latitude: 43.7384,
-      longitude: 7.4246,
-      country: "Monaco",
-      region: "Monaco",
-    },
-    {
-      id: "13",
-      name: "Marseille",
-      latitude: 43.2965,
-      longitude: 5.3698,
-      country: "France",
-      region: "Provence-Alpes-Côte d'Azur",
-    },
-    {
-      id: "14",
-      name: "Aix-en-Provence",
-      latitude: 43.5297,
-      longitude: 5.4474,
-      country: "France",
-      region: "Provence-Alpes-Côte d'Azur",
-    },
-    {
-      id: "15",
-      name: "Toulon",
-      latitude: 43.1242,
-      longitude: 5.928,
-      country: "France",
-      region: "Provence-Alpes-Côte d'Azur",
-    },
-    {
-      id: "16",
-      name: "Lyon",
-      latitude: 45.764,
-      longitude: 4.8357,
-      country: "France",
-      region: "Auvergne-Rhône-Alpes",
-    },
-    {
-      id: "17",
-      name: "Villeurbanne",
-      latitude: 45.7665,
-      longitude: 4.8795,
-      country: "France",
-      region: "Auvergne-Rhône-Alpes",
-    },
-    {
-      id: "18",
-      name: "Toulouse",
-      latitude: 43.6047,
-      longitude: 1.4442,
-      country: "France",
-      region: "Occitanie",
-    },
-    {
-      id: "19",
-      name: "Bordeaux",
-      latitude: 44.8378,
-      longitude: -0.5792,
-      country: "France",
-      region: "Nouvelle-Aquitaine",
-    },
-    {
-      id: "20",
-      name: "Nantes",
-      latitude: 47.2184,
-      longitude: -1.5536,
-      country: "France",
-      region: "Pays de la Loire",
-    },
-    {
-      id: "21",
-      name: "Montpellier",
-      latitude: 43.6108,
-      longitude: 3.8767,
-      country: "France",
-      region: "Occitanie",
-    },
-  ];
+// Fonction pour récupérer les villes depuis l'API via cityService
+async function getCitiesFromAPI(): Promise<City[]> {
+  try {
+    const cities = await cityService.getCities();
+    console.log("Villes récupérées depuis l'API:", cities.length);
+
+    return cities.filter(
+      (city) => city.location.latitude && city.location.longitude
+    );
+  } catch (error) {
+    console.error(
+      "Erreur lors de la récupération des villes depuis l'API:",
+      error
+    );
+    return [];
+  }
 }
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<NearestCitiesResponse>
 ) {
-  if (req.method !== "GET") {
+  if (req.method !== "GET" && req.method !== "POST") {
     return res.status(405).json({
       success: false,
       error: "Méthode non autorisée",
@@ -229,46 +77,85 @@ export default async function handler(
   }
 
   try {
-    let clientIp = requestIp.getClientIp(req);
-    const testIp = req.query.testIp as string;
+    let userLocation: { lat: number; lon: number; source: "IP" | "GPS" };
 
-    if (process.env.NODE_ENV === "development" && testIp) {
-      clientIp = testIp;
-    }
+    // Si c'est une requête POST avec coordonnées GPS
+    if (req.method === "POST" && req.body.latitude && req.body.longitude) {
+      console.log("📍 Utilisation des coordonnées GPS précises");
+      userLocation = {
+        lat: req.body.latitude,
+        lon: req.body.longitude,
+        source: "GPS",
+      };
+    } else {
+      // Fallback vers géolocalisation IP
+      console.log("🌐 Utilisation de la géolocalisation IP");
 
-    if (
-      !clientIp ||
-      ((clientIp === "127.0.0.1" || clientIp === "::1") && !testIp)
-    ) {
-      if (process.env.NODE_ENV === "development") {
-        clientIp = "8.8.8.8";
-      } else {
+      let clientIp = requestIp.getClientIp(req);
+      const testIp = req.query.testIp as string;
+
+      // Gestion IP de développement
+      if (process.env.NODE_ENV === "development" && testIp) {
+        clientIp = testIp;
+      }
+
+      if (
+        !clientIp ||
+        ((clientIp === "127.0.0.1" || clientIp === "::1") && !testIp)
+      ) {
+        if (process.env.NODE_ENV === "development") {
+          clientIp = "8.8.8.8"; // IP de test pour le développement
+        } else {
+          return res.status(200).json({
+            success: false,
+            error: "Impossible de déterminer la localisation (IP locale)",
+          });
+        }
+      }
+
+      console.log("🌍 Géolocalisation pour IP:", clientIp);
+
+      // Récupérer la géolocalisation IP
+      const location = await getLocationFromIP(clientIp);
+
+      if (!location) {
         return res.status(200).json({
           success: false,
-          error: "Impossible de déterminer la localisation (IP locale)",
+          error: "Impossible de géolocaliser l'adresse IP",
         });
       }
+
+      userLocation = {
+        lat: location.lat,
+        lon: location.lon,
+        source: "IP",
+      };
     }
 
-    const location = await getLocationFromIP(clientIp);
+    console.log(
+      `📍 Localisation ${userLocation.source}:`,
+      userLocation.lat,
+      userLocation.lon
+    );
 
-    if (!location) {
+    // Récupérer les villes depuis l'API
+    const cities = await getCitiesFromAPI();
+
+    if (cities.length === 0) {
       return res.status(200).json({
         success: false,
-        error: "Impossible de géolocaliser l'adresse IP",
+        error: "Aucune ville disponible",
       });
     }
 
-    const cities = await getCitiesFromDatabase();
-
-    // Calculer les distances et trouver les 4 villes les plus proches (< 50km)
+    // Calculer les distances et trouver les villes proches
     const citiesWithDistance = cities.map((city) => ({
       ...city,
       distance: calculateHaversineDistance(
-        location.lat,
-        location.lon,
-        city.latitude,
-        city.longitude
+        userLocation.lat,
+        userLocation.lon,
+        city.location.latitude || 0,
+        city.location.longitude || 0
       ),
     }));
 
@@ -284,22 +171,30 @@ export default async function handler(
       .slice(0, 4)
       .map((city) => city.name);
 
+    // Fallback si aucune ville proche trouvée
+    const fallbackCities = ["Nice", "Cannes", "Marseille", "Lyon"];
+
+    console.log(
+      "🏙️ Ville la plus proche:",
+      nearestCity.name,
+      "(" + Math.round(nearestCity.distance) + "km)"
+    );
+    console.log("🎯 Villes proches:", nearbyCities);
+
     return res.status(200).json({
       success: true,
       data: {
         currentCity: nearestCity.name,
-        nearbyCities:
-          nearbyCities.length > 0
-            ? nearbyCities
-            : ["Nice", "Cannes", "Marseille", "Lyon"],
+        nearbyCities: nearbyCities.length > 0 ? nearbyCities : fallbackCities,
         userLocation: {
-          latitude: location.lat,
-          longitude: location.lon,
+          latitude: userLocation.lat,
+          longitude: userLocation.lon,
         },
+        locationType: userLocation.source,
       },
     });
   } catch (error) {
-    console.error("Erreur dans l'API nearest-city:", error);
+    console.error("❌ Erreur dans l'API nearest-city:", error);
     return res.status(500).json({
       success: false,
       error: "Erreur interne du serveur",

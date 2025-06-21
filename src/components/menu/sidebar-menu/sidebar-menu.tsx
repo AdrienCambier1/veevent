@@ -1,25 +1,28 @@
 "use client";
-import "./sidebar-menu.scss";
-import { Xmark, City, MapPin } from "iconoir-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useSidebar } from "@/contexts/sidebar-context";
-import { useCity } from "@/contexts/city-context";
-import Link from "next/link";
-import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
+import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import { useCity } from "@/contexts/city-context";
+import { useSidebar } from "@/contexts/sidebar-context";
+import { AnimatePresence, motion } from "framer-motion";
+import { City, MapPin, Xmark } from "iconoir-react";
+import Link from "next/link";
+import "./sidebar-menu.scss";
 
 export default function SidebarMenu() {
   const { isOpen, closeSidebar } = useSidebar();
-  const { currentCity, nearbyCities, geoLoading, changeCity } = useCity();
 
-  const handleCitySelect = (cityName: string) => {
-    const cityObject = {
-      name: cityName,
-      value: cityName.toLowerCase().replace(/\s+/g, "-"),
-    };
-    changeCity(cityObject);
-    closeSidebar();
-  };
+  const {
+    currentCity,
+    nearbyCities,
+    geoLoading,
+    geoError, // ✅ Récupérer l'erreur
+    clearGeoError, // ✅ Fonction de reset
+    locationType,
+    requestPreciseLocation,
+    disablePreciseLocation,
+    canUsePreciseLocation,
+    isGpsEnabled,
+  } = useCity();
 
   const overlayVariants = {
     hidden: { opacity: 0 },
@@ -81,6 +84,16 @@ export default function SidebarMenu() {
     },
   };
 
+  const handleGpsToggle = async () => {
+    if (geoLoading) return;
+
+    if (isGpsEnabled) {
+      await disablePreciseLocation();
+    } else {
+      await requestPreciseLocation();
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -113,7 +126,9 @@ export default function SidebarMenu() {
               </button>
               <div className="city-selector">
                 <City strokeWidth={2} />
-                <span>{geoLoading ? "Localisation..." : currentCity}</span>
+                <div className="city-info">
+                  <span>{geoLoading ? "Localisation..." : currentCity}</span>
+                </div>
               </div>
             </motion.div>
 
@@ -135,7 +150,6 @@ export default function SidebarMenu() {
                   key={city}
                   variants={itemVariants}
                   custom={index}
-                  onClick={() => handleCitySelect(city)}
                   style={{ cursor: "pointer" }}
                 >
                   <TextImageCard
@@ -159,19 +173,62 @@ export default function SidebarMenu() {
               </motion.div>
             </motion.ul>
 
-            <motion.div
-              className="sidebar-footer"
-              variants={itemVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-            >
-              <button className="geo-button">
-                <MapPin />
-                {geoLoading
-                  ? "Localisation en cours..."
-                  : "Actualiser la géolocalisation"}
-              </button>
+            <motion.div className="sidebar-footer" variants={itemVariants}>
+              {geoError && (
+                <motion.div variants={itemVariants}>
+                  <div className="text-red-500 flex gap-1 text-xs">
+                    <span>{geoError}</span>
+                    <button onClick={clearGeoError} className="error-dismiss">
+                      ✕
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {canUsePreciseLocation && (
+                <div className="geo-section">
+                  {isGpsEnabled ? (
+                    <div className="gps-active">
+                      <div className="gps-status">
+                        <MapPin className="gps-icon active" />
+                        <span className="gps-text">
+                          Géolocalisation précise activée
+                        </span>
+                      </div>
+                      <button
+                        className="geo-button disable"
+                        onClick={handleGpsToggle}
+                        disabled={geoLoading}
+                      >
+                        {geoLoading
+                          ? "Désactivation..."
+                          : "Désactiver la géolocalisation"}
+                      </button>
+                      <p className="geo-info">
+                        Vos coordonnées GPS sont utilisées pour une localisation
+                        précise
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="gps-inactive">
+                      <button
+                        className="geo-button enable"
+                        onClick={handleGpsToggle}
+                        disabled={geoLoading}
+                      >
+                        <MapPin />
+                        {geoLoading
+                          ? "Activation..."
+                          : "Utiliser la géolocalisation précise"}
+                      </button>
+                      <p className="geo-info">
+                        Autorisez la géolocalisation pour une localisation plus
+                        précise
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
             </motion.div>
           </motion.div>
         </>

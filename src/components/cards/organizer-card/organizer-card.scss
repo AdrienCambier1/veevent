@@ -8,7 +8,7 @@
   .profile-stats {
     @apply flex text-xs text-center;
     div {
-      @apply flex flex-col gap-1 text-gray-500  flex-1 relative px-4;
+      @apply flex flex-col gap-1 text-gray-500  flex-1 relative px-4 text-nowrap;
       line-height: 0.8;
 
       &:not(:last-child)::after {
