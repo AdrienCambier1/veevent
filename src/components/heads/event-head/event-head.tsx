@@ -2,13 +2,16 @@ import ProfileImg from "@/components/images/profile-img/profile-img";
 import "./event-head.scss";
 import { MapPin, Calendar, Bookmark } from "iconoir-react";
 import ThemeTag from "@/components/tags/theme-tag/theme-tag";
+import { BaseCategory, BaseUser } from "@/types";
 
 interface EventHeadProps {
   title: string;
   location: string;
   date: string;
-  price: number;
+  price: number | undefined;
   interested?: number;
+  organizer: BaseUser;
+  categories: BaseCategory[];
 }
 
 export default function EventHead({
@@ -17,11 +20,23 @@ export default function EventHead({
   date,
   price,
   interested,
+  organizer,
+  categories,
 }: EventHeadProps) {
   return (
     <section className="event-head wrapper">
-      <ThemeTag category="music" onEventCard={true} /> <h1>{title}</h1>
-      <ProfileImg name="Marie N." note={4} />
+      <div className="flex flex-wrap gap-2">
+        {categories.map((category: BaseCategory, index: number) => (
+          <ThemeTag
+            key={`${category.key}-${index}`}
+            category={category.key}
+            name={category.name}
+            onEventCard={true}
+          />
+        ))}
+      </div>
+      <h1>{title}</h1>
+      <ProfileImg name={organizer.pseudo || ""} note={organizer.note} />
       <div className="flex flex-col gap-2">
         <div className="info">
           <MapPin className="icon-small" />
@@ -34,7 +49,11 @@ export default function EventHead({
       </div>
       <div className="flex gap-2">
         <button className="primary-btn flex-1">
-          <span>À partir de {price}€</span>
+          {price === 0 ? (
+            <span>Gratuit</span>
+          ) : (
+            <span>À partir de {price}€</span>
+          )}
         </button>
         <button className="secondary-btn flex-1">
           <Bookmark />
@@ -43,7 +62,7 @@ export default function EventHead({
       </div>
       {interested && (
         <p className="interested">
-          <span>{interested}</span> sont intéressé·e·s
+          <span>{interested} personnes</span> sont intéressé·e·s
         </p>
       )}
     </section>

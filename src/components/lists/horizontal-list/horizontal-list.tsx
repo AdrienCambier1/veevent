@@ -21,7 +21,7 @@ export default function HorizontalList({
   const childrenArray = React.Children.toArray(children);
 
   return (
-    <section className="horizontal-list gap-0">
+    <section className="horizontal-list gap-0 ">
       <div className="wrapper pb-0">
         {description ? (
           <CustomTitle title={title} description={description} />
@@ -30,7 +30,7 @@ export default function HorizontalList({
         )}
       </div>
 
-      <div className="swiper-container">
+      <div className="swiper-container ">
         <Swiper
           modules={[FreeMode, Mousewheel, Keyboard]}
           slidesPerView="auto"

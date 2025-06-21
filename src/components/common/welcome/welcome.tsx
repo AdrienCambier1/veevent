@@ -14,7 +14,7 @@ export default function Welcome() {
   return (
     <div className="welcome">
       <p className="hello">
-        Bonjour {isAuthenticated ? user?.fistName || user?.name : "visiteur"} !
+        Bonjour {isAuthenticated ? user?.firstName || user?.lastName : ""} !
       </p>
 
       {!isAuthenticated ? (

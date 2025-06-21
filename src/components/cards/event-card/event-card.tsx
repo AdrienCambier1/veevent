@@ -1,72 +1,76 @@
 import niceImage from "@/assets/images/nice.jpg";
-import ProfilesImg from "@/components/images/profiles-img/profiles-img";
 import ProfileImg from "@/components/images/profile-img/profile-img";
+import ProfilesImg from "@/components/images/profiles-img/profiles-img";
 import ThemeTag from "@/components/tags/theme-tag/theme-tag";
+import { BaseCategory, Event } from "@/types";
 import { ArrowUpRight, Bookmark, Calendar, MapPin } from "iconoir-react";
 import Image from "next/image";
-import "./event-card.scss";
 import Link from "next/link";
+import "./event-card.scss";
+import { useSlugify } from "@/hooks/useSlugify";
 
 interface EventCardProps {
-  title: string;
-  description?: string;
-  location: string;
-  date: string;
-  price: number;
+  id: string;
+  event: Event;
   minify?: boolean;
-  imageUrl?: string; // Optional since it's not being used currently
-  link?: string; // Optional for linking to event details
 }
 
-const themes: string[] = [
-  "live_music",
-  "cinema",
-  "sport",
-  "education",
-  "sponsored",
-];
-
-export default function EventCard({
-  title,
-  description,
-  location,
-  date,
-  price,
-  minify,
-  imageUrl,
-  link = "/evenements/1",
-}: EventCardProps) {
+export default function EventCard({ id, event, minify }: EventCardProps) {
+  const nameSlug = useSlugify(event.name);
   return (
-    <Link href={link} className={`event-card ${minify ? "minify" : ""}`}>
+    <Link
+      href={`/evenements/${id}/${nameSlug}`}
+      className={`event-card ${minify ? "minify" : ""}`}
+    >
       <div className="image-container">
         <div className="theme-tags">
-          {themes.map((theme, index) => {
-            return <ThemeTag key={index} category={theme} onEventCard={true} />;
+          {event.categories.map((category: BaseCategory, index: number) => {
+            return (
+              <ThemeTag
+                key={`${category.key}-${index}`}
+                category={category.key}
+                name={category.name}
+                onEventCard={true}
+              />
+            );
           })}
         </div>
         <Image src={niceImage} className="banner" alt="Event image" />
       </div>
-      <div className="flex flex-col gap-2 p-2">
+      <div className="flex flex-col gap-1 flex-1 justify-between p-2">
         <div className="flex items-center justify-between gap-2">
-          <div className="title">{title}</div>
+          <div className="title">{event.name}</div>
           <Bookmark className="icon" />
         </div>
-        <ProfileImg name="Marie N." note={4} />
+        <ProfileImg
+          name={
+            `${event.organizer.firstName} ${event.organizer.lastName}` || ""
+          }
+          note={event.organizer.note}
+        />
         <div className="flex flex-wrap gap-2">
           <div className="info">
             <MapPin className="icon-small" />
-            <span>{location}</span>
+            <span>{event.address}</span>
           </div>
           <div className="info">
             <Calendar className="icon-small" />
-            <span>{date}</span>
+            <span>{event.date}</span>
           </div>
         </div>
-        {!minify && description && <p className="description">{description}</p>}
+        {!minify && event.description && (
+          <p className="description">{event.description}</p>
+        )}
         <div className="flex items-center justify-between gap-2">
-          {!minify && <ProfilesImg totalCount={8} />}
+          {!minify && <ProfilesImg totalCount={event.currentParticipants} />}
           <p className="price">
-            À partir de <span>{price} €</span>
+            {event.price === 0 ? (
+              <span>Gratuit</span>
+            ) : (
+              <>
+                À partir de <span>{event.price} €</span>
+              </>
+            )}
           </p>
           {minify && <ArrowUpRight className="text-lg" />}
         </div>

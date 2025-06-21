@@ -23,9 +23,121 @@ import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import FaqCard from "@/components/cards/faq-card/faq-card";
 import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import { useAuth } from "@/contexts/auth-context";
+import { useEvents } from "@/hooks/useEvents";
+import { Event } from "@/types";
 
 export default function Home() {
   const { login, loading, isAuthenticated, logout } = useAuth();
+
+  // Récupération des événements par catégorie
+  const {
+    events: popularEvents,
+    loading: popularLoading,
+    error: popularError,
+  } = useEvents("popular");
+  const {
+    events: dealEvents,
+    loading: dealLoading,
+    error: dealError,
+  } = useEvents("deals");
+  const {
+    events: freeEvents,
+    loading: freeLoading,
+    error: freeError,
+  } = useEvents("free");
+
+  // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
+  const extractIdFromSelfLink = (event: Event): string => {
+    const href = event._links.self.href;
+    const id = href.split("/").pop();
+    return id || "";
+  };
+
+  // Fonction pour rendre les cartes d'événements
+  const renderEventCards = (
+    events: Event[],
+    loading: boolean,
+    error: Error | null
+  ) => {
+    if (loading) {
+      return (
+        <>
+          <div className="animate-pulse bg-gray-200 h-64 rounded"></div>
+          <div className="animate-pulse bg-gray-200 h-64 rounded"></div>
+          <div className="animate-pulse bg-gray-200 h-64 rounded"></div>
+        </>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="text-red-500 p-4">
+          Erreur lors du chargement des événements
+        </div>
+      );
+    }
+
+    if (!events || events.length === 0) {
+      return <div className="text-gray-500 p-4">Aucun événement trouvé</div>;
+    }
+
+    return events.slice(0, 6).map((event: Event) => {
+      const eventId = extractIdFromSelfLink(event);
+
+      return (
+        <EventCard id={eventId} key={eventId} event={event} minify={false} />
+      );
+    });
+  };
+
+  // Fonction pour rendre les cartes trending à partir des événements populaires
+  const renderTrendingCards = (
+    events: Event[],
+    loading: boolean,
+    error: Error | null
+  ) => {
+    if (loading) {
+      return (
+        <>
+          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+        </>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="text-red-500 p-4">
+          Erreur lors du chargement des événements populaires
+        </div>
+      );
+    }
+
+    if (!events || events.length === 0) {
+      return (
+        <div className="text-gray-500 p-4">
+          Aucun événement populaire trouvé
+        </div>
+      );
+    }
+
+    return events.slice(0, 3).map((event: Event) => {
+      const eventId = extractIdFromSelfLink(event);
+
+      return (
+        <TrendingCard
+          key={eventId}
+          organizer={event.organizer.pseudo}
+          city={event.address.split(",")[0] || event.address} // Extraction de la ville
+          description={
+            event.description.length > 50
+              ? event.description.substring(0, 50) + "..."
+              : event.description
+          }
+        />
+      );
+    });
+  };
 
   return (
     <main>
@@ -44,18 +156,11 @@ export default function Home() {
           <SearchBtn />
         </div>
       </section>
+
       <HorizontalList title="Les évènements populaires">
-        <TrendingCard
-          organizer="Mike Shinoda"
-          city="Paris"
-          description="Pour la première fois en France"
-        />
-        <TrendingCard
-          organizer="Mike Shinoda"
-          city="Paris"
-          description="Pour la première fois en France"
-        />
+        {renderTrendingCards(popularEvents, popularLoading, popularError)}
       </HorizontalList>
+
       <HorizontalList title="Envie d'une sortie">
         <ThemeCard category="music" />
         <ThemeCard category="sport" name="Aquaponey" />
@@ -63,74 +168,15 @@ export default function Home() {
         <ThemeCard category="sport" name="Aquaponey" />
         <ThemeCard category="sport" name="Aquaponey" />
       </HorizontalList>
-      <HorizontalList title="Proche de chez vous">
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                              consectetur. "
-          minify={false}
-          price={59}
-        />
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                              consectetur. "
-          minify={false}
-          price={59}
-        />
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                              consectetur. "
-          minify={false}
-          price={59}
-        />
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                              consectetur. "
-          minify={false}
-          price={59}
-        />
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                              consectetur. "
-          minify={false}
-          price={59}
-        />
-        <EventCard
-          title="Atelier fresque végétal"
-          location="Antibes"
-          date="vendredi 14 mai 2025 • 19h00"
-          description=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                              semper commodo velit ac facilisis. Nullam augue dui, bibendum vel
-                              congue vitae, lacinia vel nunc. Cras tristique ac ipsum nec
-                              consectetur. "
-          minify={false}
-          price={59}
-        />
+
+      <HorizontalList title="Les bonnes affaires de la semaine">
+        {renderEventCards(dealEvents, dealLoading, dealError)}
       </HorizontalList>
+
+      <HorizontalList title="Sortez gratuitement ce week-end">
+        {renderEventCards(freeEvents, freeLoading, freeError)}
+      </HorizontalList>
+
       {!isAuthenticated && (
         <section className="wrapper">
           <h2>Gérer vos évènements facilement</h2>
@@ -153,13 +199,13 @@ export default function Home() {
           title="Les sorties qui font la une"
         />
         <NewsCard
-          title="Les 5 artistes émergeants qui font le show sur la Côte d’Azur"
+          title="Les 5 artistes émergeants qui font le show sur la Côte d'Azur"
           description="Magis reges hoc pertinacior inquam nulla arcesilas nata hoc diodorus erit coercendi maximas quod. Et effectrix tanto est quid est modo voluptatem autem tanto familiares actione et credo si.
 Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pullum constructio atqui etiam istud iste... En lire plus"
           date="25/04/2025"
         />
         <NewsCard
-          title="Les 5 artistes émergeants qui font le show sur la Côte d’Azur"
+          title="Les 5 artistes émergeants qui font le show sur la Côte d'Azur"
           description="description courte le bouton ne s'affiche pas à voir si ça redirige vers une page ou ça affiche tout le texte"
           date="25/04/2025"
         />
@@ -167,6 +213,7 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           <span>Voir les actualités des évènements</span>
         </Link>
       </section>
+
       <HorizontalList title="Destinations tendances" description="Villes">
         <TextImageCard
           title="Nice"
@@ -211,6 +258,7 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           <span>Voir tous les avis</span>
         </Link>
       </section>
+
       <section className="wrapper">
         <CustomTitle
           title="Questions fréquentes de nos utilisateurs"
@@ -220,6 +268,7 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
         <FaqCard label="Comment acheter un billet de concert ?" />
         <FaqCard label="Comment acheter un billet de concert ?" />
       </section>
+
       <section className="wrapper">
         <CustomTitle
           description="Lieux"
@@ -227,6 +276,7 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
         />
         <PlacesMapList />
       </section>
+
       <section className="wrapper">
         <CustomTitle
           description="Newsletter"
@@ -245,15 +295,16 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           et consentez à recevoir des mises à jour.
         </p>
         <button className="primary-btn">
-          <span>S’inscrire à la newsletter</span>
+          <span>S'inscrire à la newsletter</span>
         </button>
       </section>
+
       <section className="wrapper">
         <CustomTitle
           description="Organisateurs populaires"
           title="Découvrez leurs derniers évènements"
         />
-        <OrganizerCard name="Jean-Baptiste" />
+        {/* <OrganizerCard name="Jean-Baptiste" /> */}
       </section>
 
       {/* Composants random */}
@@ -273,11 +324,11 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
           generateHref={(city) => `/cities/${city.toLowerCase()}`}
         />
 
-        <ProfileHead isMe={true} />
+        {/* <ProfileHead isMe={true} /> */}
 
         <TicketCard />
 
-        <PlaceCard
+        {/* <PlaceCard
           place={{
             id: "1",
             name: "Bar des artistes",
@@ -290,7 +341,7 @@ Cum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pu
             imageUrl: "/images/nice.jpg",
             eventsCount: 5,
           }}
-        />
+        /> */}
       </section>
     </main>
   );

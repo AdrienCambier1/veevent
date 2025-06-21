@@ -101,6 +101,10 @@ interface ThemeIcons {
 }
 
 const themeIcons: ThemeIcons = {
+  trending: {
+    icon: <FireFlame className="icon-small" />,
+    name: "Tendance",
+  },
   default: { icon: <Calendar className="icon-small" />, name: "Événement" },
 
   // Sports & Fitness
