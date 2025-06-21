@@ -11,7 +11,7 @@ import mockEvents from "@/services/data/events.js";
 import { mockOrganizers } from "@/services/data/organizers.js";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
-const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || true;
+const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true";
 
 // Fonction utilitaire pour formater la date
 const formatEventDate = (dateString: string): string => {
@@ -451,9 +451,10 @@ export const eventService = {
     return freeEvents;
   },
 
-  async getOrganizerByEvent(organizerPseudo: string): Promise<SingleUser> {
+  async getOrganizerByEvent(organizerHref: string): Promise<SingleUser> {
     try {
       if (useMockData) {
+        const organizerPseudo = organizerHref.split("/").pop() || "";
         const organizer = getOrganizerByPseudo(organizerPseudo);
         if (!organizer) {
           throw new Error("Organisateur non trouvé");
@@ -490,7 +491,7 @@ export const eventService = {
 
         return mappedOrganizer;
       }
-      const response = await fetch(`${apiUrl}/users/${organizerPseudo}`, {
+      const response = await fetch(organizerHref, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -509,8 +510,17 @@ export const eventService = {
         note: organizerData.note || 0,
         firstName: organizerData.firstName || "",
         lastName: organizerData.lastName || "",
+        description: organizerData.description || null,
+        imageUrl: organizerData.imageUrl || null,
+        bannerUrl: organizerData.bannerUrl || null,
+        email: organizerData.email,
+        phone: organizerData.phone,
+        socials: organizerData.socials || [],
+        categories: organizerData.categories || [],
+        organizer: true,
         eventPastCount: organizerData.eventPastCount || 0,
         eventsCount: organizerData.eventsCount || 0,
+        _links: organizerData._links,
       };
 
       return mappedOrganizer;

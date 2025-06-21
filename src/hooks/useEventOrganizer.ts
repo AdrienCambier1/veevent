@@ -26,9 +26,7 @@ export const useEventOrganizer = (
       setLoading(true);
       setError(null);
 
-      const organizerPseudo = organizerHref.split("/").pop() || "";
-
-      const data = await eventService.getOrganizerByEvent(organizerPseudo);
+      const data = await eventService.getOrganizerByEvent(organizerHref);
       setOrganizer(data);
     } catch (err) {
       console.error("❌ Error in useEventOrganizer:", err);

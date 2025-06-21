@@ -47,6 +47,7 @@ export default function EventCard({ id, event, minify }: EventCardProps) {
             `${event.organizer.firstName} ${event.organizer.lastName}` || ""
           }
           note={event.organizer.note}
+          imageUrl={event.organizer.imageUrl}
         />
         <div className="flex flex-wrap gap-2">
           <div className="info">
