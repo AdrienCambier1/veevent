@@ -1,6 +1,6 @@
-import { City } from "@/types";
+import { City, SingleCity } from "@/types";
 
-export const mockCities: City[] = [
+export const mockCities: SingleCity[] = [
   {
     id: 1,
     name: "Nice",
@@ -13,7 +13,7 @@ export const mockCities: City[] = [
     bannerUrl: null,
     imageUrl: null,
     content: null,
-    nearestCities: ["Cannes", "Antibes", "Monaco"],
+    nearestCities: [2, 3, 4],
     _links: {
       self: { href: "/cities/1" },
     },
@@ -30,7 +30,7 @@ export const mockCities: City[] = [
     bannerUrl: null,
     imageUrl: null,
     content: null,
-    nearestCities: ["Nice", "Antibes", "Grasse"],
+    nearestCities: [1, 3, 4],
     _links: {
       self: { href: "/cities/2" },
     },

@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import "./price-filter.scss";
+import { useFilters } from "@/contexts/FilterContext";
 
 export default function PriceFilter() {
+  const { tempFilters, updateTempFilters } = useFilters();
+
   const priceData = [
     5, 8, 12, 15, 18, 22, 25, 30, 35, 38, 42, 45, 48, 52, 55, 50, 45, 40, 35,
     30, 25, 20, 18, 15, 12, 10, 8, 5, 3, 1,
@@ -12,13 +15,59 @@ export default function PriceFilter() {
   const MAX_PRICE = priceData.length * 10;
   const PRICE_STEP = 10;
 
-  const [minPrice, setMinPrice] = useState<number>(MIN_PRICE);
-  const [maxPrice, setMaxPrice] = useState<number>(MAX_PRICE);
+  // Initialiser avec les valeurs du contexte ou les valeurs par défaut
+  const [minPrice, setMinPrice] = useState<number>(
+    tempFilters.minPrice ?? MIN_PRICE
+  );
+  const [maxPrice, setMaxPrice] = useState<number>(
+    tempFilters.maxPrice ?? MAX_PRICE
+  );
   const [isDragging, setIsDragging] = useState<string | null>(null);
-  const [showOnlyFree, setShowOnlyFree] = useState<boolean>(false);
+  const [showOnlyFree, setShowOnlyFree] = useState<boolean>(
+    tempFilters.minPrice === 0 && tempFilters.maxPrice === 0
+  );
 
   const sliderRef = useRef<HTMLDivElement>(null);
   const isMouseDownRef = useRef<boolean>(false);
+
+  // Synchroniser avec les filtres temporaires du contexte
+  useEffect(() => {
+    if (
+      tempFilters.minPrice !== undefined &&
+      tempFilters.minPrice !== minPrice
+    ) {
+      setMinPrice(tempFilters.minPrice);
+    }
+    if (
+      tempFilters.maxPrice !== undefined &&
+      tempFilters.maxPrice !== maxPrice
+    ) {
+      setMaxPrice(tempFilters.maxPrice);
+    }
+
+    // Détecter si "événements gratuits uniquement" est activé
+    const isFreeOnly = tempFilters.minPrice === 0 && tempFilters.maxPrice === 0;
+    if (isFreeOnly !== showOnlyFree) {
+      setShowOnlyFree(isFreeOnly);
+    }
+  }, [
+    tempFilters.minPrice,
+    tempFilters.maxPrice,
+    minPrice,
+    maxPrice,
+    showOnlyFree,
+  ]);
+
+  // Mettre à jour le contexte quand les prix changent
+  const updatePriceFilters = useCallback(
+    (newMinPrice: number, newMaxPrice: number) => {
+      updateTempFilters({
+        minPrice: newMinPrice,
+        maxPrice: newMaxPrice,
+      });
+    },
+    [updateTempFilters]
+  );
 
   const maxValue = Math.max(...priceData);
 
@@ -34,12 +83,16 @@ export default function PriceFilter() {
       const value = Math.round(percent * MAX_PRICE);
 
       if (isDragging === "min") {
-        setMinPrice(Math.min(value, maxPrice));
+        const newMinPrice = Math.min(value, maxPrice);
+        setMinPrice(newMinPrice);
+        updatePriceFilters(newMinPrice, maxPrice);
       } else if (isDragging === "max") {
-        setMaxPrice(Math.max(value, minPrice));
+        const newMaxPrice = Math.max(value, minPrice);
+        setMaxPrice(newMaxPrice);
+        updatePriceFilters(minPrice, newMaxPrice);
       }
     },
-    [isDragging, MAX_PRICE, maxPrice, minPrice]
+    [isDragging, MAX_PRICE, maxPrice, minPrice, updatePriceFilters]
   );
 
   const handleMouseUp = useCallback(() => {
@@ -64,9 +117,13 @@ export default function PriceFilter() {
     const distToMax = Math.abs(maxPrice - value);
 
     if (distToMin <= distToMax) {
-      setMinPrice(Math.min(value, maxPrice));
+      const newMinPrice = Math.min(value, maxPrice);
+      setMinPrice(newMinPrice);
+      updatePriceFilters(newMinPrice, maxPrice);
     } else {
-      setMaxPrice(Math.max(value, minPrice));
+      const newMaxPrice = Math.max(value, minPrice);
+      setMaxPrice(newMaxPrice);
+      updatePriceFilters(minPrice, newMaxPrice);
     }
   };
 
@@ -109,12 +166,16 @@ export default function PriceFilter() {
       const value = Math.round(percent * MAX_PRICE);
 
       if (isDragging === "min") {
-        setMinPrice(Math.min(value, maxPrice));
+        const newMinPrice = Math.min(value, maxPrice);
+        setMinPrice(newMinPrice);
+        updatePriceFilters(newMinPrice, maxPrice);
       } else if (isDragging === "max") {
-        setMaxPrice(Math.max(value, minPrice));
+        const newMaxPrice = Math.max(value, minPrice);
+        setMaxPrice(newMaxPrice);
+        updatePriceFilters(minPrice, newMaxPrice);
       }
     },
-    [isDragging, MAX_PRICE, maxPrice, minPrice]
+    [isDragging, MAX_PRICE, maxPrice, minPrice, updatePriceFilters]
   );
 
   const handleTouchEnd = useCallback(() => {
@@ -127,6 +188,41 @@ export default function PriceFilter() {
     document.removeEventListener("touchmove", handleTouchMove);
     document.removeEventListener("touchend", handleTouchEnd);
   }, [handleTouchMove]);
+
+  // Gérer le changement de "événements gratuits uniquement"
+  const handleFreeOnlyChange = useCallback(() => {
+    const newShowOnlyFree = !showOnlyFree;
+    setShowOnlyFree(newShowOnlyFree);
+
+    if (newShowOnlyFree) {
+      // Activer les événements gratuits uniquement
+      setMinPrice(0);
+      setMaxPrice(0);
+      updateTempFilters({
+        minPrice: 0,
+        maxPrice: 0,
+      });
+    } else {
+      // Désactiver et revenir aux valeurs par défaut
+      setMinPrice(MIN_PRICE);
+      setMaxPrice(MAX_PRICE);
+      updateTempFilters({
+        minPrice: undefined,
+        maxPrice: undefined,
+      });
+    }
+  }, [showOnlyFree, updateTempFilters, MIN_PRICE, MAX_PRICE]);
+
+  // Fonction pour effacer les filtres de prix
+  const clearPriceFilters = useCallback(() => {
+    setMinPrice(MIN_PRICE);
+    setMaxPrice(MAX_PRICE);
+    setShowOnlyFree(false);
+    updateTempFilters({
+      minPrice: undefined,
+      maxPrice: undefined,
+    });
+  }, [MIN_PRICE, MAX_PRICE, updateTempFilters]);
 
   useEffect(() => {
     return () => {
@@ -179,11 +275,27 @@ export default function PriceFilter() {
   const { count, total } = getFilteredEvents();
   const percentage = Math.round((count / total) * 100);
 
+  // Vérifier si des filtres de prix sont actifs
+  const hasPriceFilters =
+    minPrice !== MIN_PRICE || maxPrice !== MAX_PRICE || showOnlyFree;
+
   return (
     <div className={`price-filter ${showOnlyFree ? "disabled" : ""}`}>
       <div className="flex flex-col">
-        <h2 className="title">Fourchette de prix</h2>
-        <p className="subtitle">Prix par billet</p>
+        <div className="flex items-center justify-between">
+          <h2 className="title">Fourchette de prix</h2>
+          {hasPriceFilters && (
+            <button
+              onClick={clearPriceFilters}
+              className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+            >
+              Effacer
+            </button>
+          )}
+        </div>
+        <p className="subtitle">
+          Prix par billet • {percentage}% des événements ({count}/{total})
+        </p>
       </div>
 
       <div className="histogram">
@@ -240,8 +352,10 @@ export default function PriceFilter() {
       </div>
 
       <div className="labels">
-        <span className="label">{minPrice}€</span>
-        <span className="label">{maxPrice}€</span>
+        <span className="label">{showOnlyFree ? "0€" : `${minPrice}€`}</span>
+        <span className="label">
+          {showOnlyFree ? "Gratuit" : `${maxPrice}€`}
+        </span>
       </div>
 
       <label className="checkbox">
@@ -250,7 +364,7 @@ export default function PriceFilter() {
             type="checkbox"
             className="checkbox-input"
             checked={showOnlyFree}
-            onChange={() => setShowOnlyFree(!showOnlyFree)}
+            onChange={handleFreeOnlyChange}
           />
           <div className={`checkbox-box ${showOnlyFree ? "checked" : ""}`}>
             {showOnlyFree && (
@@ -265,7 +379,7 @@ export default function PriceFilter() {
             )}
           </div>
         </div>
-        <span className="checkbox-text">Événements gratuits uniquements</span>
+        <span className="checkbox-text">Événements gratuits uniquement</span>
       </label>
     </div>
   );

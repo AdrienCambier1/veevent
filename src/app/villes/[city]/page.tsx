@@ -8,7 +8,13 @@ import CustomTitle from "@/components/common/custom-title/custom-title";
 import TabList from "@/components/lists/tab-list/tab-list";
 import Link from "next/link";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
-import { Event } from "@/types";
+import { BaseUser, Event, SingleUser } from "@/types";
+import { useCityEvents } from "@/hooks/useCityEvents";
+import { FRENCH_REGIONS } from "@/constants/regions";
+import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import img from "@/assets/images/nice.jpg";
+import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
+import { useCityData } from "@/hooks/useCityData";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;
@@ -28,10 +34,26 @@ export default function CityPage() {
   // Hook pour récupérer les données de la ville
   const { city, events, nearestCities, loading, error } = useCity(cityName);
 
+  const { trendingEvents } = useCityEvents(cityName);
+  const { organizers: popularOrganizers } = useCityData(
+    cityName,
+    "organizers",
+    undefined,
+    3
+  );
+
   // Hook pour récupérer les villes par région (pour les TabList)
   const { cities: regionCities } = useCities("byRegion", {
-    region: city?.region || "Provence Alpes Côte d'azur",
+    region: city?.region || "",
   });
+  const slugify = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "") // Supprimer les caractères spéciaux
+      .replace(/\s+/g, "-") // Remplacer les espaces par des tirets
+      .replace(/-+/g, "-") // Remplacer les tirets multiples par un seul
+      .trim(); // Supprimer les espaces au début et à la fin
+  };
 
   // Fonction pour rendre les EventCards (inspirée de la page événements)
   const renderEventCards = (
@@ -92,16 +114,12 @@ export default function CityPage() {
     );
   }
 
-  // Séparer les événements populaires (les 4 premiers) du reste
-  const popularEvents = events.slice(0, 4);
-  const otherEvents = events.slice(4);
-
   return (
     <>
       {/* Section des événements populaires en horizontal */}
-      {popularEvents.length > 0 && (
+      {trendingEvents.length > 0 && (
         <HorizontalList title={`Les évènements populaires à ${city.name}`}>
-          {renderEventCards(popularEvents, false, null)}
+          {renderEventCards(trendingEvents, false, null)}
         </HorizontalList>
       )}
 
@@ -120,40 +138,48 @@ export default function CityPage() {
 
       {/* Section tous les événements */}
       <section className="wrapper">
-        <h2>Les évènements à {city.name}</h2>
-
-        {events.length === 0 ? (
-          <p>Aucun événement disponible pour le moment à {city.name}.</p>
-        ) : (
-          <>
-            {/* Afficher les autres événements s'il y en a */}
-            {otherEvents.length > 0 &&
-              renderEventCards(otherEvents, false, null)}
-
-            {/* Si pas d'événements populaires, afficher tous les événements ici */}
-            {popularEvents.length === 0 &&
-              renderEventCards(events, false, null)}
-          </>
-        )}
-
         {/* Villes proches */}
         {nearestCities.length > 0 && (
           <>
             <h3>Villes proches de {city.name}</h3>
-            <TabList
-              title="Villes à proximité"
-              items={nearestCities}
-              generateHref={(cityName) =>
-                `/villes/${cityName.toLowerCase().replace(" ", "-")}`
-              }
-            />
+            {nearestCities.map(
+              (nearestCity) =>
+                nearestCity.eventsCount > 0 && (
+                  <TextImageCard
+                    key={nearestCity.id}
+                    title={nearestCity.name}
+                    subtitle={`${nearestCity.eventsCount} événement${
+                      nearestCity.eventsCount > 1 ? "s" : ""
+                    }`}
+                    image={img}
+                    href={`/villes/${slugify(nearestCity.name)}`}
+                  />
+                )
+            )}
           </>
         )}
+      </section>
 
-        {/* Villes de la région */}
-        {regionCities.length > 0 && (
+      <section className="wrapper">
+        <CustomTitle
+          title={`Découvrez leurs derniers évènements sur ${city.name}`}
+          description={`Organisateurs populaires`}
+        />
+        {popularOrganizers.length > 0 &&
+          popularOrganizers.map((organizer: SingleUser) => (
+            <OrganizerCard key={organizer.id} organizer={organizer} />
+          ))}
+        <button className="secondary-btn">
+          <span>Voir tous les organisateurs</span>
+        </button>
+      </section>
+      {/* Villes de la région */}
+      {/* {regionCities.length > 0 && (
           <TabList
-            title={city.region}
+            title={
+              FRENCH_REGIONS[city.region as keyof typeof FRENCH_REGIONS] ||
+              city.region
+            }
             items={regionCities
               .filter((c) => c.name !== city.name) // Exclure la ville actuelle
               .map((c) => c.name)}
@@ -161,8 +187,7 @@ export default function CityPage() {
               `/villes/${cityName.toLowerCase().replace(" ", "-")}`
             }
           />
-        )}
-      </section>
+        )} */}
 
       {/* Section actualités */}
       <section className="wrapper">

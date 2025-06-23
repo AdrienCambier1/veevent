@@ -7,9 +7,16 @@
     input {
       @apply w-full outline-none placeholder:text-gray-400 border-none text-[16px] cursor-pointer;
     }
+    .search-icons {
+      @apply flex items-center gap-2;
 
-    .search-icon {
-      @apply text-primary-600 pointer-events-none;
+      .search-icon {
+        @apply text-primary-600 pointer-events-none;
+      }
+
+      .clear-button {
+        @apply text-primary-600 hover:text-primary-800 transition-colors duration-200;
+      }
     }
   }
 

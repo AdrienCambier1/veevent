@@ -3,6 +3,7 @@
 import BottomSheet from "@/components/common/bottom-sheet/bottom-sheet";
 import Filters from "./filters";
 import FilterFooter from "./filter-footer/filter-footer";
+import { useFilters } from "@/contexts/FilterContext";
 
 interface FilterBottomSheetProps {
   isOpen: boolean;
@@ -13,14 +14,15 @@ export default function FilterBottomSheet({
   isOpen,
   onClose,
 }: FilterBottomSheetProps) {
+  const { clearFilters, hasActiveFilters, applyFilters, hasTempChanges } = useFilters();
+
   const handleShowResults = () => {
+    applyFilters(); // Appliquer les filtres temporaires
     onClose();
-    // Logique pour appliquer les filtres et afficher les résultats
   };
 
   const handleClearAll = () => {
-    // Logique pour effacer tous les filtres
-    console.log("Effacer tous les filtres");
+    clearFilters();
   };
 
   return (
@@ -32,6 +34,8 @@ export default function FilterBottomSheet({
         <FilterFooter
           onShowResults={handleShowResults}
           onClearAll={handleClearAll}
+          hasActiveFilters={hasActiveFilters}
+          hasTempChanges={hasTempChanges}
         />
       </div>
     </BottomSheet>

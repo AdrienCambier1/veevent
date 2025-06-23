@@ -1,10 +1,12 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useCityEvents } from "@/hooks/useCityEvents";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import EventCard from "@/components/cards/event-card/event-card";
-import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import { Event } from "@/types";
+import { Filter } from "iconoir-react";
+import FilterBottomSheet from "@/components/common/filters/filter-bottom-sheet";
+import { FilterProvider, useFilters } from "@/contexts/FilterContext";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;
@@ -12,20 +14,38 @@ const extractIdFromSelfLink = (event: Event): string => {
   return id || "";
 };
 
-export default function EvenementsPage() {
+function EvenementsContent() {
   const { city: cityParam } = useParams() as { city: string };
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { appliedFilters, hasActiveFilters } = useFilters(); // Utiliser appliedFilters au lieu de filters
 
   // Décoder le paramètre URL et capitaliser
   const cityName = useMemo(() => {
-    return decodeURIComponent(cityParam)
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
+    return decodeURIComponent(cityParam);
   }, [cityParam]);
 
   // Hook pour récupérer les événements via les liens HATEOAS
-  const { city, allEvents, trendingEvents, otherEvents, loading, error } =
-    useCityEvents(cityName);
+  const {
+    city,
+    allEvents,
+    trendingEvents,
+    firstEditionEvents,
+    loading,
+    error,
+    applyFilters,
+  } = useCityEvents(cityName, {
+    fetchAll: true,
+    fetchTrending: true,
+    fetchFirstEdition: true,
+    filters: appliedFilters, // Utiliser appliedFilters
+  });
+
+  // Appliquer les filtres quand appliedFilters change
+  useMemo(() => {
+    if (Object.keys(appliedFilters).length > 0) {
+      applyFilters(appliedFilters);
+    }
+  }, [appliedFilters, applyFilters]);
 
   // Fonction pour rendre les EventCards
   const renderEventCards = useCallback(
@@ -70,11 +90,6 @@ export default function EvenementsPage() {
     [cityName]
   );
 
-  // Debug logs
-  console.log("All events:", allEvents.length);
-  console.log("Trending events:", trendingEvents.length);
-  console.log("Other events:", otherEvents.length);
-
   if (loading) {
     return (
       <div className="wrapper">
@@ -105,12 +120,59 @@ export default function EvenementsPage() {
         )}
       </section>
 
-      {/* Autres événements */}
-      {otherEvents.length > 0 && (
-        <HorizontalList title={`Tous les autres évènements à ${city.name}`}>
-          {renderEventCards(otherEvents, false, null, true)}
-        </HorizontalList>
-      )}
+      <section className="wrapper">
+        {/* Événements de première édition */}
+        <h2>Ils font leur début à {city.name}</h2>
+        {firstEditionEvents.length > 0 ? (
+          renderEventCards(firstEditionEvents, false, null, false)
+        ) : (
+          <p>Aucun événement de première édition pour le moment.</p>
+        )}
+      </section>
+
+      <section className="wrapper">
+        {/* Autres événements */}
+        <h2>Tous les événements à {city.name} et aux alentours</h2>
+        {/* Bouton de filtre */}
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setIsFilterOpen(true)}
+            className={`rounded-full border font-semibold px-2 py-1 flex items-center gap-2 ${
+              hasActiveFilters
+                ? "border-primary-600 bg-primary-600 text-white"
+                : "border-primary-600 text-primary-600"
+            }`}
+          >
+            <Filter className="text-xs" />
+            filtres & tris
+            {hasActiveFilters && (
+              <span className="bg-white text-primary-600 rounded-full px-1 text-xs">
+                •
+              </span>
+            )}
+          </button>
+        </div>
+        {allEvents.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {renderEventCards(allEvents, false, null, true)}
+          </div>
+        )}
+        {allEvents.length === 0 && hasActiveFilters && (
+          <p>Aucun événement ne correspond à vos critères de filtrage.</p>
+        )}
+      </section>
+      <FilterBottomSheet
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+      />
     </>
+  );
+}
+
+export default function EvenementsPage() {
+  return (
+    <FilterProvider>
+      <EvenementsContent />
+    </FilterProvider>
   );
 }

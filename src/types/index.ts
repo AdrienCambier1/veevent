@@ -122,6 +122,11 @@ export interface EventFilters {
   maxPrice?: number;
   startDate?: string;
   endDate?: string;
+  categories?: string[]; // Changé pour utiliser les clés des catégories
+  sortBy?: "date" | "price" | "popularity";
+  sortOrder?: "asc" | "desc";
+  cityName?: string;
+  placeName?: string;
 }
 
 // === INTERFACES POUR LES VILLES ===
@@ -161,7 +166,7 @@ export interface SingleCity extends BaseCity {
   location: Location;
   eventsCount: number;
   eventsPastCount: number;
-  nearestCities: string[];
+  nearestCities: number[];
   _links: {
     self: EventLink;
     cities?: EventLink;
@@ -171,7 +176,7 @@ export interface SingleCity extends BaseCity {
 }
 
 export interface CitiesEmbedded {
-  cityResponses: City[];
+  cityResponses: SingleCity[];
 }
 
 export interface CitiesResponse {

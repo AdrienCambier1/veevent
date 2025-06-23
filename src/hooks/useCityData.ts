@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { cityService } from "@/services/cityService";
-import { SingleCity, Event, Place } from "@/types";
+import { SingleCity, Event, Place, SingleUser } from "@/types";
 
 interface UseCityDataReturn {
   city: SingleCity | null;
@@ -21,12 +21,13 @@ export const useCityData = (
     startDate?: string;
     endDate?: string;
     categories?: string;
-  }
+  },
+  limit?: number
 ): UseCityDataReturn => {
   const [city, setCity] = useState<SingleCity | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
-  const [organizers, setOrganizers] = useState<any[]>([]);
+  const [organizers, setOrganizers] = useState<SingleUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -70,9 +71,10 @@ export const useCityData = (
           try {
             const cityEvents = await cityService.getEventsByCityLink(
               cityData._links.events.href,
-              stableFilters
+              stableFilters,
+              limit
             );
-            setEvents(cityEvents);
+            setEvents(limit ? cityEvents.slice(0, limit) : cityEvents);
           } catch (eventError) {
             console.warn(
               "Erreur lors du chargement des événements:",
@@ -87,10 +89,12 @@ export const useCityData = (
       if (dataType === "trending") {
         if (cityData._links?.events?.href) {
           try {
-            const trendingEvents = await cityService.getTrendingEventsByCityLink(
-              cityData._links.events.href
-            );
-            setEvents(trendingEvents);
+            const trendingEvents =
+              await cityService.getTrendingEventsByCityLink(
+                cityData._links.events.href,
+                limit
+              );
+            setEvents(limit ? trendingEvents.slice(0, limit) : trendingEvents);
           } catch (eventError) {
             console.warn(
               "Erreur lors du chargement des événements trending:",
@@ -105,9 +109,10 @@ export const useCityData = (
         if (cityData._links?.places?.href) {
           try {
             const cityPlaces = await cityService.getPlacesByCityLink(
-              cityData._links.places.href
+              cityData._links.places.href,
+              limit
             );
-            setPlaces(cityPlaces);
+            setPlaces(limit ? cityPlaces.slice(0, limit) : cityPlaces);
           } catch (placesError) {
             console.warn("Erreur lors du chargement des lieux:", placesError);
             setPlaces([]);
@@ -119,9 +124,10 @@ export const useCityData = (
         if (cityData._links?.events?.href) {
           try {
             const cityOrganizers = await cityService.getOrganizersByCityEvents(
-              cityData._links.events.href
+              cityData._links.events.href,
+              limit
             );
-            setOrganizers(cityOrganizers);
+            setOrganizers(limit ? cityOrganizers.slice(0, limit) : cityOrganizers);
           } catch (organizersError) {
             console.warn(
               "Erreur lors du chargement des organisateurs:",
@@ -140,7 +146,7 @@ export const useCityData = (
     } finally {
       setLoading(false);
     }
-  }, [cityName, dataType, stableFilters]);
+  }, [cityName, dataType, stableFilters, limit]);
 
   useEffect(() => {
     fetchCityData();

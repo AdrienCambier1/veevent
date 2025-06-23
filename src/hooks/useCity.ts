@@ -5,7 +5,7 @@ import { SingleCity, Event } from "@/types";
 interface UseCityReturn {
   city: SingleCity | null;
   events: Event[];
-  nearestCities: string[];
+  nearestCities: SingleCity[];
   loading: boolean;
   error: Error | null;
   refetch: () => void;
@@ -14,7 +14,7 @@ interface UseCityReturn {
 export const useCity = (cityName: string): UseCityReturn => {
   const [city, setCity] = useState<SingleCity | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
-  const [nearestCities, setNearestCities] = useState<string[]>([]);
+  const [nearestCities, setNearestCities] = useState<SingleCity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -33,7 +33,39 @@ export const useCity = (cityName: string): UseCityReturn => {
       }
 
       setCity(cityData);
-      setNearestCities(cityData.nearestCities || []);
+
+      // Récupérer les villes les plus proches
+      if (cityData.nearestCities && cityData.nearestCities.length > 0) {
+        try {
+          const nearestCitiesData = await Promise.all(
+            cityData.nearestCities.map(async (cityId: number) => {
+              try {
+                return await cityService.getCityById(cityId);
+              } catch (error) {
+                console.warn(
+                  `Erreur lors du chargement de la ville ${cityId}:`,
+                  error
+                );
+                return null;
+              }
+            })
+          );
+
+          // Filtrer les villes nulles (en cas d'erreur)
+          const validNearestCities = nearestCitiesData.filter(
+            (city): city is SingleCity => city !== null
+          );
+          setNearestCities(validNearestCities);
+        } catch (nearestCitiesError) {
+          console.warn(
+            "Erreur lors du chargement des villes proches:",
+            nearestCitiesError
+          );
+          setNearestCities([]);
+        }
+      } else {
+        setNearestCities([]);
+      }
 
       // Récupérer les événements de la ville
       try {

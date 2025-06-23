@@ -12,7 +12,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
 const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true";
 
 export const cityService = {
-  async getCities(): Promise<City[]> {
+  async getCities(): Promise<SingleCity[]> {
     try {
       // Si on utilise les données fictives
       if (useMockData) {
@@ -105,7 +105,7 @@ export const cityService = {
       throw error;
     }
   },
-  async getCitiesByRegion(region: string): Promise<City[]> {
+  async getCitiesByRegion(region: string): Promise<SingleCity[]> {
     try {
       if (useMockData) {
         const mockCitiesByRegion = mockCities.filter(
@@ -136,7 +136,7 @@ export const cityService = {
     }
   },
 
-  async getPopularCities(limit: number = 10): Promise<City[]> {
+  async getPopularCities(limit: number = 10): Promise<SingleCity[]> {
     try {
       const cities = await this.getCities();
       return cities
@@ -148,7 +148,7 @@ export const cityService = {
     }
   },
 
-  async searchCities(searchTerm: string): Promise<City[]> {
+  async searchCities(searchTerm: string): Promise<SingleCity[]> {
     try {
       const cities = await this.getCities();
       return cities.filter(
@@ -217,7 +217,8 @@ export const cityService = {
       startDate?: string;
       endDate?: string;
       categories?: string;
-    }
+    },
+    limit?: number
   ): Promise<Event[]> {
     try {
       if (useMockData) {
@@ -227,17 +228,24 @@ export const cityService = {
       // Construire l'URL avec les paramètres de filtre
       let url = eventsHref;
 
-      if (filters) {
+      if (filters || limit) {
         const searchParams = new URLSearchParams();
-        if (filters.minPrice !== undefined)
-          searchParams.append("minPrice", filters.minPrice.toString());
-        if (filters.maxPrice !== undefined)
-          searchParams.append("maxPrice", filters.maxPrice.toString());
-        if (filters.startDate)
-          searchParams.append("startDate", filters.startDate);
-        if (filters.endDate) searchParams.append("endDate", filters.endDate);
-        if (filters.categories)
-          searchParams.append("categories", filters.categories);
+
+        if (filters) {
+          if (filters.minPrice !== undefined)
+            searchParams.append("minPrice", filters.minPrice.toString());
+          if (filters.maxPrice !== undefined)
+            searchParams.append("maxPrice", filters.maxPrice.toString());
+          if (filters.startDate)
+            searchParams.append("startDate", filters.startDate);
+          if (filters.endDate) searchParams.append("endDate", filters.endDate);
+          if (filters.categories)
+            searchParams.append("categories", filters.categories);
+        }
+
+        if (limit) {
+          searchParams.append("limit", limit.toString());
+        }
 
         // Remplacer le template {?...} par les vrais paramètres
         if (url.includes("{?")) {
@@ -280,25 +288,42 @@ export const cityService = {
   },
 
   // Nouvelle méthode pour récupérer les événements populaires (trending)
-  async getTrendingEventsByCityLink(eventsHref: string): Promise<Event[]> {
+  async getTrendingEventsByCityLink(
+    eventsHref: string,
+    limit?: number
+  ): Promise<Event[]> {
     try {
-      return await this.getEventsByCityLink(eventsHref, {
-        categories: "trending",
-      });
+      return await this.getEventsByCityLink(
+        eventsHref,
+        {
+          categories: "trending",
+        },
+        limit
+      );
     } catch (error) {
       console.error("❌ Error in getTrendingEventsByCityLink:", error);
       throw error;
     }
   },
 
-  async getPlacesByCityLink(placesHref: string): Promise<Place[]> {
+  async getPlacesByCityLink(
+    placesHref: string,
+    limit?: number
+  ): Promise<Place[]> {
     try {
       if (useMockData) {
         // Retourner des données mock si nécessaire
         return [];
       }
 
-      const response = await fetch(placesHref, {
+      let url = placesHref;
+      if (limit) {
+        const searchParams = new URLSearchParams();
+        searchParams.append("limit", limit.toString());
+        url += `?${searchParams.toString()}`;
+      }
+
+      const response = await fetch(url, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -321,9 +346,16 @@ export const cityService = {
   },
 
   // Nouvelle méthode pour récupérer tous les organisateurs d'une ville
-  async getOrganizersByCityEvents(eventsHref: string): Promise<any[]> {
+  async getOrganizersByCityEvents(
+    eventsHref: string,
+    limit?: number
+  ): Promise<any[]> {
     try {
-      const events = await this.getEventsByCityLink(eventsHref);
+      const events = await this.getEventsByCityLink(
+        eventsHref,
+        undefined,
+        limit
+      );
 
       // Extraire les organisateurs uniques
       const uniqueOrganizers = events.reduce(
@@ -344,7 +376,7 @@ export const cityService = {
         []
       );
 
-      return uniqueOrganizers;
+      return limit ? uniqueOrganizers.slice(0, limit) : uniqueOrganizers;
     } catch (error) {
       console.error("❌ Error in getOrganizersByCityEvents:", error);
       throw error;
@@ -397,6 +429,45 @@ export const cityService = {
       return await this.getOrganizers();
     } catch (error) {
       console.error("❌ Error in getOrganizersByCity:", error);
+      throw error;
+    }
+  },
+
+  // Nouvelle méthode pour récupérer les événements de première édition
+  async getFirstEditionEventsByCity(cityName: string, limit?: number): Promise<Event[]> {
+    try {
+      if (useMockData) {
+        return [];
+      }
+
+      const searchParams = new URLSearchParams();
+      searchParams.append("city", cityName);
+      if (limit) {
+        searchParams.append("limit", limit.toString());
+      }
+
+      const url = `${apiUrl}/events/first-editions?${searchParams.toString()}`;
+
+      console.log("Fetching first edition events from:", url); // Debug
+
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("First Edition Events API Response:", result); // Debug
+
+      // Utiliser eventSummaryResponses comme dans la réponse API
+      return result._embedded?.eventSummaryResponses || [];
+    } catch (error) {
+      console.error("❌ Error in getFirstEditionEventsByCity:", error);
       throw error;
     }
   },

@@ -3,15 +3,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./date-filter.scss";
 import { Calendar, NavArrowLeft, NavArrowRight } from "iconoir-react";
 import { JSX } from "react";
+import { useFilters } from "@/contexts/FilterContext";
 
 type CalendarState = "start" | "end" | null;
 
 export default function DateFilter() {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const { tempFilters, updateTempFilters } = useFilters();
+  
+  // Obtenir la date actuelle pour les comparaisons
+  const today = useMemo(() => {
+    const now = new Date();
+    // Réinitialiser à minuit pour éviter les problèmes d'heure
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }, []);
+  
+  // État local pour les dates sélectionnées
+  const [startDate, setStartDate] = useState<Date | null>(
+    tempFilters.startDate ? new Date(tempFilters.startDate) : null
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    tempFilters.endDate ? new Date(tempFilters.endDate) : null
+  );
   const [calendarOpen, setCalendarOpen] = useState<CalendarState>(null);
+  // Initialiser le mois courant à la date actuelle
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const calendarRef = useRef<HTMLDivElement>(null);
+
+  // Synchroniser avec les filtres temporaires du contexte
+  useEffect(() => {
+    if (tempFilters.startDate && tempFilters.startDate !== startDate?.toISOString().split('T')[0]) {
+      setStartDate(new Date(tempFilters.startDate));
+    }
+    if (tempFilters.endDate && tempFilters.endDate !== endDate?.toISOString().split('T')[0]) {
+      setEndDate(new Date(tempFilters.endDate));
+    }
+  }, [tempFilters.startDate, tempFilters.endDate, startDate, endDate]);
 
   // ✅ Fonctions utilitaires pures (évitent les mutations)
   const isSameDay = useCallback((date1: Date | null, date2: Date): boolean => {
@@ -39,12 +64,25 @@ export default function DateFilter() {
     });
   }, []);
 
-  // ✅ Navigation mois optimisée
-  const prevMonth = useCallback((): void => {
-    setCurrentMonth(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1)
-    );
+  // Convertir une date en format ISO (YYYY-MM-DD)
+  const formatDateForAPI = useCallback((date: Date): string => {
+    return date.toISOString().split('T')[0];
   }, []);
+
+  // Vérifier si une date est dans le passé
+  const isDateInPast = useCallback((date: Date): boolean => {
+    return date < today;
+  }, [today]);
+
+  // ✅ Navigation mois optimisée avec restriction
+  const prevMonth = useCallback((): void => {
+    const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1);
+    // Ne pas permettre de naviguer vers un mois antérieur au mois actuel
+    if (newMonth.getFullYear() > today.getFullYear() || 
+        (newMonth.getFullYear() === today.getFullYear() && newMonth.getMonth() >= today.getMonth())) {
+      setCurrentMonth(newMonth);
+    }
+  }, [currentMonth, today]);
 
   const nextMonth = useCallback((): void => {
     setCurrentMonth(
@@ -52,13 +90,34 @@ export default function DateFilter() {
     );
   }, []);
 
-  // ✅ Sélection de date optimisée
+  // Vérifier si le bouton précédent doit être désactivé
+  const isPrevMonthDisabled = useMemo(() => {
+    return currentMonth.getFullYear() === today.getFullYear() && 
+           currentMonth.getMonth() === today.getMonth();
+  }, [currentMonth, today]);
+
+  // ✅ Sélection de date optimisée avec vérification des dates passées
   const handleDateSelect = useCallback(
     (date: Date): void => {
+      // Ne pas permettre la sélection de dates passées
+      if (isDateInPast(date)) {
+        return;
+      }
+
       if (calendarOpen === "start") {
         setStartDate(date);
+        
+        // Mettre à jour les filtres temporaires (pas appliqués immédiatement)
+        updateTempFilters({
+          startDate: formatDateForAPI(date)
+        });
+
         if (!endDate || date > endDate) {
           setEndDate(null);
+          updateTempFilters({
+            startDate: formatDateForAPI(date),
+            endDate: undefined
+          });
           setCalendarOpen("end");
         } else {
           setCalendarOpen(null);
@@ -67,20 +126,36 @@ export default function DateFilter() {
         if (startDate && date < startDate) {
           setEndDate(startDate);
           setStartDate(date);
+          updateTempFilters({
+            startDate: formatDateForAPI(date),
+            endDate: formatDateForAPI(startDate)
+          });
         } else {
           setEndDate(date);
+          updateTempFilters({
+            endDate: formatDateForAPI(date)
+          });
         }
         setCalendarOpen(null);
       }
     },
-    [calendarOpen, endDate, startDate]
+    [calendarOpen, endDate, startDate, updateTempFilters, formatDateForAPI, isDateInPast]
   );
+
+  // Fonction pour effacer les dates
+  const clearDates = useCallback(() => {
+    setStartDate(null);
+    setEndDate(null);
+    updateTempFilters({
+      startDate: undefined,
+      endDate: undefined
+    });
+  }, [updateTempFilters]);
 
   // ✅ Génération des jours avec useMemo (évite recalculs inutiles)
   const calendarDays = useMemo(() => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
-    const today = new Date();
 
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0);
@@ -100,14 +175,19 @@ export default function DateFilter() {
       const isToday = isSameDay(today, date);
       const isSelected = isSameDay(startDate, date) || isSameDay(endDate, date);
       const isInRange = isInDateRange(date, startDate, endDate) && !isSelected;
+      const isPast = isDateInPast(date);
 
       days.push(
         <div
           key={day}
           className={`calendar-day ${isToday ? "today" : ""} ${
             isSelected ? "selected" : ""
-          } ${isInRange ? "in-range" : ""}`}
-          onClick={() => handleDateSelect(date)}
+          } ${isInRange ? "in-range" : ""} ${isPast ? "past disabled" : ""}`}
+          onClick={() => !isPast && handleDateSelect(date)}
+          style={{
+            cursor: isPast ? "not-allowed" : "pointer",
+            opacity: isPast ? 0.4 : 1,
+          }}
         >
           {day}
         </div>
@@ -119,8 +199,10 @@ export default function DateFilter() {
     currentMonth,
     startDate,
     endDate,
+    today,
     isSameDay,
     isInDateRange,
+    isDateInPast,
     handleDateSelect,
   ]);
 
@@ -154,10 +236,25 @@ export default function DateFilter() {
   const handleStartDateClick = useCallback(() => setCalendarOpen("start"), []);
   const handleEndDateClick = useCallback(() => setCalendarOpen("end"), []);
 
+  // Vérifier si des dates sont sélectionnées
+  const hasSelectedDates = startDate || endDate;
+
+  const calendarRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="date-filter">
       <div className="flex flex-col">
-        <h2 className="title">Plage de dates</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="title">Plage de dates</h2>
+          {hasSelectedDates && (
+            <button
+              onClick={clearDates}
+              className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+            >
+              Effacer
+            </button>
+          )}
+        </div>
         <p className="subtitle">Sélectionnez une plage de dates</p>
       </div>
 
@@ -198,9 +295,14 @@ export default function DateFilter() {
               <div className="calendar">
                 <div className="calendar-header">
                   <button
-                    className="calendar-nav"
+                    className={`calendar-nav ${isPrevMonthDisabled ? 'disabled' : ''}`}
                     onClick={prevMonth}
+                    disabled={isPrevMonthDisabled}
                     aria-label="Mois précédent"
+                    style={{
+                      opacity: isPrevMonthDisabled ? 0.4 : 1,
+                      cursor: isPrevMonthDisabled ? "not-allowed" : "pointer",
+                    }}
                   >
                     <NavArrowLeft />
                   </button>

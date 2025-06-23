@@ -60,7 +60,19 @@ export default function EventCard({ id, event, minify }: EventCardProps) {
           </div>
           <div className="info">
             <Calendar className="icon-small" />
-            <span>{event.date}</span>
+            <span>
+              Le{" "}
+              {new Date(event.date).toLocaleDateString("fr-FR", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              }) +
+                " à " +
+                new Date(event.date).toLocaleTimeString("fr-FR", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+            </span>
           </div>
         </div>
         {!minify && event.description && (

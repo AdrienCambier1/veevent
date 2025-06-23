@@ -44,7 +44,19 @@ export default function EventHead({
         </div>
         <div className="info">
           <Calendar className="icon-small" />
-          <span>{date}</span>
+          <span>
+            Le{" "}
+            {new Date(date).toLocaleDateString("fr-FR", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            }) +
+              " à " +
+              new Date(date).toLocaleTimeString("fr-FR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+          </span>
         </div>
       </div>
       <div className="flex gap-2">
