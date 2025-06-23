@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useFilters } from "@/contexts/filter-context";
 import { Category } from "@/types";
-import { categoryService } from "@/services/categoryService";
+import { categoryService } from "@/services/category-service";
 import SelectorThemeTags from "@/components/tags/selector-theme-tags/selector-theme-tags";
 
 export default function CategoriesFilter() {

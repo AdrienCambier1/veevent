@@ -1,10 +1,10 @@
 "use client";
 import SelectorThemeTags from "@/components/tags/selector-theme-tags/selector-theme-tags";
-import StepIndicator from "@/components/common/step-indicator/step-indictator";
+import StepIndicator from "@/components/commons/step-indicator/step-indictator";
 import Link from "next/link";
 import { FormEvent, useState, useEffect } from "react";
 import { useHeader } from "@/contexts/header-context";
-import { categoryService } from "@/services/categoryService";
+import { categoryService } from "@/services/category-service";
 import { Category } from "@/types";
 
 export default function InscriptionPage() {
@@ -31,19 +31,97 @@ export default function InscriptionPage() {
         console.error("Erreur lors du chargement des catégories:", error);
         // En cas d'erreur, utiliser les thèmes par défaut
         const fallbackCategories: Category[] = [
-          { name: "Musique", key: "musique", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Sport", key: "sport", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Art", key: "art", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Cinéma", key: "cinema", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Théâtre", key: "theatre", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Jeux Vidéo", key: "jeux-video", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Cuisine", key: "cuisine", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Voyage", key: "voyage", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Photographie", key: "photographie", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Mode", key: "mode", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Technologie", key: "technologie", description: "", trending: true, _links: { self: { href: "" } } },
-          { name: "Nature", key: "nature", description: "", trending: false, _links: { self: { href: "" } } },
-          { name: "Bien-être", key: "bien-etre", description: "", trending: true, _links: { self: { href: "" } } },
+          {
+            name: "Musique",
+            key: "musique",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Sport",
+            key: "sport",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Art",
+            key: "art",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Cinéma",
+            key: "cinema",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Théâtre",
+            key: "theatre",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Jeux Vidéo",
+            key: "jeux-video",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Cuisine",
+            key: "cuisine",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Voyage",
+            key: "voyage",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Photographie",
+            key: "photographie",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Mode",
+            key: "mode",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Technologie",
+            key: "technologie",
+            description: "",
+            trending: true,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Nature",
+            key: "nature",
+            description: "",
+            trending: false,
+            _links: { self: { href: "" } },
+          },
+          {
+            name: "Bien-être",
+            key: "bien-etre",
+            description: "",
+            trending: true,
+            _links: { self: { href: "" } },
+          },
         ];
         setCategories(fallbackCategories);
       } finally {
@@ -102,28 +180,28 @@ export default function InscriptionPage() {
             </div>
             <div className="flex flex-col gap-2">
               <label>Pseudo*</label>
-              <input 
-                className="input" 
-                type="text" 
-                placeholder="@veevent" 
+              <input
+                className="input"
+                type="text"
+                placeholder="@veevent"
                 required
               />
             </div>
             <div className="flex flex-col gap-2">
               <label>Mot de passe*</label>
-              <input 
-                className="input" 
-                type="password" 
-                placeholder="******" 
+              <input
+                className="input"
+                type="password"
+                placeholder="******"
                 required
               />
             </div>
             <div className="flex flex-col gap-2">
               <label>Confirmer le mot de passe*</label>
-              <input 
-                className="input" 
-                type="password" 
-                placeholder="******" 
+              <input
+                className="input"
+                type="password"
+                placeholder="******"
                 required
               />
             </div>
@@ -135,33 +213,24 @@ export default function InscriptionPage() {
           <>
             <div className="flex flex-col gap-2">
               <label>Prénom*</label>
-              <input 
-                className="input" 
-                type="text" 
-                placeholder="John" 
+              <input
+                className="input"
+                type="text"
+                placeholder="John"
                 required
               />
             </div>
             <div className="flex flex-col gap-2">
               <label>Nom*</label>
-              <input 
-                className="input" 
-                type="text" 
-                placeholder="Doe" 
-                required
-              />
+              <input className="input" type="text" placeholder="Doe" required />
             </div>
             <div className="flex flex-col gap-2">
               <label>Date de naissance*</label>
-              <input
-                className="input"
-                type="date"
-                required
-              />
+              <input className="input" type="date" required />
             </div>
             <div className="flex flex-col gap-2">
               <label>Description</label>
-              <textarea 
+              <textarea
                 className="input min-h-[100px] resize-vertical"
                 placeholder="Quelques mots pour vous décrire..."
               />
@@ -173,12 +242,15 @@ export default function InscriptionPage() {
         return (
           <div className="flex flex-col gap-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">Sélectionnez vos centres d'intérêts :</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                Sélectionnez vos centres d'intérêts :
+              </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Choisissez les catégories qui vous intéressent pour personnaliser votre expérience
+                Choisissez les catégories qui vous intéressent pour
+                personnaliser votre expérience
               </p>
             </div>
-            
+
             {loadingCategories ? (
               <div className="text-center py-8">
                 <p className="text-gray-500">Chargement des catégories...</p>
@@ -196,7 +268,9 @@ export default function InscriptionPage() {
             {selectedThemes.length > 0 && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
                 <p className="text-sm text-blue-700">
-                  <strong>{selectedThemes.length}</strong> catégorie{selectedThemes.length > 1 ? 's' : ''} sélectionnée{selectedThemes.length > 1 ? 's' : ''}
+                  <strong>{selectedThemes.length}</strong> catégorie
+                  {selectedThemes.length > 1 ? "s" : ""} sélectionnée
+                  {selectedThemes.length > 1 ? "s" : ""}
                 </p>
               </div>
             )}
@@ -218,8 +292,8 @@ export default function InscriptionPage() {
         <StepIndicator steps={steps} currentStep={step} />
         <form onSubmit={handleNextStep}>
           {renderStep()}
-          <button 
-            className="primary-btn" 
+          <button
+            className="primary-btn"
             type="submit"
             disabled={step === 3 && selectedThemes.length === 0}
           >

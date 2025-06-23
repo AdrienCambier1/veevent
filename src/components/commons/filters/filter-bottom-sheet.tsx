@@ -1,6 +1,6 @@
 "use client";
 
-import BottomSheet from "@/components/common/bottom-sheet/bottom-sheet";
+import BottomSheet from "@/components/commons/bottom-sheet/bottom-sheet";
 import Filters from "./filters";
 import FilterFooter from "./filter-footer/filter-footer";
 import { useFilters } from "@/contexts/filter-context";

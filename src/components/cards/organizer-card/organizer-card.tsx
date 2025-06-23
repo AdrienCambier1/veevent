@@ -2,7 +2,7 @@ import ProfileImg from "@/components/images/profile-img/profile-img";
 import { BaseUser, SingleUser } from "@/types";
 import Link from "next/link";
 import EventCardLine from "../event-card-line/event-card-line";
-import { useOrganizerEvents } from "@/hooks/useOrganizerEvents";
+import { useOrganizerEvents } from "@/hooks/organizers/use-organizer-events";
 import "./organizer-card.scss";
 
 interface OrganizerCardProps {

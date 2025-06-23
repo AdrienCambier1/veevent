@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import FilterBottomSheet from "@/components/common/filters/filter-bottom-sheet";
+import FilterBottomSheet from "@/components/commons/filters/filter-bottom-sheet";
 
 export default function ConnexionPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
