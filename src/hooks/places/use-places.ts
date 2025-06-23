@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { placeService } from "@/services/placeService";
+import { placeService } from "@/services/place-service";
 import { Place } from "@/types";
 
 interface UsePlacesReturn {

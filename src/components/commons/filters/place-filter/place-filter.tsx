@@ -1,72 +1,76 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Xmark } from "iconoir-react";
-import { useFilters } from "@/contexts/FilterContext";
-import { cityService } from "@/services/cityService";
+import { useFilters } from "@/contexts/filter-context";
+import { placeService } from "@/services/place-service";
 import { SearchFilterOption } from "@/types";
 import "../search-filter/search-filter.scss";
 
-export default function CityFilter() {
+export default function PlaceFilter() {
   const { tempFilters, updateTempFilters } = useFilters();
-  
+
   const [isOpen, setIsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(tempFilters.cityName || "");
-  const [selectedCity, setSelectedCity] = useState<SearchFilterOption | null>(
-    tempFilters.cityName ? { name: tempFilters.cityName, eventCount: 0 } : null
+  const [searchTerm, setSearchTerm] = useState(tempFilters.placeName || "");
+  const [selectedPlace, setSelectedPlace] = useState<SearchFilterOption | null>(
+    tempFilters.placeName
+      ? { name: tempFilters.placeName, eventCount: 0 }
+      : null
   );
-  const [cities, setCities] = useState<SearchFilterOption[]>([]);
-  const [filteredCities, setFilteredCities] = useState<SearchFilterOption[]>([]);
+  const [places, setPlaces] = useState<SearchFilterOption[]>([]);
+  const [filteredPlaces, setFilteredPlaces] = useState<SearchFilterOption[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
-  // Charger les villes depuis l'API
-  const loadCities = useCallback(async () => {
+  // Charger les lieux depuis l'API
+  const loadPlaces = useCallback(async () => {
     try {
       setLoading(true);
-      const citiesData = await cityService.getCities();
-      const cityOptions: SearchFilterOption[] = citiesData.map(city => ({
-        id: city.id.toString(),
-        name: city.name,
-        eventCount: city.eventsCount
+      const placesData = await placeService.getPlaces();
+      const placeOptions: SearchFilterOption[] = placesData.map((place) => ({
+        id: place.id.toString(),
+        name: place.name,
+        eventCount: place.eventsCount,
       }));
-      setCities(cityOptions);
-      setFilteredCities(cityOptions);
+      setPlaces(placeOptions);
+      setFilteredPlaces(placeOptions);
     } catch (error) {
-      console.error("Erreur lors du chargement des villes:", error);
+      console.error("Erreur lors du chargement des lieux:", error);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // Charger les villes au montage du composant
+  // Charger les lieux au montage du composant
   useEffect(() => {
-    loadCities();
-  }, [loadCities]);
+    loadPlaces();
+  }, [loadPlaces]);
 
-  // Filtrer les villes selon le terme de recherche
+  // Filtrer les lieux selon le terme de recherche
   useEffect(() => {
     if (searchTerm.trim() === "") {
-      setFilteredCities(cities);
+      setFilteredPlaces(places);
     } else {
-      const filtered = cities.filter((city) =>
-        city.name.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = places.filter((place) =>
+        place.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredCities(filtered);
+      setFilteredPlaces(filtered);
     }
-  }, [searchTerm, cities]);
+  }, [searchTerm, places]);
 
   // Synchroniser avec les filtres du contexte
   useEffect(() => {
-    if (tempFilters.cityName !== selectedCity?.name) {
-      if (tempFilters.cityName) {
-        setSelectedCity({ name: tempFilters.cityName, eventCount: 0 });
-        setSearchTerm(tempFilters.cityName);
+    if (tempFilters.placeName !== selectedPlace?.name) {
+      if (tempFilters.placeName) {
+        setSelectedPlace({ name: tempFilters.placeName, eventCount: 0 });
+        setSearchTerm(tempFilters.placeName);
       } else {
-        setSelectedCity(null);
+        setSelectedPlace(null);
         setSearchTerm("");
       }
     }
-  }, [tempFilters.cityName, selectedCity]);
+  }, [tempFilters.placeName, selectedPlace]);
 
   // Gérer le clic extérieur
   useEffect(() => {
@@ -83,21 +87,21 @@ export default function CityFilter() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleCitySelect = (city: SearchFilterOption) => {
-    setSelectedCity(city);
-    setSearchTerm(city.name);
+  const handlePlaceSelect = (place: SearchFilterOption) => {
+    setSelectedPlace(place);
+    setSearchTerm(place.name);
     setIsOpen(false);
-    updateTempFilters({ cityName: city.name });
+    updateTempFilters({ placeName: place.name });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setIsOpen(true);
-    
+
     // Si l'input est vidé, supprimer le filtre
     if (e.target.value.trim() === "") {
-      setSelectedCity(null);
-      updateTempFilters({ cityName: undefined });
+      setSelectedPlace(null);
+      updateTempFilters({ placeName: undefined });
     }
   };
 
@@ -106,9 +110,9 @@ export default function CityFilter() {
   };
 
   const clearSelection = () => {
-    setSelectedCity(null);
+    setSelectedPlace(null);
     setSearchTerm("");
-    updateTempFilters({ cityName: undefined });
+    updateTempFilters({ placeName: undefined });
   };
 
   const dropdownVariants = {
@@ -150,13 +154,13 @@ export default function CityFilter() {
       <div className="search-search-input" onClick={() => setIsOpen(true)}>
         <input
           type="text"
-          placeholder="Rechercher une ville"
+          placeholder="Rechercher un lieu"
           value={searchTerm}
           onChange={handleInputChange}
           onFocus={handleInputFocus}
         />
         <div className="search-icons">
-          {selectedCity && (
+          {selectedPlace && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -183,29 +187,29 @@ export default function CityFilter() {
             exit="hidden"
           >
             {loading ? (
-              <div className="loading">Chargement des villes...</div>
-            ) : filteredCities.length > 0 ? (
-              filteredCities.map((city, index) => (
+              <div className="loading">Chargement des lieux...</div>
+            ) : filteredPlaces.length > 0 ? (
+              filteredPlaces.map((place, index) => (
                 <motion.div
-                  key={city.id || city.name}
+                  key={place.id || place.name}
                   className={`search-option ${
-                    selectedCity?.name === city.name ? "selected" : ""
+                    selectedPlace?.name === place.name ? "selected" : ""
                   }`}
                   variants={itemVariants}
                   initial="hidden"
                   animate="visible"
                   custom={index}
-                  onClick={() => handleCitySelect(city)}
+                  onClick={() => handlePlaceSelect(place)}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <span>{city.name}</span>
+                  <span>{place.name}</span>
                   <span className="event-count">
-                    {city.eventCount} événements
+                    {place.eventCount} événements
                   </span>
                 </motion.div>
               ))
             ) : (
-              <div className="no-results">Aucune ville trouvée</div>
+              <div className="no-results">Aucun lieu trouvé</div>
             )}
           </motion.div>
         )}

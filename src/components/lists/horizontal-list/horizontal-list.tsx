@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Mousewheel, Keyboard } from "swiper/modules";
-import CustomTitle from "@/components/common/custom-title/custom-title";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
 import React from "react";
 
 import "swiper/css";

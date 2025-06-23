@@ -2,12 +2,12 @@
 import BannerHead from "@/components/heads/banner-head/banner-head";
 import EventHead from "@/components/heads/event-head/event-head";
 import { useParams } from "next/navigation";
-import CustomTitle from "@/components/common/custom-title/custom-title";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
 import FaqCard from "@/components/cards/faq-card/faq-card";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 import NewsCard from "@/components/cards/news-card/news-card";
-import { useSingleEvent } from "@/hooks/useSingleEvent";
-import { useEventOrganizer } from "@/hooks/useEventOrganizer";
+import { useSingleEvent } from "@/hooks/events/use-single-event";
+import { useEventOrganizer } from "@/hooks/organizers/use-event-organizer";
 
 export default function EventPage() {
   const { id, slug } = useParams() as { id: string; slug: string };

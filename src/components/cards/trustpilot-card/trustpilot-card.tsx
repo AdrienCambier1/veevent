@@ -1,4 +1,4 @@
-import RatingStars from "@/components/common/rating-stars/rating-stars";
+import RatingStars from "@/components/commons/rating-stars/rating-stars";
 import Image from "next/image";
 import Trustpilot from "@/assets/images/trustpilot.png";
 import "./trustpilot-card.scss";

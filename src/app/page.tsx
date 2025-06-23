@@ -2,19 +2,19 @@
 import EventCard from "@/components/cards/event-card/event-card";
 import NewsCard from "@/components/cards/news-card/news-card";
 import ThemeCard from "@/components/cards/theme-card/theme-card";
-import CustomTitle from "@/components/common/custom-title/custom-title";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
 import TrustpilotCard from "@/components/cards/trustpilot-card/trustpilot-card";
 import { Medal } from "iconoir-react";
 import ReviewCard from "@/components/cards/review-card/review-card";
 import TrendingCard from "@/components/cards/trending-card/trending-card";
 import Link from "next/link";
-import Shortcut from "@/components/common/shortcut/shortcut";
+import Shortcut from "@/components/commons/shortcut/shortcut";
 import PlaceCard from "@/components/cards/place-card/place-card";
 import PlacesMapList from "@/components/lists/places-map-list/places-map-list";
-import EventsAgenda from "@/components/common/events-agenda/events-agenda";
-import Welcome from "@/components/common/welcome/welcome";
+import EventsAgenda from "@/components/commons/events-agenda/events-agenda";
+import Welcome from "@/components/commons/welcome/welcome";
 import ProfileHead from "@/components/heads/profile-head/profile-head";
-import SearchBtn from "@/components/common/search-btn/search-btn";
+import SearchBtn from "@/components/commons/search-btn/search-btn";
 import TabList from "@/components/lists/tab-list/tab-list";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
@@ -23,10 +23,12 @@ import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import FaqCard from "@/components/cards/faq-card/faq-card";
 import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import { useAuth } from "@/contexts/auth-context";
-import { useEvents } from "@/hooks/useEvents";
+import { useEvents } from "@/hooks/events/use-events";
 import { Event } from "@/types";
 import EventCardSkeleton from "@/components/cards/event-card/event-card-skeleton";
-import { useCategories } from "@/hooks/useCategories";
+import { useCategories } from "@/hooks/commons/use-categories";
+import ThemeCardSkeleton from "@/components/cards/theme-card/theme-card-skeleton";
+import TrendingCardSkeleton from "@/components/cards/trending-card/trending-card-skeleton";
 
 export default function Home() {
   const { login, loading, isAuthenticated, logout } = useAuth();
@@ -67,19 +69,25 @@ export default function Home() {
     error: Error | null
   ) => {
     if (loading) {
-      return <></>;
+      return (
+        <>
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+        </>
+      );
     }
 
     if (error) {
       return (
-        <div className="text-red-500 p-4">
+        <div className="text-red-500">
           Erreur lors du chargement des événements
         </div>
       );
     }
 
     if (!events || events.length === 0) {
-      return <div className="text-gray-500 p-4">Aucun événement trouvé</div>;
+      return <div className="text-gray-500">Aucun événement trouvé</div>;
     }
 
     return events.slice(0, 6).map((event: Event) => {
@@ -98,12 +106,18 @@ export default function Home() {
     error: Error | null
   ) => {
     if (loading) {
-      return <></>;
+      return (
+        <>
+          <TrendingCardSkeleton />
+          <TrendingCardSkeleton />
+          <TrendingCardSkeleton />
+        </>
+      );
     }
 
     if (error) {
       return (
-        <div className="text-red-500 p-4">
+        <div className="text-red-500">
           Erreur lors du chargement des événements populaires
         </div>
       );
@@ -111,9 +125,7 @@ export default function Home() {
 
     if (!events || events.length === 0) {
       return (
-        <div className="text-gray-500 p-4">
-          Aucun événement populaire trouvé
-        </div>
+        <div className="text-gray-500">Aucun événement populaire trouvé</div>
       );
     }
 
@@ -137,7 +149,13 @@ export default function Home() {
 
   const renderThemeCards = () => {
     if (categoriesLoading) {
-      return <div>Chargement des catégories...</div>;
+      return (
+        <>
+          <ThemeCardSkeleton />
+          <ThemeCardSkeleton />
+          <ThemeCardSkeleton />
+        </>
+      );
     }
 
     if (categoriesError) {

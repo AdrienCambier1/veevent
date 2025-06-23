@@ -6,8 +6,8 @@ import EventCard from "@/components/cards/event-card/event-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import CustomTitle from "@/components/common/custom-title/custom-title";
 import PlaceCard from "@/components/cards/place-card/place-card";
-import { usePlaces } from "@/hooks/usePlaces";
-import { useEvents } from "@/hooks/useEvents";
+import { usePlaces } from "@/hooks/places/use-places";
+import { useEvents } from "@/hooks/events/use-events";
 
 function LieuxPageContent() {
   const searchParams = useSearchParams();

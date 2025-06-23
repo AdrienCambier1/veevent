@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { cityService } from "@/services/cityService";
+import { cityService } from "@/services/city-service";
 import { City, SingleCity } from "@/types";
 
 interface UseCitiesReturn {

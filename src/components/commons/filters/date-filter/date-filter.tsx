@@ -3,20 +3,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./date-filter.scss";
 import { Calendar, NavArrowLeft, NavArrowRight } from "iconoir-react";
 import { JSX } from "react";
-import { useFilters } from "@/contexts/FilterContext";
+import { useFilters } from "@/contexts/filter-context";
 
 type CalendarState = "start" | "end" | null;
 
 export default function DateFilter() {
   const { tempFilters, updateTempFilters } = useFilters();
-  
+
   // Obtenir la date actuelle pour les comparaisons
   const today = useMemo(() => {
     const now = new Date();
     // Réinitialiser à minuit pour éviter les problèmes d'heure
     return new Date(now.getFullYear(), now.getMonth(), now.getDate());
   }, []);
-  
+
   // État local pour les dates sélectionnées
   const [startDate, setStartDate] = useState<Date | null>(
     tempFilters.startDate ? new Date(tempFilters.startDate) : null
@@ -30,10 +30,16 @@ export default function DateFilter() {
 
   // Synchroniser avec les filtres temporaires du contexte
   useEffect(() => {
-    if (tempFilters.startDate && tempFilters.startDate !== startDate?.toISOString().split('T')[0]) {
+    if (
+      tempFilters.startDate &&
+      tempFilters.startDate !== startDate?.toISOString().split("T")[0]
+    ) {
       setStartDate(new Date(tempFilters.startDate));
     }
-    if (tempFilters.endDate && tempFilters.endDate !== endDate?.toISOString().split('T')[0]) {
+    if (
+      tempFilters.endDate &&
+      tempFilters.endDate !== endDate?.toISOString().split("T")[0]
+    ) {
       setEndDate(new Date(tempFilters.endDate));
     }
   }, [tempFilters.startDate, tempFilters.endDate, startDate, endDate]);
@@ -66,20 +72,29 @@ export default function DateFilter() {
 
   // Convertir une date en format ISO (YYYY-MM-DD)
   const formatDateForAPI = useCallback((date: Date): string => {
-    return date.toISOString().split('T')[0];
+    return date.toISOString().split("T")[0];
   }, []);
 
   // Vérifier si une date est dans le passé
-  const isDateInPast = useCallback((date: Date): boolean => {
-    return date < today;
-  }, [today]);
+  const isDateInPast = useCallback(
+    (date: Date): boolean => {
+      return date < today;
+    },
+    [today]
+  );
 
   // ✅ Navigation mois optimisée avec restriction
   const prevMonth = useCallback((): void => {
-    const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1);
+    const newMonth = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth() - 1
+    );
     // Ne pas permettre de naviguer vers un mois antérieur au mois actuel
-    if (newMonth.getFullYear() > today.getFullYear() || 
-        (newMonth.getFullYear() === today.getFullYear() && newMonth.getMonth() >= today.getMonth())) {
+    if (
+      newMonth.getFullYear() > today.getFullYear() ||
+      (newMonth.getFullYear() === today.getFullYear() &&
+        newMonth.getMonth() >= today.getMonth())
+    ) {
       setCurrentMonth(newMonth);
     }
   }, [currentMonth, today]);
@@ -92,8 +107,10 @@ export default function DateFilter() {
 
   // Vérifier si le bouton précédent doit être désactivé
   const isPrevMonthDisabled = useMemo(() => {
-    return currentMonth.getFullYear() === today.getFullYear() && 
-           currentMonth.getMonth() === today.getMonth();
+    return (
+      currentMonth.getFullYear() === today.getFullYear() &&
+      currentMonth.getMonth() === today.getMonth()
+    );
   }, [currentMonth, today]);
 
   // ✅ Sélection de date optimisée avec vérification des dates passées
@@ -106,17 +123,17 @@ export default function DateFilter() {
 
       if (calendarOpen === "start") {
         setStartDate(date);
-        
+
         // Mettre à jour les filtres temporaires (pas appliqués immédiatement)
         updateTempFilters({
-          startDate: formatDateForAPI(date)
+          startDate: formatDateForAPI(date),
         });
 
         if (!endDate || date > endDate) {
           setEndDate(null);
           updateTempFilters({
             startDate: formatDateForAPI(date),
-            endDate: undefined
+            endDate: undefined,
           });
           setCalendarOpen("end");
         } else {
@@ -128,18 +145,25 @@ export default function DateFilter() {
           setStartDate(date);
           updateTempFilters({
             startDate: formatDateForAPI(date),
-            endDate: formatDateForAPI(startDate)
+            endDate: formatDateForAPI(startDate),
           });
         } else {
           setEndDate(date);
           updateTempFilters({
-            endDate: formatDateForAPI(date)
+            endDate: formatDateForAPI(date),
           });
         }
         setCalendarOpen(null);
       }
     },
-    [calendarOpen, endDate, startDate, updateTempFilters, formatDateForAPI, isDateInPast]
+    [
+      calendarOpen,
+      endDate,
+      startDate,
+      updateTempFilters,
+      formatDateForAPI,
+      isDateInPast,
+    ]
   );
 
   // Fonction pour effacer les dates
@@ -148,7 +172,7 @@ export default function DateFilter() {
     setEndDate(null);
     updateTempFilters({
       startDate: undefined,
-      endDate: undefined
+      endDate: undefined,
     });
   }, [updateTempFilters]);
 
@@ -295,7 +319,9 @@ export default function DateFilter() {
               <div className="calendar">
                 <div className="calendar-header">
                   <button
-                    className={`calendar-nav ${isPrevMonthDisabled ? 'disabled' : ''}`}
+                    className={`calendar-nav ${
+                      isPrevMonthDisabled ? "disabled" : ""
+                    }`}
                     onClick={prevMonth}
                     disabled={isPrevMonthDisabled}
                     aria-label="Mois précédent"

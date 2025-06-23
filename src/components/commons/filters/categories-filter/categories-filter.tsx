@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useFilters } from "@/contexts/FilterContext";
+import { useFilters } from "@/contexts/filter-context";
 import { Category } from "@/types";
 import { categoryService } from "@/services/categoryService";
 import SelectorThemeTags from "@/components/tags/selector-theme-tags/selector-theme-tags";

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import requestIp from "request-ip";
-import { cityService } from "@/services/cityService";
+import { cityService } from "@/services/city-service";
 import {
   City,
   GeolocationResponse,

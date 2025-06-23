@@ -3,8 +3,8 @@ import SearchInput from "@/components/inputs/search-input/search-input";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 import { useState, useEffect, Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import CustomTitle from "@/components/common/custom-title/custom-title";
-import { useOrganizers } from "@/hooks/useOrganizers";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
+import { useOrganizers } from "@/hooks/organizers/use-organizers";
 import { SingleUser } from "@/types";
 
 function OrganisateursPageContent() {

@@ -27,6 +27,14 @@
         transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
 
+      .skeleton-bg {
+        margin-right: 1rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
       .swiper-slide {
         @apply w-auto flex-shrink-0;
 

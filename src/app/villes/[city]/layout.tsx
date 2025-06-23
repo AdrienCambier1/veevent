@@ -3,7 +3,7 @@ import { useState, ReactNode } from "react";
 import SearchInput from "@/components/inputs/search-input/search-input";
 import BarMenu from "@/components/menu/bar-menu/bar-menu";
 import BannerHead from "@/components/heads/banner-head/banner-head";
-import CustomTitle from "@/components/common/custom-title/custom-title";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
 import FaqCard from "@/components/cards/faq-card/faq-card";
 import ReviewCard from "@/components/cards/review-card/review-card";
 import Link from "next/link";

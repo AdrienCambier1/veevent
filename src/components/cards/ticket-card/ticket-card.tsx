@@ -4,8 +4,8 @@ import "./ticket-card.scss";
 import Image from "next/image";
 import img from "@/assets/images/nice.jpg";
 import { useState } from "react";
-import BottomSheet from "@/components/common/bottom-sheet/bottom-sheet";
-import QRCode from "@/components/common/qr-code/qr-code";
+import BottomSheet from "@/components/commons/bottom-sheet/bottom-sheet";
+import QRCode from "@/components/commons/qr-code/qr-code";
 import Link from "next/link";
 
 export default function TicketCard() {

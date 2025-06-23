@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
-import { useEvents } from "@/hooks/useEvents";
+import { useEvents } from "@/hooks/events/use-events";
 import { Event } from "@/types";
 
 // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS

@@ -7,7 +7,7 @@ import FloatingMenu from "@/components/menu/floating-menu/floating-menu";
 import { Metadata } from "next";
 import { AuthProvider } from "@/contexts/auth-context";
 import { HeaderProvider } from "@/contexts/header-context";
-import { FilterProvider } from "@/contexts/FilterContext";
+import { FilterProvider } from "@/contexts/filter-context";
 
 export const metadata: Metadata = {
   appleWebApp: {

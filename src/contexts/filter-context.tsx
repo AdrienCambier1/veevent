@@ -1,5 +1,4 @@
 "use client";
-
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 export interface EventFilters {
@@ -45,7 +44,7 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
   const [appliedFilters, setAppliedFilters] = useState<EventFilters>({});
 
   const updateTempFilters = (newFilters: Partial<EventFilters>) => {
-    setTempFilters(prev => ({ ...prev, ...newFilters }));
+    setTempFilters((prev) => ({ ...prev, ...newFilters }));
   };
 
   const applyFilters = () => {
@@ -58,18 +57,21 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
   };
 
   const hasActiveFilters = Object.keys(appliedFilters).length > 0;
-  const hasTempChanges = JSON.stringify(tempFilters) !== JSON.stringify(appliedFilters);
+  const hasTempChanges =
+    JSON.stringify(tempFilters) !== JSON.stringify(appliedFilters);
 
   return (
-    <FilterContext.Provider value={{
-      tempFilters,
-      appliedFilters,
-      updateTempFilters,
-      applyFilters,
-      clearFilters,
-      hasActiveFilters,
-      hasTempChanges
-    }}>
+    <FilterContext.Provider
+      value={{
+        tempFilters,
+        appliedFilters,
+        updateTempFilters,
+        applyFilters,
+        clearFilters,
+        hasActiveFilters,
+        hasTempChanges,
+      }}
+    >
       {children}
     </FilterContext.Provider>
   );

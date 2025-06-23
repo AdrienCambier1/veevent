@@ -3,7 +3,7 @@
 import BottomSheet from "@/components/common/bottom-sheet/bottom-sheet";
 import Filters from "./filters";
 import FilterFooter from "./filter-footer/filter-footer";
-import { useFilters } from "@/contexts/FilterContext";
+import { useFilters } from "@/contexts/filter-context";
 
 interface FilterBottomSheetProps {
   isOpen: boolean;
@@ -14,7 +14,8 @@ export default function FilterBottomSheet({
   isOpen,
   onClose,
 }: FilterBottomSheetProps) {
-  const { clearFilters, hasActiveFilters, applyFilters, hasTempChanges } = useFilters();
+  const { clearFilters, hasActiveFilters, applyFilters, hasTempChanges } =
+    useFilters();
 
   const handleShowResults = () => {
     applyFilters(); // Appliquer les filtres temporaires

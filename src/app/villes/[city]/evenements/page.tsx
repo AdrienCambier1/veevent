@@ -1,12 +1,12 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useCityEvents } from "@/hooks/useCityEvents";
+import { useCityEvents } from "@/hooks/cities/use-city-events";
 import { useMemo, useCallback, useState } from "react";
 import EventCard from "@/components/cards/event-card/event-card";
 import { Event } from "@/types";
 import { Filter } from "iconoir-react";
-import FilterBottomSheet from "@/components/common/filters/filter-bottom-sheet";
-import { FilterProvider, useFilters } from "@/contexts/FilterContext";
+import FilterBottomSheet from "@/components/commons/filters/filter-bottom-sheet";
+import { FilterProvider, useFilters } from "@/contexts/filter-context";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;

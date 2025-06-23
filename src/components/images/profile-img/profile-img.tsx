@@ -1,6 +1,6 @@
 import Image from "next/image";
 import profilePicture from "@/assets/images/profile-pic.jpg";
-import RatingStars from "@/components/common/rating-stars/rating-stars";
+import RatingStars from "@/components/commons/rating-stars/rating-stars";
 
 type SizeOption = "base" | "sm" | "xs";
 
@@ -27,20 +27,12 @@ export default function ProfileImg({
 
   return (
     <div className="flex items-center gap-2">
-      {imageUrl && (
-        <img
-          src={imageUrl}
-          alt="Profile picture"
-          className={`profile-pic ${iconSize}`}
-        />
-      )}
-      {!imageUrl && (
-        <Image
-          src={profilePicture}
-          alt={`Profile picture of ${name}`}
-          className="profile-pic"
-        />
-      )}
+      <Image
+        src={imageUrl ? imageUrl : profilePicture}
+        alt="Profile picture"
+        className={`profile-pic ${iconSize}`}
+      />
+
       {note !== null && (
         <div className="flex flex-col justify-center">
           <p className="text-base font-medium">{name}</p>

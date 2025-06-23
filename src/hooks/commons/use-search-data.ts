@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { cityService } from "@/services/cityService";
-import { placeService } from "@/services/placeService";
+import { cityService } from "@/services/city-service";
+import { placeService } from "@/services/place-service";
 import { SearchFilterOption } from "@/types";
 
 interface UseSearchDataReturn {
@@ -25,27 +25,30 @@ export const useSearchData = (): UseSearchDataReturn => {
         // Charger les villes et les lieux en parallèle
         const [citiesData, placesData] = await Promise.all([
           cityService.getCities(),
-          placeService.getPlaces()
+          placeService.getPlaces(),
         ]);
 
         // Transformer les données pour le SearchFilter
-        const cityOptions: SearchFilterOption[] = citiesData.map(city => ({
+        const cityOptions: SearchFilterOption[] = citiesData.map((city) => ({
           id: city.id.toString(),
           name: city.name,
-          eventCount: city.eventsCount
+          eventCount: city.eventsCount,
         }));
 
-        const placeOptions: SearchFilterOption[] = placesData.map(place => ({
+        const placeOptions: SearchFilterOption[] = placesData.map((place) => ({
           id: place.id.toString(),
           name: place.name,
-          eventCount: place.eventsCount
+          eventCount: place.eventsCount,
         }));
 
         setCities(cityOptions);
         setPlaces(placeOptions);
       } catch (err) {
         setError(err as Error);
-        console.error("Erreur lors du chargement des données de recherche:", err);
+        console.error(
+          "Erreur lors du chargement des données de recherche:",
+          err
+        );
       } finally {
         setLoading(false);
       }

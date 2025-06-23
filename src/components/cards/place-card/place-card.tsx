@@ -4,7 +4,7 @@ import { MapPin, Shop } from "iconoir-react";
 import Image from "next/image";
 import img from "@/assets/images/nice.jpg";
 import Link from "next/link";
-import { useSlugify } from "@/hooks/useSlugify";
+import { useSlugify } from "@/hooks/commons/use-slugify";
 interface PlaceCardProps {
   place?: Place;
   index?: number;

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { eventService } from "@/services/eventService";
+import { eventService } from "@/services/event-service";
 import { Event, EventFilters } from "@/types";
 
 interface UseEventsReturn {

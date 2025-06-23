@@ -1,20 +1,20 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useCity } from "@/hooks/useCity";
-import { useCities } from "@/hooks/useCities";
+import { useCity } from "@/hooks/cities/use-city";
+import { useCities } from "@/hooks/cities/use-cities";
 import EventCard from "@/components/cards/event-card/event-card";
 import NewsCard from "@/components/cards/news-card/news-card";
-import CustomTitle from "@/components/common/custom-title/custom-title";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
 import TabList from "@/components/lists/tab-list/tab-list";
 import Link from "next/link";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import { BaseUser, Event, SingleUser } from "@/types";
-import { useCityEvents } from "@/hooks/useCityEvents";
+import { useCityEvents } from "@/hooks/cities/use-city-events";
 import { FRENCH_REGIONS } from "@/constants/regions";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
-import { useCityData } from "@/hooks/useCityData";
+import { useCityData } from "@/hooks/cities/use-city-data";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;

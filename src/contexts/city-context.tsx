@@ -1,7 +1,7 @@
 "use client";
 import { City, NearestCitiesResponse, SingleCity } from "@/types";
-import { cityService } from "@/services/cityService";
-import { useGeolocation } from "@/hooks/useGeolocation";
+import { cityService } from "@/services/city-service";
+import { useGeolocation } from "@/hooks/commons/use-geolocation";
 import {
   createContext,
   useContext,

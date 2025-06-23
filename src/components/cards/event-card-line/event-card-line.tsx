@@ -4,7 +4,7 @@ import img from "@/assets/images/nice.jpg";
 import { ArrowUpRight } from "iconoir-react";
 import { Event } from "@/types";
 import Link from "next/link";
-import { useSlugify } from "@/hooks/useSlugify";
+import { useSlugify } from "@/hooks/commons/use-slugify";
 
 interface EventCardLineProps {
   event?: Event;

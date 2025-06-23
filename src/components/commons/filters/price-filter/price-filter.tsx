@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import "./price-filter.scss";
-import { useFilters } from "@/contexts/FilterContext";
+import { useFilters } from "@/contexts/filter-context";
 
 export default function PriceFilter() {
   const { tempFilters, updateTempFilters } = useFilters();

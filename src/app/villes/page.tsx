@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useCities } from "@/hooks/useCities";
+import { useCities } from "@/hooks/cities/use-cities";
 import {
   FRENCH_REGIONS,
   RegionCode,
@@ -8,11 +8,11 @@ import {
 } from "@/constants/regions";
 import SearchInput from "@/components/inputs/search-input/search-input";
 import TabList from "@/components/lists/tab-list/tab-list";
-import CustomTitle from "@/components/common/custom-title/custom-title";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
 import PlacesMapList from "@/components/lists/places-map-list/places-map-list";
-import { usePlaces } from "@/hooks/usePlaces";
+import { usePlaces } from "@/hooks/places/use-places";
 
 export default function VillesPage() {
   const [searchTerm, setSearchTerm] = useState("");

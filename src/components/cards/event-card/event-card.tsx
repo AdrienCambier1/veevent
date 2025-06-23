@@ -7,7 +7,7 @@ import { ArrowUpRight, Bookmark, Calendar, MapPin } from "iconoir-react";
 import Image from "next/image";
 import Link from "next/link";
 import "./event-card.scss";
-import { useSlugify } from "@/hooks/useSlugify";
+import { useSlugify } from "@/hooks/commons/use-slugify";
 
 interface EventCardProps {
   id: string;
@@ -37,11 +37,7 @@ export default function EventCard({ id, event, minify }: EventCardProps) {
         </div>
         <Image src={niceImage} className="banner" alt="Event image" />
       </div>
-      <div
-        className={`flex flex-col flex-1 p-2 ${
-          minify ? "gap-1" : "justify-between gap-1"
-        }`}
-      >
+      <div className={`flex flex-col flex-1 p-2 ${minify ? "gap-1" : "gap-1"}`}>
         <div className="flex items-center justify-between gap-2">
           <div className="title">{event.name}</div>
           <Bookmark className="icon" />

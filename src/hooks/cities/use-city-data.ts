@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { cityService } from "@/services/cityService";
+import { cityService } from "@/services/city-service";
 import { SingleCity, Event, Place, SingleUser } from "@/types";
 
 interface UseCityDataReturn {
@@ -127,7 +127,9 @@ export const useCityData = (
               cityData._links.events.href,
               limit
             );
-            setOrganizers(limit ? cityOrganizers.slice(0, limit) : cityOrganizers);
+            setOrganizers(
+              limit ? cityOrganizers.slice(0, limit) : cityOrganizers
+            );
           } catch (organizersError) {
             console.warn(
               "Erreur lors du chargement des organisateurs:",

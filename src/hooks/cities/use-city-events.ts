@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { cityService } from "@/services/cityService";
+import { cityService } from "@/services/city-service";
 import { SingleCity, Event, EventFilters } from "@/types";
 
 type EventType = "all" | "trending" | "firstEdition";
@@ -41,7 +41,12 @@ export const useCityEvents = (
   // Mémoriser les options pour éviter les rerenders
   const memoizedOptions = useMemo(
     () => options,
-    [options.fetchAll, options.fetchTrending, options.fetchFirstEdition, JSON.stringify(options.filters)]
+    [
+      options.fetchAll,
+      options.fetchTrending,
+      options.fetchFirstEdition,
+      JSON.stringify(options.filters),
+    ]
   );
 
   const fetchCityEvents = useCallback(
@@ -70,7 +75,7 @@ export const useCityEvents = (
           maxPrice: filtersToApply.maxPrice,
           startDate: filtersToApply.startDate,
           endDate: filtersToApply.endDate,
-          categories: filtersToApply.categories?.join(','),
+          categories: filtersToApply.categories?.join(","),
         };
 
         // Préparer les promesses selon les options
@@ -79,7 +84,10 @@ export const useCityEvents = (
 
         if (finalOptions.fetchAll && cityData._links?.events?.href) {
           promises.push(
-            cityService.getEventsByCityLink(cityData._links.events.href, apiFilters)
+            cityService.getEventsByCityLink(
+              cityData._links.events.href,
+              apiFilters
+            )
           );
           promiseTypes.push("all");
         }
@@ -107,7 +115,11 @@ export const useCityEvents = (
 
             // Appliquer le tri côté client si nécessaire
             if (filtersToApply.sortBy) {
-              sortedResult = sortEvents(result, filtersToApply.sortBy, filtersToApply.sortOrder);
+              sortedResult = sortEvents(
+                result,
+                filtersToApply.sortBy,
+                filtersToApply.sortOrder
+              );
             }
 
             switch (type) {
@@ -137,32 +149,39 @@ export const useCityEvents = (
   );
 
   // Fonction pour trier les événements côté client
-  const sortEvents = (events: Event[], sortBy: string, sortOrder: string = 'asc'): Event[] => {
+  const sortEvents = (
+    events: Event[],
+    sortBy: string,
+    sortOrder: string = "asc"
+  ): Event[] => {
     return [...events].sort((a, b) => {
       let comparison = 0;
-      
+
       switch (sortBy) {
-        case 'date':
+        case "date":
           comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
           break;
-        case 'price':
+        case "price":
           comparison = a.price - b.price;
           break;
-        case 'popularity':
+        case "popularity":
           comparison = a.currentParticipants - b.currentParticipants;
           break;
         default:
           return 0;
       }
-      
-      return sortOrder === 'desc' ? -comparison : comparison;
+
+      return sortOrder === "desc" ? -comparison : comparison;
     });
   };
 
-  const applyFilters = useCallback((filters: EventFilters) => {
-    setCurrentFilters(filters);
-    fetchCityEvents({ filters });
-  }, [fetchCityEvents]);
+  const applyFilters = useCallback(
+    (filters: EventFilters) => {
+      setCurrentFilters(filters);
+      fetchCityEvents({ filters });
+    },
+    [fetchCityEvents]
+  );
 
   useEffect(() => {
     fetchCityEvents();

@@ -1,10 +1,10 @@
 "use client";
 import EventCard from "@/components/cards/event-card/event-card";
-import CustomTitle from "@/components/common/custom-title/custom-title";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import PlacesMapList from "@/components/lists/places-map-list/places-map-list";
-import { useCityData } from "@/hooks/useCityData";
-import { useCityEvents } from "@/hooks/useCityEvents";
+import { useCityData } from "@/hooks/cities/use-city-data";
+import { useCityEvents } from "@/hooks/cities/use-city-events";
 import { Event } from "@/types";
 import Link from "next/link";
 import { useParams } from "next/navigation";
