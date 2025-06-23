@@ -246,21 +246,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         const { token: authToken } = await response.json();
 
-        // const jwtPayload: JWTPayload = {
-        //   sub: credentials.email,
-        //   id: 1,
-        //   email: credentials.email,
-        //   exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-        //   iat: Math.floor(Date.now() / 1000),
-        // };
-
-        // const payloadBase64 = btoa(JSON.stringify(jwtPayload))
-        //   .replace(/\+/g, "-")
-        //   .replace(/\//g, "_")
-        //   .replace(/=+$/, "");
-
-        // const simulatedToken = `eyJhbGciOiJIUzI1NiJ9.${payloadBase64}.SIGNATURE`;
-
         const userData = await fetchUserData(authToken);
 
         if (!userData) {

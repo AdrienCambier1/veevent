@@ -1,5 +1,5 @@
 "use client";
-import { City, NearestCitiesResponse } from "@/types";
+import { City, NearestCitiesResponse, SingleCity } from "@/types";
 import { cityService } from "@/services/cityService";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import {
@@ -12,10 +12,10 @@ import {
 } from "react";
 
 interface CityContextType {
-  selectedCity: City | undefined;
+  selectedCity: SingleCity | undefined;
   currentCity: string | undefined;
   nearbyCities: string[];
-  changeCity: (city: City) => void;
+  changeCity: (city: SingleCity) => void;
   loading: boolean;
   geoLoading: boolean;
   // ✅ Ajouter les erreurs et fonctions manquantes
@@ -44,7 +44,7 @@ interface CityProviderProps {
 }
 
 export function CityProvider({ children }: CityProviderProps) {
-  const [selectedCity, setSelectedCity] = useState<City | undefined>();
+  const [selectedCity, setSelectedCity] = useState<SingleCity | undefined>();
   const [currentCity, setCurrentCity] = useState<string | undefined>();
   const [nearbyCities, setNearbyCities] = useState<string[]>([]);
   const [userLocation, setUserLocation] = useState<
@@ -229,7 +229,7 @@ export function CityProvider({ children }: CityProviderProps) {
     const storedCity = localStorage.getItem("selectedCity");
     if (storedCity) {
       try {
-        const parsedCity = JSON.parse(storedCity) as City;
+        const parsedCity = JSON.parse(storedCity) as SingleCity;
         console.log("💾 Ville restaurée depuis localStorage:", parsedCity.name);
 
         const cityData = await cityService.getCityById(parsedCity.id);
@@ -266,7 +266,7 @@ export function CityProvider({ children }: CityProviderProps) {
     initializeCityContext();
   }, []);
 
-  const changeCity = (city: City): void => {
+  const changeCity = (city: SingleCity): void => {
     console.log("🔄 Changement de ville vers:", city.name);
     setSelectedCity(city);
     localStorage.setItem("selectedCity", JSON.stringify(city));

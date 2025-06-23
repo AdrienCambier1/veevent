@@ -1,42 +1,32 @@
+import { useRouter } from "next/navigation";
+import { Category } from "@/types";
 import themeIcons from "../../tags/theme-tag/themes";
 import "./theme-card.scss";
 
 interface ThemeCardProps {
-  category?: string;
-  name?: string;
+  category: Category; // ✅ Obligatoire maintenant
   children?: React.ReactNode;
 }
 
-export default function ThemeCard({
-  category,
-  name,
-  children,
-}: ThemeCardProps) {
-  if (category) {
-    const themeIcon = themeIcons[category] || themeIcons.default;
-    const displayName = name || themeIcon.name;
+export default function ThemeCard({ category, children }: ThemeCardProps) {
+  const router = useRouter();
 
-    return (
-      <div className="theme-card">
-        <div className="theme-card-icon">{themeIcon.icon}</div>
-        <span className="theme-card-label">{displayName}</span>
-        {children}
-      </div>
-    );
-  }
+  const handleClick = () => {
+    // ✅ Redirection vers la page des événements avec le filtre de catégorie
+    router.push(`/evenements?theme=${category.key}`);
+  };
 
-  if (name) {
-    return (
-      <div className="theme-card">
-        <div className="theme-card-icon"> {themeIcons.default.icon}</div>
-        <span className="theme-card-label">
-          {" "}
-          {children}
-          {name}
-        </span>
-      </div>
-    );
-  }
+  const themeIcon = themeIcons[category.key] || themeIcons.default;
 
-  return <span className="theme-card">{children}</span>;
+  return (
+    <div
+      className="theme-card"
+      onClick={handleClick}
+      style={{ cursor: "pointer" }}
+    >
+      <div className="theme-card-icon">{themeIcon.icon}</div>
+      <span className="theme-card-label">{category.name}</span>
+      {children}
+    </div>
+  );
 }

@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { cityService } from "@/services/cityService";
-import { City } from "@/types";
+import { City, SingleCity } from "@/types";
 
 interface UseCitiesReturn {
-  cities: City[];
+  cities: SingleCity[];
   loading: boolean;
   error: Error | null;
   refetch: () => void;
@@ -17,7 +17,7 @@ export const useCities = (
     searchTerm?: string;
   }
 ): UseCitiesReturn => {
-  const [cities, setCities] = useState<City[]>([]);
+  const [cities, setCities] = useState<SingleCity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -26,7 +26,7 @@ export const useCities = (
       setLoading(true);
       setError(null);
 
-      let data: City[] = [];
+      let data: SingleCity[] = [];
 
       switch (type) {
         case "popular":

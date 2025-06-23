@@ -25,6 +25,8 @@ import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import { useAuth } from "@/contexts/auth-context";
 import { useEvents } from "@/hooks/useEvents";
 import { Event } from "@/types";
+import EventCardSkeleton from "@/components/cards/event-card/event-card-skeleton";
+import { useCategories } from "@/hooks/useCategories";
 
 export default function Home() {
   const { login, loading, isAuthenticated, logout } = useAuth();
@@ -45,6 +47,11 @@ export default function Home() {
     loading: freeLoading,
     error: freeError,
   } = useEvents("free");
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useCategories();
 
   // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
   const extractIdFromSelfLink = (event: Event): string => {
@@ -60,13 +67,7 @@ export default function Home() {
     error: Error | null
   ) => {
     if (loading) {
-      return (
-        <>
-          <div className="animate-pulse bg-gray-200 h-64 rounded"></div>
-          <div className="animate-pulse bg-gray-200 h-64 rounded"></div>
-          <div className="animate-pulse bg-gray-200 h-64 rounded"></div>
-        </>
-      );
+      return <></>;
     }
 
     if (error) {
@@ -97,12 +98,7 @@ export default function Home() {
     error: Error | null
   ) => {
     if (loading) {
-      return (
-        <>
-          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
-          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
-        </>
-      );
+      return <></>;
     }
 
     if (error) {
@@ -139,6 +135,28 @@ export default function Home() {
     });
   };
 
+  const renderThemeCards = () => {
+    if (categoriesLoading) {
+      return <div>Chargement des catégories...</div>;
+    }
+
+    if (categoriesError) {
+      return (
+        <div className="text-red-500">
+          Erreur lors du chargement des catégories
+        </div>
+      );
+    }
+
+    if (!categories || categories.length === 0) {
+      return <div>Aucune catégorie trouvée</div>;
+    }
+
+    return categories.map((category) => (
+      <ThemeCard key={category.key} category={category} />
+    ));
+  };
+
   return (
     <main>
       <section className="wrapper">
@@ -162,11 +180,7 @@ export default function Home() {
       </HorizontalList>
 
       <HorizontalList title="Envie d'une sortie">
-        <ThemeCard category="music" />
-        <ThemeCard category="sport" name="Aquaponey" />
-        <ThemeCard category="sport" name="Aquaponey" />
-        <ThemeCard category="sport" name="Aquaponey" />
-        <ThemeCard category="sport" name="Aquaponey" />
+        {renderThemeCards()}
       </HorizontalList>
 
       <HorizontalList title="Les bonnes affaires de la semaine">

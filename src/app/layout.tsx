@@ -7,6 +7,7 @@ import FloatingMenu from "@/components/menu/floating-menu/floating-menu";
 import { Metadata } from "next";
 import { AuthProvider } from "@/contexts/auth-context";
 import { HeaderProvider } from "@/contexts/header-context";
+import { FilterProvider } from "@/contexts/FilterContext";
 
 export const metadata: Metadata = {
   appleWebApp: {
@@ -32,15 +33,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="fr">
       <body>
         <AuthProvider>
-          <HeaderProvider>
-            <CityProvider>
-              <SidebarProvider>
-                <Header />
-                {children}
-                <FloatingMenu />
-              </SidebarProvider>
-            </CityProvider>
-          </HeaderProvider>
+          <FilterProvider>
+            <HeaderProvider>
+              <CityProvider>
+                <SidebarProvider>
+                  <Header />
+                  {children}
+                  <FloatingMenu />
+                </SidebarProvider>
+              </CityProvider>
+            </HeaderProvider>
+          </FilterProvider>
         </AuthProvider>
       </body>
     </html>

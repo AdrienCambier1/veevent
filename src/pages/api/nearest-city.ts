@@ -1,7 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import requestIp from "request-ip";
 import { cityService } from "@/services/cityService";
-import { City, GeolocationResponse, NearestCitiesResponse } from "@/types";
+import {
+  City,
+  GeolocationResponse,
+  NearestCitiesResponse,
+  SingleCity,
+} from "@/types";
 
 // Fonction pour calculer la distance avec la formule de Haversine
 function calculateHaversineDistance(
@@ -48,7 +53,7 @@ async function getLocationFromIP(
 }
 
 // Fonction pour récupérer les villes depuis l'API via cityService
-async function getCitiesFromAPI(): Promise<City[]> {
+async function getCitiesFromAPI(): Promise<SingleCity[]> {
   try {
     const cities = await cityService.getCities();
     console.log("Villes récupérées depuis l'API:", cities.length);
