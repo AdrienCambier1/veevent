@@ -154,7 +154,7 @@ export default function SidebarMenu() {
                 >
                   <TextImageCard
                     title={city}
-                    href={`/villes/${city}`}
+                    href={`/villes/${city.toLowerCase()}`}
                     isCard={false}
                     image={img}
                   />

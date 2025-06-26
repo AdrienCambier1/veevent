@@ -16,9 +16,12 @@ export default function OrganizerCard({
 }: OrganizerCardProps) {
   const { events, loading, error } = useOrganizerEvents(
     organizer.pseudo || "",
+    organizer.id,
     currentEventId,
     2
   );
+
+  console.log("organizer", organizer);
 
   const renderEvents = () => {
     if (loading) {
@@ -70,7 +73,7 @@ export default function OrganizerCard({
             <span>12</span> abonnés
           </div> */}
           <div>
-            <span>{organizer.eventsCount} </span>
+            <span>{organizer.eventsCount - organizer.eventPastCount} </span>
             {/* {organizer.eventsCount > 1 ? "événements " : "événement "} */}
             en cours
           </div>

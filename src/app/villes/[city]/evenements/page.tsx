@@ -7,6 +7,7 @@ import { Event } from "@/types";
 import { Filter } from "iconoir-react";
 import FilterBottomSheet from "@/components/commons/filters/filter-bottom-sheet";
 import { FilterProvider, useFilters } from "@/contexts/filter-context";
+import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;
@@ -110,25 +111,19 @@ function EvenementsContent() {
 
   return (
     <>
-      <section className="wrapper">
-        {/* Événements trending (populaires) */}
-        <h2>Les événements populaires à {city.name}</h2>
-        {trendingEvents.length > 0 ? (
-          renderEventCards(trendingEvents, false, null, false)
-        ) : (
-          <p>Aucun événement populaire pour le moment.</p>
-        )}
-      </section>
+      {/* Événements de première édition */}
+      {trendingEvents.length > 0 && (
+        <HorizontalList title={`Les événements populaires à ${city.name}`}>
+          {renderEventCards(trendingEvents, false, null, false)}
+        </HorizontalList>
+      )}
 
-      <section className="wrapper">
-        {/* Événements de première édition */}
-        <h2>Ils font leur début à {city.name}</h2>
-        {firstEditionEvents.length > 0 ? (
-          renderEventCards(firstEditionEvents, false, null, false)
-        ) : (
-          <p>Aucun événement de première édition pour le moment.</p>
-        )}
-      </section>
+      {/* Événements de première édition */}
+      {firstEditionEvents.length > 0 && (
+        <HorizontalList title={`Ils font leur début à ${city.name}`}>
+          {renderEventCards(firstEditionEvents, false, null, false)}
+        </HorizontalList>
+      )}
 
       <section className="wrapper">
         {/* Autres événements */}

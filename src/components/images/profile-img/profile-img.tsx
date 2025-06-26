@@ -28,7 +28,7 @@ export default function ProfileImg({
   return (
     <div className="flex items-center gap-2">
       <Image
-        src={imageUrl ? imageUrl : profilePicture}
+        src={profilePicture}
         alt="Profile picture"
         className={`profile-pic ${iconSize}`}
       />

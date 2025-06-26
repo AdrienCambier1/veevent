@@ -9,7 +9,8 @@
     }
 
     .title {
-      @apply text-white;
+      @apply text-white text-center;
+      line-height: 1;
     }
 
     img {

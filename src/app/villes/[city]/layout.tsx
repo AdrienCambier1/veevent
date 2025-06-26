@@ -8,6 +8,7 @@ import FaqCard from "@/components/cards/faq-card/faq-card";
 import ReviewCard from "@/components/cards/review-card/review-card";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useCityData } from "@/hooks/cities/use-city-data";
 
 interface CitiesLayoutProps {
   children: ReactNode;
@@ -15,6 +16,7 @@ interface CitiesLayoutProps {
 
 export default function CityLayout({ children }: CitiesLayoutProps) {
   const { city } = useParams() as { city: string };
+  const { city: cityData } = useCityData(city);
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigation = [
@@ -26,7 +28,7 @@ export default function CityLayout({ children }: CitiesLayoutProps) {
 
   return (
     <main>
-      <BannerHead city={city} />
+      <BannerHead city={cityData?.name || ""} />
       <section className="wrapper">
         <h1>Évènements et activités proche de la ville de {city}</h1>
         <h3>Rechercher un évènement à {city}</h3>

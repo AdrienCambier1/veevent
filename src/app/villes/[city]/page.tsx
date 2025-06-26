@@ -160,19 +160,22 @@ export default function CityPage() {
         )}
       </section>
 
+        {popularOrganizers.length > 0 && (
       <section className="wrapper">
         <CustomTitle
           title={`Découvrez leurs derniers évènements sur ${city.name}`}
           description={`Organisateurs populaires`}
         />
-        {popularOrganizers.length > 0 &&
+        {
           popularOrganizers.map((organizer: SingleUser) => (
             <OrganizerCard key={organizer.id} organizer={organizer} />
           ))}
         <button className="secondary-btn">
           <span>Voir tous les organisateurs</span>
-        </button>
-      </section>
+          </button>
+        </section>
+      )}
+
       {/* Villes de la région */}
       {/* {regionCities.length > 0 && (
           <TabList

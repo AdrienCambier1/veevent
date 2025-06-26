@@ -172,6 +172,7 @@ export interface SingleCity extends BaseCity {
     cities?: EventLink;
     places?: EventLink;
     events?: EventLink;
+    organizers?: EventLink;
   };
 }
 

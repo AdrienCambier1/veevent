@@ -11,6 +11,7 @@ interface UseOrganizerEventsReturn {
 
 export const useOrganizerEvents = (
   organizerPseudo: string,
+  organizerId: number,
   currentEventId?: string,
   limit: number = 3
 ): UseOrganizerEventsReturn => {
@@ -29,11 +30,17 @@ export const useOrganizerEvents = (
       setLoading(true);
       setError(null);
 
+      console.log("organizerPseudo", organizerPseudo);
+      console.log("currentEventId", currentEventId);
+      console.log("limit", limit);
+
       const data = await eventService.getEventsByOrganizer(
         organizerPseudo,
+        organizerId,
         currentEventId,
         limit
       );
+
 
       setEvents(data);
     } catch (err) {

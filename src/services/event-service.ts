@@ -335,6 +335,7 @@ export const eventService = {
 
   async getEventsByOrganizer(
     organizerPseudo: string,
+    organizerId?: number,
     currentEventId?: string,
     limit: number = 3
   ): Promise<Event[]> {
@@ -370,12 +371,14 @@ export const eventService = {
         return mappedEvents;
       }
 
-      const response = await fetch(`${apiUrl}/events`, {
+      const response = await fetch(`${apiUrl}/users/${organizerId}/events`, {
         headers: {
           "Content-Type": "application/json",
         },
         cache: "no-store",
       });
+
+      console.log("response", response);
 
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
@@ -526,6 +529,79 @@ export const eventService = {
       return mappedOrganizer;
     } catch (error) {
       console.error("❌ Error in getOrganizerByEvent:", error);
+      throw error;
+    }
+  },
+
+  async getFirstEvents(
+    city?: string,
+    place?: string,
+    limit: number = 10
+  ): Promise<Event[]> {
+    try {
+      if (useMockData) {
+        // Pour les données mock, on peut filtrer par ville ou lieu
+        let filteredEvents = mockEvents.filter((event) => {
+          if (city && event.address.toLowerCase().includes(city.toLowerCase())) {
+            return true;
+          }
+          if (place && event.address.toLowerCase().includes(place.toLowerCase())) {
+            return true;
+          }
+          return false;
+        });
+
+        // Limiter le nombre d'événements
+        filteredEvents = filteredEvents.slice(0, limit);
+
+        return filteredEvents.map(mapMockEventToEvent);
+      }
+
+      // Construction de l'URL avec les paramètres
+      const searchParams = new URLSearchParams();
+      if (city) searchParams.append("city", city);
+      if (place) searchParams.append("place", place);
+      if (limit) searchParams.append("limit", limit.toString());
+
+      const queryString = searchParams.toString();
+      const url = `${apiUrl}/events/first-editions${queryString ? `?${queryString}` : ""}`;
+
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const apiEvents = result._embedded?.eventSummaryResponses || [];
+
+      const mappedEvents: Event[] = apiEvents.map((apiEvent: any) => ({
+        date: formatEventDate(apiEvent.date),
+        description: apiEvent.description,
+        name: apiEvent.name,
+        address: apiEvent.address,
+        maxCustomers: apiEvent.maxCustomers,
+        isTrending: apiEvent.isTrending,
+        price: apiEvent.price,
+        status: apiEvent.status,
+        categories: apiEvent.categories,
+        organizer: apiEvent.organizer,
+        currentParticipants: apiEvent.currentParticipants,
+        _links: {
+          self: {
+            href: apiEvent._links.self.href,
+          },
+        },
+      }));
+
+      return mappedEvents;
+    } catch (error) {
+      console.error("❌ Error in getFirstEvents:", error);
       throw error;
     }
   },

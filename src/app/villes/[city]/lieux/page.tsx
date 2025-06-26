@@ -3,8 +3,14 @@ import EventCard from "@/components/cards/event-card/event-card";
 import CustomTitle from "@/components/commons/custom-title/custom-title";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import PlacesMapList from "@/components/lists/places-map-list/places-map-list";
+import TabList from "@/components/lists/tab-list/tab-list";
+import {
+  PLACE_TYPE_LABELS,
+  PLACE_TYPE_ORDER,
+} from "@/constants/places-categories";
 import { useCityData } from "@/hooks/cities/use-city-data";
 import { useCityEvents } from "@/hooks/cities/use-city-events";
+import { useCityPlacesByCategory } from "@/hooks/cities/use-city-places-by-category";
 import { Event } from "@/types";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -21,10 +27,10 @@ export default function LieuxPage() {
 
   // Décoder le paramètre URL et capitaliser
   const cityName = useMemo(() => {
-    return decodeURIComponent(cityParam)
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
+    return decodeURIComponent(cityParam);
+    // .split("-")
+    // .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    // .join(" ");
   }, [cityParam]);
 
   // Hook pour récupérer les lieux via les liens HATEOAS
@@ -42,6 +48,23 @@ export default function LieuxPage() {
     loading: eventsLoading,
     error: eventsError,
   } = useCityEvents(cityName);
+
+  const {
+    placesByCategory,
+    loading: placesByCategoryLoading,
+    error: placesByCategoryError,
+  } = useCityPlacesByCategory(city?._links?.places?.href);
+
+  if (placesByCategoryLoading) {
+    return <div>Chargement des lieux...</div>;
+  }
+  if (placesByCategoryError) {
+    return (
+      <div>
+        Erreur lors du chargement des lieux: {placesByCategoryError.message}
+      </div>
+    );
+  }
 
   // Fonction pour rendre les EventCards
   const renderEventCards = (
@@ -105,21 +128,14 @@ export default function LieuxPage() {
     );
   }
 
-  // Limiter les événements trending affichés
-  const featuredTrendingEvents = trendingEvents.slice(0, 4);
-
   return (
     <>
+      {/* Affichage des lieux */}
       <section className="wrapper">
         <CustomTitle
           title={`Les lieux populaires à ${cityData.name}`}
           description="Lieux"
         />
-      </section>
-
-      {/* Affichage des lieux */}
-      <section className="wrapper">
-        <h2>Les lieux disponibles</h2>
         {places.length > 0 ? (
           <PlacesMapList locations={places} />
         ) : (
@@ -128,17 +144,34 @@ export default function LieuxPage() {
       </section>
 
       {/* Événements populaires (trending) */}
-      {featuredTrendingEvents.length > 0 && (
+      {trendingEvents.length > 0 && (
         <HorizontalList title={`Les évènements populaires à ${cityData.name}`}>
-          {renderEventCards(featuredTrendingEvents, false, null, false)}
+          {renderEventCards(trendingEvents, false, null, false)}
         </HorizontalList>
       )}
 
+      {/* Liste des lieux par catégorie */}
       <section className="wrapper">
-        <Link href={`/villes/${cityParam}/evenements`} className="primary-btn">
-          <span>Voir tous les événements à {cityData.name}</span>
-        </Link>
+        <h2>Tous les lieux sur Nice et alentours</h2>
+        {PLACE_TYPE_ORDER.map((typeKey) => {
+          const label = PLACE_TYPE_LABELS[typeKey];
+          const places = placesByCategory[label];
+          if (!places || places.length === 0) return null;
+          return (
+            <TabList
+              key={typeKey}
+              title={label}
+              items={places.map((place) => place.name)}
+              generateHref={(name) => {
+                const place = places.find((p) => p.name === name);
+                return place ? `/lieux/${place.id}` : "#";
+              }}
+            />
+          );
+        })}
       </section>
+
+    
     </>
   );
 }

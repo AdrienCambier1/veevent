@@ -8,6 +8,9 @@ import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import { Event } from "@/types";
 import { useMemo } from "react";
+import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
+import { useCityEvents } from "@/hooks/cities/use-city-events";
+import OrganizerPhotoCard from "@/components/cards/organizer-photo-card/organizer-photo-card";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;
@@ -20,17 +23,18 @@ export default function OrganisateursPage() {
 
   // Décoder le paramètre URL et capitaliser
   const cityName = useMemo(() => {
-    return decodeURIComponent(cityParam)
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
+    return decodeURIComponent(cityParam);
   }, [cityParam]);
 
   // Hook pour récupérer les organisateurs via les liens HATEOAS
-  const { city, events, organizers, loading, error } = useCityData(
+  const { city, events, organizers, firstEvents, loading, error } = useCityData(
     cityName,
     "organizers"
   );
+
+  const { trendingEvents } = useCityEvents(cityName, {
+    fetchTrending: true,
+  });
 
   // Fonction pour rendre les EventCards
   const renderEventCards = (
@@ -100,13 +104,18 @@ export default function OrganisateursPage() {
           title={`Découvrez leurs derniers évènements sur ${city.name}`}
           description="Organisateurs populaires"
         />
+        {organizers.length > 0 &&
+          organizers.map((organizer) => (
+            <OrganizerCard organizer={organizer} />
+          ))}
       </section>
 
-      {featuredEvent && (
-        <section className="wrapper">
-          <h2>Les évènements populaires à {city.name}</h2>
-          {renderEventCards([featuredEvent], false, null, false)}
-        </section>
+      {/* Événements de première édition */}
+     
+      {trendingEvents.length > 0 && (
+        <HorizontalList title={`Les événements populaires à ${city.name}`}>
+          {renderEventCards(trendingEvents, false, null, false)}
+        </HorizontalList>
       )}
 
       <section className="wrapper">
@@ -123,9 +132,7 @@ export default function OrganisateursPage() {
                     organizer.lastName || ""
                   }`.trim() || organizer.pseudo
                 }
-                subtitle={`${organizer.eventsCount || 0} événement${
-                  organizer.eventsCount > 1 ? "s" : ""
-                } • Note: ${organizer.note || "N/A"}/5`}
+                
                 href={`/organisateurs/${organizer.pseudo}`}
                 image={organizer.imageUrl || organizer.bannerUrl}
               />
@@ -134,25 +141,27 @@ export default function OrganisateursPage() {
           <p>Aucun organisateur trouvé pour le moment.</p>
         )}
 
-        <Link href="/organisateurs" className="primary-btn">
-          <span>Voir tous les organisateurs</span>
+        <Link href={`/villes/${cityParam}/evenements`} className="primary-btn">
+          <span>Voir les prochains événements</span>
         </Link>
       </section>
 
-      {popularEvents.length > 1 && (
-        <HorizontalList title={`Les évènements populaires à ${city.name}`}>
-          {renderEventCards(popularEvents, false, null, false)}
+      {firstEvents.length > 1 && (
+        <HorizontalList title={`Ils font leur début à ${city.name}`}>
+          {renderEventCards(firstEvents, false, null, false)}
         </HorizontalList>
       )}
 
+      {organizers.length > 0 && (
       <section className="wrapper">
-        <Link
-          href={`/villes/${cityParam}/evenements`}
-          className="secondary-btn"
-        >
-          <span>Voir tous les événements</span>
-        </Link>
+      <h2>Ils ont organisé récemment à {city.name}</h2>
+      <div className="grid grid-cols-3 gap-4">
+        {organizers.map((organizer) => (
+          <OrganizerPhotoCard key={organizer.pseudo} name={organizer.firstName + " " + organizer.lastName} imageUrl={organizer.imageUrl} href={`/organisateurs/${organizer.pseudo}`} />
+        ))}
+      </div>
       </section>
+      )}
     </>
   );
 }

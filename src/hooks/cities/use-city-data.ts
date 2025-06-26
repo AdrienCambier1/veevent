@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { cityService } from "@/services/city-service";
+import { eventService } from "@/services/event-service";
 import { SingleCity, Event, Place, SingleUser } from "@/types";
 
 interface UseCityDataReturn {
@@ -7,6 +8,7 @@ interface UseCityDataReturn {
   events: Event[];
   places: Place[];
   organizers: any[];
+  firstEvents: Event[];
   loading: boolean;
   error: Error | null;
   refetch: () => void;
@@ -14,7 +16,7 @@ interface UseCityDataReturn {
 
 export const useCityData = (
   cityName: string,
-  dataType?: "events" | "places" | "organizers" | "trending" | "all",
+  dataType?: "events" | "places" | "organizers" | "trending" | "firstEvents" | "all",
   filters?: {
     minPrice?: number;
     maxPrice?: number;
@@ -28,6 +30,7 @@ export const useCityData = (
   const [events, setEvents] = useState<Event[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
   const [organizers, setOrganizers] = useState<SingleUser[]>([]);
+  const [firstEvents, setFirstEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -105,6 +108,24 @@ export const useCityData = (
         }
       }
 
+      // 4. Gestion spécifique des événements first editions
+      if (dataType === "firstEvents" || dataType === "all") {
+        try {
+          const firstEditionEvents = await eventService.getFirstEvents(
+            cityName,
+            undefined,
+            limit
+          );
+          setFirstEvents(limit ? firstEditionEvents.slice(0, limit) : firstEditionEvents);
+        } catch (firstEventsError) {
+          console.warn(
+            "Erreur lors du chargement des événements first editions:",
+            firstEventsError
+          );
+          setFirstEvents([]);
+        }
+      }
+
       if (dataType === "places" || dataType === "all") {
         if (cityData._links?.places?.href) {
           try {
@@ -121,12 +142,14 @@ export const useCityData = (
       }
 
       if (dataType === "organizers" || dataType === "all") {
+        console.log("link events organizers", "cityData._links?.events?.href", cityData._links?.events?.href);
         if (cityData._links?.events?.href) {
           try {
-            const cityOrganizers = await cityService.getOrganizersByCityEvents(
-              cityData._links.events.href,
+            const cityOrganizers = await cityService.getOrganizersByCityLink(
+              cityData._links?.organizers?.href || "",
               limit
             );
+            console.log("cityOrganizers", cityOrganizers);
             setOrganizers(
               limit ? cityOrganizers.slice(0, limit) : cityOrganizers
             );
@@ -145,6 +168,7 @@ export const useCityData = (
       setEvents([]);
       setPlaces([]);
       setOrganizers([]);
+      setFirstEvents([]);
     } finally {
       setLoading(false);
     }
@@ -158,5 +182,5 @@ export const useCityData = (
     fetchCityData();
   }, [fetchCityData]);
 
-  return { city, events, places, organizers, loading, error, refetch };
+  return { city, events, places, organizers, firstEvents, loading, error, refetch };
 };

@@ -1,0 +1,12 @@
+.organizer-photo-card {
+  @apply flex flex-col gap-1;
+  .photo-card-image {
+    @apply w-full h-full object-cover;
+    img {
+      @apply w-full h-full object-cover aspect-square rounded-[var(--vv-border-radius)];
+    }
+  }
+  .photo-card-name {
+    @apply font-semibold text-primary-950 ml-1;
+  }
+}

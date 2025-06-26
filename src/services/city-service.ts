@@ -81,7 +81,7 @@ export const cityService = {
         return mockCity || null;
       }
 
-      const response = await fetch(`${apiUrl}/cities?name=${name}`, {
+      const response = await fetch(`${apiUrl}/cities?slug=${name}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -341,6 +341,34 @@ export const cityService = {
       return result._embedded?.placeResponses || [];
     } catch (error) {
       console.error("❌ Error in getPlacesByCityLink:", error);
+      throw error;
+    }
+  },
+
+  async getOrganizersByCityLink(
+    organizersHref: string,
+    limit?: number
+  ): Promise<SingleUser[]> {
+    try {
+      let url = organizersHref;
+
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("Organizers API Response:", result); // Debug log
+
+      return result._embedded?.userResponses || [];
+    } catch (error) {
+      console.error("❌ Error in getOrganizersByCityLink:", error);
       throw error;
     }
   },
