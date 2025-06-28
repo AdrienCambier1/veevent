@@ -34,7 +34,6 @@ export default function FilterFooter({
       >
         <span className="text-primary-50 text-sm font-semibold">
           Afficher les résultats
-          {hasTempChanges && " *"}
         </span>
       </button>
     </div>

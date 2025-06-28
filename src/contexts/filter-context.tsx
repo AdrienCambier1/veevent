@@ -11,6 +11,8 @@ export interface EventFilters {
   sortOrder?: "asc" | "desc";
   cityName?: string;
   placeName?: string;
+  selectedCityObj?: any; // Objet complet de la ville sélectionnée
+  selectedPlaceObj?: any; // Objet complet du lieu sélectionné
 }
 
 interface FilterContextType {
@@ -23,6 +25,8 @@ interface FilterContextType {
   clearFilters: () => void;
   hasActiveFilters: boolean;
   hasTempChanges: boolean;
+  filterVersion: number;
+  removeFilterAndApply: (key: string) => void;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -39,26 +43,55 @@ interface FilterProviderProps {
   children: ReactNode;
 }
 
+// Fonction utilitaire pour nettoyer les filtres
+function cleanFilters(filters: EventFilters): EventFilters {
+  return Object.fromEntries(
+    Object.entries(filters).filter(
+      ([, value]) => value !== undefined && value !== null && !(Array.isArray(value) && value.length === 0)
+    )
+  );
+}
+
 export const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
   const [tempFilters, setTempFilters] = useState<EventFilters>({});
   const [appliedFilters, setAppliedFilters] = useState<EventFilters>({});
+  const [filterVersion, setFilterVersion] = useState(0);
 
   const updateTempFilters = (newFilters: Partial<EventFilters>) => {
-    setTempFilters((prev) => ({ ...prev, ...newFilters }));
+    setTempFilters((prev) => cleanFilters({ ...prev, ...newFilters }));
   };
 
   const applyFilters = () => {
-    setAppliedFilters(tempFilters);
+    console.log("[FilterContext] applyFilters called", tempFilters);
+    setAppliedFilters(cleanFilters(tempFilters));
+    setFilterVersion((v) => v + 1);
   };
 
   const clearFilters = () => {
+    console.log("[FilterContext] clearFilters called");
     setTempFilters({});
     setAppliedFilters({});
+    setFilterVersion((v) => v + 1);
   };
 
   const hasActiveFilters = Object.keys(appliedFilters).length > 0;
   const hasTempChanges =
     JSON.stringify(tempFilters) !== JSON.stringify(appliedFilters);
+
+  // Supprimer un filtre et appliquer immédiatement
+  const removeFilterAndApply = (key: string) => {
+    setTempFilters((prev) => {
+      const newFilters: EventFilters = { ...prev };
+      delete newFilters[key as keyof EventFilters];
+      return newFilters;
+    });
+    setAppliedFilters((prev) => {
+      const newFilters: EventFilters = { ...prev };
+      delete newFilters[key as keyof EventFilters];
+      return newFilters;
+    });
+    setFilterVersion((v) => v + 1);
+  };
 
   return (
     <FilterContext.Provider
@@ -70,6 +103,8 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
         clearFilters,
         hasActiveFilters,
         hasTempChanges,
+        filterVersion,
+        removeFilterAndApply,
       }}
     >
       {children}

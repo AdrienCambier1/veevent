@@ -217,12 +217,22 @@ export const cityService = {
       startDate?: string;
       endDate?: string;
       categories?: string;
+      page?: number;
+      size?: number;
     },
     limit?: number
-  ): Promise<Event[]> {
+  ): Promise<import("@/types").EventsResponse> {
     try {
       if (useMockData) {
-        return [];
+        return {
+          _embedded: { eventSummaryResponses: [] },
+          _links: {
+            first: { href: "" },
+            self: { href: "" },
+            last: { href: "" }
+          },
+          page: { number: 0, size: 20, totalElements: 0, totalPages: 0 }
+        };
       }
 
       // Construire l'URL avec les paramètres de filtre
@@ -241,6 +251,10 @@ export const cityService = {
           if (filters.endDate) searchParams.append("endDate", filters.endDate);
           if (filters.categories)
             searchParams.append("categories", filters.categories);
+          if (filters.page !== undefined)
+            searchParams.append("page", filters.page.toString());
+          if (filters.size !== undefined)
+            searchParams.append("size", filters.size.toString());
         }
 
         if (limit) {
@@ -275,12 +289,8 @@ export const cityService = {
       const result = await response.json();
       console.log("Events API Response:", result); // Debug
 
-      // Vérifier la structure de la réponse
-      return (
-        result._embedded?.events ||
-        result._embedded?.eventSummaryResponses ||
-        []
-      );
+      // Retourner la réponse paginée complète
+      return result;
     } catch (error) {
       console.error("❌ Error in getEventsByCityLink:", error);
       throw error;
@@ -293,13 +303,13 @@ export const cityService = {
     limit?: number
   ): Promise<Event[]> {
     try {
-      return await this.getEventsByCityLink(
+      const result = await this.getEventsByCityLink(
         eventsHref,
-        {
-          categories: "trending",
-        },
+        { categories: "trending" },
         limit
       );
+      // Correction ici : extraire le tableau d'événements
+      return result._embedded?.eventSummaryResponses || [];
     } catch (error) {
       console.error("❌ Error in getTrendingEventsByCityLink:", error);
       throw error;
@@ -379,11 +389,13 @@ export const cityService = {
     limit?: number
   ): Promise<any[]> {
     try {
-      const events = await this.getEventsByCityLink(
+      const result = await this.getEventsByCityLink(
         eventsHref,
         undefined,
         limit
       );
+
+      const events = result._embedded?.eventSummaryResponses || [];
 
       // Extraire les organisateurs uniques
       const uniqueOrganizers = events.reduce(
@@ -395,7 +407,7 @@ export const cityService = {
             organizers.push({
               ...event.organizer,
               eventsCount: events.filter(
-                (e) => e.organizer.pseudo === event.organizer.pseudo
+                (e: Event) => e.organizer.pseudo === event.organizer.pseudo
               ).length,
             });
           }

@@ -8,17 +8,22 @@ import SortBy from "./sort-by/sort-by";
 import RateFilter from "./rate-filter/rate-filter";
 import CategoriesFilter from "./categories-filter/categories-filter";
 
-export default function Filters() {
+interface FiltersProps {
+  hideCityFilter?: boolean;
+  cityName?: string;
+}
+
+export default function Filters({ hideCityFilter = false, cityName }: FiltersProps) {
   return (
     <div className="filters">
       <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
         <div className="title">Trier par</div>
         <SortBy />
       </div>
-      <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
+      {/* <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
         <div className="title">Nos recommandations</div>
         <FavoriteFilter />
-      </div>
+      </div> */}
       <div className="filters-item">
         <DateFilter />
       </div>
@@ -28,18 +33,20 @@ export default function Filters() {
       <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
         <CategoriesFilter />
       </div>
-      <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
-        <div className="title">Villes</div>
-        <CityFilter />
-      </div>
+      {!hideCityFilter && (
+        <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
+          <div className="title">Villes</div>
+          <CityFilter />
+        </div>
+      )}
       <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
         <div className="title">Lieux</div>
-        <PlaceFilter />
+        <PlaceFilter cityName={cityName} />
       </div>
-      <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
+      {/* <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
         <div className="title">Note de l'organisateur</div>
         <RateFilter />
-      </div>
+      </div> */}
     </div>
   );
 }

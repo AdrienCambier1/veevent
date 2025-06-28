@@ -13,14 +13,15 @@ interface EventCardProps {
   id: string;
   event: Event;
   minify?: boolean;
+  grid?: boolean;
 }
 
-export default function EventCard({ id, event, minify }: EventCardProps) {
+export default function EventCard({ id, event, minify, grid }: EventCardProps) {
   const nameSlug = useSlugify(event.name);
   return (
     <Link
       href={`/evenements/${id}/${nameSlug}`}
-      className={`event-card ${minify ? "minify" : ""}`}
+      className={`event-card ${minify ? "minify" : ""} ${grid ? "grid" : ""}`}
     >
       <div className="image-container">
         <div className="theme-tags">

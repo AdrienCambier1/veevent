@@ -53,6 +53,7 @@ export interface SearchFilterOption {
   name: string;
   eventCount: number;
   id?: string | number;
+  _full?: any;
 }
 
 export type EventStatus =
@@ -107,15 +108,10 @@ export interface SingleEvent extends BaseEvent {
 }
 
 export interface EventsEmbedded {
-  events: Event[];
+  eventSummaryResponses: Event[];
 }
 
-export interface EventsResponse {
-  _embedded: EventsEmbedded;
-  _links: {
-    self: EventLink;
-  };
-}
+export interface EventsResponse extends PaginatedResponse<EventsEmbedded> {}
 
 export interface EventFilters {
   minPrice?: number;
@@ -127,6 +123,27 @@ export interface EventFilters {
   sortOrder?: "asc" | "desc";
   cityName?: string;
   placeName?: string;
+  page?: number;
+  size?: number;
+}
+
+// Interface pour la pagination
+export interface PaginationInfo {
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  number: number;
+}
+
+export interface PaginatedResponse<T> {
+  _embedded: T;
+  _links: {
+    first: EventLink;
+    self: EventLink;
+    next?: EventLink;
+    last: EventLink;
+  };
+  page: PaginationInfo;
 }
 
 // === INTERFACES POUR LES VILLES ===

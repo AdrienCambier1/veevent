@@ -3,10 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Xmark } from "iconoir-react";
 import { useFilters } from "@/contexts/filter-context";
 import { placeService } from "@/services/place-service";
+import { cityService } from "@/services/city-service";
 import { SearchFilterOption } from "@/types";
 import "../search-filter/search-filter.scss";
 
-export default function PlaceFilter() {
+interface PlaceFilterProps {
+  cityName?: string;
+}
+
+export default function PlaceFilter({ cityName }: PlaceFilterProps) {
   const { tempFilters, updateTempFilters } = useFilters();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -17,35 +22,79 @@ export default function PlaceFilter() {
       : null
   );
   const [places, setPlaces] = useState<SearchFilterOption[]>([]);
-  const [filteredPlaces, setFilteredPlaces] = useState<SearchFilterOption[]>(
-    []
-  );
+  const [filteredPlaces, setFilteredPlaces] = useState<SearchFilterOption[]>([]);
   const [loading, setLoading] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
-  // Charger les lieux depuis l'API
+  // Charger les lieux depuis l'API ou via HATEOAS si une ville est sélectionnée
   const loadPlaces = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const placesData = await placeService.getPlaces();
-      const placeOptions: SearchFilterOption[] = placesData.map((place) => ({
-        id: place.id.toString(),
-        name: place.name,
-        eventCount: place.eventsCount,
-      }));
-      setPlaces(placeOptions);
-      setFilteredPlaces(placeOptions);
+      if (cityName) {
+        // Charger les lieux de la ville courante
+        const city = await cityService.getCityByName(cityName);
+        if (city && city._links?.places?.href) {
+          const cityPlaces = await cityService.getPlacesByCityLink(city._links.places.href);
+          const placeOptions: SearchFilterOption[] = cityPlaces.map((place) => ({
+            id: place.id.toString(),
+            name: place.name,
+            eventCount: place.eventsCount,
+            _full: place,
+          }));
+          setPlaces(placeOptions);
+          setFilteredPlaces(placeOptions);
+        } else {
+          setPlaces([]);
+          setFilteredPlaces([]);
+        }
+      } else if (tempFilters.selectedCityObj && tempFilters.selectedCityObj._links?.places?.href) {
+        // Charger les lieux de la ville sélectionnée dans les filtres
+        const cityPlaces = await cityService.getPlacesByCityLink(tempFilters.selectedCityObj._links.places.href);
+        const placeOptions: SearchFilterOption[] = cityPlaces.map((place) => ({
+          id: place.id.toString(),
+          name: place.name,
+          eventCount: place.eventsCount,
+          _full: place,
+        }));
+        setPlaces(placeOptions);
+        setFilteredPlaces(placeOptions);
+      } else if (tempFilters.selectedCityObj && tempFilters.selectedCityObj.name) {
+        // Fallback: filtrer par nom de ville
+        const allPlaces = await placeService.getPlaces();
+        const cityPlaces = allPlaces.filter(place => 
+          place.cityName.toLowerCase() === tempFilters.selectedCityObj.name.toLowerCase()
+        );
+        const placeOptions: SearchFilterOption[] = cityPlaces.map((place) => ({
+          id: place.id.toString(),
+          name: place.name,
+          eventCount: place.eventsCount,
+          _full: place,
+        }));
+        setPlaces(placeOptions);
+        setFilteredPlaces(placeOptions);
+      } else {
+        // Charger tous les lieux
+        const allPlaces = await placeService.getPlaces();
+        const placeOptions: SearchFilterOption[] = allPlaces.map((place) => ({
+          id: place.id.toString(),
+          name: place.name,
+          eventCount: place.eventsCount,
+          _full: place,
+        }));
+        setPlaces(placeOptions);
+        setFilteredPlaces(placeOptions);
+      }
     } catch (error) {
-      console.error("Erreur lors du chargement des lieux:", error);
+      console.error("❌ PlaceFilter loadPlaces error:", error);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [cityName, tempFilters.selectedCityObj]);
 
-  // Charger les lieux au montage du composant
+  // Recharger les lieux quand selectedCityObj ou cityName change
   useEffect(() => {
     loadPlaces();
-  }, [loadPlaces]);
+  }, [tempFilters.selectedCityObj, cityName, loadPlaces]);
 
   // Filtrer les lieux selon le terme de recherche
   useEffect(() => {
@@ -72,6 +121,14 @@ export default function PlaceFilter() {
     }
   }, [tempFilters.placeName, selectedPlace]);
 
+  // Synchroniser l'input avec le contexte quand la place est désélectionnée
+  useEffect(() => {
+    if (!tempFilters.placeName) {
+      setSearchTerm("");
+      setSelectedPlace(null);
+    }
+  }, [tempFilters.placeName]);
+
   // Gérer le clic extérieur
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -91,7 +148,24 @@ export default function PlaceFilter() {
     setSelectedPlace(place);
     setSearchTerm(place.name);
     setIsOpen(false);
-    updateTempFilters({ placeName: place.name });
+
+    if (cityName) {
+      // Sur la page ville, on ne touche pas au filtre ville
+      updateTempFilters({ placeName: place.name, selectedPlaceObj: place._full });
+    } else {
+      // Comportement normal (hors page ville)
+      const cityNameFromPlace = place._full?.cityName;
+      if (cityNameFromPlace && tempFilters.cityName !== cityNameFromPlace) {
+        updateTempFilters({
+          placeName: place.name,
+          selectedPlaceObj: place._full,
+          cityName: cityNameFromPlace,
+          selectedCityObj: undefined
+        });
+      } else {
+        updateTempFilters({ placeName: place.name, selectedPlaceObj: place._full });
+      }
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +175,7 @@ export default function PlaceFilter() {
     // Si l'input est vidé, supprimer le filtre
     if (e.target.value.trim() === "") {
       setSelectedPlace(null);
-      updateTempFilters({ placeName: undefined });
+      updateTempFilters({ placeName: undefined, selectedPlaceObj: undefined });
     }
   };
 
@@ -112,7 +186,7 @@ export default function PlaceFilter() {
   const clearSelection = () => {
     setSelectedPlace(null);
     setSearchTerm("");
-    updateTempFilters({ placeName: undefined });
+    updateTempFilters({ placeName: undefined, selectedPlaceObj: undefined });
   };
 
   const dropdownVariants = {

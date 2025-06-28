@@ -1,11 +1,16 @@
 "use client";
 import SearchInput from "@/components/inputs/search-input/search-input";
-import { useState, useEffect, Suspense, useMemo } from "react";
+import { useState, useEffect, Suspense, useMemo, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import { useEvents } from "@/hooks/events/use-events";
+import { useEventsPaginated } from "@/hooks/events/use-events-paginated";
 import { Event } from "@/types";
+import { FilterProvider, useFilters } from "@/contexts/filter-context";
+import { Filter } from "iconoir-react";
+import FilterBottomSheet from "@/components/commons/filters/filter-bottom-sheet";
+import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 
 // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
 const extractIdFromSelfLink = (event: Event): string => {
@@ -15,6 +20,10 @@ const extractIdFromSelfLink = (event: Event): string => {
 };
 
 function EvenementsPageContent() {
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { appliedFilters, hasActiveFilters, filterVersion } = useFilters();
+  const eventsSectionRef = useRef<HTMLElement>(null);
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,16 +44,22 @@ function EvenementsPageContent() {
     error: freeError,
   } = useEvents("free");
 
-  // Filtrage des événements selon la recherche
-  const filteredEvents = useMemo(() => {
-    if (!searchTerm) return popularEvents;
-    return popularEvents.filter(
-      (event: Event) =>
-        event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.address?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [popularEvents, searchTerm]);
+  // Utilisation du nouveau hook paginé
+  const {
+    items: allEvents,
+    loading: allLoading,
+    error: allError,
+    pagination,
+    hasNextPage,
+    hasPreviousPage,
+    loadNextPage,
+    loadPreviousPage,
+    loadPage,
+  } = useEventsPaginated({
+    filters: appliedFilters,
+    scrollTargetRef: eventsSectionRef,
+    filterVersion,
+  });
 
   useEffect(() => {
     const urlSearch = searchParams?.get("search");
@@ -96,47 +111,88 @@ function EvenementsPageContent() {
 
     return events.map((event: Event) => {
       const eventId = extractIdFromSelfLink(event);
-
       return (
         <EventCard key={eventId} id={eventId} event={event} minify={false} />
       );
     });
   };
 
+  // Fonction de rendu pour PaginatedList
+  const renderEventCard = (event: Event, index: number) => {
+    const eventId = extractIdFromSelfLink(event);
+    return (
+      <EventCard key={eventId} id={eventId} event={event} minify={false} grid={true} />
+    );
+  };
+
   return (
-    <main>
-      <section className="wrapper">
-        <h1>Explorez les évènements sur veevent</h1>
-        <h3>Rechercher un évènement</h3>
-        <SearchInput
-          value={searchTerm}
-          onChange={handleInputChange}
-          placeholder="Concert, Festival, Conférence..."
+    <>
+      <main>
+        <section className="wrapper">
+          <h1>Explorez les évènements sur veevent</h1>
+          <h3>Rechercher un évènement</h3>
+          <SearchInput
+            value={searchTerm}
+            onChange={handleInputChange}
+            placeholder="Concert, Festival, Conférence..."
+          />
+          <button className="primary-btn" onClick={handleSearch}>
+            <span>Rechercher</span>
+          </button>
+        </section>
+
+        {popularEvents.length > 0 && (
+        <HorizontalList title="Les évènements populaires cette semaine">
+          {renderEventCards(popularEvents, popularLoading, popularError)}
+        </HorizontalList>
+        )}
+
+        {dealEvents.length > 0 && (
+          <HorizontalList title="Les bonnes affaires de la semaine">
+            {renderEventCards(dealEvents, dealLoading, dealError)}
+          </HorizontalList>
+        )}
+
+        {freeEvents.length > 0 && (
+          <HorizontalList title="Sortez gratuitement ce week end">
+            {renderEventCards(freeEvents, freeLoading, freeError)}
+          </HorizontalList>
+        )}
+        
+
+        {/* Utilisation du composant PaginatedList */}
+        <PaginatedList
+          items={allEvents}
+          loading={allLoading}
+          error={allError}
+          pagination={pagination}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          onPageChange={loadPage}
+          onPreviousPage={loadPreviousPage}
+          onNextPage={loadNextPage}
+          hasActiveFilters={hasActiveFilters}
+          onOpenFilters={() => setIsFilterOpen(true)}
+          renderItem={renderEventCard}
+          title="Tous les événements"
+          scrollTargetRef={eventsSectionRef}
         />
-        <button className="primary-btn" onClick={handleSearch}>
-          <span>Rechercher</span>
-        </button>
-      </section>
+      </main>
 
-      <HorizontalList title="Les évènements populaires cette semaine">
-        {renderEventCards(filteredEvents, popularLoading, popularError)}
-      </HorizontalList>
-
-      <HorizontalList title="Les bonnes affaires de la semaine">
-        {renderEventCards(dealEvents, dealLoading, dealError)}
-      </HorizontalList>
-
-      <HorizontalList title="Sortez gratuitement ce week end">
-        {renderEventCards(freeEvents, freeLoading, freeError)}
-      </HorizontalList>
-    </main>
+      <FilterBottomSheet
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+      />
+    </>
   );
 }
 
 export default function EvenementsPage() {
   return (
     <Suspense fallback={<div>Chargement de la page...</div>}>
-      <EvenementsPageContent />
+      <FilterProvider>
+        <EvenementsPageContent />
+      </FilterProvider>
     </Suspense>
   );
 }

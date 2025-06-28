@@ -1,13 +1,16 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useCityEvents } from "@/hooks/cities/use-city-events";
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useRef } from "react";
 import EventCard from "@/components/cards/event-card/event-card";
 import { Event } from "@/types";
 import { Filter } from "iconoir-react";
 import FilterBottomSheet from "@/components/commons/filters/filter-bottom-sheet";
 import { FilterProvider, useFilters } from "@/contexts/filter-context";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
+import PaginatedList from "@/components/commons/paginated-list/paginated-list";
+import { useCityEventsPaginated } from "@/hooks/cities/use-city-events-paginated";
+import { useCity } from "@/hooks/cities/use-city";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;
@@ -18,35 +21,39 @@ const extractIdFromSelfLink = (event: Event): string => {
 function EvenementsContent() {
   const { city: cityParam } = useParams() as { city: string };
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const { appliedFilters, hasActiveFilters } = useFilters(); // Utiliser appliedFilters au lieu de filters
+  const { appliedFilters, hasActiveFilters, filterVersion } = useFilters();
+  const eventsSectionRef = useRef<HTMLElement>(null);
 
-  // Décoder le paramètre URL et capitaliser
-  const cityName = useMemo(() => {
-    return decodeURIComponent(cityParam);
-  }, [cityParam]);
+  // Récupérer la ville depuis l'API
+  const { city, loading: cityLoading } = useCity(cityParam);
 
-  // Hook pour récupérer les événements via les liens HATEOAS
+  // Hook paginé pour les événements de la ville
   const {
-    city,
-    allEvents,
-    trendingEvents,
-    firstEditionEvents,
+    items: allEvents,
     loading,
     error,
-    applyFilters,
-  } = useCityEvents(cityName, {
+    pagination,
+    hasNextPage,
+    hasPreviousPage,
+    loadNextPage,
+    loadPreviousPage,
+    loadPage,
+  } = useCityEventsPaginated({
+    cityName: cityParam,
+    filters: appliedFilters,
+    scrollTargetRef: eventsSectionRef,
+    filterVersion,
+  });
+  const {
+    trendingEvents,
+    firstEditionEvents,
+  } = useCityEvents(cityParam, {
     fetchAll: true,
     fetchTrending: true,
     fetchFirstEdition: true,
     filters: appliedFilters, // Utiliser appliedFilters
   });
 
-  // Appliquer les filtres quand appliedFilters change
-  useMemo(() => {
-    if (Object.keys(appliedFilters).length > 0) {
-      applyFilters(appliedFilters);
-    }
-  }, [appliedFilters, applyFilters]);
 
   // Fonction pour rendre les EventCards
   const renderEventCards = useCallback(
@@ -75,7 +82,7 @@ function EvenementsContent() {
       if (!events || events.length === 0) {
         return (
           <div className="no-events text-gray-500 p-4">
-            Aucun événement trouvé à {cityName}
+            Aucun événement trouvé{city?.name ? ` à ${city.name}` : ""}
           </div>
         );
       }
@@ -88,74 +95,52 @@ function EvenementsContent() {
         );
       });
     },
-    [cityName]
+    [city]
   );
 
-  if (loading) {
-    return (
-      <div className="wrapper">
-        <p>Chargement des événements...</p>
-      </div>
-    );
-  }
-
-  if (error || !city) {
-    return (
-      <div className="wrapper">
-        <h1>Ville non trouvée</h1>
-        <p>Impossible de charger les événements pour "{cityName}".</p>
-        {error && <p>Erreur: {error.message}</p>}
-      </div>
-    );
+  if (cityLoading) {
+    return <div className="p-8 text-center">Chargement de la ville...</div>;
   }
 
   return (
     <>
       {/* Événements de première édition */}
       {trendingEvents.length > 0 && (
-        <HorizontalList title={`Les événements populaires à ${city.name}`}>
+        <HorizontalList title={`Les événements populaires à ${city?.name}`}>
           {renderEventCards(trendingEvents, false, null, false)}
         </HorizontalList>
       )}
 
       {/* Événements de première édition */}
       {firstEditionEvents.length > 0 && (
-        <HorizontalList title={`Ils font leur début à ${city.name}`}>
+        <HorizontalList title={`Ils font leur début à ${city?.name}`}>
           {renderEventCards(firstEditionEvents, false, null, false)}
         </HorizontalList>
       )}
+        
 
-      <section className="wrapper">
-        {/* Autres événements */}
-        <h2>Tous les événements à {city.name} et aux alentours</h2>
-        {/* Bouton de filtre */}
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setIsFilterOpen(true)}
-            className={`rounded-full border font-semibold px-2 py-1 flex items-center gap-2 ${
-              hasActiveFilters
-                ? "border-primary-600 bg-primary-600 text-white"
-                : "border-primary-600 text-primary-600"
-            }`}
-          >
-            <Filter className="text-xs" />
-            filtres & tris
-            {hasActiveFilters && (
-              <span className="bg-white text-primary-600 rounded-full px-1 text-xs">
-                •
-              </span>
-            )}
-          </button>
-        </div>
-        {allEvents.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {renderEventCards(allEvents, false, null, true)}
-          </div>
-        )}
-        {allEvents.length === 0 && hasActiveFilters && (
-          <p>Aucun événement ne correspond à vos critères de filtrage.</p>
-        )}
-      </section>
+    
+      <PaginatedList
+        items={allEvents}
+        loading={loading}
+        error={error}
+        pagination={pagination}
+        hasNextPage={hasNextPage}
+        hasPreviousPage={hasPreviousPage}
+        onPageChange={loadPage}
+        onPreviousPage={loadPreviousPage}
+        onNextPage={loadNextPage}
+        hasActiveFilters={hasActiveFilters}
+        onOpenFilters={() => setIsFilterOpen(true)}
+        renderItem={(event: Event, index: number) => {
+          const eventId = extractIdFromSelfLink(event);
+          return (
+            <EventCard key={eventId} id={eventId} event={event} minify={true} grid={true} />
+          );
+        }}
+        title={city ? `Tous les événements à ${city.name} et aux alentours` : "Tous les événements"}
+        scrollTargetRef={eventsSectionRef}
+      />
       <FilterBottomSheet
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}

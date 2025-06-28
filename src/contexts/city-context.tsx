@@ -10,6 +10,7 @@ import {
   ReactNode,
   useCallback,
 } from "react";
+import { useSlugify } from "@/hooks/commons/use-slugify";
 
 interface CityContextType {
   selectedCity: SingleCity | undefined;
@@ -115,8 +116,9 @@ export function CityProvider({ children }: CityProviderProps) {
       // Si une ville actuelle est détectée, essayer de la récupérer depuis l'API
       if (data.data.currentCity) {
         try {
+          const citySlug = useSlugify(data.data.currentCity);
           const cityData = await cityService.getCityByName(
-            data.data.currentCity
+            citySlug
           );
           if (cityData) {
             console.log(

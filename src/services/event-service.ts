@@ -6,6 +6,8 @@ import {
   BaseCategory,
   SingleUser,
   EventStatus,
+  PaginatedResponse,
+  EventsEmbedded,
 } from "@/types";
 import mockEvents from "@/services/data/events";
 import { mockOrganizers } from "@/services/data/organizers";
@@ -86,10 +88,12 @@ const mapMockEventToEvent = (mockEvent: any): Event => {
 };
 
 export const eventService = {
-  async getEvents(filters?: EventFilters): Promise<Event[]> {
+  async getEvents(filters?: EventFilters): Promise<PaginatedResponse<EventsEmbedded>> {
     try {
       // Si on utilise les données fictives
       if (useMockData) {
+        // Ajout du log pour vérifier le contenu de mockEvents
+        console.log("[eventService.getEvents] mockEvents count:", mockEvents.length);
         let filteredEvents = [...mockEvents];
 
         // Appliquer les filtres si nécessaire
@@ -114,9 +118,55 @@ export const eventService = {
               (event) => new Date(event.date) <= new Date(filters.endDate!)
             );
           }
+          if (filters.cityName) {
+            filteredEvents = filteredEvents.filter(
+              (event) => event.address.toLowerCase().includes(filters.cityName!.toLowerCase())
+            );
+          }
+          if (filters.placeName) {
+            filteredEvents = filteredEvents.filter(
+              (event) => event.address.toLowerCase().includes(filters.placeName!.toLowerCase())
+            );
+          }
+          if (filters.categories && filters.categories.length > 0) {
+            filteredEvents = filteredEvents.filter(
+              (event) => event.categories.some(cat => 
+                filters.categories!.includes(cat.key)
+              )
+            );
+          }
         }
 
-        return filteredEvents.map(mapMockEventToEvent);
+        const mappedEvents = filteredEvents.map(mapMockEventToEvent);
+        // Ajout du log pour vérifier le contenu de mappedEvents
+        console.log("[eventService.getEvents] mappedEvents count:", mappedEvents.length);
+        
+        // Simuler la pagination pour les données mock
+        const page = filters?.page || 0;
+        const size = filters?.size || 10;
+        const startIndex = page * size;
+        const endIndex = startIndex + size;
+        const paginatedEvents = mappedEvents.slice(startIndex, endIndex);
+        const totalElements = mappedEvents.length;
+        const totalPages = Math.ceil(totalElements / size);
+
+        return {
+          _embedded: {
+            eventSummaryResponses: paginatedEvents,
+          },
+          _links: {
+            first: { href: `/events?page=0&size=${size}` },
+            self: { href: `/events?page=${page}&size=${size}` },
+            next: page < totalPages - 1 ? { href: `/events?page=${page + 1}&size=${size}` } : undefined,
+            last: { href: `/events?page=${totalPages - 1}&size=${size}` },
+          },
+          page: {
+            size,
+            totalElements,
+            totalPages,
+            number: page,
+          },
+        };
       }
 
       // Code API existant...
@@ -128,6 +178,20 @@ export const eventService = {
       if (filters?.startDate)
         searchParams.append("startDate", filters.startDate);
       if (filters?.endDate) searchParams.append("endDate", filters.endDate);
+      if (filters?.cityName)
+        searchParams.append("cities", filters.cityName);
+      if (filters?.placeName)
+        searchParams.append("places", filters.placeName);
+      if (filters?.categories && filters.categories.length > 0)
+        searchParams.append("categories", filters.categories.join(","));
+      if (filters?.sortBy)
+        searchParams.append("sortBy", filters.sortBy);
+      if (filters?.sortOrder)
+        searchParams.append("sortOrder", filters.sortOrder);
+      if (filters?.page !== undefined)
+        searchParams.append("page", filters.page.toString());
+      if (filters?.size !== undefined)
+        searchParams.append("size", filters.size.toString());
 
       const queryString = searchParams.toString();
       const url = `${apiUrl}/events${queryString ? `?${queryString}` : ""}`;
@@ -139,33 +203,15 @@ export const eventService = {
         cache: "no-store",
       });
 
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP: ${response.status}`);
-      }
-
       const result = await response.json();
-      const apiEvents = result._embedded?.eventSummaryResponses || [];
 
-      const mappedEvents: Event[] = apiEvents.map((apiEvent: any) => ({
-        date: formatEventDate(apiEvent.date),
-        description: apiEvent.description,
-        name: apiEvent.name,
-        address: apiEvent.address,
-        maxCustomers: apiEvent.maxCustomers,
-        isTrending: apiEvent.isTrending,
-        price: apiEvent.price,
-        status: apiEvent.status,
-        categories: apiEvent.categories,
-        organizer: apiEvent.organizer,
-        currentParticipants: apiEvent.currentParticipants,
-        _links: {
-          self: {
-            href: apiEvent._links.self.href,
-          },
+      return {
+        _embedded: {
+          eventSummaryResponses: result._embedded?.eventSummaryResponses || [],
         },
-      }));
-
-      return mappedEvents;
+        _links: result._links,
+        page: result.page,
+      };
     } catch (error) {
       console.error("❌ Error in getEvents:", error);
       throw error;
@@ -441,16 +487,16 @@ export const eventService = {
   },
 
   async getDealEvents(): Promise<Event[]> {
-    const events = await this.getEvents();
-    const dealEvents = events.filter(
+    const eventsResponse = await this.getEvents();
+    const dealEvents = eventsResponse._embedded.eventSummaryResponses.filter(
       (event: Event) => event.price > 0 && event.price < 30
     );
     return dealEvents;
   },
 
   async getFreeEvents(): Promise<Event[]> {
-    const events = await this.getEvents();
-    const freeEvents = events.filter((event: Event) => event.price === 0);
+    const eventsResponse = await this.getEvents();
+    const freeEvents = eventsResponse._embedded.eventSummaryResponses.filter((event: Event) => event.price === 0);
     return freeEvents;
   },
 
