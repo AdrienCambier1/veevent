@@ -2,8 +2,8 @@ import { Search } from "iconoir-react";
 import "./search-input.scss";
 
 interface SearchInputProps {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
 }
 

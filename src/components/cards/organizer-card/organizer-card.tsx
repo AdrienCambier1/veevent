@@ -15,8 +15,7 @@ export default function OrganizerCard({
   currentEventId,
 }: OrganizerCardProps) {
   const { events, loading, error } = useOrganizerEvents(
-    organizer.pseudo || "",
-    organizer.id,
+    organizer,
     currentEventId,
     2
   );

@@ -87,7 +87,7 @@ export const useCityEvents = (
             cityService.getEventsByCityLink(
               cityData._links.events.href,
               apiFilters
-            )
+            ).then(response => response._embedded?.eventSummaryResponses || [])
           );
           promiseTypes.push("all");
         }

@@ -17,7 +17,7 @@ export default function PlaceCard({ place, index }: PlaceCardProps) {
 
   const nameSlug = useSlugify(place.name);
   return (
-    <Link href={`/lieux/${place.id}/${nameSlug}`}>
+    <Link href={`/lieux/${nameSlug}`}>
       <div className="place-card">
         {index && <div className="number">{index}</div>}
         <div className="place-card-container">

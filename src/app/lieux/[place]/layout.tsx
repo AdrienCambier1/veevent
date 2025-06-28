@@ -1,45 +1,33 @@
 "use client";
-import { useState, ReactNode } from "react";
-import SearchInput from "@/components/inputs/search-input/search-input";
-import BarMenu from "@/components/menu/bar-menu/bar-menu";
-import BannerHead from "@/components/heads/banner-head/banner-head";
-import CustomTitle from "@/components/commons/custom-title/custom-title";
 import FaqCard from "@/components/cards/faq-card/faq-card";
 import ReviewCard from "@/components/cards/review-card/review-card";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
+import PlaceHead from "@/components/heads/place-head/place-head";
+import BarMenu from "@/components/menu/bar-menu/bar-menu";
+import { usePlaceData } from "@/hooks/places/use-place-data";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useCityData } from "@/hooks/cities/use-city-data";
+import { ReactNode, useState } from "react";
 
-interface CitiesLayoutProps {
+interface PlacesLayoutProps {
   children: ReactNode;
 }
 
-export default function CityLayout({ children }: CitiesLayoutProps) {
-  const { city } = useParams() as { city: string };
-  const { city: cityData } = useCityData(city);
+export default function PlaceLayout({ children }: PlacesLayoutProps) {
+  const { place } = useParams() as { place: string };
+  const { place: placeData } = usePlaceData(place);
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigation = [
-    { isHome: true, href: `/villes/${city}`, label: "Accueil" },
-    { label: "Événements", href: `/villes/${city}/evenements` },
-    { label: "Lieux", href: `/villes/${city}/lieux` },
-    { label: "Organisateurs", href: `/villes/${city}/organisateurs` },
+    { isHome: true, href: `/lieux/${place}`, label: "Accueil" },
+    { label: "Programmation", href: `/lieux/${place}/programmation` },
+    { label: "Événements", href: `/lieux/${place}/evenements` },
+    // { label: "Actualités", href: `/lieux/${place}/actualites` },
   ];
 
   return (
     <main>
-      <BannerHead city={cityData?.name || ""} />
-      <section className="wrapper">
-        <h1>Évènements et activités proche de la ville de {city}</h1>
-        <h3>Rechercher un évènement à {city}</h3>
-        <SearchInput
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button className="primary-btn">
-          <span>Rechercher</span>
-        </button>
-      </section>
+      {placeData && <PlaceHead place={placeData} />}
       <section className="wrapper">
         <BarMenu navigation={navigation} />
       </section>

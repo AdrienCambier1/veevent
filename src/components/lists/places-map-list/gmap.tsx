@@ -143,7 +143,7 @@ const PoiMarkers = (props: {
               background={"var(--secondary-400)"}
               glyphColor={"var(--primary-600)"}
               borderColor={"var(--primary-600)"}
-              glyph={`${index + 1}`}
+              glyph={props.pois.length === 1 ? "" : `${index + 1}`}
             />
           </AdvancedMarker>
         )

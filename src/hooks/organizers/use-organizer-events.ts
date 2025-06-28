@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { eventService } from "@/services/event-service";
-import { Event } from "@/types";
+import { Event, SingleUser } from "@/types";
 
 interface UseOrganizerEventsReturn {
   events: Event[];
@@ -10,8 +10,7 @@ interface UseOrganizerEventsReturn {
 }
 
 export const useOrganizerEvents = (
-  organizerPseudo: string,
-  organizerId: number,
+  organizer: SingleUser,
   currentEventId?: string,
   limit: number = 3
 ): UseOrganizerEventsReturn => {
@@ -20,7 +19,7 @@ export const useOrganizerEvents = (
   const [error, setError] = useState<Error | null>(null);
 
   const fetchOrganizerEvents = useCallback(async () => {
-    if (!organizerPseudo) {
+    if (!organizer || !organizer._links?.self?.href) {
       setEvents([]);
       setLoading(false);
       return;
@@ -30,17 +29,18 @@ export const useOrganizerEvents = (
       setLoading(true);
       setError(null);
 
-      console.log("organizerPseudo", organizerPseudo);
+      // Construire l'URL des événements à partir du lien self de l'organisateur
+      const organizerEventsHref = `${organizer._links.self.href}/events`;
+
+      console.log("organizer events href", organizerEventsHref);
       console.log("currentEventId", currentEventId);
       console.log("limit", limit);
 
-      const data = await eventService.getEventsByOrganizer(
-        organizerPseudo,
-        organizerId,
+      const data = await eventService.getEventsByOrganizerHref(
+        organizerEventsHref,
         currentEventId,
         limit
       );
-
 
       setEvents(data);
     } catch (err) {
@@ -50,7 +50,7 @@ export const useOrganizerEvents = (
     } finally {
       setLoading(false);
     }
-  }, [organizerPseudo, currentEventId, limit]);
+  }, [organizer, currentEventId, limit]);
 
   useEffect(() => {
     fetchOrganizerEvents();

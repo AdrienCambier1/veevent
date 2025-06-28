@@ -164,7 +164,7 @@ export default function LieuxPage() {
               items={places.map((place) => place.name)}
               generateHref={(name) => {
                 const place = places.find((p) => p.name === name);
-                return place ? `/lieux/${place.id}` : "#";
+                return place ? `/lieux/${place.slug}` : "#";
               }}
             />
           );

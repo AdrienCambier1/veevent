@@ -219,7 +219,7 @@ export interface CityData extends BaseCity {
 export interface BasePlace {
   name: string;
   address: string;
-  type?: string | null;
+  type: string;
   location: Location;
   eventsCount: number;
   eventsPastCount: number;
@@ -227,6 +227,8 @@ export interface BasePlace {
   bannerUrl?: string | null;
   imageUrl: string;
   content?: string | null;
+  description: string;
+  slug: string;
 }
 
 // Lieu dans la liste API (avec id)
@@ -237,6 +239,7 @@ export interface Place extends BasePlace {
     places: EventLink;
     city: EventLink;
     events: EventLink;
+    organizers?: EventLink;
   };
 }
 
@@ -248,6 +251,7 @@ export interface SinglePlace extends BasePlace {
     places: EventLink;
     city: EventLink;
     events: EventLink;
+    organizers?: EventLink;
   };
 }
 

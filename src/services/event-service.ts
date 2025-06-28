@@ -651,4 +651,120 @@ export const eventService = {
       throw error;
     }
   },
+
+  async getEventsByOrganizerHref(
+    organizerEventsHref: string,
+    currentEventId?: string,
+    limit: number = 3
+  ): Promise<Event[]> {
+    try {
+      if (useMockData) {
+        // Pour les données mock, on extrait le pseudo de l'URL
+        const organizerPseudo = organizerEventsHref.split("/").pop() || "";
+        const organizer = getOrganizerByPseudo(organizerPseudo);
+        
+        if (!organizer) {
+          return [];
+        }
+
+        const organizerEvents = mockEvents
+          .filter((event) => {
+            const isFromOrganizer =
+              event.organizer.pseudo.toLowerCase() === organizerPseudo.toLowerCase();
+
+            const isNotCurrentEvent =
+              !currentEventId || event.id.toString() !== currentEventId;
+
+            const isActive =
+              event.status === "NOT_STARTED" || event.status === "IN_PROGRESS";
+
+            const eventDate = new Date(event.date);
+            const now = new Date();
+            const isNotPast = eventDate > now;
+
+            return (
+              isFromOrganizer && isNotCurrentEvent && isActive && isNotPast
+            );
+          })
+          .sort(
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+          )
+          .slice(0, limit);
+
+        const mappedEvents = organizerEvents.map(mapMockEventToEvent);
+
+        return mappedEvents;
+      }
+
+      // Construire l'URL avec les paramètres de filtrage
+      const url = new URL(organizerEventsHref);
+      if (currentEventId) {
+        url.searchParams.set('excludeEventId', currentEventId);
+      }
+      url.searchParams.set('limit', limit.toString());
+      url.searchParams.set('status', 'NOT_STARTED,IN_PROGRESS');
+      url.searchParams.set('sort', 'date,asc');
+
+      const response = await fetch(url.toString(), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const apiEvents = result._embedded?.eventSummaryResponses || [];
+
+      const mappedEvents: Event[] = apiEvents
+        .map((apiEvent: any) => ({
+          date: apiEvent.date,
+          description: apiEvent.description,
+          name: apiEvent.name,
+          address: apiEvent.address,
+          maxCustomers: apiEvent.maxCustomers,
+          isTrending: apiEvent.isTrending,
+          price: apiEvent.price,
+          status: apiEvent.status,
+          categories: apiEvent.categories,
+          organizer: apiEvent.organizer,
+          currentParticipants: apiEvent.currentParticipants,
+          _links: {
+            self: {
+              href: apiEvent._links.self.href,
+            },
+          },
+        }))
+        .filter((event: Event) => {
+          const eventId = event._links.self.href.split("/").pop();
+          const isNotCurrentEvent =
+            !currentEventId || eventId !== currentEventId;
+
+          const isActive =
+            event.status === "NOT_STARTED" || event.status === "IN_PROGRESS";
+
+          const eventDate = new Date(event.date);
+          const now = new Date();
+          const isNotPast = eventDate > now;
+
+          return isNotCurrentEvent && isActive && isNotPast;
+        })
+        .sort((a: Event, b: Event) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        })
+        .slice(0, limit)
+        .map((event: Event) => ({
+          ...event,
+          date: formatEventDate(event.date),
+        }));
+
+      return mappedEvents;
+    } catch (error) {
+      console.error("❌ Error in getEventsByOrganizerHref:", error);
+      throw error;
+    }
+  },
 };

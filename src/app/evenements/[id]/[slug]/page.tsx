@@ -8,18 +8,27 @@ import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 import NewsCard from "@/components/cards/news-card/news-card";
 import { useSingleEvent } from "@/hooks/events/use-single-event";
 import { useEventOrganizer } from "@/hooks/organizers/use-event-organizer";
+import { useEventPlace } from "@/hooks/places/use-event-place";
+import Gmaps from "@/components/lists/places-map-list/gmap";
+import { MapPin, Shop } from "iconoir-react";
 
 export default function EventPage() {
   const { id, slug } = useParams() as { id: string; slug: string };
   const eventIdNumber = Number(id);
   const { event, loading, error } = useSingleEvent(eventIdNumber);
-
   // Récupérer les infos complètes de l'organisateur
   const {
     organizer: detailedOrganizer,
     loading: organizerLoading,
     error: organizerError,
   } = useEventOrganizer(event?._links?.organizer?.href);
+
+  // Récupérer les infos du lieu via le lien HATEOAS
+  const {
+    place: eventPlace,
+    loading: placeLoading,
+    error: placeError,
+  } = useEventPlace(event?._links?.places?.href);
 
   // États de chargement et d'erreur
   if (loading) {
@@ -115,6 +124,32 @@ export default function EventPage() {
       <section className="wrapper">
         <h2>À propos de l'évènement</h2>
         <div dangerouslySetInnerHTML={{ __html: event.contentHtml }}></div>
+      </section>
+
+      <section className="wrapper">
+        <h2>Se rendre à l'évènement</h2>
+        {eventPlace && <Gmaps locations={[eventPlace]} />}
+        <div className="flex flex-col gap-4 text-primary-600 font-semibold">
+          <div className="flex gap-2 items-center">
+            <Shop />
+            {eventPlace?.name}
+          </div>
+          <div className="flex gap-2 items-center">
+            <MapPin />
+            {eventPlace?.address}
+          </div>
+        </div>
+        <button
+          className="secondary-btn"
+          onClick={() => {
+            window.open(
+              `https://www.google.com/maps/search/?api=1&query=${eventPlace?.name} ${eventPlace?.cityName}`,
+              "_blank"
+            );
+          }}
+        >
+          <span>Voir le lieu sur Google Maps</span>
+        </button>
       </section>
 
       <section className="wrapper">

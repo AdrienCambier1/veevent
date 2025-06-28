@@ -10,10 +10,11 @@ import CategoriesFilter from "./categories-filter/categories-filter";
 
 interface FiltersProps {
   hideCityFilter?: boolean;
+  hidePlaceFilter?: boolean;
   cityName?: string;
 }
 
-export default function Filters({ hideCityFilter = false, cityName }: FiltersProps) {
+export default function Filters({ hideCityFilter = false, hidePlaceFilter = false, cityName }: FiltersProps) {
   return (
     <div className="filters">
       <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
@@ -39,10 +40,12 @@ export default function Filters({ hideCityFilter = false, cityName }: FiltersPro
           <CityFilter />
         </div>
       )}
-      <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
-        <div className="title">Lieux</div>
-        <PlaceFilter cityName={cityName} />
-      </div>
+      {!hidePlaceFilter && (
+        <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
+          <div className="title">Lieux</div>
+          <PlaceFilter cityName={cityName} />
+        </div>
+      )}
       {/* <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
         <div className="title">Note de l'organisateur</div>
         <RateFilter />

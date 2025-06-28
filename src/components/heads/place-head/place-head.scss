@@ -1,0 +1,23 @@
+.banner-img {
+  @apply relative;
+
+  .gradient {
+    @apply inset-0 absolute opacity-50 bg-gradient-to-r from-primary-600 via-transparent to-primary-600;
+  }
+}
+.place-stats {
+  @apply flex text-xs text-center;
+  div {
+    @apply flex flex-col gap-1 text-gray-500  flex-1 relative px-4 text-nowrap;
+    line-height: 0.8;
+
+    &:not(:last-child)::after {
+      content: "";
+      @apply absolute right-0 top-0 bottom-0 w-px bg-gray-300;
+    }
+
+    span {
+      @apply text-xl font-bold text-primary-950;
+    }
+  }
+}

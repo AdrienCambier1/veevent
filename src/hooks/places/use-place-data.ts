@@ -1,22 +1,21 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { cityService } from "@/services/city-service";
+import { placeService } from "@/services/place-service";
 import { eventService } from "@/services/event-service";
-import { SingleCity, Event, Place, SingleUser } from "@/types";
+import { SinglePlace, Event, SingleUser } from "@/types";
 
-interface UseCityDataReturn {
-  city: SingleCity | null;
+interface UsePlaceDataReturn {
+  place: SinglePlace | null;
   events: Event[];
-  places: Place[];
-  organizers: any[];
+  organizers: SingleUser[];
   firstEvents: Event[];
   loading: boolean;
   error: Error | null;
   refetch: () => void;
 }
 
-export const useCityData = (
-  cityName: string,
-  dataType?: "events" | "places" | "organizers" | "trending" | "firstEvents" | "all",
+export const usePlaceData = (
+  slug: string,
+  dataType?: "events" | "organizers" | "trending" | "firstEvents" | "all",
   filters?: {
     minPrice?: number;
     maxPrice?: number;
@@ -25,10 +24,9 @@ export const useCityData = (
     categories?: string;
   },
   limit?: number
-): UseCityDataReturn => {
-  const [city, setCity] = useState<SingleCity | null>(null);
+): UsePlaceDataReturn => {
+  const [place, setPlace] = useState<SinglePlace | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
-  const [places, setPlaces] = useState<Place[]>([]);
   const [organizers, setOrganizers] = useState<SingleUser[]>([]);
   const [firstEvents, setFirstEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,32 +50,32 @@ export const useCityData = (
     filters?.categories,
   ]);
 
-  const fetchCityData = useCallback(async () => {
-    if (!cityName) return;
+  const fetchPlaceData = useCallback(async () => {
+    if (!slug) return;
 
     try {
       setLoading(true);
       setError(null);
 
-      // 1. Récupérer d'abord les données de base de la ville
-      const cityData = await cityService.getCityByName(cityName);
+      // 1. Récupérer d'abord les données de base de la place
+      const placeData = await placeService.getPlaceBySlug(slug);
 
-      if (!cityData) {
-        throw new Error("Ville non trouvée");
+      if (!placeData) {
+        throw new Error("Lieu non trouvé");
       }
 
-      setCity(cityData);
+      setPlace(placeData);
 
       // 2. Utiliser les liens HATEOAS pour récupérer les données spécifiques
       if (dataType === "events" || dataType === "all") {
-        if (cityData._links?.events?.href) {
+        if (placeData._links?.events?.href) {
           try {
-            const cityEvents = await cityService.getEventsByCityLink(
-              cityData._links.events.href,
+            const placeEvents = await placeService.getEventsByPlaceLink(
+              placeData._links.events.href,
               stableFilters,
               limit
             );
-            const events = cityEvents._embedded.eventSummaryResponses;
+            const events = placeEvents._embedded?.eventSummaryResponses || [];
             setEvents(events);
           } catch (eventError) {
             console.warn(
@@ -91,13 +89,12 @@ export const useCityData = (
 
       // 3. Gestion spécifique des événements trending
       if (dataType === "trending") {
-        if (cityData._links?.events?.href) {
+        if (placeData._links?.events?.href) {
           try {
-            const trendingEvents =
-              await cityService.getTrendingEventsByCityLink(
-                cityData._links.events.href,
-                limit
-              );
+            const trendingEvents = await placeService.getTrendingEventsByPlaceLink(
+              placeData._links.events.href,
+              limit
+            );
             setEvents(limit ? trendingEvents.slice(0, limit) : trendingEvents);
           } catch (eventError) {
             console.warn(
@@ -113,8 +110,8 @@ export const useCityData = (
       if (dataType === "firstEvents" || dataType === "all") {
         try {
           const firstEditionEvents = await eventService.getFirstEvents(
-            cityName,
-            undefined,
+            placeData.cityName,
+            placeData.name,
             limit
           );
           setFirstEvents(limit ? firstEditionEvents.slice(0, limit) : firstEditionEvents);
@@ -127,33 +124,14 @@ export const useCityData = (
         }
       }
 
-      if (dataType === "places" || dataType === "all") {
-        if (cityData._links?.places?.href) {
-          try {
-            const cityPlaces = await cityService.getPlacesByCityLink(
-              cityData._links.places.href,
-              limit
-            );
-            setPlaces(limit ? cityPlaces.slice(0, limit) : cityPlaces);
-          } catch (placesError) {
-            console.warn("Erreur lors du chargement des lieux:", placesError);
-            setPlaces([]);
-          }
-        }
-      }
-
       if (dataType === "organizers" || dataType === "all") {
-        console.log("link events organizers", "cityData._links?.events?.href", cityData._links?.events?.href);
-        if (cityData._links?.events?.href) {
+        if (placeData._links?.organizers?.href) {
           try {
-            const cityOrganizers = await cityService.getOrganizersByCityLink(
-              cityData._links?.organizers?.href || "",
+            const placeOrganizers = await placeService.getOrganizersByPlaceLink(
+              placeData._links.organizers.href,
               limit
             );
-            console.log("cityOrganizers", cityOrganizers);
-            setOrganizers(
-              limit ? cityOrganizers.slice(0, limit) : cityOrganizers
-            );
+            setOrganizers(limit ? placeOrganizers.slice(0, limit) : placeOrganizers);
           } catch (organizersError) {
             console.warn(
               "Erreur lors du chargement des organisateurs:",
@@ -165,23 +143,22 @@ export const useCityData = (
       }
     } catch (err) {
       setError(err as Error);
-      setCity(null);
+      setPlace(null);
       setEvents([]);
-      setPlaces([]);
       setOrganizers([]);
       setFirstEvents([]);
     } finally {
       setLoading(false);
     }
-  }, [cityName, dataType, stableFilters, limit]);
+  }, [slug, dataType, stableFilters, limit]);
 
   useEffect(() => {
-    fetchCityData();
-  }, [fetchCityData]);
+    fetchPlaceData();
+  }, [fetchPlaceData]);
 
   const refetch = useCallback(() => {
-    fetchCityData();
-  }, [fetchCityData]);
+    fetchPlaceData();
+  }, [fetchPlaceData]);
 
-  return { city, events, places, organizers, firstEvents, loading, error, refetch };
-};
+  return { place, events, organizers, firstEvents, loading, error, refetch };
+}; 
