@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, Suspense } from "react";
 import { useCities } from "@/hooks/cities/use-cities";
 import {
   FRENCH_REGIONS,
@@ -10,12 +10,18 @@ import SearchInput from "@/components/inputs/search-input/search-input";
 import TabList from "@/components/lists/tab-list/tab-list";
 import CustomTitle from "@/components/commons/custom-title/custom-title";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import TextImageCardSkeleton from "@/components/cards/text-image-card/text-image-card-skeleton";
 import img from "@/assets/images/nice.jpg";
 import PlacesMapList from "@/components/lists/places-map-list/places-map-list";
 import { usePlaces } from "@/hooks/places/use-places";
+import { useSearchPaginated } from "@/hooks/commons/use-search-paginated";
+import { useSearchParams } from "next/navigation";
+import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 
-export default function VillesPage() {
-  const [searchTerm, setSearchTerm] = useState("");
+function VillesPageContent() {
+  const searchParams = useSearchParams()!;
+  const initialQuery = searchParams.get("q") || "";
+  const scrollTargetRef = useRef<HTMLElement>(null);
 
   // Hook pour récupérer les villes populaires
   const { cities: popularCities, loading: popularLoading } = useCities(
@@ -38,13 +44,25 @@ export default function VillesPage() {
     return acc;
   }, {} as Record<RegionCode, any[]>);
 
-  // Hook pour la recherche
-  const { cities: searchResults, loading: searchLoading } = useCities(
-    undefined,
-    {
-      searchTerm: searchTerm.length > 2 ? searchTerm : undefined,
-    }
-  );
+  // Nouvelle logique de recherche avec useSearchPaginated
+  const {
+    query,
+    setQuery,
+    items: searchResults,
+    loading: searchLoading,
+    error: searchError,
+    pagination,
+    hasNextPage,
+    hasPreviousPage,
+    loadPage,
+    loadPreviousPage,
+    loadNextPage,
+  } = useSearchPaginated({ 
+    initialQuery, 
+    initialTypes: ["city"],
+    pageSize: 20,
+    scrollTargetRef 
+  });
 
   const slugify = (text: string) => {
     return text
@@ -55,10 +73,14 @@ export default function VillesPage() {
       .trim(); // Supprimer les espaces au début et à la fin
   };
 
-  const handleSearch = () => {
-    // La recherche se fait automatiquement via le hook quand searchTerm change
-    console.log("Recherche pour:", searchTerm);
-  };
+  // Rendu de chargement personnalisé avec le skeleton adapté
+  const renderLoading = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {Array.from({ length: 8 }, (_, i) => (
+        <TextImageCardSkeleton key={i} />
+      ))}
+    </div>
+  );
 
   return (
     <main>
@@ -66,81 +88,110 @@ export default function VillesPage() {
         <h1>Explorez les villes disponibles sur veevent</h1>
         <h3>Rechercher une ville</h3>
         <SearchInput
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={query}
+          onChange={e => setQuery(e.target.value)}
           placeholder="Nice, Cannes, Antibes..."
         />
-        <button className="primary-btn" onClick={handleSearch}>
-          <span>Rechercher</span>
-        </button>
 
-        {/* Affichage des résultats de recherche */}
-        {searchTerm.length > 2 && (
+        {/* Affichage des résultats de recherche avec PaginatedList */}
+        {query && (
           <div>
             <h4>Résultats de recherche</h4>
-            {searchLoading ? (
-              <p>Recherche en cours...</p>
-            ) : searchResults.length > 0 ? (
-              searchResults.map((city) => (
+            <PaginatedList
+              items={searchResults}
+              loading={searchLoading}
+              error={searchError}
+              pagination={pagination}
+              hasNextPage={hasNextPage}
+              hasPreviousPage={hasPreviousPage}
+              onPageChange={loadPage}
+              onPreviousPage={loadPreviousPage}
+              onNextPage={loadNextPage}
+              hasActiveFilters={false}
+              onOpenFilters={() => {}}
+              renderItem={(item: any, index: number) => (
                 <TextImageCard
-                  key={city.id}
-                  title={city.name}
-                  subtitle={`${city.eventsCount} événements`}
-                  image={city.imageUrl || img}
-                  href={`/villes/${city.name.toLowerCase()}`}
+                  key={item.city.id}
+                  title={item.city.name}
+                  subtitle={`${item.city.eventsCount} événements`}
+                  image={item.city.imageUrl || img}
+                  href={`/villes/${item.city.slug}`}
                   isCard={true}
                 />
-              ))
-            ) : (
-              <p>Aucune ville trouvée</p>
-            )}
+              )}
+              renderEmpty={() => (
+                <div className="text-center text-gray-500 py-8">
+                  <p>Aucune ville trouvée</p>
+                </div>
+              )}
+              renderLoading={renderLoading}
+              showFilters={false}
+              scrollTargetRef={scrollTargetRef}
+            />
           </div>
         )}
       </section>
 
-      <section className="wrapper">
-        <h3>Parcourir les villes populaires</h3>
-        {popularLoading ? (
-          <p>Chargement...</p>
-        ) : (
-          popularCities.map(
-            (city) =>
-              city.eventsCount > 0 && (
-                <TextImageCard
-                  key={city.id}
-                  title={city.name}
-                  subtitle={`${city.eventsCount} événements`}
-                  image={city.imageUrl || img}
-                  href={`/villes/${city.name.toLowerCase()}`}
-                  isCard={true}
-                />
+      {/* Afficher les sections suivantes seulement si pas de recherche active */}
+      {!query && (
+        <>
+          <section className="wrapper">
+            <h3>Parcourir les villes populaires</h3>
+            {popularLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {Array.from({ length: 6 }, (_, i) => (
+                  <TextImageCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : (
+              popularCities.map(
+                (city) =>
+                  city.eventsCount > 0 && (
+                    <TextImageCard
+                      key={city.id}
+                      title={city.name}
+                      subtitle={`${city.eventsCount} événements`}
+                      image={city.imageUrl || img}
+                      href={`/villes/${city.name.toLowerCase()}`}
+                      isCard={true}
+                    />
+                  )
               )
-          )
-        )}
-      </section>
+            )}
+          </section>
 
-      <section className="wrapper">
-        <h3>Parcourir par région</h3>
-        {getRegionCodes().map((regionCode) => (
-          <TabList
-            key={regionCode}
-            title={FRENCH_REGIONS[regionCode]}
-            items={regionCities[regionCode]?.map((city) => city.name) || []}
-            generateHref={(city) => `/villes/${slugify(city)}`}
-          />
-        ))}
-      </section>
+          <section className="wrapper">
+            <h3>Parcourir par région</h3>
+            {getRegionCodes().map((regionCode) => (
+              <TabList
+                key={regionCode}
+                title={FRENCH_REGIONS[regionCode]}
+                items={regionCities[regionCode]?.map((city) => city.name) || []}
+                generateHref={(city) => `/villes/${slugify(city)}`}
+              />
+            ))}
+          </section>
 
-      {filteredPlaces.length > 0 && (
-        <section className="wrapper">
-          <CustomTitle
-            title="Les lieux les plus populaires"
-            description="Lieux"
-          />
+          {filteredPlaces.length > 0 && (
+            <section className="wrapper">
+              <CustomTitle
+                title="Les lieux les plus populaires"
+                description="Lieux"
+              />
 
-          <PlacesMapList locations={filteredPlaces} />
-        </section>
+              <PlacesMapList locations={filteredPlaces} />
+            </section>
+          )}
+        </>
       )}
     </main>
+  );
+}
+
+export default function VillesPage() {
+  return (
+    <Suspense fallback={<div>Chargement...</div>}>
+      <VillesPageContent />
+    </Suspense>
   );
 }

@@ -16,7 +16,7 @@ interface UseEventsReturn {
 }
 
 export const useEvents = (
-  type?: "popular" | "deals" | "free",
+  type?: "popular" | "deals" | "free" | "trending",
   filters?: EventFilters,
   scrollTargetRef?: React.RefObject<HTMLElement | null>
 ): UseEventsReturn => {
@@ -59,6 +59,10 @@ export const useEvents = (
           break;
         case "free":
           data = await eventService.getFreeEvents();
+          setEvents(data || []);
+          break;
+        case "trending":
+          data = await eventService.getTrendingEvents();
           setEvents(data || []);
           break;
         default:

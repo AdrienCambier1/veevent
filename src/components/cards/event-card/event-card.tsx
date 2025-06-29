@@ -45,10 +45,10 @@ export default function EventCard({ id, event, minify, grid }: EventCardProps) {
         </div>
         <ProfileImg
           name={
-            `${event.organizer.firstName} ${event.organizer.lastName}` || ""
+            `${event.organizer?.firstName} ${event.organizer?.lastName}` || ""
           }
-          note={event.organizer.note}
-          imageUrl={event.organizer.imageUrl}
+          note={event.organizer?.note}
+          imageUrl={event.organizer?.imageUrl}
         />
         <div className={`flex flex-wrap ${minify ? "gap-1" : "gap-2"}`}>
           <div className="info">

@@ -39,7 +39,21 @@ const mapMockEventToEvent = (mockEvent: any): Event => {
   const fullOrganizer = getOrganizerByPseudo(mockEvent.organizer.pseudo);
 
   if (!fullOrganizer) {
-    throw new Error(`Organisateur non trouvé: ${mockEvent.organizer.pseudo}`);
+    return {
+      id: mockEvent.id,
+      date: formatEventDate(mockEvent.date),
+      description: mockEvent.description,
+      name: mockEvent.name,
+      address: mockEvent.address,
+      maxCustomers: mockEvent.maxCustomers,
+      isTrending: mockEvent.isTrending,
+      price: mockEvent.price,
+      status: mockEvent.status,
+      categories: mockEvent.categories,
+      organizer: undefined,
+      currentParticipants: mockEvent.currentParticipants,
+      _links: mockEvent._links,
+    };
   }
 
   const mappedOrganizer: SingleUser = {
@@ -72,6 +86,7 @@ const mapMockEventToEvent = (mockEvent: any): Event => {
   };
 
   return {
+    id: mockEvent.id,
     date: formatEventDate(mockEvent.date),
     description: mockEvent.description,
     name: mockEvent.name,
@@ -454,8 +469,8 @@ export const eventService = {
         }))
         .filter((event: Event) => {
           const isFromOrganizer =
-            event.organizer.pseudo?.toLowerCase() ===
-            organizerPseudo.toLowerCase();
+            !!event.organizer &&
+            event.organizer.pseudo?.toLowerCase() === organizerPseudo.toLowerCase();
 
           const eventId = event._links.self.href.split("/").pop();
           const isNotCurrentEvent =
@@ -764,6 +779,30 @@ export const eventService = {
       return mappedEvents;
     } catch (error) {
       console.error("❌ Error in getEventsByOrganizerHref:", error);
+      throw error;
+    }
+  },
+
+  async getTrendingEvents(): Promise<Event[]> {
+    try {
+      if (useMockData) {
+        return mockEvents.filter((event) => event.isTrending).map(mapMockEventToEvent);
+      }
+      // Appel API pour récupérer tous les événements puis filtrer côté front
+      const response = await fetch(`${apiUrl}/events`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+      const result = await response.json();
+      const apiEvents = result._embedded?.eventSummaryResponses || [];
+      const trending = apiEvents.filter((event: any) => event.isTrending);
+      return trending.map(mapMockEventToEvent);
+    } catch (error) {
       throw error;
     }
   },

@@ -14,6 +14,7 @@ interface BottomSheetProps {
   onClose: () => void;
   children: ReactNode;
   maxHeight?: string;
+  minHeight?: string;
   title?: string;
 }
 
@@ -22,6 +23,7 @@ export default function BottomSheet({
   onClose,
   children,
   maxHeight = "85vh",
+  minHeight = "",
   title,
 }: BottomSheetProps) {
   const DRAG_THRESHOLD = 100;
@@ -96,6 +98,7 @@ export default function BottomSheet({
             className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--background)] rounded-t-3xl shadow-2xl overflow-hidden flex flex-col"
             style={{
               maxHeight,
+              minHeight,
               overscrollBehavior: "none",
             }}
           >

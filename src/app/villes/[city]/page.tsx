@@ -27,9 +27,6 @@ export default function CityPage() {
 
   // Décoder le paramètre URL et capitaliser
   const cityName = decodeURIComponent(cityParam);
-  // .split("-")
-  // .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-  // .join(" ");
 
   // Hook pour récupérer les données de la ville
   const { city, events, nearestCities, loading, error } = useCity(cityName);
@@ -46,6 +43,7 @@ export default function CityPage() {
   const { cities: regionCities } = useCities("byRegion", {
     region: city?.region || "",
   });
+  
   const slugify = (text: string) => {
     return text
       .toLowerCase()
@@ -160,37 +158,21 @@ export default function CityPage() {
         )}
       </section>
 
-        {popularOrganizers.length > 0 && (
-      <section className="wrapper">
-        <CustomTitle
-          title={`Découvrez leurs derniers évènements sur ${city.name}`}
-          description={`Organisateurs populaires`}
-        />
-        {
-          popularOrganizers.map((organizer: SingleUser) => (
-            <OrganizerCard key={organizer.id} organizer={organizer} />
-          ))}
-        <button className="secondary-btn">
-          <span>Voir tous les organisateurs</span>
+      {popularOrganizers.length > 0 && (
+        <section className="wrapper">
+          <CustomTitle
+            title={`Découvrez leurs derniers évènements sur ${city.name}`}
+            description={`Organisateurs populaires`}
+          />
+          {
+            popularOrganizers.map((organizer: SingleUser) => (
+              <OrganizerCard key={organizer.id} organizer={organizer} />
+            ))}
+          <button className="secondary-btn">
+            <span>Voir tous les organisateurs</span>
           </button>
         </section>
       )}
-
-      {/* Villes de la région */}
-      {/* {regionCities.length > 0 && (
-          <TabList
-            title={
-              FRENCH_REGIONS[city.region as keyof typeof FRENCH_REGIONS] ||
-              city.region
-            }
-            items={regionCities
-              .filter((c) => c.name !== city.name) // Exclure la ville actuelle
-              .map((c) => c.name)}
-            generateHref={(cityName) =>
-              `/villes/${cityName.toLowerCase().replace(" ", "-")}`
-            }
-          />
-        )} */}
 
       {/* Section actualités */}
       <section className="wrapper">

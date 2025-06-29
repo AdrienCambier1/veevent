@@ -21,6 +21,35 @@ export default function Pagination({
     return null;
   }
 
+  // Fonction pour générer les numéros de page à afficher (max 5 bulles)
+  const getPageNumbers = () => {
+    const { totalPages, number } = pagination;
+    const pages: (number | string)[] = [];
+
+    if (totalPages <= 5) {
+      // Si 5 pages ou moins, afficher toutes
+      for (let i = 0; i < totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Logique pour plus de 5 pages
+      if (number <= 2) {
+        // Près du début : afficher les 3 premières + ... + dernière
+        pages.push(0, 1, 2, "...", totalPages - 1);
+      } else if (number >= totalPages - 3) {
+        // Près de la fin : afficher première + ... + 3 dernières
+        pages.push(0, "...", totalPages - 3, totalPages - 2, totalPages - 1);
+      } else {
+        // Au milieu : afficher première + ... + page courante + ... + dernière
+        pages.push(0, "...", number, "...", totalPages - 1);
+      }
+    }
+
+    return pages;
+  };
+
+  const pageNumbers = getPageNumbers();
+
   return (
     <div className="flex flex-col items-center gap-4 mt-8">
       {/* Contrôles de pagination */}
@@ -37,19 +66,25 @@ export default function Pagination({
           Précédent
         </button>
         
-        <div className="flex items-center gap-2">
-          {Array.from({ length: pagination.totalPages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => onPageChange(i)}
-              className={`px-3 py-1 rounded transition-colors ${
-                i === pagination.number
-                  ? "bg-primary-600 text-white"
-                  : "border border-primary-600 text-primary-600 hover:bg-primary-50"
-              }`}
-            >
-              {i + 1}
-            </button>
+        {/* Numéros de page - masqués sur smartphone */}
+        <div className="hidden md:flex items-center gap-2">
+          {pageNumbers.map((page, index) => (
+            <div key={index}>
+              {page === "..." ? (
+                <span className="px-3 py-1 text-gray-500">...</span>
+              ) : (
+                <button
+                  onClick={() => onPageChange(page as number)}
+                  className={`px-3 py-1 rounded transition-colors ${
+                    page === pagination.number
+                      ? "bg-primary-600 text-white"
+                      : "border border-primary-600 text-primary-600 hover:bg-primary-50"
+                  }`}
+                >
+                  {(page as number) + 1}
+                </button>
+              )}
+            </div>
           ))}
         </div>
         
@@ -68,7 +103,7 @@ export default function Pagination({
       
       {/* Informations de pagination */}
       <div className="text-center text-sm text-gray-600">
-        Page {pagination.number + 1} sur {pagination.totalPages} 
+        Page {pagination.number + 1} sur {pagination.totalPages} {""}
         ({pagination.totalElements} événements au total)
       </div>
     </div>

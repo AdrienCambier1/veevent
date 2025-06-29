@@ -1,16 +1,16 @@
 "use client";
 import SearchInput from "@/components/inputs/search-input/search-input";
-import { useState, useEffect, Suspense, useMemo, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense, useMemo, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import { useEvents } from "@/hooks/events/use-events";
 import { useEventsPaginated } from "@/hooks/events/use-events-paginated";
 import { Event } from "@/types";
 import { FilterProvider, useFilters } from "@/contexts/filter-context";
-import { Filter } from "iconoir-react";
 import FilterBottomSheet from "@/components/commons/filters/filter-bottom-sheet";
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
+import { useSearchPaginated } from "@/hooks/commons/use-search-paginated";
 
 // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
 const extractIdFromSelfLink = (event: Event): string => {
@@ -20,13 +20,12 @@ const extractIdFromSelfLink = (event: Event): string => {
 };
 
 function EvenementsPageContent() {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { appliedFilters, hasActiveFilters, filterVersion } = useFilters();
   const eventsSectionRef = useRef<HTMLElement>(null);
+  const searchScrollTargetRef = useRef<HTMLElement>(null);
 
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState("");
+  const searchParams = useSearchParams()!;
+  const initialQuery = searchParams.get("q") || "";
 
   const {
     events: popularEvents,
@@ -44,7 +43,27 @@ function EvenementsPageContent() {
     error: freeError,
   } = useEvents("free");
 
-  // Utilisation du nouveau hook paginé
+  // Nouvelle logique de recherche avec useSearchPaginated
+  const {
+    query,
+    setQuery,
+    items: searchResults,
+    loading: searchLoading,
+    error: searchError,
+    pagination: searchPagination,
+    hasNextPage: searchHasNextPage,
+    hasPreviousPage: searchHasPreviousPage,
+    loadPage: searchLoadPage,
+    loadPreviousPage: searchLoadPreviousPage,
+    loadNextPage: searchLoadNextPage,
+  } = useSearchPaginated({ 
+    initialQuery, 
+    initialTypes: ["event"],
+    pageSize: 20,
+    scrollTargetRef: searchScrollTargetRef 
+  });
+
+  // Utilisation du nouveau hook paginé pour tous les événements (quand pas de recherche)
   const {
     items: allEvents,
     loading: allLoading,
@@ -60,25 +79,6 @@ function EvenementsPageContent() {
     scrollTargetRef: eventsSectionRef,
     filterVersion,
   });
-
-  useEffect(() => {
-    const urlSearch = searchParams?.get("search");
-    if (urlSearch) {
-      setSearchTerm(urlSearch);
-    }
-  }, [searchParams]);
-
-  const handleSearch = () => {
-    if (searchTerm.trim()) {
-      router.push(`/evenements?search=${encodeURIComponent(searchTerm)}`);
-    } else {
-      router.push("/evenements");
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
 
   const renderEventCards = (
     events: Event[],
@@ -125,6 +125,15 @@ function EvenementsPageContent() {
     );
   };
 
+  // Rendu de chargement personnalisé pour la recherche
+  const renderSearchLoading = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {Array.from({ length: 8 }, (_, i) => (
+        <div key={i} className="animate-pulse bg-gray-200 h-80 rounded-lg"></div>
+      ))}
+    </div>
+  );
+
   return (
     <>
       <main>
@@ -132,56 +141,94 @@ function EvenementsPageContent() {
           <h1>Explorez les évènements sur veevent</h1>
           <h3>Rechercher un évènement</h3>
           <SearchInput
-            value={searchTerm}
-            onChange={handleInputChange}
+            value={query}
+            onChange={e => setQuery(e.target.value)}
             placeholder="Concert, Festival, Conférence..."
           />
-          <button className="primary-btn" onClick={handleSearch}>
-            <span>Rechercher</span>
-          </button>
         </section>
 
-        {popularEvents.length > 0 && (
-        <HorizontalList title="Les évènements populaires cette semaine">
-          {renderEventCards(popularEvents, popularLoading, popularError)}
-        </HorizontalList>
+        {/* Affichage des résultats de recherche avec PaginatedList */}
+        {query && (
+          <div>
+            <h4 className="px-4 pt-2">Résultats de recherche</h4>
+            <PaginatedList
+              items={searchResults}
+              loading={searchLoading}
+              error={searchError}
+              pagination={searchPagination}
+              hasNextPage={searchHasNextPage}
+              hasPreviousPage={searchHasPreviousPage}
+              onPageChange={searchLoadPage}
+              onPreviousPage={searchLoadPreviousPage}
+              onNextPage={searchLoadNextPage}
+              hasActiveFilters={false}
+              onOpenFilters={() => {}}
+              renderItem={(item: any, index: number) => (
+                <EventCard 
+                  key={item.event.id} 
+                  id={item.event.id.toString()} 
+                  event={item.event} 
+                  minify={false}
+                  grid={true}
+                />
+              )}
+              renderEmpty={() => (
+                <div className="text-center text-gray-500 py-8">
+                  <p>Aucun événement trouvé</p>
+                </div>
+              )}
+              renderLoading={renderSearchLoading}
+              showFilters={false}
+              scrollTargetRef={searchScrollTargetRef}
+            />
+          </div>
         )}
 
-        {dealEvents.length > 0 && (
-          <HorizontalList title="Les bonnes affaires de la semaine">
-            {renderEventCards(dealEvents, dealLoading, dealError)}
-          </HorizontalList>
-        )}
+        {/* Afficher les sections suivantes seulement si pas de recherche active */}
+        {!query && (
+          <>
+            {popularEvents.length > 0 && (
+              <HorizontalList title="Les évènements populaires cette semaine">
+                {renderEventCards(popularEvents, popularLoading, popularError)}
+              </HorizontalList>
+            )}
 
-        {freeEvents.length > 0 && (
-          <HorizontalList title="Sortez gratuitement ce week end">
-            {renderEventCards(freeEvents, freeLoading, freeError)}
-          </HorizontalList>
-        )}
-        
+            {dealEvents.length > 0 && (
+              <HorizontalList title="Les bonnes affaires de la semaine">
+                {renderEventCards(dealEvents, dealLoading, dealError)}
+              </HorizontalList>
+            )}
 
-        {/* Utilisation du composant PaginatedList */}
-        <PaginatedList
-          items={allEvents}
-          loading={allLoading}
-          error={allError}
-          pagination={pagination}
-          hasNextPage={hasNextPage}
-          hasPreviousPage={hasPreviousPage}
-          onPageChange={loadPage}
-          onPreviousPage={loadPreviousPage}
-          onNextPage={loadNextPage}
-          hasActiveFilters={hasActiveFilters}
-          onOpenFilters={() => setIsFilterOpen(true)}
-          renderItem={renderEventCard}
-          title="Tous les événements"
-          scrollTargetRef={eventsSectionRef}
-        />
+            {freeEvents.length > 0 && (
+              <HorizontalList title="Sortez gratuitement ce week end">
+                {renderEventCards(freeEvents, freeLoading, freeError)}
+              </HorizontalList>
+            )}
+
+            {/* Utilisation du composant PaginatedList pour tous les événements */}
+            <PaginatedList
+              items={allEvents}
+              loading={allLoading}
+              error={allError}
+              pagination={pagination}
+              hasNextPage={hasNextPage}
+              hasPreviousPage={hasPreviousPage}
+              onPageChange={loadPage}
+              onPreviousPage={loadPreviousPage}
+              onNextPage={loadNextPage}
+              hasActiveFilters={hasActiveFilters}
+              onOpenFilters={() => {}}
+              renderItem={renderEventCard}
+              title="Tous les événements"
+              scrollTargetRef={eventsSectionRef}
+            />
+          </>
+        )}
       </main>
 
       <FilterBottomSheet
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
+        isOpen={false}
+        onClose={() => {}}
       />
     </>
   );
@@ -189,7 +236,7 @@ function EvenementsPageContent() {
 
 export default function EvenementsPage() {
   return (
-    <Suspense fallback={<div>Chargement de la page...</div>}>
+    <Suspense fallback={<div>Chargement...</div>}>
       <FilterProvider>
         <EvenementsPageContent />
       </FilterProvider>

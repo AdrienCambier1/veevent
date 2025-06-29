@@ -16,6 +16,19 @@
     img {
       @apply border-2 border-white;
     }
+
+    &.skeleton-bg {
+      @apply bg-gray-200;
+
+      .city-img {
+        box-shadow: none;
+        @apply bg-gray-300;
+      }
+
+      .title {
+        @apply bg-gray-300;
+      }
+    }
   }
 
   .title {

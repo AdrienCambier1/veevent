@@ -80,12 +80,14 @@ export interface BaseEvent {
   price: number;
   status?: EventStatus;
   categories: BaseCategory[];
-  organizer: SingleUser; // Changé de BaseUser vers SingleUser
+  organizer?: SingleUser;
   currentParticipants: number;
 }
 
 // Événement dans la liste (sans id direct, sans currentParticipants)
 export interface Event extends BaseEvent {
+  id?: number;
+  organizer?: SingleUser;
   _links: {
     self: EventLink;
   };

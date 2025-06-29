@@ -52,7 +52,7 @@ export default function SearchBtn() {
   }, [charIndex, isTyping, currentTextIndex, texts]);
 
   return (
-    <Link href="#" className="search-btn">
+    <Link href="/search" className="search-btn">
       <div className="content">
         <Search className="icon-small" />
         <p className="typewriter-text">

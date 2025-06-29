@@ -26,9 +26,10 @@ export const viewport = {
 
 interface RootLayoutProps {
   children: ReactNode;
+  sheet?: React.ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children, sheet }: RootLayoutProps) {
   return (
     <html lang="fr">
       <body>
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 <SidebarProvider>
                   <Header />
                   {children}
+                  {sheet}
                   <FloatingMenu />
                 </SidebarProvider>
               </CityProvider>

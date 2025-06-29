@@ -401,13 +401,13 @@ export const cityService = {
       const uniqueOrganizers = events.reduce(
         (organizers: any[], event: Event) => {
           const existingOrganizer = organizers.find(
-            (org) => org.pseudo === event.organizer.pseudo
+            (org) => org.pseudo === event.organizer?.pseudo
           );
           if (!existingOrganizer) {
             organizers.push({
               ...event.organizer,
               eventsCount: events.filter(
-                (e: Event) => e.organizer.pseudo === event.organizer.pseudo
+                (e: Event) => e.organizer?.pseudo === event.organizer?.pseudo
               ).length,
             });
           }

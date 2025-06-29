@@ -20,7 +20,6 @@ export default function OrganizerCard({
     2
   );
 
-  console.log("organizer", organizer);
 
   const renderEvents = () => {
     if (loading) {

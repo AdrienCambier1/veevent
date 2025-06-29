@@ -135,8 +135,8 @@ export default function Home() {
       return (
         <TrendingCard
           key={eventId}
-          organizer={event.organizer.pseudo || ""}
-          city={event.address.split(",")[0] || event.address} // Extraction de la ville
+          organizer={event.organizer?.pseudo || ""}
+          city={event.address.split(",")[0] || event.address}
           description={
             event.description.length > 50
               ? event.description.substring(0, 50) + "..."

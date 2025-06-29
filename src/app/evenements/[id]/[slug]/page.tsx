@@ -95,7 +95,7 @@ export default function EventPage() {
         date={event.date}
         price={event.price}
         interested={interestedCount}
-        organizer={organizerToUse}
+        organizer={organizerToUse || {}}
         categories={event.categories}
       />
 
@@ -188,7 +188,7 @@ export default function EventPage() {
             Erreur lors du chargement des informations de l'organisateur
           </div>
         ) : (
-          <OrganizerCard organizer={organizerToUse} currentEventId={id} />
+          <OrganizerCard organizer={organizerToUse!} currentEventId={id} />
         )}
         <button className="secondary-btn">
           <span>Signaler l'évènement</span>

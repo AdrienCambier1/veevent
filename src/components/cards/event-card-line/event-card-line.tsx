@@ -51,7 +51,7 @@ export default function EventCardLine({ event }: EventCardLineProps) {
         <div className="card-content">
           <div className="card-title">{event.name}</div>
           <ul className="card-specs">
-            <li className="card-organizer">{event.organizer.pseudo}</li>
+            <li className="card-organizer">{event.organizer?.pseudo}</li>
             <li className="card-price">{priceDisplay}</li>
           </ul>
         </div>
