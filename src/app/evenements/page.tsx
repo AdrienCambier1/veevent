@@ -1,6 +1,6 @@
 "use client";
 import SearchInput from "@/components/inputs/search-input/search-input";
-import { Suspense, useMemo, useRef } from "react";
+import { Suspense, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
@@ -23,6 +23,7 @@ function EvenementsPageContent() {
   const { appliedFilters, hasActiveFilters, filterVersion } = useFilters();
   const eventsSectionRef = useRef<HTMLElement>(null);
   const searchScrollTargetRef = useRef<HTMLElement>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
@@ -134,6 +135,16 @@ function EvenementsPageContent() {
     </div>
   );
 
+  // Fonction pour ouvrir le bottom sheet des filtres
+  const handleOpenFilters = () => {
+    setIsFilterOpen(true);
+  };
+
+  // Fonction pour fermer le bottom sheet des filtres
+  const handleCloseFilters = () => {
+    setIsFilterOpen(false);
+  };
+
   return (
     <>
       <main>
@@ -217,7 +228,7 @@ function EvenementsPageContent() {
               onPreviousPage={loadPreviousPage}
               onNextPage={loadNextPage}
               hasActiveFilters={hasActiveFilters}
-              onOpenFilters={() => {}}
+              onOpenFilters={handleOpenFilters}
               renderItem={renderEventCard}
               title="Tous les événements"
               scrollTargetRef={eventsSectionRef}
@@ -227,8 +238,8 @@ function EvenementsPageContent() {
       </main>
 
       <FilterBottomSheet
-        isOpen={false}
-        onClose={() => {}}
+        isOpen={isFilterOpen}
+        onClose={handleCloseFilters}
       />
     </>
   );
