@@ -60,7 +60,12 @@ export default function EventHead({
         </div>
       </div>
       <div className="flex gap-2">
-        <button className="primary-btn flex-1">
+        <button className="primary-btn flex-1" onClick={() => {
+          const billetSection = document.getElementById("billet");
+          if (billetSection) {
+            billetSection.scrollIntoView({ behavior: "smooth" });
+          }
+        }}>
           {price === 0 ? (
             <span>Gratuit</span>
           ) : (
@@ -72,11 +77,6 @@ export default function EventHead({
           <span>Intéressé.e</span>
         </button>
       </div>
-      {interested && (
-        <p className="interested">
-          <span>{interested} personnes</span> sont intéressé·e·s
-        </p>
-      )}
     </section>
   );
 }

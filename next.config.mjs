@@ -7,13 +7,7 @@ const nextConfig = {
       'lh4.googleusercontent.com',
       'lh5.googleusercontent.com',
       'lh6.googleusercontent.com',
-      'graph.facebook.com', // Images de profil Facebook
-      'platform-lookaside.fbsbx.com',
-      'images.unsplash.com', // Images Unsplash
-      'via.placeholder.com', // Images de placeholder
-      'picsum.photos', // Images Lorem Picsum
-      'cdn.pixabay.com', // Images Pixabay
-      'images.pexels.com', // Images Pexels
+      'res.cloudinary.com'
     ],
     formats: ["image/webp", "image/avif"],
     // Configuration pour les images distantes avec patterns
@@ -88,11 +82,12 @@ const nextConfig = {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
           },
-          // CSP très permissif en développement pour résoudre le problème
-          ...(isDevelopment ? [{
+          {
             key: "Content-Security-Policy",
-            value: "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:*; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:;",
-          }] : []),
+            value: isDevelopment
+              ? "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:*; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:;"
+              : "default-src 'self' https://maps.googleapis.com https://maps.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://maps.googleapis.com https://maps.gstatic.com;",
+          },
         ],
       },
     ];

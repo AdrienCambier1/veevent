@@ -102,6 +102,17 @@ const mapMockEventToEvent = (mockEvent: any): Event => {
   };
 };
 
+// Type pour une invitation
+export interface Invitation {
+  description: string;
+  status: "SENT" | "ACCEPTED" | "REFUSED";
+  _links: {
+    self: { href: string };
+    invitations: { href: string };
+    event: { href: string };
+  };
+}
+
 export const eventService = {
   async getEvents(filters?: EventFilters): Promise<PaginatedResponse<EventsEmbedded>> {
     try {
@@ -806,5 +817,91 @@ export const eventService = {
     } catch (error) {
       throw error;
     }
+  },
+
+  async getInvitationStatus(eventId: number, userId: number, token?: string): Promise<Invitation | null> {
+    try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const response = await fetch(`${apiUrl}/invitations?eventId=${eventId}&userId=${userId}`, {
+        headers,
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        if (response.status === 404) return null;
+        throw new Error("Erreur lors de la récupération de l'invitation");
+      }
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0) return data[0];
+      if (data && data.status) return data;
+      return null;
+    } catch (e) {
+      return null;
+    }
+  },
+
+  async requestInvitation(eventId: number, userId: number, description: string, token?: string): Promise<Invitation> {
+    const body = JSON.stringify({ eventId, userId, description, status: "SENT" });
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    const response = await fetch(`${apiUrl}/invitations`, {
+      method: "POST",
+      headers,
+      body,
+    });
+    if (!response.ok) {
+      throw new Error("Erreur lors de la demande d'invitation");
+    }
+    return await response.json();
+  },
+
+  async reportEvent(senderUserId: number, reportedUserId: number, description: string, reportType: string, token?: string): Promise<any> {
+    const body = JSON.stringify({
+      reportType,
+      description,
+      senderUserId,
+      reportedUserId
+    });
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    const response = await fetch(`${apiUrl}/reports`, {
+      method: "POST",
+      headers,
+      body,
+    });
+    if (!response.ok) {
+      throw new Error("Erreur lors du signalement de l'événement");
+    }
+    return await response.json();
+  },
+
+  async createOrder(totalPrice: number, eventId: number, userId: number, token?: string): Promise<any> {
+    const body = JSON.stringify({ totalPrice, eventId, userId });
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    const response = await fetch(`${apiUrl}/orders`, {
+      method: "POST",
+      headers,
+      body,
+    });
+    if (!response.ok) {
+      throw new Error("Erreur lors de la création de la commande");
+    }
+    return await response.json();
+  },
+
+  async addTicketToOrder(orderId: number, ticket: { name: string; lastName: string; description: string; unitPrice: number }, token?: string): Promise<any> {
+    const body = JSON.stringify(ticket);
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    const response = await fetch(`${apiUrl}/orders/${orderId}/tickets`, {
+      method: "POST",
+      headers,
+      body,
+    });
+    if (!response.ok) {
+      throw new Error("Erreur lors de l'ajout du billet à la commande");
+    }
+    return await response.json();
   },
 };
