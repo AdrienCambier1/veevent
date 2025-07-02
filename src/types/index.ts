@@ -82,6 +82,7 @@ export interface BaseEvent {
   categories: BaseCategory[];
   organizer?: SingleUser;
   currentParticipants: number;
+  isInvitationOnly?: boolean;
 }
 
 // Événement dans la liste (sans id direct, sans currentParticipants)
@@ -261,12 +262,7 @@ export interface PlacesEmbedded {
   placeResponses: Place[]; // Changé de "places" à "placeResponses"
 }
 
-export interface PlacesResponse {
-  _embedded: PlacesEmbedded;
-  _links: {
-    self: EventLink;
-  };
-}
+export interface PlacesResponse extends PaginatedResponse<PlacesEmbedded> {}
 
 // Interface pour l'objet Place final unifié (sans métadonnées HATEOAS)
 export interface PlaceData extends BasePlace {

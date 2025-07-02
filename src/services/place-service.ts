@@ -4,46 +4,31 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
 const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true";
 
 export const placeService = {
-  async getPlaces(): Promise<Place[]> {
+  async getPlaces(page: number = 0, size: number = 10): Promise<PlacesResponse> {
     try {
-      // Si on utilise les données fictives (à implémenter plus tard si nécessaire)
       if (useMockData) {
-        // TODO: Implémenter les données mock pour les lieux
-        return [];
+        // TODO: Implémenter les données mock pour les lieux paginés
+        return {
+          _embedded: { placeResponses: [] },
+          _links: { self: { href: '' }, first: { href: '' }, last: { href: '' } },
+          page: { size, totalElements: 0, totalPages: 0, number: page }
+        };
       }
-
-      const response = await fetch(`${apiUrl}/places`, {
+      const params = new URLSearchParams();
+      params.append('page', page.toString());
+      params.append('size', size.toString());
+      const response = await fetch(`${apiUrl}/places?${params.toString()}`, {
         headers: {
           "Content-Type": "application/json",
         },
         cache: "no-store",
       });
-
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }
-
       const result: PlacesResponse = await response.json();
-      const apiPlaces = result._embedded?.placeResponses || [];
-
-      const mappedPlaces: Place[] = apiPlaces.map((apiPlace: any) => ({
-        id: apiPlace.id,
-        name: apiPlace.name,
-        address: apiPlace.address,
-        type: apiPlace.type,
-        location: apiPlace.location,
-        eventsCount: apiPlace.eventsCount,
-        eventsPastCount: apiPlace.eventsPastCount,
-        cityName: apiPlace.cityName,
-        bannerUrl: apiPlace.bannerUrl,
-        imageUrl: apiPlace.imageUrl || "/images/placeholder-place.jpg", // Image par défaut
-        content: apiPlace.content,
-        description: apiPlace.description,
-        slug: apiPlace.slug,
-        _links: apiPlace._links,
-      }));
-
-      return mappedPlaces;
+      // On retourne la réponse paginée complète
+      return result;
     } catch (error) {
       console.error("❌ Error in getPlaces:", error);
       throw error;
@@ -99,8 +84,8 @@ export const placeService = {
 
   async getPopularPlaces(limit: number = 6): Promise<Place[]> {
     try {
-      const places = await this.getPlaces();
-
+      const result = await this.getPlaces(0, 100); // On récupère un grand nombre pour trier localement
+      const places = result._embedded?.placeResponses || [];
       // Trier par nombre d'événements (actuels + passés) et limiter
       const popularPlaces = places
         .sort((a, b) => {
@@ -109,7 +94,6 @@ export const placeService = {
           return totalEventsB - totalEventsA;
         })
         .slice(0, limit);
-
       return popularPlaces;
     } catch (error) {
       console.error("❌ Error in getPopularPlaces:", error);
@@ -119,13 +103,12 @@ export const placeService = {
 
   async getPlacesByCity(cityName: string): Promise<Place[]> {
     try {
-      const places = await this.getPlaces();
-
+      const result = await this.getPlaces(0, 100); // On récupère un grand nombre pour filtrer localement
+      const places = result._embedded?.placeResponses || [];
       // Filtrer par nom de ville
       const cityPlaces = places.filter(
         (place) => place.cityName.toLowerCase() === cityName.toLowerCase()
       );
-
       return cityPlaces;
     } catch (error) {
       console.error("❌ Error in getPlacesByCity:", error);
@@ -135,8 +118,8 @@ export const placeService = {
 
   async searchPlaces(searchTerm: string): Promise<Place[]> {
     try {
-      const places = await this.getPlaces();
-
+      const result = await this.getPlaces(0, 100); // On récupère un grand nombre pour filtrer localement
+      const places = result._embedded?.placeResponses || [];
       // Recherche dans le nom, l'adresse, le type et la ville
       const filteredPlaces = places.filter((place) => {
         const searchLower = searchTerm.toLowerCase();
@@ -147,7 +130,6 @@ export const placeService = {
           (place.type && place.type.toLowerCase().includes(searchLower))
         );
       });
-
       return filteredPlaces;
     } catch (error) {
       console.error("❌ Error in searchPlaces:", error);
@@ -162,7 +144,7 @@ export const placeService = {
         throw new Error("Mock data not implemented for places by slug yet");
       }
 
-      const response = await fetch(`${apiUrl}/places?slug=${slug}`, {
+      const response = await fetch(`${apiUrl}/places/slug/${slug}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -177,7 +159,7 @@ export const placeService = {
       }
 
       const result = await response.json();
-      const apiPlace = result._embedded?.placeResponses?.[0];
+      const apiPlace = result;
 
       if (!apiPlace) {
         return null;

@@ -61,9 +61,9 @@ export default function PlaceFilter({ cityName }: PlaceFilterProps) {
       } else if (tempFilters.selectedCityObj && tempFilters.selectedCityObj.name) {
         // Fallback: filtrer par nom de ville
         const allPlaces = await placeService.getPlaces();
-        const cityPlaces = allPlaces.filter(place => 
+        const cityPlaces = allPlaces._embedded?.placeResponses?.filter(place => 
           place.cityName.toLowerCase() === tempFilters.selectedCityObj.name.toLowerCase()
-        );
+        ) || [];
         const placeOptions: SearchFilterOption[] = cityPlaces.map((place) => ({
           id: place.id.toString(),
           name: place.name,
@@ -75,12 +75,12 @@ export default function PlaceFilter({ cityName }: PlaceFilterProps) {
       } else {
         // Charger tous les lieux
         const allPlaces = await placeService.getPlaces();
-        const placeOptions: SearchFilterOption[] = allPlaces.map((place) => ({
+        const placeOptions: SearchFilterOption[] = allPlaces._embedded?.placeResponses?.map((place) => ({
           id: place.id.toString(),
           name: place.name,
           eventCount: place.eventsCount,
           _full: place,
-        }));
+        })) || [];
         setPlaces(placeOptions);
         setFilteredPlaces(placeOptions);
       }

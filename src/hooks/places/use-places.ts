@@ -7,17 +7,26 @@ interface UsePlacesReturn {
   loading: boolean;
   error: Error | null;
   refetch: () => void;
+  pageInfo?: {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+  };
 }
 
 export const usePlaces = (
   type?: "popular" | "search",
   searchTerm?: string,
   cityName?: string,
-  limit?: number
+  limit?: number,
+  page: number = 0,
+  size: number = 10
 ): UsePlacesReturn => {
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [pageInfo, setPageInfo] = useState<UsePlacesReturn["pageInfo"]>();
 
   const fetchPlaces = useCallback(async () => {
     try {
@@ -25,6 +34,7 @@ export const usePlaces = (
       setError(null);
 
       let data: Place[] = [];
+      let pageData: UsePlacesReturn["pageInfo"] | undefined = undefined;
 
       switch (type) {
         case "popular":
@@ -34,25 +44,31 @@ export const usePlaces = (
           if (searchTerm) {
             data = await placeService.searchPlaces(searchTerm);
           } else {
-            data = await placeService.getPlaces();
+            const result = await placeService.getPlaces(page, size);
+            data = result._embedded?.placeResponses || [];
+            pageData = result.page;
           }
           break;
         default:
           if (cityName) {
             data = await placeService.getPlacesByCity(cityName);
           } else {
-            data = await placeService.getPlaces();
+            const result = await placeService.getPlaces(page, size);
+            data = result._embedded?.placeResponses || [];
+            pageData = result.page;
           }
       }
 
       setPlaces(data || []);
+      setPageInfo(pageData);
     } catch (err) {
       setError(err as Error);
       setPlaces([]);
+      setPageInfo(undefined);
     } finally {
       setLoading(false);
     }
-  }, [type, searchTerm, cityName, limit]);
+  }, [type, searchTerm, cityName, limit, page, size]);
 
   useEffect(() => {
     fetchPlaces();
@@ -62,5 +78,5 @@ export const usePlaces = (
     fetchPlaces();
   }, [fetchPlaces]);
 
-  return { places, loading, error, refetch };
+  return { places, loading, error, refetch, pageInfo };
 };

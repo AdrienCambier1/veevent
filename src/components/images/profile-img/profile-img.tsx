@@ -6,7 +6,7 @@ type SizeOption = "base" | "sm" | "xs";
 
 interface ProfileImgProps {
   imageUrl?: string | null;
-  name: string;
+  name?: string;
   note?: number | null;
   size?: SizeOption;
 }
@@ -33,12 +33,14 @@ export default function ProfileImg({
         className={`profile-pic ${iconSize}`}
       />
 
-      {note !== null && (
+      
         <div className="flex flex-col justify-center">
-          <p className="text-base font-medium">{name}</p>
-          <RatingStars note={note} size="xs" />
+          {name && <p className="text-base font-medium">{name}</p>}
+          {note !== null && (
+            <RatingStars note={note} size="xs" />
+          )}
         </div>
-      )}
+      
     </div>
   );
 }

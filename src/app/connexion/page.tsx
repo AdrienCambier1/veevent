@@ -6,9 +6,11 @@ import { useSearchParams } from "next/navigation";
 import { useHeader } from "@/contexts/header-context";
 
 function ConnexionPageContent() {
-  const { login, loading, isAuthenticated } = useAuth();
+  const { login, loading, error, clearError } = useAuth();
   const { setHideCitySelector } = useHeader();
   const searchParams = useSearchParams();
+  const backendGoogleLoginUrl =
+    "http://localhost:8090/oauth2/authorization/google";
 
   const [credentials, setCredentials] = useState({
     email: "",
@@ -19,6 +21,13 @@ function ConnexionPageContent() {
     setHideCitySelector(true);
     return () => setHideCitySelector(false);
   }, [setHideCitySelector]);
+
+  // Nettoyer les erreurs quand l'utilisateur modifie les champs
+  useEffect(() => {
+    if (error) {
+      clearError();
+    }
+  }, [credentials.email, credentials.password, error, clearError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +62,7 @@ function ConnexionPageContent() {
               value={credentials.email}
               onChange={handleInputChange("email")}
               disabled={loading}
+              required
             />
           </div>
 
@@ -65,11 +75,18 @@ function ConnexionPageContent() {
               value={credentials.password}
               onChange={handleInputChange("password")}
               disabled={loading}
+              required
             />
             <Link href="/mot-de-passe-oublie" className="text-primary-600">
               Mot de passe oublié ?
             </Link>
           </div>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+              {error}
+            </div>
+          )}
 
           <button
             type="submit"
@@ -79,13 +96,21 @@ function ConnexionPageContent() {
             <span>{loading ? "Connexion en cours..." : "Se connecter"}</span>
           </button>
 
-          <button
-            type="button"
-            className="w-full border p-3 rounded-full border-black font-bold mt-4"
-            disabled={loading}
-          >
-            Sign in with apple
-          </button>
+         <Link href={backendGoogleLoginUrl}>
+         <div className="secondary-btn w-full">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="w-4 h-4 mr-2"
+              >
+                <path
+                  d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
+                  fill="currentColor"
+                />
+              </svg>
+              Connexion avec Google
+            </div>
+            </Link>
         </form>
 
         <p className="font-bold">

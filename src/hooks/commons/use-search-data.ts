@@ -35,11 +35,11 @@ export const useSearchData = (): UseSearchDataReturn => {
           eventCount: city.eventsCount,
         }));
 
-        const placeOptions: SearchFilterOption[] = placesData.map((place) => ({
+        const placeOptions: SearchFilterOption[] = placesData._embedded?.placeResponses?.map((place) => ({
           id: place.id.toString(),
           name: place.name,
           eventCount: place.eventsCount,
-        }));
+        })) || [];
 
         setCities(cityOptions);
         setPlaces(placeOptions);

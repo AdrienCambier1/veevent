@@ -11,6 +11,7 @@ import { useEventOrganizer } from "@/hooks/organizers/use-event-organizer";
 import { useEventPlace } from "@/hooks/places/use-event-place";
 import Gmaps from "@/components/lists/places-map-list/gmap";
 import { MapPin, Shop } from "iconoir-react";
+import BilletSelector from "@/components/cards/billet-selector/billet-selector";
 
 export default function EventPage() {
   const { id, slug } = useParams() as { id: string; slug: string };
@@ -101,11 +102,12 @@ export default function EventPage() {
 
       <section className="wrapper">
         <h2>Billet</h2>
-        {event.status === "NOT_STARTED" &&
-        event.currentParticipants < event.maxCustomers ? (
-          <button className="primary-btn">
-            <span>Réserver - {event.price}€</span>
-          </button>
+        {event.isInvitationOnly ? (
+          <div className="text-blue-600 font-semibold py-4">
+            Événement sur invitation uniquement
+          </div>
+        ) : event.status === "NOT_STARTED" && event.currentParticipants < event.maxCustomers ? (
+          <BilletSelector event={event} />
         ) : event.status === "COMPLETED" ? (
           <div className="text-gray-500">
             <span>Événement terminé</span>
@@ -197,3 +199,31 @@ export default function EventPage() {
     </main>
   );
 }
+
+
+// par invitation l'utilisateur peut faire une demande avec cette endpoint http://localhost:8090/api/v1/invitations
+// en pOST avec ce body par exemple 
+// {
+//   "description": "Invitation à l'événement techno de l'année",
+//   "status": "SENT",
+//   "eventId": 32,
+//   "userId": 5
+// }
+// en reponse du post 
+// {
+//     "description": "Invitation à l'événement techno de l'année",
+//     "status": "SENT",
+//     "_links": {
+//         "self": {
+//             "href": "http://localhost:8090/api/v1/invitations/1"
+//         },
+//         "invitations": {
+//             "href": "http://localhost:8090/api/v1/invitations"
+//         },
+//         "event": {
+//             "href": "http://localhost:8090/api/v1/events/13"
+//         }
+//     }
+// }
+
+// Integre au service event cette fonctionnalité, sur la page event l'utilisateur peut voir si il a fait une demande pour rejoindre l'event, si il a ete refusé, accepté ou en attente de reponse. Un evenement par invitation peut 

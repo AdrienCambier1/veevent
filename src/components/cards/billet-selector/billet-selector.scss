@@ -1,0 +1,70 @@
+.billet-selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.billet-selector-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(30, 30, 80, 0.04);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.billet-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.billet-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.billet-price {
+  color: #3a32e2;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.billet-qty-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.billet-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f2f4ff;
+  color: #3a32e2;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.billet-btn:disabled {
+  background: #e5e7ef;
+  color: #b3b3d1;
+  cursor: not-allowed;
+}
+
+.billet-qty {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #222;
+}
+
+.billet-reserver-btn {
+  font-size: 1.25rem;
+  border-radius: 2rem;
+  padding: 0.9rem 0;
+}

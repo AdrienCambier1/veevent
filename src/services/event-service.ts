@@ -378,6 +378,7 @@ export const eventService = {
         address: apiEvent.address,
         maxCustomers: apiEvent.maxCustomers,
         isTrending: apiEvent.isTrending,
+        isInvitationOnly: apiEvent.isInvitationOnly,
         price: apiEvent.price,
         status: apiEvent.status,
         categories: apiEvent.categories || [],

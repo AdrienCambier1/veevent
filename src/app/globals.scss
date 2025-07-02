@@ -214,8 +214,9 @@
   input[type="text"],
   input[type="email"],
   input[type="password"],
+  input[type="tel"],
   textarea {
-    @apply flex items-center gap-2 border-2 border-primary-600 bg-white px-3 h-12 placeholder:text-gray-400 text-primary-950 outline-none focus:outline-none focus:ring-0 rounded-lg;
+    @apply flex items-center gap-2 border-2 border-primary-600 bg-white px-3 h-12 placeholder:text-gray-400 text-primary-950 outline-none focus:outline-none focus:ring-0 rounded-lg text-[16px];
 
     svg {
       @apply text-primary-600 icon-small;
@@ -223,7 +224,7 @@
   }
 
   textarea {
-    @apply resize-none rounded-lg min-h-24;
+    @apply resize-none rounded-lg min-h-24 py-2;
     overflow-y: hidden;
     field-sizing: content;
   }

@@ -5,6 +5,7 @@ import {
   Event,
   Place,
   SingleUser,
+  CityData,
 } from "@/types";
 import { mockCities } from "@/services/data/cities";
 
@@ -81,7 +82,7 @@ export const cityService = {
         return mockCity || null;
       }
 
-      const response = await fetch(`${apiUrl}/cities?slug=${name}`, {
+      const response = await fetch(`${apiUrl}/cities/slug/${name}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -96,8 +97,8 @@ export const cityService = {
       }
 
       // Récupérer les détails complets de la ville
-      const result: CitiesResponse = await response.json();
-      const apiCity = result._embedded?.cityResponses?.[0] || null;
+      const result: SingleCity = await response.json();
+      const apiCity = result || null;
 
       return apiCity;
     } catch (error) {

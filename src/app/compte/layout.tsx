@@ -5,12 +5,18 @@ import BannerHead from "@/components/heads/banner-head/banner-head";
 import banner from "@/assets/images/banner_profile.png";
 import ProfileHead from "@/components/heads/profile-head/profile-head";
 import { useAuth } from "@/contexts/auth-context";
+import { AuthGuard } from "@/components/commons/auth-guard/auth-guard";
+import { useAuthError } from "@/hooks/commons/use-auth-error";
+import React, { Suspense } from "react";
 
 interface CompteLayoutProps {
   children: ReactNode;
 }
 
 export default function CompteLayout({ children }: CompteLayoutProps) {
+  const { user, isAuthenticated } = useAuth();
+  const { errorMessage } = useAuthError();
+
   const navigation = [
     { label: "Tickets", href: "/compte/tickets" },
     { label: "Enregistrés", href: "/compte/enregistres" },
@@ -18,18 +24,30 @@ export default function CompteLayout({ children }: CompteLayoutProps) {
     { label: "My Veevent", href: "/compte/my-veevent" },
   ];
 
-  const user = useAuth().user;
-
   return (
-    <main>
-      <BannerHead bannerImage={banner} />
-      <section className="wrapper">
-        <ProfileHead isMe={true} user={user} />
-      </section>
-      <section className="wrapper">
-        <BarMenu navigation={navigation} />
-      </section>
-      {children}
-    </main>
+    <AuthGuard>
+      <Suspense fallback={<div>Chargement...</div>}>
+        <main>
+          {errorMessage && !isAuthenticated && (
+            <div className="bg-red-50 border-b border-red-200">
+              <div className="wrapper py-3">
+                <div className="text-red-700 text-sm">
+                  ⚠️ {errorMessage}
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <BannerHead bannerImage={banner} />
+          <section className="wrapper">
+            <ProfileHead isMe={true} user={user} />
+          </section>
+          <section className="wrapper">
+            <BarMenu navigation={navigation} />
+          </section>
+          {children}
+        </main>
+      </Suspense>
+    </AuthGuard>
   );
 }

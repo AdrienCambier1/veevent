@@ -12,6 +12,7 @@ import { useSearchPaginated } from "@/hooks/commons/use-search-paginated";
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import TextImageCardSkeleton from "@/components/cards/text-image-card/text-image-card-skeleton";
+import React from "react";
 
 function LieuxPageContent() {
   const searchParams = useSearchParams()!;
@@ -27,6 +28,15 @@ function LieuxPageContent() {
 
   // Récupérer quelques événements pour la section horizontale
   const { events: popularEvents, loading: popularEventsLoading } = useEvents("popular");
+
+  // Pagination pour tous les lieux
+  const [page, setPage] = React.useState(0);
+  const pageSize = 20;
+  const {
+    places: allPlaces,
+    loading: allPlacesLoading,
+    pageInfo: allPlacesPageInfo,
+  } = usePlaces(undefined, undefined, undefined, undefined, page, pageSize);
 
   // Nouvelle logique de recherche avec useSearchPaginated
   const {
@@ -143,6 +153,38 @@ function LieuxPageContent() {
               ))}
             </HorizontalList>
           )}
+
+          <section className="wrapper">
+            <h2>Tous les lieux</h2>
+            {allPlacesLoading ? (
+              <div>Chargement...</div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {allPlaces.map((place) => (
+                  <PlaceCard key={place.id} place={place} />
+                ))}
+              </div>
+            )}
+            {allPlacesPageInfo && (
+              <div className="flex justify-center mt-4 gap-2">
+                <button
+                  disabled={page === 0}
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
+                  className="px-3 py-1 border rounded disabled:opacity-50"
+                >
+                  Précédent
+                </button>
+                <span>Page {allPlacesPageInfo.number + 1} / {allPlacesPageInfo.totalPages}</span>
+                <button
+                  disabled={page >= allPlacesPageInfo.totalPages - 1}
+                  onClick={() => setPage((p) => p + 1)}
+                  className="px-3 py-1 border rounded disabled:opacity-50"
+                >
+                  Suivant
+                </button>
+              </div>
+            )}
+          </section>
         </>
       )}
     </main>
