@@ -133,7 +133,7 @@ function SearchSheetContent() {
                         </div>
                       </div>
                     )}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                       {categories.map((cat) => (
                         <ThemeCard key={cat.key} category={cat} />
                       ))}
@@ -149,7 +149,7 @@ function SearchSheetContent() {
                       ))}
                     </div>
                     {/* Skeletons catégories */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                       {[...Array(6)].map((_, i) => (
                         <ThemeCardSkeleton key={i} />
                       ))}
@@ -201,7 +201,7 @@ function SearchSheetContent() {
                               {typeLabels[type] || type}
                             </h2>
                             {type === "user" && (
-                              <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4 p-0 list-none">
+                              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-0 list-none">
                                 {items
                                   .slice(0, 8)
                                   .map((item: any, idx: number) => (
@@ -227,7 +227,7 @@ function SearchSheetContent() {
                               </ul>
                             )}
                             {type === "event" && (
-                              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 p-0 list-none">
+                              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-0 list-none">
                                 {items
                                   .slice(0, 8)
                                   .map((item: any, idx: number) => (
@@ -251,7 +251,7 @@ function SearchSheetContent() {
                               </ul>
                             )}
                             {(type === "city" || type === "place") && (
-                              <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 p-0 list-none">
+                              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-0 list-none">
                                 {items
                                   .slice(0, 10)
                                   .map((item: any, idx: number) => (

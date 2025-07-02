@@ -25,7 +25,8 @@ export function useCityEventsPaginated({
     let isMounted = true;
     setLoadingCity(true);
     setErrorCity(null);
-    cityService.getCityByName(cityName)
+    cityService
+      .getCityByName(cityName)
       .then((city) => {
         if (isMounted && city && city._links?.events?.href) {
           setEventsHref(city._links.events.href);
@@ -37,29 +38,45 @@ export function useCityEventsPaginated({
       .finally(() => {
         if (isMounted) setLoadingCity(false);
       });
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [cityName]);
 
   // Fonction pour fetch les événements paginés
-  const fetchEvents = useCallback(async (page: number, size: number = 10) => {
-    if (!eventsHref) {
-      return { items: [], pagination: { size: 10, totalElements: 0, totalPages: 1, number: 0 } };
-    }
-    // Préparer les filtres pour l'API
-    const apiFilters: any = {
-      ...filters,
-      page,
-      size,
-    };
-    if (apiFilters.categories && Array.isArray(apiFilters.categories)) {
-      apiFilters.categories = apiFilters.categories.join(",");
-    }
-    const result: EventsResponse = await cityService.getEventsByCityLink(eventsHref, apiFilters);
-    return {
-      items: result._embedded?.eventSummaryResponses || [],
-      pagination: result.page || { size: size, totalElements: 0, totalPages: 1, number: page },
-    };
-  }, [eventsHref, filters, filterVersion]);
+  const fetchEvents = useCallback(
+    async (page: number, size: number = 10) => {
+      if (!eventsHref) {
+        return {
+          items: [],
+          pagination: { size: 10, totalElements: 0, totalPages: 1, number: 0 },
+        };
+      }
+      // Préparer les filtres pour l'API
+      const apiFilters: any = {
+        ...filters,
+        page,
+        size,
+      };
+      if (apiFilters.categories && Array.isArray(apiFilters.categories)) {
+        apiFilters.categories = apiFilters.categories.join(",");
+      }
+      const result: EventsResponse = await cityService.getEventsByCityLink(
+        eventsHref,
+        apiFilters
+      );
+      return {
+        items: result._embedded?.eventSummaryResponses || [],
+        pagination: result.page || {
+          size: size,
+          totalElements: 0,
+          totalPages: 1,
+          number: page,
+        },
+      };
+    },
+    [eventsHref, filters, filterVersion]
+  );
 
   const paginatedData = usePaginatedData({
     fetchData: fetchEvents,
@@ -80,4 +97,4 @@ export function useCityEventsPaginated({
     loading: paginatedData.loading || loadingCity,
     error: paginatedData.error || errorCity,
   };
-} 
+}

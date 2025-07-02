@@ -25,7 +25,7 @@ function EvenementsPageContent() {
   const eventsSectionRef = useRef<HTMLElement>(null);
   const searchScrollTargetRef = useRef<HTMLElement>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isSearching, setIsSearching] = useState(false); // Nouvel état pour le délai de recherche
+  const [isSearching, setIsSearching] = useState(false);
 
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
@@ -46,7 +46,6 @@ function EvenementsPageContent() {
     error: freeError,
   } = useEvents("free");
 
-  // Nouvelle logique de recherche avec useSearchPaginated
   const {
     query,
     setQuery,
@@ -64,10 +63,9 @@ function EvenementsPageContent() {
     initialTypes: ["event"],
     pageSize: 20,
     scrollTargetRef: searchScrollTargetRef,
-    debounceDelay: 300, // Réduire le délai pour une meilleure réactivité
+    debounceDelay: 300,
   });
 
-  // Utilisation du nouveau hook paginé pour tous les événements (quand pas de recherche)
   const {
     items: allEvents,
     loading: allLoading,
@@ -136,7 +134,6 @@ function EvenementsPageContent() {
     );
   };
 
-  // Rendu personnalisé pour les résultats vides de recherche
   const renderSearchEmpty = () => (
     <div className="text-center text-gray-500 py-8">
       <p className="text-lg md:text-xl font-semibold mb-2">
@@ -148,12 +145,10 @@ function EvenementsPageContent() {
     </div>
   );
 
-  // Fonction pour ouvrir le bottom sheet des filtres
   const handleOpenFilters = () => {
     setIsFilterOpen(true);
   };
 
-  // Fonction pour fermer le bottom sheet des filtres
   const handleCloseFilters = () => {
     setIsFilterOpen(false);
   };
@@ -168,18 +163,14 @@ function EvenementsPageContent() {
             value={query}
             onChange={(e) => {
               const newValue = e.target.value;
-
-              // Si l'utilisateur tape quelque chose de nouveau, activer l'état de recherche
               if (newValue !== query && newValue.trim() !== "") {
                 setIsSearching(true);
-                // Délai minimum de 1 seconde pour la recherche
                 setTimeout(() => {
                   setIsSearching(false);
                 }, 1000);
               } else if (newValue.trim() === "") {
                 setIsSearching(false);
               }
-
               setQuery(newValue);
             }}
             placeholder="Concert, Festival, Conférence..."

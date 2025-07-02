@@ -2,7 +2,7 @@ import { ArrowUpRight } from "iconoir-react";
 import Image from "next/image";
 import Link from "next/link";
 import "./text-image-card.scss";
-import img from "@/assets/images/nice.jpg"
+import img from "@/assets/images/nice.jpg";
 
 interface TextImageCardProps {
   title: string;
@@ -10,6 +10,7 @@ interface TextImageCardProps {
   href: string;
   subtitle?: string;
   isCard?: boolean;
+  onClick?: () => void;
 }
 
 export default function TextImageCard({
@@ -18,11 +19,13 @@ export default function TextImageCard({
   href,
   subtitle,
   isCard = true,
+  onClick,
 }: TextImageCardProps) {
   return (
     <Link
       href={href}
       className={`text-image-card group ${isCard ? "is-card" : ""}`}
+      onClick={onClick}
     >
       <div className="flex items-center">
         <p className="title">{title}</p>

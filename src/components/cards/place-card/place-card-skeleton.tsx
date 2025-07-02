@@ -6,7 +6,7 @@ export default function PlaceCardSkeleton() {
     <div className="place-card skeleton-bg">
       <div className="number skeleton-bg w-6 h-6" />
       <div className="place-card-container">
-        <div className="place-card-image skeleton-bg w-20 h-20 rounded-lg" />
+        <div className="place-card-image skeleton-bg" />
         <div className="place-card-content">
           <h3 className="place-card-name skeleton-text mb-2">Nom du lieu</h3>
           <div className="place-card-specs">

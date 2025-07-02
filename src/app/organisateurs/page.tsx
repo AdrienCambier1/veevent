@@ -40,9 +40,9 @@ function OrganisateursPageContent() {
 
   // Rendu de chargement personnalisé avec le skeleton adapté
   const renderLoading = () => (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-      {Array.from({ length: 10 }, (_, i) => (
-        <div key={i} className="skeleton-bg h-32"></div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {Array.from({ length: 6 }, (_, i) => (
+        <div key={i} className="skeleton-bg h-32 rounded-xl"></div>
       ))}
     </div>
   );
@@ -83,39 +83,42 @@ function OrganisateursPageContent() {
 
       {/* Affichage des résultats de recherche avec PaginatedList */}
       {query && (
-        <div>
-          <h4 className="px-4 pt-2">Résultats de recherche</h4>
-          <PaginatedList
-            items={searchResults}
-            loading={searchLoading}
-            error={searchError}
-            pagination={pagination}
-            hasNextPage={hasNextPage}
-            hasPreviousPage={hasPreviousPage}
-            onPageChange={loadPage}
-            onPreviousPage={loadPreviousPage}
-            onNextPage={loadNextPage}
-            hasActiveFilters={false}
-            onOpenFilters={() => {}}
-            renderItem={(item: any, index: number) => (
-              <OrganizerPhotoCard
-                key={item.user.id}
-                name={item.user.firstName + " " + item.user.lastName}
-                imageUrl={item.user.imageUrl || ""}
-                href={`/organisateurs/${item.user.pseudo}`}
-              />
-            )}
-            renderEmpty={() => (
-              <div className="text-center text-gray-500 py-8">
-                <p>Aucun organisateur trouvé</p>
-              </div>
-            )}
-            renderLoading={renderLoading}
-            showFilters={false}
-            scrollTargetRef={scrollTargetRef}
-            gridClassName="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"
-          />
-        </div>
+        <PaginatedList
+          items={searchResults}
+          loading={searchLoading}
+          error={searchError}
+          pagination={pagination}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          onPageChange={loadPage}
+          onPreviousPage={loadPreviousPage}
+          onNextPage={loadNextPage}
+          hasActiveFilters={false}
+          onOpenFilters={() => {}}
+          renderItem={(item: any, index: number) => (
+            <OrganizerPhotoCard
+              key={item.user.id}
+              name={item.user.firstName + " " + item.user.lastName}
+              imageUrl={item.user.imageUrl || ""}
+              href={`/organisateurs/${item.user.pseudo}`}
+            />
+          )}
+          renderEmpty={() => (
+            <div className="text-center text-gray-500 py-8">
+              <p className="text-lg md:text-xl font-semibold mb-2">
+                Aucun organisateur trouvé
+              </p>
+              <p className="text-sm md:text-base">
+                Essayez avec d'autres mots-clés
+              </p>
+            </div>
+          )}
+          renderLoading={renderLoading}
+          showFilters={false}
+          scrollTargetRef={scrollTargetRef}
+          title="Résultats de recherche"
+          gridClassName="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+        />
       )}
 
       {/* Afficher les sections suivantes seulement si pas de recherche active */}
@@ -128,18 +131,23 @@ function OrganisateursPageContent() {
                 description="Organisateurs populaires"
                 title="Découvrez les organisateurs populaires"
               />
-              {organizers
-                .filter((org) => org.eventsCount > 0)
-                .sort(
-                  (a, b) =>
-                    b.eventsCount +
-                    b.eventPastCount -
-                    (a.eventsCount + a.eventPastCount)
-                )
-                .slice(0, 6)
-                .map((organizer: SingleUser) => (
-                  <OrganizerCard key={organizer.pseudo} organizer={organizer} />
-                ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {organizers
+                  .filter((org) => org.eventsCount > 0)
+                  .sort(
+                    (a, b) =>
+                      b.eventsCount +
+                      b.eventPastCount -
+                      (a.eventsCount + a.eventPastCount)
+                  )
+                  .slice(0, 6)
+                  .map((organizer: SingleUser) => (
+                    <OrganizerCard
+                      key={organizer.pseudo}
+                      organizer={organizer}
+                    />
+                  ))}
+              </div>
             </section>
           )}
 
@@ -147,12 +155,19 @@ function OrganisateursPageContent() {
           <section className="wrapper">
             <h2>Tous les organisateurs</h2>
             {organizers.length > 0 ? (
-              organizers.map((organizer: SingleUser) => (
-                <OrganizerCard key={organizer.pseudo} organizer={organizer} />
-              ))
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {organizers.map((organizer: SingleUser) => (
+                  <OrganizerCard key={organizer.pseudo} organizer={organizer} />
+                ))}
+              </div>
             ) : (
-              <div className="no-results">
-                <p>Aucun organisateur trouvé</p>
+              <div className="text-center text-gray-500 py-8">
+                <p className="text-lg md:text-xl font-semibold mb-2">
+                  Aucun organisateur trouvé
+                </p>
+                <p className="text-sm md:text-base">
+                  Essayez avec d'autres mots-clés
+                </p>
               </div>
             )}
           </section>

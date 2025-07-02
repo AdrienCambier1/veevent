@@ -57,11 +57,11 @@ function VillesPageContent() {
     loadPage,
     loadPreviousPage,
     loadNextPage,
-  } = useSearchPaginated({ 
-    initialQuery, 
+  } = useSearchPaginated({
+    initialQuery,
     initialTypes: ["city"],
     pageSize: 20,
-    scrollTargetRef 
+    scrollTargetRef,
   });
 
   const slugify = (text: string) => {
@@ -75,8 +75,8 @@ function VillesPageContent() {
 
   // Rendu de chargement personnalisé avec le skeleton adapté
   const renderLoading = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {Array.from({ length: 8 }, (_, i) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {Array.from({ length: 6 }, (_, i) => (
         <TextImageCardSkeleton key={i} />
       ))}
     </div>
@@ -89,7 +89,7 @@ function VillesPageContent() {
         <h3>Rechercher une ville</h3>
         <SearchInput
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Nice, Cannes, Antibes..."
         />
 
@@ -127,6 +127,7 @@ function VillesPageContent() {
               renderLoading={renderLoading}
               showFilters={false}
               scrollTargetRef={scrollTargetRef}
+              gridClassName="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
             />
           </div>
         )}
@@ -138,25 +139,27 @@ function VillesPageContent() {
           <section className="wrapper">
             <h3>Parcourir les villes populaires</h3>
             {popularLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {Array.from({ length: 6 }, (_, i) => (
                   <TextImageCardSkeleton key={i} />
                 ))}
               </div>
             ) : (
-              popularCities.map(
-                (city) =>
-                  city.eventsCount > 0 && (
-                    <TextImageCard
-                      key={city.id}
-                      title={city.name}
-                      subtitle={`${city.eventsCount} événements`}
-                      image={city.imageUrl || img}
-                      href={`/villes/${city.name.toLowerCase()}`}
-                      isCard={true}
-                    />
-                  )
-              )
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {popularCities.map(
+                  (city) =>
+                    city.eventsCount > 0 && (
+                      <TextImageCard
+                        key={city.id}
+                        title={city.name}
+                        subtitle={`${city.eventsCount} événements`}
+                        image={city.imageUrl || img}
+                        href={`/villes/${city.name.toLowerCase()}`}
+                        isCard={true}
+                      />
+                    )
+                )}
+              </div>
             )}
           </section>
 

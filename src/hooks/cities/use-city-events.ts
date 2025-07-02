@@ -60,7 +60,7 @@ export const useCityEvents = (
         setLoading(true);
         setError(null);
 
-        // 1. Récupérer les données de la ville
+        // 1. Récupérer d'abord les données de base de la ville
         const cityData = await cityService.getCityByName(cityName);
 
         if (!cityData) {
@@ -84,10 +84,11 @@ export const useCityEvents = (
 
         if (finalOptions.fetchAll && cityData._links?.events?.href) {
           promises.push(
-            cityService.getEventsByCityLink(
-              cityData._links.events.href,
-              apiFilters
-            ).then(response => response._embedded?.eventSummaryResponses || [])
+            cityService
+              .getEventsByCityLink(cityData._links.events.href, apiFilters)
+              .then(
+                (response) => response._embedded?.eventSummaryResponses || []
+              )
           );
           promiseTypes.push("all");
         }

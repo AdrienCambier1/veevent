@@ -26,7 +26,7 @@ export const useCity = (cityName: string): UseCityReturn => {
       setError(null);
 
       // Récupérer les données de la ville
-      const cityData = await cityService.getCityByName(cityName.toLowerCase());
+      const cityData = await cityService.getCityByName(cityName);
 
       if (!cityData) {
         throw new Error("Ville non trouvée");

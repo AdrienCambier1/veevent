@@ -157,6 +157,7 @@ export default function SidebarMenu() {
                     href={`/villes/${city.toLowerCase()}`}
                     isCard={false}
                     image={img}
+                    onClick={closeSidebar}
                   />
                 </motion.div>
               ))}

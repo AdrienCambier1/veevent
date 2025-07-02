@@ -116,9 +116,9 @@ export function CityProvider({ children }: CityProviderProps) {
       // Si une ville actuelle est détectée, essayer de la récupérer depuis l'API
       if (data.data.currentCity) {
         try {
-          const citySlug = useSlugify(data.data.currentCity);
+          // Correction : on passe le nom brut, pas le slug
           const cityData = await cityService.getCityByName(
-            citySlug
+            data.data.currentCity
           );
           if (cityData) {
             console.log(

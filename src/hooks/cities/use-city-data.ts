@@ -16,7 +16,13 @@ interface UseCityDataReturn {
 
 export const useCityData = (
   cityName: string,
-  dataType?: "events" | "places" | "organizers" | "trending" | "firstEvents" | "all",
+  dataType?:
+    | "events"
+    | "places"
+    | "organizers"
+    | "trending"
+    | "firstEvents"
+    | "all",
   filters?: {
     minPrice?: number;
     maxPrice?: number;
@@ -117,7 +123,9 @@ export const useCityData = (
             undefined,
             limit
           );
-          setFirstEvents(limit ? firstEditionEvents.slice(0, limit) : firstEditionEvents);
+          setFirstEvents(
+            limit ? firstEditionEvents.slice(0, limit) : firstEditionEvents
+          );
         } catch (firstEventsError) {
           console.warn(
             "Erreur lors du chargement des événements first editions:",
@@ -143,7 +151,11 @@ export const useCityData = (
       }
 
       if (dataType === "organizers" || dataType === "all") {
-        console.log("link events organizers", "cityData._links?.events?.href", cityData._links?.events?.href);
+        console.log(
+          "link events organizers",
+          "cityData._links?.events?.href",
+          cityData._links?.events?.href
+        );
         if (cityData._links?.events?.href) {
           try {
             const cityOrganizers = await cityService.getOrganizersByCityLink(
@@ -183,5 +195,14 @@ export const useCityData = (
     fetchCityData();
   }, [fetchCityData]);
 
-  return { city, events, places, organizers, firstEvents, loading, error, refetch };
+  return {
+    city,
+    events,
+    places,
+    organizers,
+    firstEvents,
+    loading,
+    error,
+    refetch,
+  };
 };

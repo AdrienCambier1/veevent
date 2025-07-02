@@ -22,7 +22,9 @@ export default function PlaceFilter({ cityName }: PlaceFilterProps) {
       : null
   );
   const [places, setPlaces] = useState<SearchFilterOption[]>([]);
-  const [filteredPlaces, setFilteredPlaces] = useState<SearchFilterOption[]>([]);
+  const [filteredPlaces, setFilteredPlaces] = useState<SearchFilterOption[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -34,22 +36,31 @@ export default function PlaceFilter({ cityName }: PlaceFilterProps) {
         // Charger les lieux de la ville courante
         const city = await cityService.getCityByName(cityName);
         if (city && city._links?.places?.href) {
-          const cityPlaces = await cityService.getPlacesByCityLink(city._links.places.href);
-          const placeOptions: SearchFilterOption[] = cityPlaces.map((place) => ({
-            id: place.id.toString(),
-            name: place.name,
-            eventCount: place.eventsCount,
-            _full: place,
-          }));
+          const cityPlaces = await cityService.getPlacesByCityLink(
+            city._links.places.href
+          );
+          const placeOptions: SearchFilterOption[] = cityPlaces.map(
+            (place) => ({
+              id: place.id.toString(),
+              name: place.name,
+              eventCount: place.eventsCount,
+              _full: place,
+            })
+          );
           setPlaces(placeOptions);
           setFilteredPlaces(placeOptions);
         } else {
           setPlaces([]);
           setFilteredPlaces([]);
         }
-      } else if (tempFilters.selectedCityObj && tempFilters.selectedCityObj._links?.places?.href) {
+      } else if (
+        tempFilters.selectedCityObj &&
+        tempFilters.selectedCityObj._links?.places?.href
+      ) {
         // Charger les lieux de la ville sélectionnée dans les filtres
-        const cityPlaces = await cityService.getPlacesByCityLink(tempFilters.selectedCityObj._links.places.href);
+        const cityPlaces = await cityService.getPlacesByCityLink(
+          tempFilters.selectedCityObj._links.places.href
+        );
         const placeOptions: SearchFilterOption[] = cityPlaces.map((place) => ({
           id: place.id.toString(),
           name: place.name,
@@ -58,12 +69,18 @@ export default function PlaceFilter({ cityName }: PlaceFilterProps) {
         }));
         setPlaces(placeOptions);
         setFilteredPlaces(placeOptions);
-      } else if (tempFilters.selectedCityObj && tempFilters.selectedCityObj.name) {
+      } else if (
+        tempFilters.selectedCityObj &&
+        tempFilters.selectedCityObj.name
+      ) {
         // Fallback: filtrer par nom de ville
         const allPlaces = await placeService.getPlaces();
-        const cityPlaces = allPlaces._embedded?.placeResponses?.filter(place => 
-          place.cityName.toLowerCase() === tempFilters.selectedCityObj.name.toLowerCase()
-        ) || [];
+        const cityPlaces =
+          allPlaces._embedded?.placeResponses?.filter(
+            (place) =>
+              place.cityName.toLowerCase() ===
+              tempFilters.selectedCityObj.name.toLowerCase()
+          ) || [];
         const placeOptions: SearchFilterOption[] = cityPlaces.map((place) => ({
           id: place.id.toString(),
           name: place.name,
@@ -75,12 +92,13 @@ export default function PlaceFilter({ cityName }: PlaceFilterProps) {
       } else {
         // Charger tous les lieux
         const allPlaces = await placeService.getPlaces();
-        const placeOptions: SearchFilterOption[] = allPlaces._embedded?.placeResponses?.map((place) => ({
-          id: place.id.toString(),
-          name: place.name,
-          eventCount: place.eventsCount,
-          _full: place,
-        })) || [];
+        const placeOptions: SearchFilterOption[] =
+          allPlaces._embedded?.placeResponses?.map((place) => ({
+            id: place.id.toString(),
+            name: place.name,
+            eventCount: place.eventsCount,
+            _full: place,
+          })) || [];
         setPlaces(placeOptions);
         setFilteredPlaces(placeOptions);
       }
@@ -151,7 +169,10 @@ export default function PlaceFilter({ cityName }: PlaceFilterProps) {
 
     if (cityName) {
       // Sur la page ville, on ne touche pas au filtre ville
-      updateTempFilters({ placeName: place.name, selectedPlaceObj: place._full });
+      updateTempFilters({
+        placeName: place.name,
+        selectedPlaceObj: place._full,
+      });
     } else {
       // Comportement normal (hors page ville)
       const cityNameFromPlace = place._full?.cityName;
@@ -160,10 +181,13 @@ export default function PlaceFilter({ cityName }: PlaceFilterProps) {
           placeName: place.name,
           selectedPlaceObj: place._full,
           cityName: cityNameFromPlace,
-          selectedCityObj: undefined
+          selectedCityObj: undefined,
         });
       } else {
-        updateTempFilters({ placeName: place.name, selectedPlaceObj: place._full });
+        updateTempFilters({
+          placeName: place.name,
+          selectedPlaceObj: place._full,
+        });
       }
     }
   };
