@@ -10,7 +10,15 @@ import { useSingleEvent } from "@/hooks/events/use-single-event";
 import { useEventOrganizer } from "@/hooks/organizers/use-event-organizer";
 import { useEventPlace } from "@/hooks/places/use-event-place";
 import Gmaps from "@/components/lists/places-map-list/gmap";
-import { MapPin, Shop, InfoCircle, Megaphone } from "iconoir-react";
+import {
+  MapPin,
+  Shop,
+  InfoCircle,
+  Megaphone,
+  Clock,
+  LockSquare,
+  Xmark,
+} from "iconoir-react";
 import BilletSelector from "@/components/commons/billet-selector/billet-selector";
 import { useAuth } from "@/contexts/auth-context";
 import { useEffect, useState } from "react";
@@ -22,23 +30,26 @@ const REPORT_REASONS = [
   {
     key: "INAPPROPRIATE_CONTENT",
     label: "Contenu inapproprié",
-    description: "L'événement contient des propos, images ou liens inappropriés ou offensants."
+    description:
+      "L'événement contient des propos, images ou liens inappropriés ou offensants.",
   },
   {
     key: "SPAM",
     label: "Spam ou arnaque",
-    description: "L'événement semble être du spam, une arnaque ou une publicité abusive."
+    description:
+      "L'événement semble être du spam, une arnaque ou une publicité abusive.",
   },
   {
     key: "ORGANIZATION_PROBLEM",
     label: "Problème d'organisation",
-    description: "L'événement présente un problème d'organisation ou d'informations trompeuses."
+    description:
+      "L'événement présente un problème d'organisation ou d'informations trompeuses.",
   },
   {
     key: "OTHER",
     label: "Autre (précisez)",
-    description: "Expliquez la raison de votre signalement."
-  }
+    description: "Expliquez la raison de votre signalement.",
+  },
 ];
 
 export default function EventPage() {
@@ -65,11 +76,13 @@ export default function EventPage() {
   const [invitationError, setInvitationError] = useState<string | null>(null);
   const [showReportForm, setShowReportForm] = useState(false);
   const [reportDescription, setReportDescription] = useState("");
-  const [reportStatus, setReportStatus] = useState<null | "success" | "error">(null);
+  const [reportStatus, setReportStatus] = useState<null | "success" | "error">(
+    null
+  );
   const [reportMessage, setReportMessage] = useState<string>("");
   const [reportLoading, setReportLoading] = useState(false);
   const [reportReason, setReportReason] = useState(REPORT_REASONS[0].key);
-  const selectedReason = REPORT_REASONS.find(r => r.key === reportReason);
+  const selectedReason = REPORT_REASONS.find((r) => r.key === reportReason);
 
   const searchParams = useSearchParams();
   const orderStatus = searchParams?.get("order");
@@ -77,7 +90,12 @@ export default function EventPage() {
   useEffect(() => {
     if (event && event.isInvitationOnly && user?.id) {
       setInvitationLoading(true);
-      eventService.getInvitationStatus(Number(event.id), Number(user.id), token || undefined)
+      eventService
+        .getInvitationStatus(
+          Number(event.id),
+          Number(user.id),
+          token || undefined
+        )
         .then((inv) => setInvitation(inv))
         .catch(() => setInvitation(null))
         .finally(() => setInvitationLoading(false));
@@ -87,14 +105,21 @@ export default function EventPage() {
   const handleRequestInvitation = async () => {
     if (!isAuthenticated) {
       // Redirige vers la connexion avec redirect vers la page courante
-      window.location.href = `/connexion?redirect=${encodeURIComponent(window.location.pathname)}`;
+      window.location.href = `/connexion?redirect=${encodeURIComponent(
+        window.location.pathname
+      )}`;
       return;
     }
     if (!user?.id || !event) return;
     setInvitationLoading(true);
     setInvitationError(null);
     try {
-      const inv = await eventService.requestInvitation(Number(event.id), Number(user.id), `Demande d'invitation à l'événement ${event.name}`, token || undefined);
+      const inv = await eventService.requestInvitation(
+        Number(event.id),
+        Number(user.id),
+        `Demande d'invitation à l'événement ${event.name}`,
+        token || undefined
+      );
       setInvitation(inv);
     } catch (e: any) {
       setInvitationError(e.message || "Erreur lors de la demande");
@@ -104,9 +129,11 @@ export default function EventPage() {
   };
 
   const handleReportClick = () => {
-    console.log('Bouton signaler cliqué');
+    console.log("Bouton signaler cliqué");
     if (!isAuthenticated) {
-      window.location.href = `/connexion?redirect=${encodeURIComponent(window.location.pathname)}`;
+      window.location.href = `/connexion?redirect=${encodeURIComponent(
+        window.location.pathname
+      )}`;
       return;
     }
     setShowReportForm((v) => !v);
@@ -138,7 +165,9 @@ export default function EventPage() {
         token || undefined
       );
       setReportStatus("success");
-      setReportMessage("Merci, votre signalement a bien été transmis à notre équipe.");
+      setReportMessage(
+        "Merci, votre signalement a bien été transmis à notre équipe."
+      );
       setShowReportForm(false);
       setReportDescription("");
       setReportReason(REPORT_REASONS[0].key);
@@ -200,21 +229,22 @@ export default function EventPage() {
     );
   }
 
-  // Calculer le nombre de personnes intéressées (exemple basé sur les participants actuels)
-  const interestedCount = 192;
-
   // Utiliser l'organisateur détaillé si disponible, sinon celui de l'événement
   const organizerToUse = detailedOrganizer || event.organizer;
+
+  // Calcul du pourcentage de places restantes
+  const placesRestantes = event.maxCustomers - event.currentParticipants;
+  const pourcentageRestant = (placesRestantes / event.maxCustomers) * 100;
 
   return (
     <main>
       <BannerHead />
       <EventHead
+        id={event.id}
         title={event.name}
         location={event.address}
         date={event.date}
         price={event.price}
-        interested={interestedCount}
         organizer={organizerToUse || {}}
         categories={event.categories}
       />
@@ -222,18 +252,27 @@ export default function EventPage() {
       {orderStatus === "success" && (
         <div className="wrapper">
           <div className="bg-secondary-50 border border-secondary-200 text-secondary-800 rounded-lg p-4 text-center font-semibold">
-            🎉 Votre commande a bien été prise en compte ! Vous recevrez vos billets par email.
+            🎉 Votre commande a bien été prise en compte ! Vous recevrez vos
+            billets par email.
           </div>
         </div>
       )}
       {orderStatus === "error" && (
         <div className="wrapper">
           <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 mb-6 text-center font-semibold">
-            ❌ Une erreur est survenue lors de la commande. Merci de réessayer ou de contacter le support.
+            ❌ Une erreur est survenue lors de la commande. Merci de réessayer
+            ou de contacter le support.
           </div>
         </div>
       )}
-
+      {pourcentageRestant <= 50 && placesRestantes > 0 && (
+        <section className="wrapper">
+          <div className="bg-primary-50 border border-secondary-400 text-primary-950 rounded-lg p-4 text-center font-semibold">
+            Dépêchez-vous, il ne reste que plus beaucoup de places ! Profitez-en
+            avant qu'il ne soit trop tard.
+          </div>
+        </section>
+      )}
       <section className="wrapper">
         <h2>À propos de l'évènement</h2>
         <div dangerouslySetInnerHTML={{ __html: event.contentHtml }}></div>
@@ -265,53 +304,194 @@ export default function EventPage() {
         </button>
       </section>
 
-       <section className="wrapper" id="billet" style={{ scrollMarginTop: "100px" }}>
+      <section
+        className="wrapper"
+        id="billet"
+        style={{ scrollMarginTop: "100px" }}
+      >
         <h2>Billet</h2>
-        {event.isInvitationOnly ? (
+
+        {event.status === "COMPLETED" ? (
+          <div className="mb-4 p-4 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 text-center text-lg font-bold flex items-center justify-center gap-2">
+            <Clock className="w-7 h-7" />
+            Événement terminé
+          </div>
+        ) : event.status === "CANCELLED" ? (
+          <>
+            <div className="mb-4 p-4 rounded-lg bg-red-50 border border-red-300 text-red-700 text-center text-lg font-bold flex items-center justify-center gap-2">
+              <Xmark className="w-7 h-7" />
+              Événement annulé
+            </div>
+            {event.isInvitationOnly ? (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-4 flex flex-col items-start">
+                <div className="flex items-center gap-2 mb-2">
+                  <InfoCircle className="text-blue-500" />
+                  <span className="font-semibold text-blue-700">
+                    Événement sur invitation
+                  </span>
+                </div>
+                <div className="text-blue-800 mb-4 text-sm">
+                  Cet événement est accessible uniquement sur invitation.
+                  <br />
+                  Faites une demande pour tenter d'y participer. Vous recevrez
+                  une réponse par email ou sur votre compte.
+                </div>
+                {invitationLoading ? (
+                  <span>Chargement...</span>
+                ) : !isAuthenticated ? (
+                  <span className="text-blue-700">
+                    Connectez-vous pour demander une invitation.
+                  </span>
+                ) : invitation ? (
+                  invitation.status === "SENT" ? (
+                    <span className="text-blue-700">
+                      Votre demande d'invitation a bien été envoyée.
+                      <br />
+                      Vous recevrez une réponse prochainement.
+                    </span>
+                  ) : invitation.status === "ACCEPTED" ? (
+                    <span className="text-green-700 font-semibold">
+                      Votre invitation a été acceptée ! Vous pouvez désormais
+                      accéder à l'événement.
+                    </span>
+                  ) : invitation.status === "REFUSED" ? (
+                    <span className="text-red-600">
+                      Votre demande d'invitation a été refusée.
+                      <br />
+                      Vous pouvez contacter l'organisateur pour plus
+                      d'informations.
+                    </span>
+                  ) : null
+                ) : (
+                  <button
+                    className="primary-btn"
+                    onClick={handleRequestInvitation}
+                    disabled={true}
+                  >
+                    <span> Demander une invitation</span>
+                  </button>
+                )}
+                {invitationError && (
+                  <div className="text-red-500 mt-2">{invitationError}</div>
+                )}
+              </div>
+            ) : (
+              <BilletSelector event={event} disabled />
+            )}
+          </>
+        ) : event.currentParticipants >= event.maxCustomers ? (
+          <>
+            <div className="mb-4 p-4 rounded-lg bg-orange-50 border border-orange-300 text-orange-700 text-center text-lg font-bold flex items-center justify-center gap-2">
+              <LockSquare className="w-7 h-7" />
+              Complet
+            </div>
+            {event.isInvitationOnly ? (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-4 flex flex-col items-start">
+                <div className="flex items-center gap-2 mb-2">
+                  <InfoCircle className="text-blue-500" />
+                  <span className="font-semibold text-blue-700">
+                    Événement sur invitation
+                  </span>
+                </div>
+                <div className="text-blue-800 mb-4 text-sm">
+                  Cet événement est accessible uniquement sur invitation.
+                  <br />
+                  Faites une demande pour tenter d'y participer. Vous recevrez
+                  une réponse par email ou sur votre compte.
+                </div>
+                {invitationLoading ? (
+                  <span>Chargement...</span>
+                ) : !isAuthenticated ? (
+                  <span className="text-blue-700">
+                    Connectez-vous pour demander une invitation.
+                  </span>
+                ) : invitation ? (
+                  invitation.status === "SENT" ? (
+                    <span className="text-blue-700">
+                      Votre demande d'invitation a bien été envoyée.
+                      <br />
+                      Vous recevrez une réponse prochainement.
+                    </span>
+                  ) : invitation.status === "ACCEPTED" ? (
+                    <span className="text-green-700 font-semibold">
+                      Votre invitation a été acceptée ! Vous pouvez désormais
+                      accéder à l'événement.
+                    </span>
+                  ) : invitation.status === "REFUSED" ? (
+                    <span className="text-red-600">
+                      Votre demande d'invitation a été refusée.
+                      <br />
+                      Vous pouvez contacter l'organisateur pour plus
+                      d'informations.
+                    </span>
+                  ) : null
+                ) : (
+                  <button
+                    className="primary-btn"
+                    onClick={handleRequestInvitation}
+                    disabled={true}
+                  >
+                    <span> Demander une invitation</span>
+                  </button>
+                )}
+                {invitationError && (
+                  <div className="text-red-500 mt-2">{invitationError}</div>
+                )}
+              </div>
+            ) : (
+              <BilletSelector event={event} disabled />
+            )}
+          </>
+        ) : event.isInvitationOnly ? (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-4 flex flex-col items-start">
             <div className="flex items-center gap-2 mb-2">
               <InfoCircle className="text-blue-500" />
-              <span className="font-semibold text-blue-700">Événement sur invitation</span>
+              <span className="font-semibold text-blue-700">
+                Événement sur invitation
+              </span>
             </div>
             <div className="text-blue-800 mb-4 text-sm">
-              Cet événement est accessible uniquement sur invitation.<br />
-              Faites une demande pour tenter d'y participer. Vous recevrez une réponse par email ou sur votre compte.
+              Cet événement est accessible uniquement sur invitation.
+              <br />
+              Faites une demande pour tenter d'y participer. Vous recevrez une
+              réponse par email ou sur votre compte.
             </div>
             {invitationLoading ? (
               <span>Chargement...</span>
             ) : !isAuthenticated ? (
-              <span className="text-blue-700">Connectez-vous pour demander une invitation.</span>
+              <span className="text-blue-700">
+                Connectez-vous pour demander une invitation.
+              </span>
             ) : invitation ? (
               invitation.status === "SENT" ? (
-                <span className="text-blue-700">Votre demande d'invitation a bien été envoyée.<br />Vous recevrez une réponse prochainement.</span>
+                <span className="text-blue-700">
+                  Votre demande d'invitation a bien été envoyée.
+                  <br />
+                  Vous recevrez une réponse prochainement.
+                </span>
               ) : invitation.status === "ACCEPTED" ? (
-                <span className="text-green-700 font-semibold">Votre invitation a été acceptée ! Vous pouvez désormais accéder à l'événement.</span>
+                <span className="text-green-700 font-semibold">
+                  Votre invitation a été acceptée ! Vous pouvez désormais
+                  accéder à l'événement.
+                </span>
               ) : invitation.status === "REFUSED" ? (
-                <span className="text-red-600">Votre demande d'invitation a été refusée.<br />Vous pouvez contacter l'organisateur pour plus d'informations.</span>
+                <span className="text-red-600">
+                  Votre demande d'invitation a été refusée.
+                  <br />
+                  Vous pouvez contacter l'organisateur pour plus d'informations.
+                </span>
               ) : null
             ) : (
-              <button className="primary-btn" onClick={handleRequestInvitation} disabled={invitationLoading}>
+              <button className="primary-btn" onClick={handleRequestInvitation}>
                 <span> Demander une invitation</span>
               </button>
             )}
-            {invitationError && <div className="text-red-500 mt-2">{invitationError}</div>}
+            {invitationError && (
+              <div className="text-red-500 mt-2">{invitationError}</div>
+            )}
           </div>
         ) : (
-          event.status === "NOT_STARTED" && event.currentParticipants < event.maxCustomers ? (
-            <BilletSelector event={event} />
-          ) : event.status === "COMPLETED" ? (
-            <div className="text-gray-500">
-              <span>Événement terminé</span>
-            </div>
-          ) : event.status === "CANCELLED" ? (
-            <div className="text-red-500">
-              <span>Événement annulé</span>
-            </div>
-          ) : (
-            <div className="text-orange-500">
-              <span>Complet</span>
-            </div>
-          )
+          <BilletSelector event={event} />
         )}
       </section>
 
@@ -354,19 +534,21 @@ export default function EventPage() {
           <OrganizerCard organizer={organizerToUse!} currentEventId={id} />
         )}
         <button className="secondary-btn mt-4" onClick={handleReportClick}>
-          <span className="flex items-center gap-2"><Megaphone/> Signaler l'évènement</span>
+          <span className="flex items-center gap-2">
+            <Megaphone /> Signaler l'évènement
+          </span>
         </button>
-        <Modal
-          open={showReportForm}
-          onClose={() => setShowReportForm(false)}
-        >
+        <Modal open={showReportForm} onClose={() => setShowReportForm(false)}>
           <h3 className="text-lg font-semibold mb-4">Signaler l'évènement</h3>
           <form onSubmit={handleReportSubmit}>
             <div className="mb-4">
               <div className="font-semibold mb-2">Motif du signalement</div>
               <div className="flex flex-col gap-2">
-                {REPORT_REASONS.map(reason => (
-                  <label key={reason.key} className="flex items-center gap-2 cursor-pointer">
+                {REPORT_REASONS.map((reason) => (
+                  <label
+                    key={reason.key}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
                     <input
                       type="radio"
                       name="report-reason"
@@ -385,19 +567,29 @@ export default function EventPage() {
             </div>
             {reportReason === "OTHER" && (
               <div className="mb-4">
-                <label className="block mb-2 font-semibold text-gray-700">Votre motif</label>
+                <label className="block mb-2 font-semibold text-gray-700">
+                  Votre motif
+                </label>
                 <textarea
                   className="w-full border border-gray-300 rounded p-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   rows={3}
                   required
                   value={reportDescription}
-                  onChange={e => setReportDescription(e.target.value)}
+                  onChange={(e) => setReportDescription(e.target.value)}
                   placeholder="Décrivez brièvement le problème..."
                 />
               </div>
             )}
-            <button type="submit" className="primary-btn w-full flex items-center justify-center gap-2" disabled={reportLoading || (reportReason === "OTHER" && !reportDescription.trim())}>
-              <span className="flex items-center gap-2">{reportLoading ? <span className="loader loader-xs" /> : null}
+            <button
+              type="submit"
+              className="primary-btn w-full flex items-center justify-center gap-2"
+              disabled={
+                reportLoading ||
+                (reportReason === "OTHER" && !reportDescription.trim())
+              }
+            >
+              <span className="flex items-center gap-2">
+                {reportLoading ? <span className="loader loader-xs" /> : null}
                 {reportLoading ? "Envoi..." : "Envoyer le signalement"}
               </span>
             </button>
