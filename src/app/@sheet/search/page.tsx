@@ -3,7 +3,7 @@ import EventCard from "@/components/cards/event-card/event-card";
 import OrganizerPhotoCard from "@/components/cards/organizer-photo-card/organizer-photo-card";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import ThemeCard from "@/components/cards/theme-card/theme-card";
-import BottomSheet from "@/components/commons/bottom-sheet/bottom-sheet";
+import { Drawer } from "vaul";
 import SearchInput from "@/components/inputs/search-input/search-input";
 import { useSearch } from "@/hooks/commons/use-search";
 import { useEvents } from "@/hooks/events/use-events";
@@ -74,47 +74,58 @@ function SearchSheetContent() {
   };
 
   return (
-    <BottomSheet isOpen={true} onClose={() => router.back()} maxHeight="95vh" minHeight="95vh">
-      <div className="w-full max-w-lg p-4 flex flex-col gap-4">
-        <h2>Recherchez ce qui vous intéresse</h2>
-        <SearchInput
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Recherchez des événements, des lieux, des villes..."
-        />
+    <Drawer.Root open={true} onOpenChange={(open) => !open && router.back()}>
+      <Drawer.Portal>
+        <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
+        <Drawer.Content className="bg-white flex flex-col rounded-t-[20px] h-[80vh] mt-24 fixed bottom-0 left-0 right-0 w-full z-50">
+          <div className="p-4 bg-white rounded-t-[20px] flex-1 overflow-y-auto">
+            <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
+            <div className="w-full max-w-4xl mx-auto flex flex-col gap-4">
+              <h2 className="text-xl md:text-2xl font-bold">
+                Recherchez ce qui vous intéresse
+              </h2>
+              <SearchInput
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Recherchez des événements, des lieux, des villes..."
+              />
         {(!query || query.trim() === "") && (
           <>
             {trendingEvents.length > 0 && (
-              <div className="rounded-[var(--vv-border-radius)] overflow-hidden relative p-3 flex flex-col gap-2"
-              style={{
-                backgroundImage: `url('./trending.png')`,
-                backgroundSize: "cover",
-                backgroundPosition: "bottom",
-                minHeight: 240,
-              }}>
-                <div className="flex items-center gap-2 font-bold text-white text-xl">
-                  <GraphUp className="text-sm"/>
+              <div
+                className="rounded-[var(--vv-border-radius)] overflow-hidden relative p-3 md:p-6 flex flex-col gap-2 md:gap-4"
+                style={{
+                  backgroundImage: `url('./trending.png')`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "bottom",
+                  minHeight: "200px",
+                }}
+              >
+                <div className="flex items-center gap-2 font-bold text-white text-lg md:text-xl">
+                  <GraphUp className="text-base md:text-lg" />
                   Tendances
                 </div>
 
-                  <div
-                    className="flex flex-col gap-2 py-2 "
-                  >
-                    {trendingEvents.slice(0, 3).map((event, idx) => (
-                      <Link
-                        key={event.id}
-                        href={`/evenements/${event.id}/${slugify(event.name)}`}
-                        onClick={handleSheetNavigation(`/evenements/${event.id}/${slugify(event.name)}`)}
-                        className="flex items-center justify-between rounded-[var(--vv-border-radius)] bg-white/20 hover:bg-white/30 transition-colors text-sm font-medium text-white backdrop-blur-sm px-2 py-1"
-                      >
-                        <span className="text-ellipsis overflow-hidden whitespace-nowrap">{event.name}</span>
-                        <ArrowUpRight className="text-sm"/>
-                      </Link>
-                    ))}
+                <div className="flex flex-col gap-2 py-2">
+                  {trendingEvents.slice(0, 3).map((event, idx) => (
+                    <Link
+                      key={event.id}
+                      href={`/evenements/${event.id}/${slugify(event.name)}`}
+                      onClick={handleSheetNavigation(
+                        `/evenements/${event.id}/${slugify(event.name)}`
+                      )}
+                      className="flex items-center justify-between rounded-[var(--vv-border-radius)] bg-white/20 hover:bg-white/30 transition-colors text-sm md:text-base font-medium text-white backdrop-blur-sm px-3 md:px-4 py-2 md:py-3"
+                    >
+                      <span className="text-ellipsis overflow-hidden whitespace-nowrap">
+                        {event.name}
+                      </span>
+                      <ArrowUpRight className="text-sm md:text-base flex-shrink-0 ml-2" />
+                    </Link>
+                  ))}
                 </div>
               </div>
             )}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 mt-4">
               {categories.map((cat) => (
                 <ThemeCard key={cat.key} category={cat} />
               ))}
@@ -130,25 +141,30 @@ function SearchSheetContent() {
               ))}
             </div>
             {/* Skeletons catégories */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
-              {[...Array(4)].map((_, i) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 mb-4">
+              {[...Array(6)].map((_, i) => (
                 <ThemeCardSkeleton key={i} />
               ))}
             </div>
             {/* Skeletons résultats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6 p-0 list-none">
-              {[...Array(3)].map((_, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 p-0 list-none">
+              {[...Array(6)].map((_, i) => (
                 <EventCardSkeleton key={i} />
               ))}
             </div>
           </>
         )}
-        {error && <div style={{ color: "red" }}>{error}</div>}
+        {error && (
+          <div className="text-red-500 p-4 bg-red-50 rounded-lg">{error}</div>
+        )}
         {!loading && !error && query && results.length === 0 && (
-          <div className="flex flex-col items-center justify-center min-h-[80vh] w-full">
-            <div className="text-lg font-semibold text-gray-500 text-center">
-              Aucun résultat trouvé
+          <div className="flex flex-col items-center justify-center min-h-[50vh] w-full">
+            <div className="text-lg md:text-xl font-semibold text-gray-500 text-center px-4">
+              Aucun résultat trouvé pour "{query}"
             </div>
+            <p className="text-sm md:text-base text-gray-400 mt-2 text-center px-4">
+              Essayez avec d'autres mots-clés
+            </p>
           </div>
         )}
         {!loading && !error && results.length > 0 && (
@@ -156,8 +172,10 @@ function SearchSheetContent() {
             {typeOrder
               .filter((type) => grouped[type])
               .map((type) => {
-                const items = (grouped[type] as any[]);
-                const showVoirPlus = items.length > 5;
+                const items = grouped[type] as any[];
+                const showVoirPlus =
+                  items.length >
+                  (type === "user" ? 8 : type === "event" ? 8 : 10);
                 let voirPlusHref = "";
                 if (type === "event") voirPlusHref += "/evenements";
                 else if (type === "city") voirPlusHref += "/villes";
@@ -168,14 +186,23 @@ function SearchSheetContent() {
                 }
                 return (
                   <div key={type} className="mb-8">
-                    <h2 className="capitalize mb-2">{typeLabels[type] || type}</h2>
+                    <h2 className="capitalize mb-3 md:mb-4 text-lg md:text-xl font-semibold">
+                      {typeLabels[type] || type}
+                    </h2>
                     {type === "user" && (
-                      <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 p-0 list-none">
-                        {items.slice(0, 5).map((item: any, idx: number) => (
+                      <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4 p-0 list-none">
+                        {items.slice(0, 8).map((item: any, idx: number) => (
                           <li key={idx}>
-                            <div onClick={handleSheetNavigation(`/organisateurs/${item.user.pseudo}`)} style={{cursor: 'pointer'}}>
+                            <div
+                              onClick={handleSheetNavigation(
+                                `/organisateurs/${item.user.pseudo}`
+                              )}
+                              style={{ cursor: "pointer" }}
+                            >
                               <OrganizerPhotoCard
-                                name={item.user.firstName + " " + item.user.lastName}
+                                name={
+                                  item.user.firstName + " " + item.user.lastName
+                                }
                                 imageUrl={item.user.imageUrl || ""}
                                 href={`/organisateurs/${item.user.pseudo}`}
                               />
@@ -185,25 +212,59 @@ function SearchSheetContent() {
                       </ul>
                     )}
                     {type === "event" && (
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-0 list-none">
-                        {items.slice(0, 5).map((item: any, idx: number) => (
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 p-0 list-none">
+                        {items.slice(0, 8).map((item: any, idx: number) => (
                           <li key={idx}>
-                            <div onClick={handleSheetNavigation(`/evenements/${item.event.id}/${slugify(item.event.name)}`)} style={{cursor: 'pointer'}}>
-                              <EventCard id={item.event.id.toString()} event={item.event} minify />
+                            <div
+                              onClick={handleSheetNavigation(
+                                `/evenements/${item.event.id}/${slugify(
+                                  item.event.name
+                                )}`
+                              )}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <EventCard
+                                id={item.event.id.toString()}
+                                event={item.event}
+                                minify
+                              />
                             </div>
                           </li>
                         ))}
                       </ul>
                     )}
                     {(type === "city" || type === "place") && (
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-0 list-none">
-                        {items.slice(0, 5).map((item: any, idx: number) => (
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 p-0 list-none">
+                        {items.slice(0, 10).map((item: any, idx: number) => (
                           <li key={idx}>
-                            <div onClick={handleSheetNavigation(`/${type === "city" ? "villes" : "lieux"}/${type === "city" ? item.city.slug : item.place.slug}`)} style={{cursor: 'pointer'}}>
+                            <div
+                              onClick={handleSheetNavigation(
+                                `/${type === "city" ? "villes" : "lieux"}/${
+                                  type === "city"
+                                    ? item.city.slug
+                                    : item.place.slug
+                                }`
+                              )}
+                              style={{ cursor: "pointer" }}
+                            >
                               <TextImageCard
-                                title={type === "city" ? item.city.name : item.place.name}
-                                image={type === "city" ? item.city.imageUrl : item.place.imageUrl}
-                                href={`/${type === "city" ? "villes" : "lieux"}/${type === "city" ? item.city.slug : item.place.slug}`}
+                                title={
+                                  type === "city"
+                                    ? item.city.name
+                                    : item.place.name
+                                }
+                                image={
+                                  type === "city"
+                                    ? item.city.imageUrl
+                                    : item.place.imageUrl
+                                }
+                                href={`/${
+                                  type === "city" ? "villes" : "lieux"
+                                }/${
+                                  type === "city"
+                                    ? item.city.slug
+                                    : item.place.slug
+                                }`}
                               />
                             </div>
                           </li>
@@ -211,13 +272,20 @@ function SearchSheetContent() {
                       </ul>
                     )}
                     {showVoirPlus && (
-                      <div className="mt-2 flex justify-end">
+                      <div className="mt-4 flex justify-center md:justify-end">
                         <Link
                           href={voirPlusHref}
                           onClick={handleSheetNavigation(voirPlusHref)}
-                          className="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm hover:bg-blue-200 transition"
+                          className="inline-block px-4 md:px-6 py-2 md:py-3 rounded-full bg-primary-100 text-primary-700 font-semibold text-sm md:text-base hover:bg-primary-200 transition-colors"
                         >
-                          Voir plus
+                          Voir plus (
+                          {items.length -
+                            (type === "user"
+                              ? 8
+                              : type === "event"
+                              ? 8
+                              : 10)}{" "}
+                          de plus)
                         </Link>
                       </div>
                     )}
@@ -226,8 +294,11 @@ function SearchSheetContent() {
               })}
           </div>
         )}
-      </div>
-    </BottomSheet>
+            </div>
+          </div>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   );
 }
 
@@ -237,4 +308,4 @@ export default function SearchSheet() {
       <SearchSheetContent />
     </Suspense>
   );
-} 
+}

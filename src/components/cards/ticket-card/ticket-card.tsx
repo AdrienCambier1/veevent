@@ -4,7 +4,7 @@ import "./ticket-card.scss";
 import Image from "next/image";
 import img from "@/assets/images/nice.jpg";
 import { useState } from "react";
-import BottomSheet from "@/components/commons/bottom-sheet/bottom-sheet";
+import { Drawer } from "vaul";
 import QRCode from "@/components/commons/qr-code/qr-code";
 import Link from "next/link";
 
@@ -69,26 +69,34 @@ export default function TicketCard() {
         />
       </div>
 
-      <BottomSheet
-        isOpen={isQRCodeOpen}
-        onClose={() => setIsQRCodeOpen(false)}
-        maxHeight="75vh"
-        title="Code QR du billet"
-      >
-        <div
-          className="flex flex-col items-center justify-center p-4 gap-3"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsQRCodeOpen(false);
-          }}
-        >
-          <QRCode value={ticketId} size={250} />
-          <div className="primary-btn">
-            <span>Fermer</span>
-          </div>
-        </div>
-      </BottomSheet>
+      <Drawer.Root open={isQRCodeOpen} onOpenChange={setIsQRCodeOpen}>
+        <Drawer.Portal>
+          <Drawer.Overlay className="fixed inset-0 bg-black/40 z-50" />
+          <Drawer.Content className="bg-white flex flex-col rounded-t-[20px] mt-24 fixed bottom-0 left-0 right-0 z-50">
+            <div className="p-4 bg-white rounded-t-[20px] flex-1">
+              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
+              <div className="max-w-md mx-auto">
+                <Drawer.Title className="font-medium mb-4 text-center">
+                  Code QR du billet
+                </Drawer.Title>
+                <div
+                  className="flex flex-col items-center justify-center p-4 gap-3"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsQRCodeOpen(false);
+                  }}
+                >
+                  <QRCode value={ticketId} size={250} />
+                  <div className="primary-btn">
+                    <span>Fermer</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
     </Link>
   );
 }

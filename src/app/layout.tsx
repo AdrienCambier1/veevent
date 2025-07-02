@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import { AuthProvider } from "@/contexts/auth-context";
 import { HeaderProvider } from "@/contexts/header-context";
 import { FilterProvider } from "@/contexts/filter-context";
+import HydrationFix from "@/components/commons/hydration-fix/hydration-fix";
 
 export const metadata: Metadata = {
   appleWebApp: {
@@ -33,6 +34,7 @@ export default function RootLayout({ children, sheet }: RootLayoutProps) {
   return (
     <html lang="fr">
       <body>
+        <HydrationFix />
         <AuthProvider>
           <FilterProvider>
             <HeaderProvider>

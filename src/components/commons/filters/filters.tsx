@@ -14,15 +14,19 @@ interface FiltersProps {
   cityName?: string;
 }
 
-export default function Filters({ hideCityFilter = false, hidePlaceFilter = false, cityName }: FiltersProps) {
+export default function Filters({
+  hideCityFilter = false,
+  hidePlaceFilter = false,
+  cityName,
+}: FiltersProps) {
   return (
     <div className="filters">
-      <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
-        <div className="title">Trier par</div>
+      <div className="filters-item w-full p-4 md:p-6 flex flex-col gap-3 md:gap-4">
+        <div className="title text-lg md:text-xl font-semibold">Trier par</div>
         <SortBy />
       </div>
-      {/* <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
-        <div className="title">Nos recommandations</div>
+      {/* <div className="filters-item w-full p-4 md:p-6 flex flex-col gap-3 md:gap-4">
+        <div className="title text-lg md:text-xl font-semibold">Nos recommandations</div>
         <FavoriteFilter />
       </div> */}
       <div className="filters-item">
@@ -31,23 +35,23 @@ export default function Filters({ hideCityFilter = false, hidePlaceFilter = fals
       <div className="filters-item">
         <PriceFilter />
       </div>
-      <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
+      <div className="filters-item w-full p-4 md:p-6 flex flex-col gap-3 md:gap-4">
         <CategoriesFilter />
       </div>
       {!hideCityFilter && (
-        <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
-          <div className="title">Villes</div>
+        <div className="filters-item w-full p-4 md:p-6 flex flex-col gap-3 md:gap-4">
+          <div className="title text-lg md:text-xl font-semibold">Villes</div>
           <CityFilter />
         </div>
       )}
       {!hidePlaceFilter && (
-        <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
-          <div className="title">Lieux</div>
+        <div className="filters-item w-full p-4 md:p-6 flex flex-col gap-3 md:gap-4">
+          <div className="title text-lg md:text-xl font-semibold">Lieux</div>
           <PlaceFilter cityName={cityName} />
         </div>
       )}
-      {/* <div className="filters-item w-full max-w-lg p-4 flex flex-col gap-3">
-        <div className="title">Note de l'organisateur</div>
+      {/* <div className="filters-item w-full p-4 md:p-6 flex flex-col gap-3 md:gap-4">
+        <div className="title text-lg md:text-xl font-semibold">Note de l'organisateur</div>
         <RateFilter />
       </div> */}
     </div>
