@@ -1,5 +1,5 @@
 .price-filter {
-  @apply w-full max-w-lg p-4 flex flex-col gap-3;
+  @apply w-full max-w-lg flex flex-col gap-3;
 
   &.disabled {
     .histogram,

@@ -55,18 +55,20 @@ export default function FilterBottomSheet({
               Filtres
             </Drawer.Title>
           </div>
-          
+
           {/* Contenu scrollable */}
           <div className="flex-1 overflow-y-auto px-4">
-            <div className="w-full pb-6">
-              <Filters
-                hideCityFilter={!!cityName || isPlacePage}
-                hidePlaceFilter={isPlacePage}
-                cityName={cityName}
-              />
+            <div className="w-full max-w-4xl mx-auto pb-6">
+              <div className="flex flex-col gap-4">
+                <Filters
+                  hideCityFilter={!!cityName || isPlacePage}
+                  hidePlaceFilter={isPlacePage}
+                  cityName={cityName}
+                />
+              </div>
             </div>
           </div>
-          
+
           {/* Footer fixe */}
           <div className="flex-shrink-0 bg-white border-t border-gray-200 p-4">
             <div className="w-full">

@@ -72,24 +72,31 @@ export default function TicketCard() {
       <Drawer.Root open={isQRCodeOpen} onOpenChange={setIsQRCodeOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 z-50" />
-          <Drawer.Content className="bg-white flex flex-col rounded-t-[20px] mt-24 fixed bottom-0 left-0 right-0 z-50">
-            <div className="p-4 bg-white rounded-t-[20px] flex-1">
-              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
-              <div className="max-w-md mx-auto">
-                <Drawer.Title className="font-medium mb-4 text-center">
-                  Code QR du billet
-                </Drawer.Title>
-                <div
-                  className="flex flex-col items-center justify-center p-4 gap-3"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setIsQRCodeOpen(false);
-                  }}
-                >
-                  <QRCode value={ticketId} size={250} />
-                  <div className="primary-btn">
-                    <span>Fermer</span>
+          <Drawer.Content className="bg-white flex flex-col rounded-t-[20px] h-[80vh] mt-24 fixed bottom-0 left-0 right-0 z-50">
+            {/* Header avec handle */}
+            <div className="flex-shrink-0 p-4 pb-0">
+              <div className="mx-auto w-12 h-1.5 rounded-full bg-gray-300 mb-6" />
+              <Drawer.Title className="text-xl md:text-2xl font-bold text-center mb-4 md:mb-6">
+                Code QR du billet
+              </Drawer.Title>
+            </div>
+
+            {/* Contenu */}
+            <div className="flex-1 overflow-y-auto px-4">
+              <div className="w-full max-w-4xl mx-auto pb-6">
+                <div className="flex flex-col gap-4">
+                  <div
+                    className="flex flex-col items-center justify-center p-4 gap-3"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsQRCodeOpen(false);
+                    }}
+                  >
+                    <QRCode value={ticketId} size={250} />
+                    <div className="primary-btn">
+                      <span>Fermer</span>
+                    </div>
                   </div>
                 </div>
               </div>

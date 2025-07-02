@@ -267,19 +267,15 @@ export default function DateFilter() {
 
   return (
     <div className="date-filter">
-      <div className="flex flex-col">
-        <div className="flex items-center justify-between">
-          <h2 className="title">Plage de dates</h2>
-          {hasSelectedDates && (
-            <button
-              onClick={clearDates}
-              className="text-xs text-primary-600 hover:text-primary-700 font-medium"
-            >
-              Effacer
-            </button>
-          )}
-        </div>
-        <p className="subtitle">Sélectionnez une plage de dates</p>
+      <div className="flex items-center justify-end">
+        {hasSelectedDates && (
+          <button
+            onClick={clearDates}
+            className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+          >
+            Effacer
+          </button>
+        )}
       </div>
 
       <div>

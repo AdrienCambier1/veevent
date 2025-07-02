@@ -281,21 +281,15 @@ export default function PriceFilter() {
 
   return (
     <div className={`price-filter ${showOnlyFree ? "disabled" : ""}`}>
-      <div className="flex flex-col">
-        <div className="flex items-center justify-between">
-          <h2 className="title">Fourchette de prix</h2>
-          {hasPriceFilters && (
-            <button
-              onClick={clearPriceFilters}
-              className="text-xs text-primary-600 hover:text-primary-700 font-medium"
-            >
-              Effacer
-            </button>
-          )}
-        </div>
-        <p className="subtitle">
-          Prix par billet • {percentage}% des événements ({count}/{total})
-        </p>
+      <div className="flex items-center justify-end mb-3">
+        {hasPriceFilters && (
+          <button
+            onClick={clearPriceFilters}
+            className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+          >
+            Effacer
+          </button>
+        )}
       </div>
 
       <div className="histogram">
