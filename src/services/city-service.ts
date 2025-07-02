@@ -76,13 +76,31 @@ export const cityService = {
   async getCityByName(name: string): Promise<SingleCity | null> {
     try {
       if (useMockData) {
+        // Recherche plus tolérante (slug, accents, casse)
+        const normalize = (str: string) =>
+          str
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/\p{Diacritic}/gu, "")
+            .replace(/[-_\s]/g, "");
+        const target = normalize(name);
         const mockCity = mockCities.find(
-          (city) => city.name.toLowerCase() === name.toLowerCase()
+          (city) => normalize(city.name) === target
         );
         return mockCity || null;
       }
 
-      const response = await fetch(`${apiUrl}/cities/slug/${name}`, {
+      // Générer un slug pour l'API (remplace espaces/accents)
+      const slugify = (str: string) =>
+        str
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/\p{Diacritic}/gu, "")
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "");
+      const slug = slugify(name);
+
+      const response = await fetch(`${apiUrl}/cities/slug/${slug}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -230,9 +248,9 @@ export const cityService = {
           _links: {
             first: { href: "" },
             self: { href: "" },
-            last: { href: "" }
+            last: { href: "" },
           },
-          page: { number: 0, size: 20, totalElements: 0, totalPages: 0 }
+          page: { number: 0, size: 20, totalElements: 0, totalPages: 0 },
         };
       }
 
@@ -475,7 +493,10 @@ export const cityService = {
   },
 
   // Nouvelle méthode pour récupérer les événements de première édition
-  async getFirstEditionEventsByCity(cityName: string, limit?: number): Promise<Event[]> {
+  async getFirstEditionEventsByCity(
+    cityName: string,
+    limit?: number
+  ): Promise<Event[]> {
     try {
       if (useMockData) {
         return [];
