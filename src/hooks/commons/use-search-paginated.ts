@@ -23,7 +23,9 @@ export function useSearchPaginated({
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-  const [pagination, setPagination] = useState<PaginationInfo | undefined>(undefined);
+  const [pagination, setPagination] = useState<PaginationInfo | undefined>(
+    undefined
+  );
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const fetchRef = useRef<(() => void) | null>(null);
 
@@ -32,49 +34,57 @@ export function useSearchPaginated({
       const headerHeight = 80;
       const elementTop = scrollTargetRef.current.offsetTop;
       const offsetPosition = elementTop - headerHeight;
-      
+
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [scrollTargetRef]);
 
-  const fetchSearchResults = useCallback(async (page: number, size: number = pageSize) => {
-    if (!query) {
-      setItems([]);
-      setPagination(undefined);
-      setError(null);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      let data;
-      if (types && types.length > 0) {
-        data = await searchByType(query, types, page, size);
-      } else {
-        data = await searchGlobal(query, page, size);
+  const fetchSearchResults = useCallback(
+    async (page: number, size: number = pageSize) => {
+      if (!query) {
+        setItems([]);
+        setPagination(undefined);
+        setError(null);
+        return;
       }
 
-      // Extraire les résultats de la réponse API
-      const searchItems = data._embedded?.searchResultResponses || [];
-      const searchPagination = data.page || { size, totalElements: 0, totalPages: 1, number: page };
+      try {
+        setLoading(true);
+        setError(null);
 
-      setItems(searchItems);
-      setPagination(searchPagination);
-    } catch (err) {
-      setError(err as Error);
-      setItems([]);
-      setPagination(undefined);
-    } finally {
-      setLoading(false);
-    }
-  }, [query, types, pageSize]);
+        let data;
+        if (types && types.length > 0) {
+          data = await searchByType(query, types, page, size);
+        } else {
+          data = await searchGlobal(query, page, size);
+        }
+
+        // Extraire les résultats de la réponse API
+        const searchItems = data._embedded?.searchResultResponses || [];
+        const searchPagination = data.page || {
+          size,
+          totalElements: 0,
+          totalPages: 1,
+          number: page,
+        };
+
+        setItems(searchItems);
+        setPagination(searchPagination);
+      } catch (err) {
+        setError(err as Error);
+        setItems([]);
+        setPagination(undefined);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [query, types, pageSize]
+  );
 
   // Mettre à jour la référence de la fonction
   useEffect(() => {
@@ -103,12 +113,15 @@ export function useSearchPaginated({
     };
   }, [query, types, debounceDelay]);
 
-  const loadPage = useCallback((page: number) => {
-    if (pagination && page >= 0 && page < pagination.totalPages) {
-      fetchSearchResults(page);
-      scrollToTarget();
-    }
-  }, [pagination, fetchSearchResults, scrollToTarget]);
+  const loadPage = useCallback(
+    (page: number) => {
+      if (pagination && page >= 0 && page < pagination.totalPages) {
+        fetchSearchResults(page);
+        scrollToTarget();
+      }
+    },
+    [pagination, fetchSearchResults, scrollToTarget]
+  );
 
   const loadNextPage = useCallback(() => {
     if (pagination && pagination.number < pagination.totalPages - 1) {
@@ -126,7 +139,9 @@ export function useSearchPaginated({
     }
   }, [pagination, fetchSearchResults, scrollToTarget]);
 
-  const hasNextPage = pagination ? pagination.number < pagination.totalPages - 1 : false;
+  const hasNextPage = pagination
+    ? pagination.number < pagination.totalPages - 1
+    : false;
   const hasPreviousPage = pagination ? pagination.number > 0 : false;
 
   return {
@@ -144,4 +159,4 @@ export function useSearchPaginated({
     loadNextPage,
     loadPreviousPage,
   };
-} 
+}

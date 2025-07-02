@@ -3,6 +3,7 @@ import SearchInput from "@/components/inputs/search-input/search-input";
 import { Suspense, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import EventCard from "@/components/cards/event-card/event-card";
+import EventCardSkeleton from "@/components/cards/event-card/event-card-skeleton";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import { useEvents } from "@/hooks/events/use-events";
 import { useEventsPaginated } from "@/hooks/events/use-events-paginated";
@@ -24,6 +25,7 @@ function EvenementsPageContent() {
   const eventsSectionRef = useRef<HTMLElement>(null);
   const searchScrollTargetRef = useRef<HTMLElement>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isSearching, setIsSearching] = useState(false); // Nouvel état pour le délai de recherche
 
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
@@ -62,6 +64,7 @@ function EvenementsPageContent() {
     initialTypes: ["event"],
     pageSize: 20,
     scrollTargetRef: searchScrollTargetRef,
+    debounceDelay: 300, // Réduire le délai pour une meilleure réactivité
   });
 
   // Utilisation du nouveau hook paginé pour tous les événements (quand pas de recherche)
@@ -88,9 +91,11 @@ function EvenementsPageContent() {
   ) => {
     if (loading) {
       return (
-        <div className="loading-skeleton">
-          <div className="skeleton-bg h-32"></div>
-        </div>
+        <>
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+        </>
       );
     }
 
@@ -103,11 +108,7 @@ function EvenementsPageContent() {
     }
 
     if (!events || events.length === 0) {
-      return (
-        <div className="no-events text-gray-500 p-4">
-          Aucun événement trouvé
-        </div>
-      );
+      return null;
     }
 
     return events.map((event: Event) => {
@@ -117,6 +118,9 @@ function EvenementsPageContent() {
       );
     });
   };
+
+  // Variable commune pour le skeleton - EXACTEMENT la même pour tout
+  const commonSkeleton = renderEventCards([], true, null);
 
   // Fonction de rendu pour PaginatedList
   const renderEventCard = (event: Event, index: number) => {
@@ -132,12 +136,15 @@ function EvenementsPageContent() {
     );
   };
 
-  // Rendu de chargement personnalisé pour la recherche
-  const renderSearchLoading = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {Array.from({ length: 8 }, (_, i) => (
-        <div key={i} className="skeleton-bg h-80"></div>
-      ))}
+  // Rendu personnalisé pour les résultats vides de recherche
+  const renderSearchEmpty = () => (
+    <div className="text-center text-gray-500 py-8">
+      <p className="text-lg md:text-xl font-semibold mb-2">
+        Aucun événement trouvé
+      </p>
+      <p className="text-sm md:text-base">
+        Essayez avec d'autres mots-clés ou modifiez vos filtres
+      </p>
     </div>
   );
 
@@ -159,18 +166,34 @@ function EvenementsPageContent() {
           <h3>Rechercher un évènement</h3>
           <SearchInput
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value;
+
+              // Si l'utilisateur tape quelque chose de nouveau, activer l'état de recherche
+              if (newValue !== query && newValue.trim() !== "") {
+                setIsSearching(true);
+                // Délai minimum de 1 seconde pour la recherche
+                setTimeout(() => {
+                  setIsSearching(false);
+                }, 1000);
+              } else if (newValue.trim() === "") {
+                setIsSearching(false);
+              }
+
+              setQuery(newValue);
+            }}
             placeholder="Concert, Festival, Conférence..."
           />
         </section>
 
         {/* Affichage des résultats de recherche avec PaginatedList */}
-        {query && (
-          <div>
-            <h4 className="px-4 pt-2">Résultats de recherche</h4>
+        {query &&
+          searchResults.length > 0 &&
+          !searchLoading &&
+          !isSearching && (
             <PaginatedList
               items={searchResults}
-              loading={searchLoading}
+              loading={false}
               error={searchError}
               pagination={searchPagination}
               hasNextPage={searchHasNextPage}
@@ -189,36 +212,62 @@ function EvenementsPageContent() {
                   grid={true}
                 />
               )}
-              renderEmpty={() => (
-                <div className="text-center text-gray-500 py-8">
-                  <p>Aucun événement trouvé</p>
-                </div>
-              )}
-              renderLoading={renderSearchLoading}
+              renderEmpty={renderSearchEmpty}
               showFilters={false}
               scrollTargetRef={searchScrollTargetRef}
             />
-          </div>
+          )}
+
+        {/* Affichage du skeleton pendant le chargement de la recherche OU pendant isSearching */}
+        {query && (searchLoading || isSearching) && (
+          <HorizontalList title="Résultats de recherche">
+            {commonSkeleton}
+          </HorizontalList>
+        )}
+
+        {/* Affichage du message "aucun résultat" seulement quand la recherche est terminée */}
+        {query &&
+          !searchLoading &&
+          !isSearching &&
+          searchResults.length === 0 &&
+          !searchError && (
+            <section className="wrapper">{renderSearchEmpty()}</section>
+          )}
+
+        {/* Affichage des erreurs de recherche */}
+        {query && searchError && !isSearching && (
+          <section className="wrapper">
+            <div className="text-center text-red-500 py-8">
+              <p>Erreur lors de la recherche : {searchError.message}</p>
+            </div>
+          </section>
         )}
 
         {/* Afficher les sections suivantes seulement si pas de recherche active */}
         {!query && (
           <>
-            {popularEvents.length > 0 && (
+            {/* Afficher si en chargement ou si on a des événements */}
+            {(popularLoading || popularEvents.length > 0) && (
               <HorizontalList title="Les évènements populaires cette semaine">
-                {renderEventCards(popularEvents, popularLoading, popularError)}
+                {popularLoading
+                  ? commonSkeleton
+                  : renderEventCards(popularEvents, false, popularError)}
               </HorizontalList>
             )}
 
-            {dealEvents.length > 0 && (
+            {(dealLoading || dealEvents.length > 0) && (
               <HorizontalList title="Les bonnes affaires de la semaine">
-                {renderEventCards(dealEvents, dealLoading, dealError)}
+                {dealLoading
+                  ? commonSkeleton
+                  : renderEventCards(dealEvents, false, dealError)}
               </HorizontalList>
             )}
 
-            {freeEvents.length > 0 && (
+            {(freeLoading || freeEvents.length > 0) && (
               <HorizontalList title="Sortez gratuitement ce week end">
-                {renderEventCards(freeEvents, freeLoading, freeError)}
+                {freeLoading
+                  ? commonSkeleton
+                  : renderEventCards(freeEvents, false, freeError)}
               </HorizontalList>
             )}
 

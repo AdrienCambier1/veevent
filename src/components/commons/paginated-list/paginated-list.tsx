@@ -3,7 +3,6 @@ import { PaginationInfo } from "@/types";
 import Pagination from "@/components/commons/pagination/pagination";
 import { Filter, Xmark } from "iconoir-react";
 import { useFilters } from "@/contexts/filter-context";
-import PaginatedListSkeleton from "./paginated-list-skeleton";
 
 interface PaginatedListProps<T> {
   // Données et état
@@ -118,7 +117,7 @@ export default function PaginatedList<T>({
     </div>
   );
 
-  const defaultRenderLoading = () => <PaginatedListSkeleton />;
+  const defaultRenderLoading = () => null;
 
   const defaultRenderError = (error: Error) => (
     <div className="text-center text-red-500 py-8">

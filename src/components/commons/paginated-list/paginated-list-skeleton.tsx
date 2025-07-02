@@ -1,3 +1,5 @@
+import EventCardSkeleton from "@/components/cards/event-card/event-card-skeleton";
+
 interface PaginatedListSkeletonProps {
   itemCount?: number;
   columns?: {
@@ -6,7 +8,8 @@ interface PaginatedListSkeletonProps {
     md?: number;
     lg?: number;
   };
-  itemHeight?: string;
+  useEventCardSkeleton?: boolean;
+  layout?: "grid" | "horizontal";
 }
 
 export default function PaginatedListSkeleton({
@@ -17,7 +20,8 @@ export default function PaginatedListSkeleton({
     md: 3,
     lg: 4,
   },
-  itemHeight = "h-80",
+  useEventCardSkeleton = true,
+  layout = "grid",
 }: PaginatedListSkeletonProps) {
   // Utilisation de classes Tailwind statiques pour éviter les problèmes de génération
   const getGridClass = () => {
@@ -36,11 +40,36 @@ export default function PaginatedListSkeleton({
     return "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
   };
 
+  // Layout horizontal similaire aux sections HorizontalList
+  if (layout === "horizontal") {
+    return (
+      <div
+        className="flex gap-4 overflow-x-auto scrollbar-hide pb-4"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {Array.from({ length: itemCount }, (_, i) => (
+          <div key={i} className="flex-shrink-0" style={{ width: "280px" }}>
+            {useEventCardSkeleton ? (
+              <EventCardSkeleton />
+            ) : (
+              <div className="skeleton-bg h-80"></div>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Layout grille par défaut
   return (
-    <div className={`${getGridClass()} gap-4`}>
-      {Array.from({ length: itemCount }, (_, i) => (
-        <div key={i} className={`skeleton-bg ${itemHeight}`}></div>
-      ))}
+    <div className={`${getGridClass()} gap-4 md:gap-6`}>
+      {Array.from({ length: itemCount }, (_, i) =>
+        useEventCardSkeleton ? (
+          <EventCardSkeleton key={i} />
+        ) : (
+          <div key={i} className="skeleton-bg h-80"></div>
+        )
+      )}
     </div>
   );
 }
