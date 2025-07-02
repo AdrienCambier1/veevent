@@ -13,9 +13,23 @@ interface CompteLayoutProps {
   children: ReactNode;
 }
 
-export default function CompteLayout({ children }: CompteLayoutProps) {
-  const { user, isAuthenticated } = useAuth();
+function AuthErrorBanner() {
   const { errorMessage } = useAuthError();
+  const { isAuthenticated } = useAuth();
+  if (!errorMessage || isAuthenticated) return null;
+  return (
+    <div className="bg-red-50 border-b border-red-200">
+      <div className="wrapper py-3">
+        <div className="text-red-700 text-sm">
+          ⚠️ {errorMessage}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function CompteLayout({ children }: CompteLayoutProps) {
+  const { user } = useAuth();
 
   const navigation = [
     { label: "Tickets", href: "/compte/tickets" },
@@ -28,16 +42,9 @@ export default function CompteLayout({ children }: CompteLayoutProps) {
     <AuthGuard>
       <Suspense fallback={<div>Chargement...</div>}>
         <main>
-          {errorMessage && !isAuthenticated && (
-            <div className="bg-red-50 border-b border-red-200">
-              <div className="wrapper py-3">
-                <div className="text-red-700 text-sm">
-                  ⚠️ {errorMessage}
-                </div>
-              </div>
-            </div>
-          )}
-          
+          <Suspense fallback={null}>
+            <AuthErrorBanner />
+          </Suspense>
           <BannerHead bannerImage={banner} />
           <section className="wrapper">
             <ProfileHead isMe={true} user={user} />
