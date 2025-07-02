@@ -22,13 +22,6 @@ function ConnexionPageContent() {
     return () => setHideCitySelector(false);
   }, [setHideCitySelector]);
 
-  // Nettoyer les erreurs quand l'utilisateur modifie les champs
-  useEffect(() => {
-    if (error) {
-      clearError();
-    }
-  }, [credentials.email, credentials.password, error, clearError]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -45,6 +38,7 @@ function ConnexionPageContent() {
         ...prev,
         [field]: e.target.value,
       }));
+      if (error) clearError();
     };
 
   return (

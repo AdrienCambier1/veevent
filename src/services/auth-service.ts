@@ -121,6 +121,14 @@ class AuthService {
         body: JSON.stringify(credentials),
       });
 
+      // Gestion du cas où le backend retourne une redirection 302 (identifiants invalides)
+      if (response.status === 302) {
+        return {
+          message: AUTH_CONFIG.ERROR_MESSAGES.AUTH_FAILED,
+          code: "INVALID_CREDENTIALS"
+        };
+      }
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         return { 
@@ -169,7 +177,7 @@ class AuthService {
         description: data.description || null,
         imageUrl: data.imageUrl || null,
         bannerUrl: data.bannerUrl || "",
-        categories: data.categories || [],
+        categoryKeys: (data as any).categoryKeys || [],
       };
 
       const response = await fetch(`${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.REGISTER}`, {

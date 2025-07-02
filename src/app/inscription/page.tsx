@@ -23,7 +23,7 @@ interface FormData {
   description: string;
   
   // Étape 3: Préférences
-  categories: string[];
+  categoryKeys: string[];
 }
 
 interface ValidationErrors {
@@ -47,7 +47,7 @@ export default function InscriptionPage() {
     lastName: "",
     phone: "",
     description: "",
-    categories: [],
+    categoryKeys: [],
   });
 
   useEffect(() => {
@@ -158,7 +158,7 @@ export default function InscriptionPage() {
 
       case 3:
         // Validation catégories (optionnel mais recommandé)
-        if (formData.categories.length === 0) {
+        if (formData.categoryKeys.length === 0) {
           errors.categories = "Sélectionnez au moins une catégorie d'intérêt";
         }
         break;
@@ -185,13 +185,13 @@ export default function InscriptionPage() {
   };
 
   const handleCategoriesChange = (selectedCategories: string[]) => {
-    setFormData(prev => ({ ...prev, categories: selectedCategories }));
+    setFormData(prev => ({ ...prev, categoryKeys: selectedCategories }));
     
     // Nettoyer l'erreur des catégories
-    if (validationErrors.categories) {
+    if (validationErrors.categoryKeys) {
       setValidationErrors(prev => {
         const newErrors = { ...prev };
-        delete newErrors.categories;
+        delete newErrors.categoryKeys;
         return newErrors;
       });
     }
@@ -219,8 +219,10 @@ export default function InscriptionPage() {
            description: formData.description || null,
            imageUrl: null,
            bannerUrl: "",
-           categories: formData.categories,
+           categoryKeys: formData.categoryKeys,
          };
+
+         console.log(registerData);
 
          const success = await register(registerData, "/compte");
          if (success) {
@@ -414,23 +416,22 @@ export default function InscriptionPage() {
             ) : (
               <SelectorThemeTags
                 categories={categories}
-                selectedThemes={formData.categories}
+                selectedThemes={formData.categoryKeys}
                 onSelectionChange={handleCategoriesChange}
                 itemsPerPage={8}
                 showMoreLabel="Afficher plus de catégories"
               />
             )}
 
-            {validationErrors.categories && (
-              <span className="text-red-500 text-sm">{validationErrors.categories}</span>
+            {validationErrors.categoryKeys && (
+              <span className="text-red-500 text-sm">{validationErrors.categoryKeys}</span>
             )}
 
-            {formData.categories.length > 0 && (
+            {formData.categoryKeys.length > 0 && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
-                <p className="text-sm text-blue-700">
-                  <strong>{formData.categories.length}</strong> catégorie
-                  {formData.categories.length > 1 ? "s" : ""} sélectionnée
-                  {formData.categories.length > 1 ? "s" : ""}
+                <p className="text-sm text-primary-600">
+                  <strong>{formData.categoryKeys.length}</strong> catégorie
+                  {formData.categoryKeys.length > 1 ? "s" : ""} sélectionnée
                 </p>
               </div>
             )}
@@ -476,7 +477,7 @@ export default function InscriptionPage() {
             <button
               className="primary-btn flex-1"
               type="submit"
-              disabled={loading || (step === 3 && formData.categories.length === 0)}
+              disabled={loading || (step === 3 && formData.categoryKeys.length === 0)}
             >
               <span>
                 {loading 

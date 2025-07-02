@@ -823,7 +823,7 @@ export const eventService = {
     try {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
-      const response = await fetch(`${apiUrl}/invitations?eventId=${eventId}&userId=${userId}`, {
+      const response = await fetch(`${apiUrl}/invitations/search?event_id=${eventId}&user_id=${userId}`, {
         headers,
         cache: "no-store",
       });
@@ -841,7 +841,7 @@ export const eventService = {
   },
 
   async requestInvitation(eventId: number, userId: number, description: string, token?: string): Promise<Invitation> {
-    const body = JSON.stringify({ eventId, userId, description, status: "SENT" });
+    const body = JSON.stringify({ eventId, userId, description });
     const headers: Record<string, string> = { "Content-Type": "application/json" };
     if (token) headers["Authorization"] = `Bearer ${token}`;
     const response = await fetch(`${apiUrl}/invitations`, {
