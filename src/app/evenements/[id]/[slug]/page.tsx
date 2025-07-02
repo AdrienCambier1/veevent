@@ -184,10 +184,10 @@ export default function EventPage() {
     return (
       <main>
         <div className="wrapper">
-          <div className="animate-pulse">
-            <div className="bg-gray-200 h-64 rounded mb-4"></div>
-            <div className="bg-gray-200 h-8 rounded mb-2"></div>
-            <div className="bg-gray-200 h-4 rounded mb-4"></div>
+          <div>
+            <div className="skeleton-bg h-64 mb-4"></div>
+            <div className="skeleton-bg h-8 mb-2"></div>
+            <div className="skeleton-bg h-4 mb-4"></div>
           </div>
         </div>
       </main>
@@ -525,7 +525,7 @@ export default function EventPage() {
       <section className="wrapper">
         <h2>Organisé par</h2>
         {organizerLoading ? (
-          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+          <div className="skeleton-bg h-32"></div>
         ) : organizerError ? (
           <div className="text-red-500">
             Erreur lors du chargement des informations de l'organisateur

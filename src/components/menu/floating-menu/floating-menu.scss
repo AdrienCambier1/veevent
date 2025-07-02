@@ -3,10 +3,10 @@
 }
 
 .floating-menu {
-  @apply flex gap-1 justify-between border-[0.5px] border-gray-500 bg-gray-200/80 backdrop-blur-sm rounded-3xl p-2;
+  @apply flex gap-1 justify-between border-[0.5px] border-gray-500 bg-gray-200/80 backdrop-blur-sm rounded-full p-1;
 
   .floating-menu-item {
-    @apply border border-transparent bg-white/70 text-gray-500 p-1 rounded-2xl font-bold min-w-[85px] text-[12px];
+    @apply border border-transparent bg-white/70 text-gray-500 rounded-full font-bold min-w-[100px] text-[12px] h-10 flex items-center justify-center px-3;
     text-align: center;
     cursor: pointer;
 
@@ -16,7 +16,7 @@
   }
 }
 .floating-menu-search {
-  @apply flex gap-2 justify-between border-[0.5px] border-gray-500  backdrop-blur-sm p-1 rounded-full;
+  @apply flex gap-2 justify-between border-[0.5px] border-gray-500 bg-gray-200/80 backdrop-blur-sm p-1 rounded-full;
 
   .floating-menu-item.is-search {
     @apply border border-transparent bg-white/70 text-primary-600 rounded-full min-w-0 w-10 h-10 flex items-center justify-center p-0 cursor-pointer text-[12px];

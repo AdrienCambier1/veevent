@@ -27,7 +27,8 @@ function LieuxPageContent() {
   } = usePlaces("popular", undefined, undefined, 3);
 
   // Récupérer quelques événements pour la section horizontale
-  const { events: popularEvents, loading: popularEventsLoading } = useEvents("popular");
+  const { events: popularEvents, loading: popularEventsLoading } =
+    useEvents("popular");
 
   // Pagination pour tous les lieux
   const [page, setPage] = React.useState(0);
@@ -51,11 +52,11 @@ function LieuxPageContent() {
     loadPage,
     loadPreviousPage,
     loadNextPage,
-  } = useSearchPaginated({ 
-    initialQuery, 
+  } = useSearchPaginated({
+    initialQuery,
     initialTypes: ["place"],
     pageSize: 20,
-    scrollTargetRef 
+    scrollTargetRef,
   });
 
   // Rendu de chargement personnalisé avec le skeleton adapté
@@ -74,7 +75,7 @@ function LieuxPageContent() {
         <h3>Rechercher un lieu</h3>
         <SearchInput
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Stade, Parc, Salle de concert..."
         />
       </section>
@@ -127,7 +128,7 @@ function LieuxPageContent() {
             {placesLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Array.from({ length: 3 }, (_, i) => (
-                  <div key={i} className="animate-pulse bg-gray-200 h-80 rounded-lg"></div>
+                  <div key={i} className="skeleton-bg h-80"></div>
                 ))}
               </div>
             ) : (
@@ -174,7 +175,10 @@ function LieuxPageContent() {
                 >
                   Précédent
                 </button>
-                <span>Page {allPlacesPageInfo.number + 1} / {allPlacesPageInfo.totalPages}</span>
+                <span>
+                  Page {allPlacesPageInfo.number + 1} /{" "}
+                  {allPlacesPageInfo.totalPages}
+                </span>
                 <button
                   disabled={page >= allPlacesPageInfo.totalPages - 1}
                   onClick={() => setPage((p) => p + 1)}

@@ -57,11 +57,11 @@ function EvenementsPageContent() {
     loadPage: searchLoadPage,
     loadPreviousPage: searchLoadPreviousPage,
     loadNextPage: searchLoadNextPage,
-  } = useSearchPaginated({ 
-    initialQuery, 
+  } = useSearchPaginated({
+    initialQuery,
     initialTypes: ["event"],
     pageSize: 20,
-    scrollTargetRef: searchScrollTargetRef 
+    scrollTargetRef: searchScrollTargetRef,
   });
 
   // Utilisation du nouveau hook paginé pour tous les événements (quand pas de recherche)
@@ -89,7 +89,7 @@ function EvenementsPageContent() {
     if (loading) {
       return (
         <div className="loading-skeleton">
-          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+          <div className="skeleton-bg h-32"></div>
         </div>
       );
     }
@@ -122,7 +122,13 @@ function EvenementsPageContent() {
   const renderEventCard = (event: Event, index: number) => {
     const eventId = extractIdFromSelfLink(event);
     return (
-      <EventCard key={eventId} id={eventId} event={event} minify={false} grid={true} />
+      <EventCard
+        key={eventId}
+        id={eventId}
+        event={event}
+        minify={false}
+        grid={true}
+      />
     );
   };
 
@@ -130,7 +136,7 @@ function EvenementsPageContent() {
   const renderSearchLoading = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {Array.from({ length: 8 }, (_, i) => (
-        <div key={i} className="animate-pulse bg-gray-200 h-80 rounded-lg"></div>
+        <div key={i} className="skeleton-bg h-80"></div>
       ))}
     </div>
   );
@@ -153,7 +159,7 @@ function EvenementsPageContent() {
           <h3>Rechercher un évènement</h3>
           <SearchInput
             value={query}
-            onChange={e => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Concert, Festival, Conférence..."
           />
         </section>
@@ -175,10 +181,10 @@ function EvenementsPageContent() {
               hasActiveFilters={false}
               onOpenFilters={() => {}}
               renderItem={(item: any, index: number) => (
-                <EventCard 
-                  key={item.event.id} 
-                  id={item.event.id.toString()} 
-                  event={item.event} 
+                <EventCard
+                  key={item.event.id}
+                  id={item.event.id.toString()}
+                  event={item.event}
                   minify={false}
                   grid={true}
                 />
@@ -237,10 +243,7 @@ function EvenementsPageContent() {
         )}
       </main>
 
-      <FilterBottomSheet
-        isOpen={isFilterOpen}
-        onClose={handleCloseFilters}
-      />
+      <FilterBottomSheet isOpen={isFilterOpen} onClose={handleCloseFilters} />
     </>
   );
 }

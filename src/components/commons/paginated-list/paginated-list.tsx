@@ -3,6 +3,7 @@ import { PaginationInfo } from "@/types";
 import Pagination from "@/components/commons/pagination/pagination";
 import { Filter, Xmark } from "iconoir-react";
 import { useFilters } from "@/contexts/filter-context";
+import PaginatedListSkeleton from "./paginated-list-skeleton";
 
 interface PaginatedListProps<T> {
   // Données et état
@@ -10,24 +11,24 @@ interface PaginatedListProps<T> {
   loading: boolean;
   error: Error | null;
   pagination?: PaginationInfo;
-  
+
   // Actions de pagination
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   onPageChange: (page: number) => void;
   onPreviousPage: () => void;
   onNextPage: () => void;
-  
+
   // Filtres
   hasActiveFilters?: boolean;
   onOpenFilters: () => void;
-  
+
   // Rendu
   renderItem: (item: T, index: number) => ReactNode;
   renderEmpty?: () => ReactNode;
   renderLoading?: () => ReactNode;
   renderError?: (error: Error) => ReactNode;
-  
+
   // Layout
   gridClassName?: string;
   showPagination?: boolean;
@@ -79,7 +80,13 @@ export default function PaginatedList<T>({
 
   // Générer la liste des tags à afficher
   const activeFilterTags = Object.entries(appliedFilters)
-    .filter(([key, value]) => value !== undefined && value !== null && key !== "selectedCityObj" && key !== "selectedPlaceObj")
+    .filter(
+      ([key, value]) =>
+        value !== undefined &&
+        value !== null &&
+        key !== "selectedCityObj" &&
+        key !== "selectedPlaceObj"
+    )
     .map(([key, value]) => {
       let label = filterLabels[key] || key;
       let displayValue = "";
@@ -111,13 +118,7 @@ export default function PaginatedList<T>({
     </div>
   );
 
-  const defaultRenderLoading = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {Array.from({ length: 8 }, (_, i) => (
-        <div key={i} className="animate-pulse bg-gray-200 h-80 rounded-lg"></div>
-      ))}
-    </div>
-  );
+  const defaultRenderLoading = () => <PaginatedListSkeleton />;
 
   const defaultRenderError = (error: Error) => (
     <div className="text-center text-red-500 py-8">
@@ -128,7 +129,7 @@ export default function PaginatedList<T>({
   return (
     <section className="wrapper" ref={targetRef}>
       {title && <h2>{title}</h2>}
-      
+
       {showFilters && (
         <div className="flex flex-wrap gap-2 mb-2 items-center">
           <button
@@ -161,22 +162,24 @@ export default function PaginatedList<T>({
 
       {/* Contenu principal */}
       {loading && (renderLoading?.() || defaultRenderLoading())}
-      
+
       {error && (renderError?.(error) || defaultRenderError(error))}
-      
+
       {!loading && !error && items.length > 0 && (
         <div className={gridClassName}>
           {items.map((item, index) => renderItem(item, index))}
         </div>
       )}
-      
+
       {!loading && !error && items.length === 0 && hasActiveFilters && (
         <p>Aucun élément ne correspond à vos critères de filtrage.</p>
       )}
-      
-      {!loading && !error && items.length === 0 && !hasActiveFilters && 
-        (renderEmpty?.() || defaultRenderEmpty())
-      }
+
+      {!loading &&
+        !error &&
+        items.length === 0 &&
+        !hasActiveFilters &&
+        (renderEmpty?.() || defaultRenderEmpty())}
 
       {/* Pagination */}
       {showPagination && pagination && (
@@ -191,4 +194,4 @@ export default function PaginatedList<T>({
       )}
     </section>
   );
-} 
+}

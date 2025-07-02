@@ -22,7 +22,7 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
   const searchScrollTargetRef = useRef<HTMLElement>(null);
-  
+
   const { city: cityData } = useCityData(city);
 
   // Nouvelle logique de recherche avec useSearchPaginated
@@ -38,11 +38,11 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
     loadPage: searchLoadPage,
     loadPreviousPage: searchLoadPreviousPage,
     loadNextPage: searchLoadNextPage,
-  } = useSearchPaginated({ 
-    initialQuery, 
+  } = useSearchPaginated({
+    initialQuery,
     initialTypes: ["event"],
     pageSize: 20,
-    scrollTargetRef: searchScrollTargetRef 
+    scrollTargetRef: searchScrollTargetRef,
   });
 
   const navigation = [
@@ -56,7 +56,7 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
   const renderSearchLoading = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {Array.from({ length: 8 }, (_, i) => (
-        <div key={i} className="animate-pulse bg-gray-200 h-80 rounded-lg"></div>
+        <div key={i} className="skeleton-bg h-80"></div>
       ))}
     </div>
   );
@@ -69,7 +69,7 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
         <h3>Rechercher un évènement à {cityData?.name}</h3>
         <SearchInput
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Concert, Festival, Conférence..."
         />
       </section>
@@ -91,10 +91,10 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
             hasActiveFilters={false}
             onOpenFilters={() => {}}
             renderItem={(item: any, index: number) => (
-              <EventCard 
-                key={item.event.id} 
-                id={item.event.id.toString()} 
-                event={item.event} 
+              <EventCard
+                key={item.event.id}
+                id={item.event.id.toString()}
+                event={item.event}
                 minify={false}
                 grid={true}
               />

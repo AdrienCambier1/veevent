@@ -22,11 +22,23 @@ export default function PlacePage() {
 
   const { place, loading, error, refetch } = usePlaceData(placeParam);
 
-  const {events: trendingEvents, loading: trendingEventsLoading, error: trendingEventsError} = usePlaceData(placeParam, "trending");
+  const {
+    events: trendingEvents,
+    loading: trendingEventsLoading,
+    error: trendingEventsError,
+  } = usePlaceData(placeParam, "trending");
 
-  const {events: firstEditionEvents, loading: firstEditionEventsLoading, error: firstEditionEventsError} = usePlaceData(placeParam, "firstEvents");
+  const {
+    events: firstEditionEvents,
+    loading: firstEditionEventsLoading,
+    error: firstEditionEventsError,
+  } = usePlaceData(placeParam, "firstEvents");
 
-  const {organizers, loading: organizersLoading, error: organizersError} = usePlaceData(placeParam, "organizers");
+  const {
+    organizers,
+    loading: organizersLoading,
+    error: organizersError,
+  } = usePlaceData(placeParam, "organizers");
 
   // Décoder le paramètre URL et capitaliser
   const placeName = decodeURIComponent(placeParam);
@@ -34,11 +46,10 @@ export default function PlacePage() {
   // .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
   // .join(" ");
 
-
   // Hook pour récupérer les villes par région (pour les TabList)
-//   const { cities: regionCities } = useCities("byRegion", {
-//     region: city?.region || "",
-//   });
+  //   const { cities: regionCities } = useCities("byRegion", {
+  //     region: city?.region || "",
+  //   });
   const slugify = (text: string) => {
     return text
       .toLowerCase()
@@ -57,7 +68,7 @@ export default function PlacePage() {
     if (loading) {
       return (
         <div className="loading-skeleton">
-          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+          <div className="skeleton-bg h-32"></div>
         </div>
       );
     }
@@ -118,7 +129,9 @@ export default function PlacePage() {
 
       {/* Section découverte de la ville */}
       <section className="wrapper">
-        <h2>Iconique {place.name} à {place.cityName}</h2>
+        <h2>
+          Iconique {place.name} à {place.cityName}
+        </h2>
         {place.content ? (
           <NewsCard description={place.content} />
         ) : (
@@ -132,8 +145,19 @@ export default function PlacePage() {
       <section className="wrapper">
         <h2>Se rendre à {place.name}</h2>
         <Gmap locations={[place]} />
-        <div className="flex gap-2 items-center"><MapPin className="text-primary-600"/>{place.address}</div>
-        <button className="secondary-btn" onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${place.name} ${place.cityName}`, '_blank')}>
+        <div className="flex gap-2 items-center">
+          <MapPin className="text-primary-600" />
+          {place.address}
+        </div>
+        <button
+          className="secondary-btn"
+          onClick={() =>
+            window.open(
+              `https://www.google.com/maps/search/?api=1&query=${place.name} ${place.cityName}`,
+              "_blank"
+            )
+          }
+        >
           <span>Voir sur Google Maps</span>
         </button>
       </section>
@@ -150,9 +174,10 @@ export default function PlacePage() {
                 title={
                   `${organizer.firstName || ""} ${
                     organizer.lastName || ""
-                  }`.trim() || organizer.pseudo || "Organisateur"
+                  }`.trim() ||
+                  organizer.pseudo ||
+                  "Organisateur"
                 }
-                
                 href={`/organisateurs/${organizer.pseudo || "unknown"}`}
                 image={organizer.imageUrl || organizer.bannerUrl || ""}
               />
@@ -166,7 +191,7 @@ export default function PlacePage() {
         </Link>
       </section>
 
-       {/* Événements de première édition */}
+      {/* Événements de première édition */}
       {firstEditionEvents.length > 0 && (
         <HorizontalList title={`Ils font leur début à ${place?.name}`}>
           {renderEventCards(firstEditionEvents, false, null)}

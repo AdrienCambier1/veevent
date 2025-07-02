@@ -76,7 +76,7 @@ export default function LieuxPage() {
     if (loading) {
       return (
         <div className="loading-skeleton">
-          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+          <div className="skeleton-bg h-32"></div>
         </div>
       );
     }
@@ -170,8 +170,6 @@ export default function LieuxPage() {
           );
         })}
       </section>
-
-    
     </>
   );
 }

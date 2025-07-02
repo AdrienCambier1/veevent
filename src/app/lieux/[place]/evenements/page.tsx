@@ -43,9 +43,17 @@ function EvenementsContent() {
     filterVersion,
   });
 
-  const {events: trendingEvents, loading: trendingEventsLoading, error: trendingEventsError} = usePlaceData(placeParam, "trending");
+  const {
+    events: trendingEvents,
+    loading: trendingEventsLoading,
+    error: trendingEventsError,
+  } = usePlaceData(placeParam, "trending");
 
-  const {events: firstEditionEvents, loading: firstEditionEventsLoading, error: firstEditionEventsError} = usePlaceData(placeParam, "firstEvents");
+  const {
+    events: firstEditionEvents,
+    loading: firstEditionEventsLoading,
+    error: firstEditionEventsError,
+  } = usePlaceData(placeParam, "firstEvents");
 
   // Fonction pour rendre les EventCards
   const renderEventCards = useCallback(
@@ -58,7 +66,7 @@ function EvenementsContent() {
       if (loading) {
         return (
           <div className="loading-skeleton">
-            <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+            <div className="skeleton-bg h-32"></div>
           </div>
         );
       }
@@ -96,22 +104,20 @@ function EvenementsContent() {
 
   return (
     <>
-
-     {/* Section des événements populaires en horizontal */}
+      {/* Section des événements populaires en horizontal */}
       {trendingEvents.length > 0 && (
         <HorizontalList title={`Les évènements populaires à ${place?.name}`}>
           {renderEventCards(trendingEvents, false, null)}
         </HorizontalList>
       )}
 
-       {/* Événements de première édition */}
+      {/* Événements de première édition */}
       {firstEditionEvents.length > 0 && (
         <HorizontalList title={`Ils font leur début à ${place?.name}`}>
           {renderEventCards(firstEditionEvents, false, null)}
         </HorizontalList>
       )}
 
-      
       <PaginatedList
         items={allEvents}
         loading={loading}
@@ -127,10 +133,18 @@ function EvenementsContent() {
         renderItem={(event: Event, index: number) => {
           const eventId = extractIdFromSelfLink(event);
           return (
-            <EventCard key={eventId} id={eventId} event={event} minify={true} grid={true} />
+            <EventCard
+              key={eventId}
+              id={eventId}
+              event={event}
+              minify={true}
+              grid={true}
+            />
           );
         }}
-        title={place ? `Tous les événements à ${place.name}` : "Tous les événements"}
+        title={
+          place ? `Tous les événements à ${place.name}` : "Tous les événements"
+        }
         scrollTargetRef={eventsSectionRef}
       />
       <FilterBottomSheet

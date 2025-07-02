@@ -46,7 +46,7 @@ export default function OrganisateursPage() {
     if (loading) {
       return (
         <div className="loading-skeleton">
-          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+          <div className="skeleton-bg h-32"></div>
         </div>
       );
     }
@@ -111,7 +111,7 @@ export default function OrganisateursPage() {
       </section>
 
       {/* Événements de première édition */}
-     
+
       {trendingEvents.length > 0 && (
         <HorizontalList title={`Les événements populaires à ${city.name}`}>
           {renderEventCards(trendingEvents, false, null, false)}
@@ -132,7 +132,6 @@ export default function OrganisateursPage() {
                     organizer.lastName || ""
                   }`.trim() || organizer.pseudo
                 }
-                
                 href={`/organisateurs/${organizer.pseudo}`}
                 image={organizer.imageUrl || organizer.bannerUrl}
               />
@@ -153,14 +152,19 @@ export default function OrganisateursPage() {
       )}
 
       {organizers.length > 0 && (
-      <section className="wrapper">
-      <h2>Ils ont organisé récemment à {city.name}</h2>
-      <div className="grid grid-cols-3 gap-4">
-        {organizers.map((organizer) => (
-          <OrganizerPhotoCard key={organizer.pseudo} name={organizer.firstName + " " + organizer.lastName} imageUrl={organizer.imageUrl} href={`/organisateurs/${organizer.pseudo}`} />
-        ))}
-      </div>
-      </section>
+        <section className="wrapper">
+          <h2>Ils ont organisé récemment à {city.name}</h2>
+          <div className="grid grid-cols-3 gap-4">
+            {organizers.map((organizer) => (
+              <OrganizerPhotoCard
+                key={organizer.pseudo}
+                name={organizer.firstName + " " + organizer.lastName}
+                imageUrl={organizer.imageUrl}
+                href={`/organisateurs/${organizer.pseudo}`}
+              />
+            ))}
+          </div>
+        </section>
       )}
     </>
   );

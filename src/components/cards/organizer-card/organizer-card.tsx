@@ -3,6 +3,7 @@ import { BaseUser, SingleUser } from "@/types";
 import Link from "next/link";
 import EventCardLine from "../event-card-line/event-card-line";
 import { useOrganizerEvents } from "@/hooks/organizers/use-organizer-events";
+import OrganizerCardSkeleton from "./organizer-card-skeleton";
 import "./organizer-card.scss";
 
 interface OrganizerCardProps {
@@ -20,15 +21,9 @@ export default function OrganizerCard({
     2
   );
 
-
   const renderEvents = () => {
     if (loading) {
-      return (
-        <div className="flex flex-col w-full gap-2">
-          <div className="animate-pulse bg-gray-200 h-16 rounded"></div>
-          <div className="animate-pulse bg-gray-200 h-16 rounded"></div>
-        </div>
-      );
+      return <OrganizerCardSkeleton />;
     }
 
     if (error) {

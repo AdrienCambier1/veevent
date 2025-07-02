@@ -43,7 +43,7 @@ export default function CityPage() {
   const { cities: regionCities } = useCities("byRegion", {
     region: city?.region || "",
   });
-  
+
   const slugify = (text: string) => {
     return text
       .toLowerCase()
@@ -62,7 +62,7 @@ export default function CityPage() {
     if (loading) {
       return (
         <div className="loading-skeleton">
-          <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+          <div className="skeleton-bg h-32"></div>
         </div>
       );
     }
@@ -164,10 +164,9 @@ export default function CityPage() {
             title={`Découvrez leurs derniers évènements sur ${city.name}`}
             description={`Organisateurs populaires`}
           />
-          {
-            popularOrganizers.map((organizer: SingleUser) => (
-              <OrganizerCard key={organizer.id} organizer={organizer} />
-            ))}
+          {popularOrganizers.map((organizer: SingleUser) => (
+            <OrganizerCard key={organizer.id} organizer={organizer} />
+          ))}
           <button className="secondary-btn">
             <span>Voir tous les organisateurs</span>
           </button>

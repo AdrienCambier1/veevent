@@ -44,16 +44,12 @@ function EvenementsContent() {
     scrollTargetRef: eventsSectionRef,
     filterVersion,
   });
-  const {
-    trendingEvents,
-    firstEditionEvents,
-  } = useCityEvents(cityParam, {
+  const { trendingEvents, firstEditionEvents } = useCityEvents(cityParam, {
     fetchAll: true,
     fetchTrending: true,
     fetchFirstEdition: true,
     filters: appliedFilters, // Utiliser appliedFilters
   });
-
 
   // Fonction pour rendre les EventCards
   const renderEventCards = useCallback(
@@ -66,7 +62,7 @@ function EvenementsContent() {
       if (loading) {
         return (
           <div className="loading-skeleton">
-            <div className="animate-pulse bg-gray-200 h-32 rounded"></div>
+            <div className="skeleton-bg h-32"></div>
           </div>
         );
       }
@@ -117,9 +113,7 @@ function EvenementsContent() {
           {renderEventCards(firstEditionEvents, false, null, false)}
         </HorizontalList>
       )}
-        
 
-    
       <PaginatedList
         items={allEvents}
         loading={loading}
@@ -135,10 +129,20 @@ function EvenementsContent() {
         renderItem={(event: Event, index: number) => {
           const eventId = extractIdFromSelfLink(event);
           return (
-            <EventCard key={eventId} id={eventId} event={event} minify={true} grid={true} />
+            <EventCard
+              key={eventId}
+              id={eventId}
+              event={event}
+              minify={true}
+              grid={true}
+            />
           );
         }}
-        title={city ? `Tous les événements à ${city.name} et aux alentours` : "Tous les événements"}
+        title={
+          city
+            ? `Tous les événements à ${city.name} et aux alentours`
+            : "Tous les événements"
+        }
         scrollTargetRef={eventsSectionRef}
       />
       <FilterBottomSheet

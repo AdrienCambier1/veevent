@@ -6,8 +6,8 @@ const OrganizerCardSkeleton = () => (
       className="skeleton-bg rounded-full mb-2"
       style={{ aspectRatio: "1/1" }}
     />
-    <div className="skeleton-text mb-2" />
-    <div className="skeleton-text" />
+    <h3 className="skeleton-text mb-2">Nom de l'organisateur</h3>
+    <p className="skeleton-text">Description de l'organisateur</p>
   </div>
 );
 

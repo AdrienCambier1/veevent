@@ -31,18 +31,18 @@ function OrganisateursPageContent() {
     loadPage,
     loadPreviousPage,
     loadNextPage,
-  } = useSearchPaginated({ 
-    initialQuery, 
+  } = useSearchPaginated({
+    initialQuery,
     initialTypes: ["user"],
     pageSize: 20,
-    scrollTargetRef 
+    scrollTargetRef,
   });
 
   // Rendu de chargement personnalisé avec le skeleton adapté
   const renderLoading = () => (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
       {Array.from({ length: 10 }, (_, i) => (
-        <div key={i} className="animate-pulse bg-gray-200 h-32 rounded-lg"></div>
+        <div key={i} className="skeleton-bg h-32"></div>
       ))}
     </div>
   );
@@ -76,7 +76,7 @@ function OrganisateursPageContent() {
         <h3>Rechercher un organisateur</h3>
         <SearchInput
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Florent, Jean, Marie..."
         />
       </section>
@@ -130,7 +130,12 @@ function OrganisateursPageContent() {
               />
               {organizers
                 .filter((org) => org.eventsCount > 0)
-                .sort((a, b) => b.eventsCount + b.eventPastCount - (a.eventsCount + a.eventPastCount))
+                .sort(
+                  (a, b) =>
+                    b.eventsCount +
+                    b.eventPastCount -
+                    (a.eventsCount + a.eventPastCount)
+                )
                 .slice(0, 6)
                 .map((organizer: SingleUser) => (
                   <OrganizerCard key={organizer.pseudo} organizer={organizer} />
