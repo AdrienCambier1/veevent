@@ -64,7 +64,6 @@ const nextConfig = {
 
   // Configuration des en-têtes de sécurité
   async headers() {
-    const isDevelopment = process.env.NODE_ENV === 'development';
     // Récupération du domaine de l'API (ex: https://abcd1234.ngrok.io)
     let apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     let apiOrigin = '';
@@ -94,9 +93,13 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: isDevelopment
-              ? `default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:*${apiOrigin ? ' ' + apiOrigin : ''}; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:;`
-              : `default-src 'self' https://maps.googleapis.com https://maps.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://maps.googleapis.com https://maps.gstatic.com${apiOrigin ? ' ' + apiOrigin : ''};`,
+            value:
+              `default-src 'self' https://maps.googleapis.com https://maps.gstatic.com; ` +
+              `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; ` +
+              `style-src 'self' 'unsafe-inline'; ` +
+              `img-src 'self' data: blob: https:; ` +
+              `font-src 'self' data:; ` +
+              `connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://maps.googleapis.com https://maps.gstatic.com${apiOrigin ? ' ' + apiOrigin : ''};`,
           },
         ],
       },
