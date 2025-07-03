@@ -64,7 +64,7 @@ export default function middleware(request) {
   const response = NextResponse.next();
   response.headers.set(
     "Content-Security-Policy",
-    "default-src 'self' https://maps.googleapis.com https://maps.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' data: http://localhost:8090 https://maps.googleapis.com https://maps.gstatic.com https://mapsresources-pa.googleapis.com; worker-src 'self' blob:;"
+    "default-src 'self' https://maps.googleapis.com https://maps.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' data: http://localhost:8090 https://maps.googleapis.com https://maps.gstatic.com https://mapsresources-pa.googleapis.com https://dominant-skylark-civil.ngrok-free.app; worker-src 'self' blob:;"
   );
   return response;
 }
