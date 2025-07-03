@@ -66,6 +66,7 @@ const nextConfig = {
   async headers() {
     // Récupération du domaine de l'API (ex: https://abcd1234.ngrok.io)
     let apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    console.log('CSP API ORIGIN:', process.env.NEXT_PUBLIC_API_URL);
     return [
       {
         source: "/(.*)",
