@@ -64,9 +64,9 @@ const nextConfig = {
 
   // Configuration des en-têtes de sécurité
   async headers() {
-    // Récupération du domaine de l'API (ex: https://abcd1234.ngrok.io)
     let apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    console.log('CSP API ORIGIN:', process.env.NEXT_PUBLIC_API_URL);
+    const apiOrigin = apiUrl ? new URL(apiUrl).origin : '';
+    console.log('CSP API ORIGIN:', apiOrigin);
     return [
       {
         source: "/(.*)",
@@ -91,7 +91,7 @@ const nextConfig = {
               `style-src 'self' 'unsafe-inline'; ` +
               `img-src 'self' data: blob: https:; ` +
               `font-src 'self' data:; ` +
-              `connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://maps.googleapis.com https://maps.gstatic.com ${process.env.NEXT_PUBLIC_API_URL};`,
+              `connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://maps.googleapis.com https://maps.gstatic.com${apiOrigin ? ' ' + apiOrigin : ''};`,
           },
         ],
       },
