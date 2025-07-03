@@ -96,7 +96,7 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: isDevelopment
               ? `default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:*${apiOrigin ? ' ' + apiOrigin : ''}; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:;`
-              : "default-src 'self' https://maps.googleapis.com https://maps.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://*.ngrok-free.app;",
+              : `default-src 'self' https://maps.googleapis.com https://maps.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://maps.googleapis.com https://maps.gstatic.com${apiOrigin ? ' ' + apiOrigin : ''};`,
           },
         ],
       },
