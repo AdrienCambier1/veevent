@@ -83,16 +83,16 @@ const nextConfig = {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
           },
-          {
-            key: "Content-Security-Policy",
-            value:
-              `default-src 'self' https://maps.googleapis.com https://maps.gstatic.com; ` +
-              `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; ` +
-              `style-src 'self' 'unsafe-inline'; ` +
-              `img-src 'self' data: blob: https:; ` +
-              `font-src 'self' data:; ` +
-              `connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://maps.googleapis.com https://maps.gstatic.com https://dominant-skylark-civil.ngrok-free.app:*;`,
-          },
+                      {
+              key: "Content-Security-Policy",
+              value:
+                `default-src 'self' https://maps.googleapis.com https://maps.gstatic.com; ` +
+                `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; ` +
+                `style-src 'self' 'unsafe-inline'; ` +
+                `img-src 'self' data: blob: https:; ` +
+                `font-src 'self' data:; ` +
+                `connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://maps.googleapis.com https://maps.gstatic.com https://dominant-skylark-civil.ngrok-free.app;`,
+            },
         ],
       },
     ];
