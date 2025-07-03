@@ -81,13 +81,13 @@ function SearchSheetContent() {
           {/* Header avec handle */}
           <div className="flex-shrink-0 p-4 pb-0">
             <div className="mx-auto w-12 h-1.5 rounded-full bg-gray-300 mb-6" />
-            <Drawer.Title className="text-xl md:text-2xl font-bold text-center mb-4 md:mb-6">
-              Recherchez ce qui vous intéresse
-            </Drawer.Title>
           </div>
 
           {/* Contenu scrollable */}
           <div className="flex-1 overflow-y-auto px-4">
+            <Drawer.Title className="text-xl md:text-2xl font-bold text-center mb-4 md:mb-6">
+              Recherchez ce qui vous intéresse
+            </Drawer.Title>
             <div className="w-full max-w-4xl mx-auto pb-6">
               <div className="flex flex-col gap-4">
                 <SearchInput

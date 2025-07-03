@@ -1,0 +1,120 @@
+.footer {
+  @apply bg-primary-950 text-white mt-16;
+
+  .footer-content {
+    @apply max-w-7xl mx-auto px-4 py-12;
+
+    .footer-main {
+      @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8;
+
+      .footer-brand {
+        @apply lg:col-span-1;
+
+        .footer-logo {
+          @apply h-8 mb-4 filter brightness-0 invert;
+        }
+
+        .footer-description {
+          @apply text-gray-300 text-sm leading-relaxed mb-6;
+        }
+
+        .footer-socials {
+          @apply flex gap-3;
+
+          .social-link {
+            @apply w-10 h-10 bg-primary-800 hover:bg-primary-600 rounded-full flex items-center justify-center transition-colors duration-200;
+
+            svg {
+              @apply w-5 h-5;
+            }
+          }
+        }
+      }
+
+      .footer-nav {
+        @apply lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-8;
+
+        .nav-section {
+          h4 {
+            @apply text-lg font-semibold mb-4 text-primary-200;
+          }
+
+          ul {
+            @apply space-y-2;
+
+            li {
+              a {
+                @apply text-gray-300 hover:text-primary-200 transition-colors duration-200 text-sm;
+              }
+            }
+          }
+        }
+      }
+
+      .footer-contact {
+        @apply lg:col-span-1;
+
+        h4 {
+          @apply text-lg font-semibold mb-4 text-primary-200;
+        }
+
+        .contact-info {
+          @apply space-y-3;
+
+          .contact-item {
+            @apply flex items-center gap-3 text-gray-300 text-sm;
+
+            svg {
+              @apply w-4 h-4 text-primary-400 flex-shrink-0;
+            }
+          }
+        }
+      }
+    }
+
+    .footer-bottom {
+      @apply border-t border-primary-800 pt-6;
+
+      .footer-bottom-content {
+        @apply flex flex-col sm:flex-row justify-between items-center gap-4;
+
+        p {
+          @apply text-gray-400 text-sm;
+        }
+
+        .footer-bottom-links {
+          @apply flex gap-6;
+
+          a {
+            @apply text-gray-400 hover:text-primary-200 transition-colors duration-200 text-sm;
+          }
+        }
+      }
+    }
+  }
+
+  // Responsive
+  @media (max-width: 768px) {
+    .footer-content {
+      @apply px-4 py-8;
+
+      .footer-main {
+        @apply gap-6;
+
+        .footer-nav {
+          @apply grid-cols-1 gap-6;
+        }
+      }
+
+      .footer-bottom {
+        .footer-bottom-content {
+          @apply text-center;
+
+          .footer-bottom-links {
+            @apply justify-center;
+          }
+        }
+      }
+    }
+  }
+}

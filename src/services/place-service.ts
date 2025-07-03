@@ -1,22 +1,38 @@
-import { PlacesResponse, Place, SinglePlace, EventsResponse, SingleUser, UsersResponse, Event as ApiEvent } from "@/types";
+import {
+  PlacesResponse,
+  Place,
+  SinglePlace,
+  EventsResponse,
+  SingleUser,
+  UsersResponse,
+  Event as ApiEvent,
+} from "@/types";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090/api/v1";
 const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true";
 
 export const placeService = {
-  async getPlaces(page: number = 0, size: number = 10): Promise<PlacesResponse> {
+  async getPlaces(
+    page: number = 0,
+    size: number = 10
+  ): Promise<PlacesResponse> {
     try {
       if (useMockData) {
         // TODO: Implémenter les données mock pour les lieux paginés
         return {
           _embedded: { placeResponses: [] },
-          _links: { self: { href: '' }, first: { href: '' }, last: { href: '' } },
-          page: { size, totalElements: 0, totalPages: 0, number: page }
+          _links: {
+            self: { href: "" },
+            first: { href: "" },
+            last: { href: "" },
+          },
+          page: { size, totalElements: 0, totalPages: 0, number: page },
         };
       }
       const params = new URLSearchParams();
-      params.append('page', page.toString());
-      params.append('size', size.toString());
+      params.append("page", page.toString());
+      params.append("size", size.toString());
       const response = await fetch(`${apiUrl}/places?${params.toString()}`, {
         headers: {
           "Content-Type": "application/json",
@@ -207,8 +223,10 @@ export const placeService = {
       // Ajouter les filtres à l'URL si présents
       if (filters) {
         const params = new URLSearchParams();
-        if (filters.minPrice !== undefined) params.append("minPrice", filters.minPrice.toString());
-        if (filters.maxPrice !== undefined) params.append("maxPrice", filters.maxPrice.toString());
+        if (filters.minPrice !== undefined)
+          params.append("minPrice", filters.minPrice.toString());
+        if (filters.maxPrice !== undefined)
+          params.append("maxPrice", filters.maxPrice.toString());
         if (filters.startDate) params.append("startDate", filters.startDate);
         if (filters.endDate) params.append("endDate", filters.endDate);
         if (filters.categories) params.append("categories", filters.categories);

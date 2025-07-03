@@ -9,6 +9,7 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { HeaderProvider } from "@/contexts/header-context";
 import { FilterProvider } from "@/contexts/filter-context";
 import HydrationFix from "@/components/commons/hydration-fix/hydration-fix";
+import Footer from "@/components/footer/footer";
 
 export const metadata: Metadata = {
   appleWebApp: {
@@ -43,6 +44,7 @@ export default function RootLayout({ children, sheet }: RootLayoutProps) {
                   <Header />
                   {children}
                   {sheet}
+                  <Footer />
                   <FloatingMenu />
                 </SidebarProvider>
               </CityProvider>

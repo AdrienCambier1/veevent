@@ -12,7 +12,8 @@ import {
 import mockEvents from "@/services/data/events";
 import { mockOrganizers } from "@/services/data/organizers";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090/api/v1";
 const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true";
 
 // Fonction utilitaire pour formater la date
@@ -114,12 +115,17 @@ export interface Invitation {
 }
 
 export const eventService = {
-  async getEvents(filters?: EventFilters): Promise<PaginatedResponse<EventsEmbedded>> {
+  async getEvents(
+    filters?: EventFilters
+  ): Promise<PaginatedResponse<EventsEmbedded>> {
     try {
       // Si on utilise les données fictives
       if (useMockData) {
         // Ajout du log pour vérifier le contenu de mockEvents
-        console.log("[eventService.getEvents] mockEvents count:", mockEvents.length);
+        console.log(
+          "[eventService.getEvents] mockEvents count:",
+          mockEvents.length
+        );
         let filteredEvents = [...mockEvents];
 
         // Appliquer les filtres si nécessaire
@@ -145,18 +151,22 @@ export const eventService = {
             );
           }
           if (filters.cityName) {
-            filteredEvents = filteredEvents.filter(
-              (event) => event.address.toLowerCase().includes(filters.cityName!.toLowerCase())
+            filteredEvents = filteredEvents.filter((event) =>
+              event.address
+                .toLowerCase()
+                .includes(filters.cityName!.toLowerCase())
             );
           }
           if (filters.placeName) {
-            filteredEvents = filteredEvents.filter(
-              (event) => event.address.toLowerCase().includes(filters.placeName!.toLowerCase())
+            filteredEvents = filteredEvents.filter((event) =>
+              event.address
+                .toLowerCase()
+                .includes(filters.placeName!.toLowerCase())
             );
           }
           if (filters.categories && filters.categories.length > 0) {
-            filteredEvents = filteredEvents.filter(
-              (event) => event.categories.some(cat => 
+            filteredEvents = filteredEvents.filter((event) =>
+              event.categories.some((cat) =>
                 filters.categories!.includes(cat.key)
               )
             );
@@ -165,8 +175,11 @@ export const eventService = {
 
         const mappedEvents = filteredEvents.map(mapMockEventToEvent);
         // Ajout du log pour vérifier le contenu de mappedEvents
-        console.log("[eventService.getEvents] mappedEvents count:", mappedEvents.length);
-        
+        console.log(
+          "[eventService.getEvents] mappedEvents count:",
+          mappedEvents.length
+        );
+
         // Simuler la pagination pour les données mock
         const page = filters?.page || 0;
         const size = filters?.size || 10;
@@ -183,7 +196,10 @@ export const eventService = {
           _links: {
             first: { href: `/events?page=0&size=${size}` },
             self: { href: `/events?page=${page}&size=${size}` },
-            next: page < totalPages - 1 ? { href: `/events?page=${page + 1}&size=${size}` } : undefined,
+            next:
+              page < totalPages - 1
+                ? { href: `/events?page=${page + 1}&size=${size}` }
+                : undefined,
             last: { href: `/events?page=${totalPages - 1}&size=${size}` },
           },
           page: {
@@ -204,14 +220,11 @@ export const eventService = {
       if (filters?.startDate)
         searchParams.append("startDate", filters.startDate);
       if (filters?.endDate) searchParams.append("endDate", filters.endDate);
-      if (filters?.cityName)
-        searchParams.append("cities", filters.cityName);
-      if (filters?.placeName)
-        searchParams.append("places", filters.placeName);
+      if (filters?.cityName) searchParams.append("cities", filters.cityName);
+      if (filters?.placeName) searchParams.append("places", filters.placeName);
       if (filters?.categories && filters.categories.length > 0)
         searchParams.append("categories", filters.categories.join(","));
-      if (filters?.sortBy)
-        searchParams.append("sortBy", filters.sortBy);
+      if (filters?.sortBy) searchParams.append("sortBy", filters.sortBy);
       if (filters?.sortOrder)
         searchParams.append("sortOrder", filters.sortOrder);
       if (filters?.page !== undefined)
@@ -482,7 +495,8 @@ export const eventService = {
         .filter((event: Event) => {
           const isFromOrganizer =
             !!event.organizer &&
-            event.organizer.pseudo?.toLowerCase() === organizerPseudo.toLowerCase();
+            event.organizer.pseudo?.toLowerCase() ===
+              organizerPseudo.toLowerCase();
 
           const eventId = event._links.self.href.split("/").pop();
           const isNotCurrentEvent =
@@ -523,7 +537,9 @@ export const eventService = {
 
   async getFreeEvents(): Promise<Event[]> {
     const eventsResponse = await this.getEvents();
-    const freeEvents = eventsResponse._embedded.eventSummaryResponses.filter((event: Event) => event.price === 0);
+    const freeEvents = eventsResponse._embedded.eventSummaryResponses.filter(
+      (event: Event) => event.price === 0
+    );
     return freeEvents;
   },
 
@@ -615,10 +631,16 @@ export const eventService = {
       if (useMockData) {
         // Pour les données mock, on peut filtrer par ville ou lieu
         let filteredEvents = mockEvents.filter((event) => {
-          if (city && event.address.toLowerCase().includes(city.toLowerCase())) {
+          if (
+            city &&
+            event.address.toLowerCase().includes(city.toLowerCase())
+          ) {
             return true;
           }
-          if (place && event.address.toLowerCase().includes(place.toLowerCase())) {
+          if (
+            place &&
+            event.address.toLowerCase().includes(place.toLowerCase())
+          ) {
             return true;
           }
           return false;
@@ -637,7 +659,9 @@ export const eventService = {
       if (limit) searchParams.append("limit", limit.toString());
 
       const queryString = searchParams.toString();
-      const url = `${apiUrl}/events/first-editions${queryString ? `?${queryString}` : ""}`;
+      const url = `${apiUrl}/events/first-editions${
+        queryString ? `?${queryString}` : ""
+      }`;
 
       const response = await fetch(url, {
         headers: {
@@ -689,7 +713,7 @@ export const eventService = {
         // Pour les données mock, on extrait le pseudo de l'URL
         const organizerPseudo = organizerEventsHref.split("/").pop() || "";
         const organizer = getOrganizerByPseudo(organizerPseudo);
-        
+
         if (!organizer) {
           return [];
         }
@@ -697,7 +721,8 @@ export const eventService = {
         const organizerEvents = mockEvents
           .filter((event) => {
             const isFromOrganizer =
-              event.organizer.pseudo.toLowerCase() === organizerPseudo.toLowerCase();
+              event.organizer.pseudo.toLowerCase() ===
+              organizerPseudo.toLowerCase();
 
             const isNotCurrentEvent =
               !currentEventId || event.id.toString() !== currentEventId;
@@ -726,11 +751,11 @@ export const eventService = {
       // Construire l'URL avec les paramètres de filtrage
       const url = new URL(organizerEventsHref);
       if (currentEventId) {
-        url.searchParams.set('excludeEventId', currentEventId);
+        url.searchParams.set("excludeEventId", currentEventId);
       }
-      url.searchParams.set('limit', limit.toString());
-      url.searchParams.set('status', 'NOT_STARTED,IN_PROGRESS');
-      url.searchParams.set('sort', 'date,asc');
+      url.searchParams.set("limit", limit.toString());
+      url.searchParams.set("status", "NOT_STARTED,IN_PROGRESS");
+      url.searchParams.set("sort", "date,asc");
 
       const response = await fetch(url.toString(), {
         headers: {
@@ -798,7 +823,9 @@ export const eventService = {
   async getTrendingEvents(): Promise<Event[]> {
     try {
       if (useMockData) {
-        return mockEvents.filter((event) => event.isTrending).map(mapMockEventToEvent);
+        return mockEvents
+          .filter((event) => event.isTrending)
+          .map(mapMockEventToEvent);
       }
       // Appel API pour récupérer tous les événements puis filtrer côté front
       const response = await fetch(`${apiUrl}/events`, {
@@ -819,14 +846,23 @@ export const eventService = {
     }
   },
 
-  async getInvitationStatus(eventId: number, userId: number, token?: string): Promise<Invitation | null> {
+  async getInvitationStatus(
+    eventId: number,
+    userId: number,
+    token?: string
+  ): Promise<Invitation | null> {
     try {
-      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
       if (token) headers["Authorization"] = `Bearer ${token}`;
-      const response = await fetch(`${apiUrl}/invitations/search?event_id=${eventId}&user_id=${userId}`, {
-        headers,
-        cache: "no-store",
-      });
+      const response = await fetch(
+        `${apiUrl}/invitations/search?event_id=${eventId}&user_id=${userId}`,
+        {
+          headers,
+          cache: "no-store",
+        }
+      );
       if (!response.ok) {
         if (response.status === 404) return null;
         throw new Error("Erreur lors de la récupération de l'invitation");
@@ -840,9 +876,16 @@ export const eventService = {
     }
   },
 
-  async requestInvitation(eventId: number, userId: number, description: string, token?: string): Promise<Invitation> {
+  async requestInvitation(
+    eventId: number,
+    userId: number,
+    description: string,
+    token?: string
+  ): Promise<Invitation> {
     const body = JSON.stringify({ eventId, userId, description });
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
     if (token) headers["Authorization"] = `Bearer ${token}`;
     const response = await fetch(`${apiUrl}/invitations`, {
       method: "POST",
@@ -855,14 +898,22 @@ export const eventService = {
     return await response.json();
   },
 
-  async reportEvent(senderUserId: number, reportedUserId: number, description: string, reportType: string, token?: string): Promise<any> {
+  async reportEvent(
+    senderUserId: number,
+    reportedUserId: number,
+    description: string,
+    reportType: string,
+    token?: string
+  ): Promise<any> {
     const body = JSON.stringify({
       reportType,
       description,
       senderUserId,
-      reportedUserId
+      reportedUserId,
     });
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
     if (token) headers["Authorization"] = `Bearer ${token}`;
     const response = await fetch(`${apiUrl}/reports`, {
       method: "POST",
@@ -875,9 +926,16 @@ export const eventService = {
     return await response.json();
   },
 
-  async createOrder(totalPrice: number, eventId: number, userId: number, token?: string): Promise<any> {
+  async createOrder(
+    totalPrice: number,
+    eventId: number,
+    userId: number,
+    token?: string
+  ): Promise<any> {
     const body = JSON.stringify({ totalPrice, eventId, userId });
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
     if (token) headers["Authorization"] = `Bearer ${token}`;
     const response = await fetch(`${apiUrl}/orders`, {
       method: "POST",
@@ -890,9 +948,20 @@ export const eventService = {
     return await response.json();
   },
 
-  async addTicketToOrder(orderId: number, ticket: { name: string; lastName: string; description: string; unitPrice: number }, token?: string): Promise<any> {
+  async addTicketToOrder(
+    orderId: number,
+    ticket: {
+      name: string;
+      lastName: string;
+      description: string;
+      unitPrice: number;
+    },
+    token?: string
+  ): Promise<any> {
     const body = JSON.stringify(ticket);
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
     if (token) headers["Authorization"] = `Bearer ${token}`;
     const response = await fetch(`${apiUrl}/orders/${orderId}/tickets`, {
       method: "POST",

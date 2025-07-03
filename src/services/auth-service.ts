@@ -89,12 +89,15 @@ class AuthService {
   // Récupération des données utilisateur
   public async fetchUserData(token: string): Promise<UserData | null> {
     try {
-      const response = await fetch(`${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.USER_PROFILE}`, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-      });
+      const response = await fetch(
+        `${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.USER_PROFILE}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         console.error("Erreur API user profile:", response.status);
@@ -109,64 +112,93 @@ class AuthService {
   }
 
   // Connexion
-  public async login(credentials: LoginCredentials): Promise<AuthResponse | AuthError> {
+  public async login(
+    credentials: LoginCredentials
+  ): Promise<AuthResponse | AuthError> {
     try {
       if (!credentials.email || !credentials.password) {
-        return { message: AUTH_CONFIG.ERROR_MESSAGES.MISSING_CREDENTIALS, code: "MISSING_CREDENTIALS" };
+        return {
+          message: AUTH_CONFIG.ERROR_MESSAGES.MISSING_CREDENTIALS,
+          code: "MISSING_CREDENTIALS",
+        };
       }
 
-      const response = await fetch(`${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.LOGIN}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
-      });
+      const response = await fetch(
+        `${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.LOGIN}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(credentials),
+        }
+      );
 
       // Gestion du cas où le backend retourne une redirection 302 (identifiants invalides)
       if (response.status === 302) {
         return {
           message: AUTH_CONFIG.ERROR_MESSAGES.AUTH_FAILED,
-          code: "INVALID_CREDENTIALS"
+          code: "INVALID_CREDENTIALS",
         };
       }
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        return { 
-          message: errorData.message || AUTH_CONFIG.ERROR_MESSAGES.AUTH_FAILED, 
-          code: `HTTP_${response.status}` 
+        return {
+          message: errorData.message || AUTH_CONFIG.ERROR_MESSAGES.AUTH_FAILED,
+          code: `HTTP_${response.status}`,
         };
       }
 
       const { token } = await response.json();
 
       if (!this.isTokenValid(token)) {
-        return { message: AUTH_CONFIG.ERROR_MESSAGES.INVALID_TOKEN, code: "INVALID_TOKEN" };
+        return {
+          message: AUTH_CONFIG.ERROR_MESSAGES.INVALID_TOKEN,
+          code: "INVALID_TOKEN",
+        };
       }
 
       const userData = await this.fetchUserData(token);
       if (!userData) {
-        return { message: AUTH_CONFIG.ERROR_MESSAGES.USER_FETCH_FAILED, code: "USER_FETCH_FAILED" };
+        return {
+          message: AUTH_CONFIG.ERROR_MESSAGES.USER_FETCH_FAILED,
+          code: "USER_FETCH_FAILED",
+        };
       }
 
       return { token, user: userData };
     } catch (error) {
       console.error("Erreur connexion:", error);
-      return { message: AUTH_CONFIG.ERROR_MESSAGES.NETWORK_ERROR, code: "NETWORK_ERROR" };
+      return {
+        message: AUTH_CONFIG.ERROR_MESSAGES.NETWORK_ERROR,
+        code: "NETWORK_ERROR",
+      };
     }
   }
 
   // Inscription
   public async register(data: RegisterData): Promise<AuthResponse | AuthError> {
     try {
-      if (!data.email || !data.password || !data.lastName || !data.firstName || !data.pseudo) {
-        return { message: "Tous les champs obligatoires sont requis", code: "MISSING_FIELDS" };
+      if (
+        !data.email ||
+        !data.password ||
+        !data.lastName ||
+        !data.firstName ||
+        !data.pseudo
+      ) {
+        return {
+          message: "Tous les champs obligatoires sont requis",
+          code: "MISSING_FIELDS",
+        };
       }
 
       if (data.password.length < AUTH_CONFIG.SECURITY.PASSWORD_MIN_LENGTH) {
-        return { message: AUTH_CONFIG.ERROR_MESSAGES.WEAK_PASSWORD, code: "WEAK_PASSWORD" };
+        return {
+          message: AUTH_CONFIG.ERROR_MESSAGES.WEAK_PASSWORD,
+          code: "WEAK_PASSWORD",
+        };
       }
 
-     // Préparer les données pour l'API
+      // Préparer les données pour l'API
       const apiData = {
         lastName: data.lastName,
         firstName: data.firstName,
@@ -180,30 +212,39 @@ class AuthService {
         categoryKeys: (data as any).categoryKeys || [],
       };
 
-      const response = await fetch(`${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.REGISTER}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(apiData),
-      });
+      const response = await fetch(
+        `${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.REGISTER}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(apiData),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        return { 
-          message: errorData.message || "Erreur d'inscription", 
-          code: `HTTP_${response.status}` 
+        return {
+          message: errorData.message || "Erreur d'inscription",
+          code: `HTTP_${response.status}`,
         };
       }
 
       const { token } = await response.json();
 
       if (!this.isTokenValid(token)) {
-        return { message: AUTH_CONFIG.ERROR_MESSAGES.INVALID_TOKEN, code: "INVALID_TOKEN" };
+        return {
+          message: AUTH_CONFIG.ERROR_MESSAGES.INVALID_TOKEN,
+          code: "INVALID_TOKEN",
+        };
       }
 
       return { token };
     } catch (error) {
       console.error("Erreur inscription:", error);
-      return { message: AUTH_CONFIG.ERROR_MESSAGES.NETWORK_ERROR, code: "NETWORK_ERROR" };
+      return {
+        message: AUTH_CONFIG.ERROR_MESSAGES.NETWORK_ERROR,
+        code: "NETWORK_ERROR",
+      };
     }
   }
 
@@ -246,13 +287,16 @@ class AuthService {
   // Rafraîchissement du token (si nécessaire)
   public async refreshToken(token: string): Promise<string | null> {
     try {
-      const response = await fetch(`${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.REFRESH}`, {
-        method: "POST",
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-      });
+      const response = await fetch(
+        `${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.REFRESH}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) return null;
 
@@ -265,4 +309,4 @@ class AuthService {
   }
 }
 
-export const authService = new AuthService(); 
+export const authService = new AuthService();
