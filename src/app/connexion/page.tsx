@@ -9,7 +9,10 @@ function ConnexionPageContent() {
   const { login, loading, error, clearError } = useAuth();
   const { setHideCitySelector } = useHeader();
   const searchParams = useSearchParams();
-  const backendGoogleLoginUrl = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google?state=${process.env.NEXT_PUBLIC_FRONTEND_URL}`;
+  const redirectUri = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/auth/callback`;
+  const backendGoogleLoginUrl = `${
+    process.env.NEXT_PUBLIC_BACK_URL
+  }/oauth2/authorize/google?redirect_uri=${encodeURIComponent(redirectUri)}`;
 
   const [credentials, setCredentials] = useState({
     email: "",
@@ -89,8 +92,8 @@ function ConnexionPageContent() {
             <span>{loading ? "Connexion en cours..." : "Se connecter"}</span>
           </button>
 
-         <Link href={backendGoogleLoginUrl}>
-         <div className="secondary-btn w-full">
+          <a href={backendGoogleLoginUrl}>
+            <div className="secondary-btn w-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -103,7 +106,7 @@ function ConnexionPageContent() {
               </svg>
               Connexion avec Google
             </div>
-            </Link>
+          </a>
         </form>
 
         <p className="font-bold">
