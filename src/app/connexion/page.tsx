@@ -9,8 +9,7 @@ function ConnexionPageContent() {
   const { login, loading, error, clearError } = useAuth();
   const { setHideCitySelector } = useHeader();
   const searchParams = useSearchParams();
-  const backendGoogleLoginUrl =
-    "http://localhost:8090/oauth2/authorization/google";
+  const backendGoogleLoginUrl = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google?state=${process.env.NEXT_PUBLIC_FRONTEND_URL}`;
 
   const [credentials, setCredentials] = useState({
     email: "",
