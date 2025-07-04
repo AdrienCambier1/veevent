@@ -64,9 +64,6 @@ const nextConfig = {
 
   // Configuration des en-têtes de sécurité
   async headers() {
-    let apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const apiOrigin = apiUrl ? new URL(apiUrl).origin : '';
-    console.log('CSP API ORIGIN:', apiOrigin);
     return [
       {
         source: "/(.*)",
