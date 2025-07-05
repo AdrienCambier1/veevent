@@ -54,4 +54,8 @@
       }
     }
   }
+
+  .theme-card {
+    @apply max-w-32 text-center;
+  }
 }

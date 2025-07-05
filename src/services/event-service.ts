@@ -845,7 +845,7 @@ export const eventService = {
           .map(mapMockEventToEvent);
       }
       // Appel API pour récupérer tous les événements puis filtrer côté front
-      const response = await fetch(`${apiUrl}/events`, {
+      const response = await fetch(`${apiUrl}/events/trending`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -855,11 +855,39 @@ export const eventService = {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }
       const result = await response.json();
-      const apiEvents = result._embedded?.eventSummaryResponses || [];
-      const trending = apiEvents.filter((event: any) => event.isTrending);
-      return trending.map(mapMockEventToEvent);
+      return result._embedded?.eventSummaryResponses || [];
     } catch (error) {
       throw error;
+    }
+  },
+
+  async getEventsByCities(cities: string[], limit: number = 10): Promise<Event[]> {
+    try {
+      if (useMockData) {
+        // Filtrer les événements par villes dans les données mock
+        const cityEvents = mockEvents.filter((event) =>
+          cities.some(city => 
+            event.address.toLowerCase().includes(city.toLowerCase())
+          )
+        );
+        return cityEvents.slice(0, limit).map(mapMockEventToEvent);
+      }
+
+      // Construire le paramètre cities pour l'API
+      const citiesParam = cities.join(',');
+      const response = await fetch(
+        `${apiUrl}/events?cities=${citiesParam}&size=${limit}&sort=date,asc`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data: EventsResponse = await response.json();
+      return data._embedded.eventSummaryResponses || [];
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des événements par villes:", error);
+      return [];
     }
   },
 
