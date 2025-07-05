@@ -25,6 +25,7 @@ import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import { useAuth } from "@/contexts/auth-context";
 import { useEvents } from "@/hooks/events/use-events";
 import { useCityEvents } from "@/hooks/events/use-city-events";
+import { useUserPreferredEvents } from "@/hooks/events/use-user-preferred-events";
 import { useCities } from "@/hooks/cities/use-cities";
 import { Event } from "@/types";
 import EventCardSkeleton from "@/components/cards/event-card/event-card-skeleton";
@@ -106,6 +107,13 @@ export default function HomePage() {
     loading: cityEventsLoading,
     error: cityEventsError,
   } = useCityEvents(6);
+
+  // ✅ Hook pour récupérer les événements des catégories préférées de l'utilisateur connecté
+  const {
+    events: userPreferredEvents,
+    loading: userPreferredEventsLoading,
+    error: userPreferredEventsError,
+  } = useUserPreferredEvents(10);
 
   // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
   const extractIdFromSelfLink = (event: Event): string => {
@@ -306,6 +314,13 @@ export default function HomePage() {
       {renderEventCards(cityEvents, cityEventsLoading, cityEventsError) && (
         <HorizontalList title="Événements près de chez vous">
           {renderEventCards(cityEvents, cityEventsLoading, cityEventsError)}
+        </HorizontalList>
+      )}
+
+      {/* ✅ Section des événements des catégories préférées de l'utilisateur connecté */}
+      {isAuthenticated && renderEventCards(userPreferredEvents, userPreferredEventsLoading, userPreferredEventsError) && (
+        <HorizontalList title="Événements selon vos goûts">
+          {renderEventCards(userPreferredEvents, userPreferredEventsLoading, userPreferredEventsError)}
         </HorizontalList>
       )}
 

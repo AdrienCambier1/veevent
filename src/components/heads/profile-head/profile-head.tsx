@@ -26,6 +26,7 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
     user.role === "Admin" ||
     user.role === "AuthService";
 
+
   return (
     <div className="profile-head">
       <div className="grid gap-2 grid-cols-[auto,1fr] items-center">

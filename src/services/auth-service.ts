@@ -39,35 +39,6 @@ export interface AuthError {
 
 import { AUTH_CONFIG } from "@/config/auth.config";
 
-// Fonction pour convertir SingleUser vers AuthenticatedUser
-function convertSingleUserToAuthenticatedUser(singleUser: any): AuthenticatedUser {
-  return {
-    id: singleUser.id,
-    firstName: singleUser.firstName,
-    lastName: singleUser.lastName,
-    pseudo: singleUser.pseudo,
-    email: singleUser.email,
-    phone: singleUser.phone,
-    description: singleUser.description,
-    imageUrl: singleUser.imageUrl,
-    bannerUrl: singleUser.bannerUrl,
-    note: singleUser.note,
-    role: singleUser.role,
-    eventsCount: singleUser.eventsCount,
-    eventPastCount: singleUser.eventPastCount,
-    socials: singleUser.socials,
-    categories: singleUser.categories?.map((cat: string) => ({
-      key: cat,
-      name: cat,
-      description: "",
-      trending: false
-    })) || [],
-    isOrganizer: singleUser.role === "Organizer" || singleUser.role === "Admin" || singleUser.role === "AuthService",
-    // Préserver les liens HATEOAS
-    _links: singleUser._links
-  };
-}
-
 class AuthService {
   private apiUrl: string;
   private tokenKey: string;
@@ -177,7 +148,7 @@ class AuthService {
       }
 
       const userData = await response.json();
-      return convertSingleUserToAuthenticatedUser(userData);
+      return userData;
     } catch (error) {
       console.error("Erreur récupération données utilisateur:", error);
       return null;
