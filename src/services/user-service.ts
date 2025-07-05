@@ -81,9 +81,9 @@ export const userService = {
     return res.json();
   },
 
-  async getOrdersByUserLink(ordersLink: string, token?: string) {
+  async getOrdersByUserLink(token?: string) {
     if (!token) throw new Error("Utilisateur non authentifié");
-    const res = await fetch(ordersLink, {
+    const res = await fetch(`${API_BASE_URL}/users/me/orders`, {
       headers: { Authorization: `Bearer ${token}` },
       credentials: "include"
     });
