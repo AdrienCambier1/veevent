@@ -24,6 +24,7 @@ import FaqCard from "@/components/cards/faq-card/faq-card";
 import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import { useAuth } from "@/contexts/auth-context";
 import { useEvents } from "@/hooks/events/use-events";
+import { useCityEvents } from "@/hooks/events/use-city-events";
 import { useCities } from "@/hooks/cities/use-cities";
 import { Event } from "@/types";
 import EventCardSkeleton from "@/components/cards/event-card/event-card-skeleton";
@@ -51,6 +52,11 @@ export default function HomePage() {
     loading: popularLoading,
     error: popularError,
   } = useEvents("popular");
+  const {
+    events: trendingEvents,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useEvents("trending");
   const {
     events: dealEvents,
     loading: dealLoading,
@@ -93,6 +99,13 @@ export default function HomePage() {
   // Hook pour récupérer les lieux les plus proches (toutes villes confondues)
   const { places: nearbyPlaces, loading: loadingNearbyPlaces } =
     useNearbyPlaces(3);
+
+  // ✅ Hook pour récupérer les événements de la ville sélectionnée et de ses villes proches
+  const {
+    events: cityEvents,
+    loading: cityEventsLoading,
+    error: cityEventsError,
+  } = useCityEvents(6);
 
   // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
   const extractIdFromSelfLink = (event: Event): string => {
@@ -274,11 +287,11 @@ export default function HomePage() {
           <SearchBtn />
         </div>
       </section>
-
+ 
       {/* ✅ Sections conditionnelles - n'affichent que si contenu disponible */}
-      {renderTrendingCards(popularEvents, popularLoading, popularError) && (
+      {renderTrendingCards(trendingEvents, trendingLoading, trendingError) && (
         <HorizontalList title="Les évènements populaires">
-          {renderTrendingCards(popularEvents, popularLoading, popularError)}
+          {renderTrendingCards(trendingEvents, trendingLoading, trendingError)}
         </HorizontalList>
       )}
 
@@ -286,6 +299,13 @@ export default function HomePage() {
       {renderThemeCards() && (
         <HorizontalList title="Envie d'une sortie">
           {renderThemeCards()}
+        </HorizontalList>
+      )}
+
+       {/* ✅ Section des événements de la ville sélectionnée et de ses villes proches */}
+      {renderEventCards(cityEvents, cityEventsLoading, cityEventsError) && (
+        <HorizontalList title="Événements près de chez vous">
+          {renderEventCards(cityEvents, cityEventsLoading, cityEventsError)}
         </HorizontalList>
       )}
 
@@ -434,9 +454,7 @@ export default function HomePage() {
           description="Lieux"
           title="Les lieux populaires proche de chez vous"
         />
-        <Link href="/lieux" className="secondary-btn mt-4 mb-2">
-          <span>Voir tous les lieux</span>
-        </Link>
+
         {/* Affichage dynamique des lieux proches avec la map */}
         {loadingNearbyPlaces ? (
           <div className="flex gap-4">
@@ -447,6 +465,9 @@ export default function HomePage() {
         ) : (
           <PlacesMapList locations={nearbyPlaces} />
         )}
+        <Link href="/lieux" className="secondary-btn mt-4 mb-2">
+          <span>Voir tous les lieux</span>
+        </Link>
       </section>
 
       <section className="wrapper">
