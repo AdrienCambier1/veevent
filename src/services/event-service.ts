@@ -891,6 +891,36 @@ export const eventService = {
     }
   },
 
+  async getEventsByCategories(categories: string[], limit: number = 10): Promise<Event[]> {
+    try {
+      if (useMockData) {
+        // Filtrer les événements par catégories dans les données mock
+        const categoryEvents = mockEvents.filter((event) =>
+          event.categories.some(cat => 
+            categories.includes(cat.key)
+          )
+        );
+        return categoryEvents.slice(0, limit).map(mapMockEventToEvent);
+      }
+
+      // Construire le paramètre categories pour l'API
+      const categoriesParam = categories.join(',');
+      const response = await fetch(
+        `${apiUrl}/events?categories=${categoriesParam}&size=${limit}&sort=date,asc`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data: EventsResponse = await response.json();
+      return data._embedded.eventSummaryResponses || [];
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des événements par catégories:", error);
+      return [];
+    }
+  },
+
   async getInvitationStatus(
     eventId: number,
     userId: number,
