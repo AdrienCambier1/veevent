@@ -12,6 +12,7 @@ import { FilterProvider, useFilters } from "@/contexts/filter-context";
 import FilterBottomSheet from "@/components/commons/filters/filter-bottom-sheet";
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 import { useSearchPaginated } from "@/hooks/commons/use-search-paginated";
+import { useCategoryFilter } from "@/hooks/commons/use-category-filter";
 
 // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
 const extractIdFromSelfLink = (event: Event): string => {
@@ -24,11 +25,15 @@ function EvenementsPageContent() {
   const { appliedFilters, hasActiveFilters, filterVersion } = useFilters();
   const eventsSectionRef = useRef<HTMLElement>(null);
   const searchScrollTargetRef = useRef<HTMLElement>(null);
+  const categoryScrollTargetRef = useRef<HTMLElement>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
 
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
+  
+  // Utiliser le hook pour gérer le filtre de catégorie
+  const { categoryParam, hasCategoryFilter, clearCategoryFilter } = useCategoryFilter();
 
   const {
     events: popularEvents,
@@ -79,6 +84,23 @@ function EvenementsPageContent() {
   } = useEventsPaginated({
     filters: appliedFilters,
     scrollTargetRef: eventsSectionRef,
+    filterVersion,
+  });
+
+  // Hook spécifique pour les événements filtrés par catégorie
+  const {
+    items: categoryEvents,
+    loading: categoryLoading,
+    error: categoryError,
+    pagination: categoryPagination,
+    hasNextPage: categoryHasNextPage,
+    hasPreviousPage: categoryHasPreviousPage,
+    loadNextPage: categoryLoadNextPage,
+    loadPreviousPage: categoryLoadPreviousPage,
+    loadPage: categoryLoadPage,
+  } = useEventsPaginated({
+    filters: hasCategoryFilter ? { categories: [categoryParam!] } : {},
+    scrollTargetRef: categoryScrollTargetRef,
     filterVersion,
   });
 
@@ -234,8 +256,47 @@ function EvenementsPageContent() {
           </section>
         )}
 
-        {/* Afficher les sections suivantes seulement si pas de recherche active */}
-        {!query && (
+        {/* Affichage des résultats filtrés par catégorie */}
+        {!query && hasCategoryFilter && (
+          <>
+            {/* Bouton pour effacer le filtre de catégorie */}
+            <section className="wrapper">
+                <h2>Événements de la catégorie {categoryParam}</h2> 
+            </section>
+            <PaginatedList
+              items={categoryEvents}
+              loading={categoryLoading}
+              error={categoryError}
+              pagination={categoryPagination}
+              hasNextPage={categoryHasNextPage}
+              hasPreviousPage={categoryHasPreviousPage}
+              onPageChange={categoryLoadPage}
+              onPreviousPage={categoryLoadPreviousPage}
+              onNextPage={categoryLoadNextPage}
+              hasActiveFilters={hasActiveFilters}
+              onOpenFilters={handleOpenFilters}
+              renderItem={renderEventCard}
+              renderEmpty={() => (
+                <div className="text-center text-gray-500 py-8">
+                  <p className="text-lg md:text-xl font-semibold mb-2">
+                    Aucun événement trouvé dans cette catégorie
+                  </p>
+                  <p className="text-sm md:text-base">
+                    Essayez de modifier vos filtres ou explorez d'autres catégories
+                  </p>
+                </div>
+              )}
+              showFilters={true}
+              scrollTargetRef={categoryScrollTargetRef}
+            />
+            <section className="wrapper">
+              <button className="secondary-btn" onClick={clearCategoryFilter}><span>Voir tous les événements</span></button>
+            </section>
+          </>
+        )}
+
+        {/* Afficher les sections suivantes seulement si pas de recherche active ET pas de filtre de catégorie */}
+        {!query && !hasCategoryFilter && (
           <>
             {/* Afficher si en chargement ou si on a des événements */}
             {(popularLoading || popularEvents.length > 0) && (

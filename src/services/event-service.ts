@@ -845,7 +845,7 @@ export const eventService = {
           .map(mapMockEventToEvent);
       }
       // Appel API pour récupérer tous les événements puis filtrer côté front
-      const response = await fetch(`${apiUrl}/events`, {
+      const response = await fetch(`${apiUrl}/events/trending`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -855,9 +855,7 @@ export const eventService = {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }
       const result = await response.json();
-      const apiEvents = result._embedded?.eventSummaryResponses || [];
-      const trending = apiEvents.filter((event: any) => event.isTrending);
-      return trending.map(mapMockEventToEvent);
+      return result._embedded?.eventSummaryResponses || [];
     } catch (error) {
       throw error;
     }
