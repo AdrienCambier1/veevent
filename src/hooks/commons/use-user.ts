@@ -19,9 +19,23 @@ export function useUser() {
     try {
       setLoading(true);
       setError(null);
+      
+      // Vérifier d'abord si le token est valide côté serveur
+      const isTokenValid = await authService.isTokenValid(token);
+      if (!isTokenValid) {
+        // Token invalide côté serveur, déconnecter l'utilisateur
+        console.warn("Token invalide côté serveur, déconnexion automatique");
+        // Note: On ne peut pas appeler logout() directement depuis le hook
+        // La déconnexion se fera via le contexte lors du prochain refreshAuth
+        setUser(null);
+        setError(new Error("Token invalide"));
+        return;
+      }
+      
       const userData = await authService.fetchUserData(token);
       setUser(userData);
     } catch (err) {
+      console.error("Erreur lors de la récupération des données utilisateur:", err);
       setError(err as Error);
       setUser(null);
     } finally {

@@ -71,6 +71,8 @@ function convertSingleUserToAuthenticatedUser(singleUser: any): AuthenticatedUse
 class AuthService {
   private apiUrl: string;
   private tokenKey: string;
+  private validationCache: Map<string, { isValid: boolean; timestamp: number }> = new Map();
+  private readonly CACHE_DURATION = 30000; // 30 secondes
 
   constructor() {
     this.apiUrl = AUTH_CONFIG.API.BASE_URL;
@@ -102,13 +104,56 @@ class AuthService {
     }
   }
 
-  // Validation du token
-  public isTokenValid(token: string): boolean {
+  // Validation du token (vérification locale de l'expiration)
+  public isTokenExpired(token: string): boolean {
     try {
       const decoded = jwtDecode<JWTPayload>(token);
       const currentTime = Date.now() / 1000;
-      return decoded.exp > currentTime;
+      return decoded.exp <= currentTime;
     } catch {
+      return true;
+    }
+  }
+
+  // Validation complète du token (vérification côté serveur avec cache)
+  public async isTokenValid(token: string): Promise<boolean> {
+    try {
+      // Vérification locale de l'expiration (rapide)
+      if (this.isTokenExpired(token)) {
+        return false;
+      }
+
+      // Vérifier le cache
+      const cached = this.validationCache.get(token);
+      const now = Date.now();
+      if (cached && (now - cached.timestamp) < this.CACHE_DURATION) {
+        return cached.isValid;
+      }
+
+      // Vérification côté serveur que l'utilisateur existe toujours
+      const response = await fetch(
+        `${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.USER_PROFILE}`,
+        {
+          method: 'HEAD', // Utiliser HEAD pour éviter de récupérer les données
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const isValid = response.ok;
+      
+      if (!isValid) {
+        console.log("Token invalide côté serveur:", response.status);
+      }
+
+      // Mettre en cache le résultat
+      this.validationCache.set(token, { isValid, timestamp: now });
+
+      return isValid;
+    } catch (error) {
+      console.error("Erreur lors de la validation du token:", error);
       return false;
     }
   }
@@ -178,7 +223,7 @@ class AuthService {
 
       const { token } = await response.json();
 
-      if (!this.isTokenValid(token)) {
+      if (this.isTokenExpired(token)) {
         return {
           message: AUTH_CONFIG.ERROR_MESSAGES.INVALID_TOKEN,
           code: "INVALID_TOKEN",
@@ -259,7 +304,7 @@ class AuthService {
 
       const { token } = await response.json();
 
-      if (!this.isTokenValid(token)) {
+      if (this.isTokenExpired(token)) {
         return {
           message: AUTH_CONFIG.ERROR_MESSAGES.INVALID_TOKEN,
           code: "INVALID_TOKEN",
@@ -309,6 +354,7 @@ class AuthService {
     if (typeof window === "undefined") return;
 
     this.clearSecureCookie(this.tokenKey);
+    this.validationCache.clear(); // Nettoyer le cache de validation
   }
 
   // Rafraîchissement du token (si nécessaire)

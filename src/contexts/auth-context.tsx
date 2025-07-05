@@ -53,14 +53,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshAuth = useCallback(async () => {
     try {
       const storedToken = authService.getStoredToken();
-      
       if (!storedToken) {
         setIsAuthenticated(false);
         setToken(null);
         return;
       }
 
-      if (!authService.isTokenValid(storedToken)) {
+      // Vérification locale d'abord
+      if (authService.isTokenExpired(storedToken)) {
         // Tentative de rafraîchissement du token
         const newToken = await authService.refreshToken(storedToken);
         if (newToken) {
@@ -77,7 +77,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // Token valide
+      // Token non expiré localement, on l'accepte temporairement
+      // La validation serveur se fera plus tard via le hook useUser
       setToken(storedToken);
       setIsAuthenticated(true);
     } catch (error) {
@@ -113,6 +114,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     checkAuth();
   }, [refreshAuth]);
+
+  // Vérification périodique de la validité du token (toutes les 5 minutes)
+  useEffect(() => {
+    if (!isAuthenticated || !token) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const isTokenValid = await authService.isTokenValid(token);
+        if (!isTokenValid) {
+          console.warn("Token devenu invalide, déconnexion automatique");
+          authService.clearAuthData();
+          setIsAuthenticated(false);
+          setToken(null);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la vérification périodique du token:", error);
+      }
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(interval);
+  }, [isAuthenticated, token]);
 
   // Connexion
   const login = useCallback(

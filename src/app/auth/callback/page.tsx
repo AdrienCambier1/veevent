@@ -31,27 +31,45 @@ function AuthCallbackContent() {
           return;
         }
 
-        // Validation du token
-        if (!authService.isTokenValid(token)) {
-          setError("Token invalide ou expiré.");
+        // Vérification locale de l'expiration du token
+        if (authService.isTokenExpired(token)) {
+          setError("Token expiré.");
           router.replace(
-            `/connexion?error=invalid_token&redirect=${encodeURIComponent(redirectUrl)}`
+            `/connexion?error=expired_token&redirect=${encodeURIComponent(redirectUrl)}`
           );
           return;
         }
 
-        // Récupération des données utilisateur
-        const userData = await authService.fetchUserData(token);
-        if (!userData) {
-          setError("Impossible de récupérer les données utilisateur.");
-          router.replace(
-            `/connexion?error=user_fetch_failed&redirect=${encodeURIComponent(redirectUrl)}`
-          );
-          return;
-        }
-
-        // Stockage des données d'authentification
+        // Stockage immédiat du token (validation serveur plus tard)
         authService.storeAuthData(token);
+        
+        // Tentative de récupération des données utilisateur avec retry
+        let userData = null;
+        let retryCount = 0;
+        const maxRetries = 3;
+        
+        while (!userData && retryCount < maxRetries) {
+          try {
+            userData = await authService.fetchUserData(token);
+            if (!userData) {
+              retryCount++;
+              if (retryCount < maxRetries) {
+                // Attendre un peu avant de réessayer
+                await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+              }
+            }
+          } catch (error) {
+            retryCount++;
+            if (retryCount < maxRetries) {
+              await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+            }
+          }
+        }
+
+        if (!userData) {
+          console.warn("Impossible de récupérer les données utilisateur après plusieurs tentatives, mais le token est stocké");
+          // On continue quand même, la validation se fera plus tard
+        }
         
         // Redirection vers la page demandée
         router.replace(redirectUrl);
