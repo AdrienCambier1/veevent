@@ -356,7 +356,7 @@ export interface OrganizersResponse extends PaginatedResponse<UsersEmbedded> {}
 
 // Interface pour l'objet User final unifié (sans métadonnées HATEOAS)
 export interface UserData extends BaseUser {
-  id: string | number;
+  id: number;
   isOrganizer?: boolean; // Optionnel car différent selon la source
   organizer?: boolean; // Optionnel car différent selon la source
   role?: UserRole; // Optionnel car pas dans SingleUser

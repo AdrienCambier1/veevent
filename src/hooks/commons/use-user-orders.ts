@@ -23,7 +23,7 @@ export function useUserOrders() {
     try {
       setLoading(true);
       setError(null);
-      const data = await userService.getOrdersByUserLink(user._links.orders.href, token ?? undefined);
+      const data = await userService.getOrdersByUserLink(token ?? undefined);
       const ordersRaw = data._embedded?.orderResponses || [];
       // Pour chaque commande, aller chercher l'événement associé
       const ordersWithDetails = await Promise.all(
