@@ -5,6 +5,7 @@ import BannerHead from "@/components/heads/banner-head/banner-head";
 import banner from "@/assets/images/banner_profile.png";
 import ProfileHead from "@/components/heads/profile-head/profile-head";
 import { useAuth } from "@/contexts/auth-context";
+import { useUser } from "@/hooks/commons/use-user";
 import { AuthGuard } from "@/components/commons/auth-guard/auth-guard";
 import { useAuthError } from "@/hooks/commons/use-auth-error";
 import React, { Suspense } from "react";
@@ -29,13 +30,16 @@ function AuthErrorBanner() {
 }
 
 export default function CompteLayout({ children }: CompteLayoutProps) {
-  const { user } = useAuth();
+  const { user } = useUser();
+
+  // Détection du rôle organisateur
+  const isOrganizer = user?.role === "Organizer" || user?.role === "Admin" || user?.role === "AuthService";
 
   const navigation = [
     { label: "Tickets", href: "/compte/tickets" },
     { label: "Enregistrés", href: "/compte/enregistres" },
-    { label: "Mes événements", href: "/compte/mes-evenements" },
-    { label: "My Veevent", href: "/compte/my-veevent" },
+    ...(isOrganizer ? [{ label: "Mes événements", href: "/compte/mes-evenements" }] : []),
+    { label: "MyVeevent", href: "/compte/my-veevent" },
   ];
 
   return (

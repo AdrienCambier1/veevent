@@ -1,51 +1,43 @@
 "use client";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { useAuth } from "@/contexts/auth-context";
-import { useRouter } from "next/navigation";
+import { useUser } from "@/hooks/commons/use-user";
 
 interface AuthGuardProps {
   children: ReactNode;
   fallback?: ReactNode;
-  redirectTo?: string;
-  requireAuth?: boolean;
 }
 
-export function AuthGuard({ 
-  children, 
-  fallback, 
-  redirectTo = "/connexion",
-  requireAuth = true 
-}: AuthGuardProps) {
+export function AuthGuard({ children, fallback }: AuthGuardProps) {
   const { isAuthenticated, loading } = useAuth();
-  const router = useRouter();
+  const { user, loading: userLoading } = useUser();
 
-  useEffect(() => {
-    if (!loading && requireAuth && !isAuthenticated) {
-      const currentPath = window.location.pathname;
-      const encodedRedirectPath = encodeURIComponent(currentPath);
-      router.push(`${redirectTo}?redirect=${encodedRedirectPath}`);
-    }
-  }, [isAuthenticated, loading, requireAuth, redirectTo, router]);
-
-  // Affichage du fallback pendant le chargement
-  if (loading) {
-    return fallback ? (
-      <>{fallback}</>
-    ) : (
+  // Afficher le fallback pendant le chargement
+  if (loading || userLoading) {
+    return fallback || (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Vérification de l'authentification...</p>
+          <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
     );
   }
 
-  // Si l'authentification n'est pas requise ou si l'utilisateur est authentifié
-  if (!requireAuth || isAuthenticated) {
-    return <>{children}</>;
+  // Rediriger si non authentifié
+  if (!isAuthenticated) {
+    if (typeof window !== "undefined") {
+      window.location.href = "/connexion";
+    }
+    return fallback || (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Redirection vers la connexion...</p>
+        </div>
+      </div>
+    );
   }
 
-  // Si l'utilisateur n'est pas authentifié et que l'authentification est requise
-  return null;
+  // Afficher les enfants si authentifié et données utilisateur disponibles
+  return <>{children}</>;
 } 

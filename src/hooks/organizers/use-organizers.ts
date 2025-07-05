@@ -19,15 +19,15 @@ export const useOrganizers = (cityName?: string): UseOrganizersReturn => {
       setLoading(true);
       setError(null);
 
-      let organizersData: SingleUser[];
+      let organizersResponse;
 
       if (cityName) {
-        organizersData = await cityService.getOrganizersByCity(cityName);
+        organizersResponse = await cityService.getOrganizersByCity(cityName);
       } else {
-        organizersData = await cityService.getOrganizers();
+        organizersResponse = await cityService.getOrganizers();
       }
 
-      setOrganizers(organizersData);
+      setOrganizers(organizersResponse._embedded?.userResponses || []);
     } catch (err) {
       setError(err as Error);
       setOrganizers([]);

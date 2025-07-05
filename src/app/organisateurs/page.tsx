@@ -5,9 +5,10 @@ import OrganizerPhotoCard from "@/components/cards/organizer-photo-card/organize
 import { Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import CustomTitle from "@/components/commons/custom-title/custom-title";
-import { useOrganizers } from "@/hooks/organizers/use-organizers";
+import { useOrganizersPaginated } from "@/hooks/organizers/use-organizers-paginated";
 import { useSearchPaginated } from "@/hooks/commons/use-search-paginated";
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
+import Pagination from "@/components/commons/pagination/pagination";
 import { SingleUser } from "@/types";
 
 function OrganisateursPageContent() {
@@ -15,8 +16,18 @@ function OrganisateursPageContent() {
   const initialQuery = searchParams.get("q") || "";
   const scrollTargetRef = useRef<HTMLElement>(null);
 
-  // Hook pour récupérer tous les organisateurs
-  const { organizers, loading, error } = useOrganizers();
+  // Hook pour récupérer tous les organisateurs avec pagination
+  const {
+    organizers,
+    loading,
+    error,
+    pagination: organizersPagination,
+    hasNextPage: organizersHasNextPage,
+    hasPreviousPage: organizersHasPreviousPage,
+    loadNextPage: organizersLoadNextPage,
+    loadPreviousPage: organizersLoadPreviousPage,
+    loadPage: organizersLoadPage,
+  } = useOrganizersPaginated(20, scrollTargetRef);
 
   // Nouvelle logique de recherche avec useSearchPaginated
   const {
@@ -25,12 +36,12 @@ function OrganisateursPageContent() {
     items: searchResults,
     loading: searchLoading,
     error: searchError,
-    pagination,
-    hasNextPage,
-    hasPreviousPage,
-    loadPage,
-    loadPreviousPage,
-    loadNextPage,
+    pagination: searchPagination,
+    hasNextPage: searchHasNextPage,
+    hasPreviousPage: searchHasPreviousPage,
+    loadPage: searchLoadPage,
+    loadPreviousPage: searchLoadPreviousPage,
+    loadNextPage: searchLoadNextPage,
   } = useSearchPaginated({
     initialQuery,
     initialTypes: ["user"],
@@ -87,22 +98,28 @@ function OrganisateursPageContent() {
           items={searchResults}
           loading={searchLoading}
           error={searchError}
-          pagination={pagination}
-          hasNextPage={hasNextPage}
-          hasPreviousPage={hasPreviousPage}
-          onPageChange={loadPage}
-          onPreviousPage={loadPreviousPage}
-          onNextPage={loadNextPage}
+          pagination={searchPagination}
+          hasNextPage={searchHasNextPage}
+          hasPreviousPage={searchHasPreviousPage}
+          onPageChange={searchLoadPage}
+          onPreviousPage={searchLoadPreviousPage}
+          onNextPage={searchLoadNextPage}
           hasActiveFilters={false}
           onOpenFilters={() => {}}
-          renderItem={(item: any, index: number) => (
-            <OrganizerPhotoCard
-              key={item.user.id}
-              name={item.user.firstName + " " + item.user.lastName}
-              imageUrl={item.user.imageUrl || ""}
-              href={`/organisateurs/${item.user.pseudo}`}
-            />
-          )}
+          renderItem={(item: any, index: number) => {
+            // Filtrer pour ne montrer que les organisateurs avec des événements
+            if (item.user.role !== "Organizer" || (item.user.eventsCount === 0 && item.user.eventPastCount === 0)) {
+              return null;
+            }
+            return (
+              <OrganizerPhotoCard
+                key={item.user.id}
+                name={`${item.user.firstName || ""} ${item.user.lastName || ""}`.trim() || "Organisateur"}
+                imageUrl={item.user.imageUrl || ""}
+                href={`/organisateurs/${item.user.pseudo}`}
+              />
+            );
+          }}
           renderEmpty={() => (
             <div className="text-center text-gray-500 py-8">
               <p className="text-lg md:text-xl font-semibold mb-2">
@@ -125,7 +142,7 @@ function OrganisateursPageContent() {
       {!query && (
         <>
           {/* Organisateurs populaires */}
-          {organizers.length > 0 && (
+          {organizers.filter((org) => org.role === "Organizer" && (org.eventsCount > 0 || org.eventPastCount > 0)).length > 0 && (
             <section className="wrapper">
               <CustomTitle
                 description="Organisateurs populaires"
@@ -133,7 +150,7 @@ function OrganisateursPageContent() {
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {organizers
-                  .filter((org) => org.eventsCount > 0)
+                  .filter((org) => org.role === "Organizer" && (org.eventsCount > 0 || org.eventPastCount > 0))
                   .sort(
                     (a, b) =>
                       b.eventsCount +
@@ -154,19 +171,35 @@ function OrganisateursPageContent() {
           {/* Tous les organisateurs */}
           <section className="wrapper">
             <h2>Tous les organisateurs</h2>
-            {organizers.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {organizers.map((organizer: SingleUser) => (
-                  <OrganizerCard key={organizer.pseudo} organizer={organizer} />
-                ))}
-              </div>
+            {organizers.filter(org => org.role === "Organizer" && (org.eventsCount > 0 || org.eventPastCount > 0)).length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {organizers
+                    .filter(org => org.role === "Organizer" && (org.eventsCount > 0 || org.eventPastCount > 0))
+                    .map((organizer: SingleUser) => (
+                      <OrganizerCard key={organizer.pseudo} organizer={organizer} />
+                    ))}
+                </div>
+                {organizersPagination && (
+                  <div className="mt-8">
+                    <Pagination
+                      pagination={organizersPagination}
+                      onPageChange={organizersLoadPage}
+                      onPreviousPage={organizersLoadPreviousPage}
+                      onNextPage={organizersLoadNextPage}
+                      hasPreviousPage={organizersHasPreviousPage}
+                      hasNextPage={organizersHasNextPage}
+                    />
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-center text-gray-500 py-8">
                 <p className="text-lg md:text-xl font-semibold mb-2">
                   Aucun organisateur trouvé
                 </p>
                 <p className="text-sm md:text-base">
-                  Essayez avec d'autres mots-clés
+                  Aucun organisateur avec des événements n'est disponible pour le moment
                 </p>
               </div>
             )}

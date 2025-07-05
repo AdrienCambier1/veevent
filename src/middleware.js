@@ -10,7 +10,7 @@ const ROUTES = {
 
 // Configuration des redirections par défaut
 const REDIRECTS = {
-  AFTER_LOGIN: "/compte",
+  AFTER_LOGIN: "/compte/tickets",
   AFTER_LOGOUT: "/",
   LOGIN_PAGE: "/connexion",
 };

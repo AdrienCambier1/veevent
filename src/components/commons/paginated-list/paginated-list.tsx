@@ -1,12 +1,13 @@
+"use client";
 import { ReactNode, useRef } from "react";
-import { PaginationInfo } from "@/types";
+import { PaginationInfo, Event } from "@/types";
 import Pagination from "@/components/commons/pagination/pagination";
 import { Filter, Xmark } from "iconoir-react";
 import { useFilters } from "@/contexts/filter-context";
 
 interface PaginatedListProps<T> {
   // Données et état
-  items: T[];
+  items: Event[];
   loading: boolean;
   error: Error | null;
   pagination?: PaginationInfo;
@@ -57,7 +58,7 @@ export default function PaginatedList<T>({
   showFilters = true,
   title,
   scrollTargetRef,
-}: PaginatedListProps<T>) {
+}: PaginatedListProps<Event>) {
   const defaultScrollRef = useRef<HTMLElement>(null);
   const targetRef = scrollTargetRef || defaultScrollRef;
 

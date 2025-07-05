@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { UserData } from "@/types";
+import { UserData, AuthenticatedUser } from "@/types";
 
 export interface LoginCredentials {
   email: string;
@@ -29,7 +29,7 @@ export interface JWTPayload {
 
 export interface AuthResponse {
   token: string;
-  user?: UserData;
+  user?: AuthenticatedUser;
 }
 
 export interface AuthError {
@@ -39,15 +39,42 @@ export interface AuthError {
 
 import { AUTH_CONFIG } from "@/config/auth.config";
 
+// Fonction pour convertir SingleUser vers AuthenticatedUser
+function convertSingleUserToAuthenticatedUser(singleUser: any): AuthenticatedUser {
+  return {
+    id: singleUser.id,
+    firstName: singleUser.firstName,
+    lastName: singleUser.lastName,
+    pseudo: singleUser.pseudo,
+    email: singleUser.email,
+    phone: singleUser.phone,
+    description: singleUser.description,
+    imageUrl: singleUser.imageUrl,
+    bannerUrl: singleUser.bannerUrl,
+    note: singleUser.note,
+    role: singleUser.role,
+    eventsCount: singleUser.eventsCount,
+    eventPastCount: singleUser.eventPastCount,
+    socials: singleUser.socials,
+    categories: singleUser.categories?.map((cat: string) => ({
+      key: cat,
+      name: cat,
+      description: "",
+      trending: false
+    })) || [],
+    isOrganizer: singleUser.role === "Organizer" || singleUser.role === "Admin" || singleUser.role === "AuthService",
+    // Préserver les liens HATEOAS
+    _links: singleUser._links
+  };
+}
+
 class AuthService {
   private apiUrl: string;
   private tokenKey: string;
-  private userKey: string;
 
   constructor() {
     this.apiUrl = AUTH_CONFIG.API.BASE_URL;
     this.tokenKey = AUTH_CONFIG.TOKEN.STORAGE_KEY;
-    this.userKey = AUTH_CONFIG.TOKEN.USER_DATA_KEY;
   }
 
   // Gestion des cookies sécurisés
@@ -87,7 +114,7 @@ class AuthService {
   }
 
   // Récupération des données utilisateur
-  public async fetchUserData(token: string): Promise<UserData | null> {
+  public async fetchUserData(token: string): Promise<AuthenticatedUser | null> {
     try {
       const response = await fetch(
         `${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.USER_PROFILE}`,
@@ -104,7 +131,8 @@ class AuthService {
         return null;
       }
 
-      return await response.json();
+      const userData = await response.json();
+      return convertSingleUserToAuthenticatedUser(userData);
     } catch (error) {
       console.error("Erreur récupération données utilisateur:", error);
       return null;
@@ -248,39 +276,38 @@ class AuthService {
     }
   }
 
-  // Stockage des données d'authentification
-  public storeAuthData(token: string, user?: UserData): void {
+  // Stockage des données d'authentification (uniquement en cookies sécurisés)
+  public storeAuthData(token: string): void {
     if (typeof window === "undefined") return;
-
-    localStorage.setItem(this.tokenKey, token);
-    if (user) {
-      localStorage.setItem(this.userKey, JSON.stringify(user));
-    }
 
     const decoded = jwtDecode<JWTPayload>(token);
     const maxAge = Math.floor(decoded.exp - Date.now() / 1000);
     this.setSecureCookie(this.tokenKey, token, maxAge);
   }
 
-  // Récupération des données stockées
-  public getStoredAuthData(): { token: string | null; user: UserData | null } {
+  // Récupération du token stocké (depuis les cookies)
+  public getStoredToken(): string | null {
     if (typeof window === "undefined") {
-      return { token: null, user: null };
+      return null;
     }
 
-    const token = localStorage.getItem(this.tokenKey);
-    const userStr = localStorage.getItem(this.userKey);
-    const user = userStr ? JSON.parse(userStr) : null;
+    // Récupérer depuis les cookies plutôt que localStorage
+    const cookies = document.cookie.split(';');
+    const tokenCookie = cookies.find(cookie => 
+      cookie.trim().startsWith(`${this.tokenKey}=`)
+    );
+    
+    if (tokenCookie) {
+      return decodeURIComponent(tokenCookie.split('=')[1]);
+    }
 
-    return { token, user };
+    return null;
   }
 
   // Nettoyage des données d'authentification
   public clearAuthData(): void {
     if (typeof window === "undefined") return;
 
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.userKey);
     this.clearSecureCookie(this.tokenKey);
   }
 

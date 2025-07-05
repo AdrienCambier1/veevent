@@ -1,0 +1,25 @@
+.order-card {
+  @apply bg-[#fafafa] rounded-2xl p-6 flex flex-col gap-2 shadow-sm mb-4;
+}
+.order-card-header {
+  @apply flex justify-between items-center mb-1;
+}
+.order-id {
+  @apply font-bold text-lg text-black;
+}
+.order-price {
+  @apply text-black text-base font-medium;
+}
+.order-event-link {
+  @apply text-primary-600 underline underline-offset-2 hover:text-primary-700 mb-1;
+}
+.order-event-name {
+  @apply text-primary-600 text-base font-semibold;
+}
+.order-date {
+  @apply text-black text-sm mb-2;
+}
+.order-btn {
+  @apply border-2 border-primary-600 text-primary-600 rounded-full px-6 py-2 text-center font-bold text-lg transition hover:bg-primary-600 hover:text-white mt-2;
+  display: block;
+}

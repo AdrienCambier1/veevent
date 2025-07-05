@@ -114,6 +114,23 @@ export interface Invitation {
   };
 }
 
+// --- FAVORIS LOCALSTORAGE ---
+const FAVORITE_EVENTS_KEY = "vv-fav-events";
+
+function getFavoriteEventIds(): number[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(localStorage.getItem(FAVORITE_EVENTS_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function setFavoriteEventIds(ids: number[]) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(FAVORITE_EVENTS_KEY, JSON.stringify(ids));
+}
+
 export const eventService = {
   async getEvents(
     filters?: EventFilters
@@ -857,7 +874,7 @@ export const eventService = {
       };
       if (token) headers["Authorization"] = `Bearer ${token}`;
       const response = await fetch(
-        `${apiUrl}/invitations/search?event_id=${eventId}&user_id=${userId}`,
+        `${apiUrl}/invitations/search?eventId=${eventId}&userId=${userId}`,
         {
           headers,
           cache: "no-store",
@@ -930,9 +947,10 @@ export const eventService = {
     totalPrice: number,
     eventId: number,
     userId: number,
+    ticketToBeCreated: number,
     token?: string
   ): Promise<any> {
-    const body = JSON.stringify({ totalPrice, eventId, userId });
+    const body = JSON.stringify({ totalPrice, eventId, userId, ticketToBeCreated });
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
@@ -958,7 +976,7 @@ export const eventService = {
     },
     token?: string
   ): Promise<any> {
-    const body = JSON.stringify(ticket);
+    const body = JSON.stringify({ ...ticket, orderId });
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
@@ -972,5 +990,42 @@ export const eventService = {
       throw new Error("Erreur lors de l'ajout du billet à la commande");
     }
     return await response.json();
+  },
+
+  getFavoriteEventIds,
+
+  addFavoriteEvent(id: number) {
+    const ids = getFavoriteEventIds();
+    if (!ids.includes(id)) {
+      setFavoriteEventIds([...ids, id]);
+    }
+  },
+
+  removeFavoriteEvent(id: number) {
+    const ids = getFavoriteEventIds();
+    setFavoriteEventIds(ids.filter((eid) => eid !== id));
+  },
+
+  toggleFavoriteEvent(id: number) {
+    const ids = getFavoriteEventIds();
+    if (ids.includes(id)) {
+      setFavoriteEventIds(ids.filter((eid) => eid !== id));
+    } else {
+      setFavoriteEventIds([...ids, id]);
+    }
+  },
+
+  async getFavoriteEvents(): Promise<Event[]> {
+    const ids = getFavoriteEventIds();
+    
+      const events: Event[] = [];
+      for (const id of ids) {
+        try {
+          const event = await eventService.getEventById(id);
+          events.push(event as Event);
+        } catch {}
+      }
+      return events;
+    
   },
 };

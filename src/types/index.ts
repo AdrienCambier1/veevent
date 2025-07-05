@@ -352,6 +352,8 @@ export interface UsersResponse {
   };
 }
 
+export interface OrganizersResponse extends PaginatedResponse<UsersEmbedded> {}
+
 // Interface pour l'objet User final unifié (sans métadonnées HATEOAS)
 export interface UserData extends BaseUser {
   id: string | number;
@@ -362,4 +364,57 @@ export interface UserData extends BaseUser {
   eventsCount?: number; // Optionnel car pas dans la liste
   socials?: string | string[]; // Peut être string ou tableau
   categories?: CategoryData[]; // Optionnel car pas dans la liste
+}
+
+// Interface pour l'utilisateur authentifié avec liens HATEOAS
+export interface AuthenticatedUser extends UserData {
+  _links?: {
+    self: EventLink;
+    users?: EventLink;
+    events?: EventLink;
+    categories?: EventLink;
+    orders?: EventLink;
+    invitations?: EventLink;
+  };
+}
+
+// === INTERFACES POUR LES COMMANDES ET TICKETS ===
+
+// Interface pour un ticket
+export interface Ticket {
+  id: number;
+  name: string;
+  lastName: string;
+  description: string;
+  unitPrice: number;
+  _links?: {
+    self: EventLink;
+  };
+}
+
+// Interface pour une commande
+export interface Order {
+  id: number;
+  totalPrice: number;
+  ticketToBeCreated: number;
+  tickets: Ticket[];
+  _links: {
+    self: EventLink;
+    user: EventLink;
+    events: EventLink;
+    tickets: EventLink;
+  };
+}
+
+// Interface pour la réponse des commandes
+export interface OrdersEmbedded {
+  orderResponses: Order[];
+}
+
+export interface OrdersResponse {
+  _embedded: OrdersEmbedded;
+  _links: {
+    self: EventLink;
+    orders: EventLink;
+  };
 }

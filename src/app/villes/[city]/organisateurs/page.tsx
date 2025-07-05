@@ -1,19 +1,19 @@
 "use client";
-import { useParams } from "next/navigation";
-import { useCityData } from "@/hooks/cities/use-city-data";
-import CustomTitle from "@/components/commons/custom-title/custom-title";
 import EventCard from "@/components/cards/event-card/event-card";
-import Link from "next/link";
-import TextImageCard from "@/components/cards/text-image-card/text-image-card";
-import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
-import { Event } from "@/types";
-import { useMemo } from "react";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
-import { useCityEvents } from "@/hooks/cities/use-city-events";
 import OrganizerPhotoCard from "@/components/cards/organizer-photo-card/organizer-photo-card";
+import TextImageCard from "@/components/cards/text-image-card/text-image-card";
+import CustomTitle from "@/components/commons/custom-title/custom-title";
+import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
+import { useCityData } from "@/hooks/cities/use-city-data";
+import { useCityEvents } from "@/hooks/cities/use-city-events";
+import { Event } from "@/types";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useMemo } from "react";
 
 const extractIdFromSelfLink = (event: Event): string => {
-  const href = event._links.self.href;
+  const href = event._links?.self?.href || "";
   const id = href.split("/").pop();
   return id || "";
 };
@@ -114,7 +114,7 @@ export default function OrganisateursPage() {
 
       {trendingEvents.length > 0 && (
         <HorizontalList title={`Les événements populaires à ${city.name}`}>
-          {renderEventCards(trendingEvents, false, null, false)}
+          {renderEventCards(trendingEvents as Event[], false, null, false)}
         </HorizontalList>
       )}
 
@@ -147,7 +147,7 @@ export default function OrganisateursPage() {
 
       {firstEvents.length > 1 && (
         <HorizontalList title={`Ils font leur début à ${city.name}`}>
-          {renderEventCards(firstEvents, false, null, false)}
+          {renderEventCards(firstEvents as Event[], false, null, false)}
         </HorizontalList>
       )}
 

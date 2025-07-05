@@ -14,7 +14,13 @@ export default function OrganizerPhotoCard({name, imageUrl, href}: OrganizerPhot
     <Link href={href}>
       <div className="organizer-photo-card">
         <div className="photo-card-image">
-        <Image src={img} alt={name} />
+          <Image 
+            src={imageUrl || img} 
+            alt={name} 
+            width={200}
+            height={200}
+            className="rounded-full object-cover"
+          />
         </div>
         <div className="photo-card-name">{name}</div>
       </div>

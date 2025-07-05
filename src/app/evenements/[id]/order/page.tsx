@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
-import { eventService } from "@/services/event-service";
+import { useUser } from "@/hooks/commons/use-user";
 import { useSingleEvent } from "@/hooks/events/use-single-event";
-import { useSlugify } from "@/hooks/commons/use-slugify";
+import { eventService } from "@/services/event-service";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function OrderPage() {
   const router = useRouter();
@@ -12,7 +12,8 @@ export default function OrderPage() {
   const { id } = useParams() as { id: string };
   const eventId = Number(id);
   const { event, loading: eventLoading, error: eventError } = useSingleEvent(eventId);
-  const { user, isAuthenticated, token } = useAuth();
+  const { isAuthenticated, token } = useAuth();
+  const { user } = useUser();
 
   // Récupérer la quantité depuis les query params (ex: ?qty=2)
   const qty = Number(searchParams?.get("qty")) || 1;
@@ -57,7 +58,7 @@ export default function OrderPage() {
     setSubmitting(true);
     try {
       // 1. Créer la commande
-      const order = await eventService.createOrder(totalPrice, event.id, Number(user.id), token || undefined);
+      const order = await eventService.createOrder(totalPrice, event.id, Number(user.id), qty, token || undefined);
       console.log("Order response", order);
       const orderId = order._links?.self?.href?.split("/").pop();
       if (!orderId) {

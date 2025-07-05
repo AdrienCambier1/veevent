@@ -224,10 +224,10 @@ export default function InscriptionPage() {
 
          console.log(registerData);
 
-         const success = await register(registerData, "/compte");
+         const success = await register(registerData, "/compte/tickets");
          if (success) {
            // Redirection vers le profil après inscription réussie
-           window.location.href = "/compte";
+           window.location.href = "/compte/tickets";
          }
        } catch (error) {
          console.error("Erreur lors de l'inscription:", error);

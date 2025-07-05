@@ -16,10 +16,19 @@ export default function OrganizerCard({
   currentEventId,
 }: OrganizerCardProps) {
   const { events, loading, error } = useOrganizerEvents(
-    organizer,
+    organizer.id,
     currentEventId,
     2
   );
+
+  const slugify = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "") // Supprimer les caractères spéciaux
+      .replace(/\s+/g, "-") // Remplacer les espaces par des tirets
+      .replace(/-+/g, "-") // Remplacer les tirets multiples par un seul
+      .trim(); // Supprimer les espaces au début et à la fin
+  };
 
   const renderEvents = () => {
     if (loading) {
@@ -52,11 +61,11 @@ export default function OrganizerCard({
   };
 
   return (
-    <Link href={`/organisateurs/${organizer.pseudo?.toLowerCase()}`}>
+    <Link href={`/organisateurs/${slugify(organizer.pseudo || "")}/evenements`}>
       <div className="organizer-card">
         <ProfileImg
-          name={`${organizer.firstName} ${organizer.lastName}` || ""}
-          note={organizer.note}
+          name={`${organizer.firstName || ""} ${organizer.lastName || ""}`.trim() || "Organisateur"}
+          note={organizer.note || 0}
         />
         <div className="profile-stats">
           {/* <div>
@@ -66,9 +75,8 @@ export default function OrganizerCard({
             <span>12</span> abonnés
           </div> */}
           <div>
-            <span>{organizer.eventsCount - organizer.eventPastCount} </span>
-            {/* {organizer.eventsCount > 1 ? "événements " : "événement "} */}
-            en cours
+            <span>{Math.max(0, organizer.eventsCount - organizer.eventPastCount)} </span>
+            événements en cours
           </div>
           <div>
             <span>{organizer.eventPastCount}</span>

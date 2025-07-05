@@ -24,6 +24,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { useEffect, useState } from "react";
 import { eventService } from "@/services/event-service";
 import Modal from "@/components/commons/modal/modal";
+import { useUser } from "@/hooks/commons/use-user";
 
 // Motifs prédéfinis pour le signalement
 const REPORT_REASONS = [
@@ -70,7 +71,8 @@ export default function EventPage() {
     error: placeError,
   } = useEventPlace(event?._links?.places?.href);
 
-  const { user, isAuthenticated, token } = useAuth();
+  const { isAuthenticated, token } = useAuth();
+  const { user } = useUser();
   const [invitation, setInvitation] = useState<null | { status: string }>(null);
   const [invitationLoading, setInvitationLoading] = useState(false);
   const [invitationError, setInvitationError] = useState<string | null>(null);

@@ -16,11 +16,11 @@ function AuthCallbackContent() {
         const token = searchParams?.get("token");
         
         // URL de redirection par défaut
-        let redirectUrl = searchParams?.get("redirect") || "/compte";
+        let redirectUrl = searchParams?.get("redirect") || "/compte/tickets";
         
         // Sécurité : empêcher les redirections vers des pages d'auth
         if (redirectUrl.startsWith("/auth/") || redirectUrl.startsWith("/connexion") || redirectUrl.startsWith("/inscription")) {
-          redirectUrl = "/compte";
+          redirectUrl = "/compte/tickets";
         }
 
         if (!token) {
@@ -51,7 +51,7 @@ function AuthCallbackContent() {
         }
 
         // Stockage des données d'authentification
-        authService.storeAuthData(token, userData);
+        authService.storeAuthData(token);
         
         // Redirection vers la page demandée
         router.replace(redirectUrl);
@@ -60,7 +60,7 @@ function AuthCallbackContent() {
         console.error("Erreur lors du traitement du callback:", err);
         setError(err.message || "Erreur d'authentification");
         
-        const redirectUrl = searchParams?.get("redirect") || "/compte";
+        const redirectUrl = searchParams?.get("redirect") || "/compte/tickets";
         router.replace(
           `/connexion?error=auth_failed&redirect=${encodeURIComponent(redirectUrl)}`
         );

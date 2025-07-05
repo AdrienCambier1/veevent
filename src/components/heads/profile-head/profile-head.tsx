@@ -6,6 +6,7 @@ import Link from "next/link";
 import ThemeTag from "@/components/tags/theme-tag/theme-tag";
 import { useAuth } from "@/contexts/auth-context";
 import { CategoryData, UserData } from "@/types";
+import { useUserOrders } from "@/hooks/commons/use-user-orders";
 
 interface ProfileHeadProps {
   isMe?: boolean;
@@ -17,6 +18,8 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
     return null;
   }
   const { logout } = useAuth();
+
+  const { orders} = useUserOrders();
 
   const isOrganizer =
     user.role === "Organizer" ||
@@ -49,13 +52,21 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
           <span>12</span> abonnés
         </div> */}
         {isOrganizer && (
+          <>    
           <div>
-            <span>{user.eventsCount} </span>événements
+            <span>{user.eventsCount} </span>événements à venir
           </div>
-        )}
+
         <div>
-          <span>{user.eventPastCount} </span>myVeevent
+          <span>{user.eventPastCount} </span>événements passés
         </div>
+        </>
+        )}
+        {isMe && orders.length > 0 && (
+        <div>
+          <span>{orders.length} </span>participations
+        </div>
+        )}
       </div>
       {user.description && (
         <div className="profile-bio">

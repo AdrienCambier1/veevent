@@ -2,18 +2,36 @@
 
 import "./ticket-card.scss";
 import Image from "next/image";
-import img from "@/assets/images/nice.jpg";
 import { useState } from "react";
 import { Drawer } from "vaul";
 import QRCode from "@/components/commons/qr-code/qr-code";
 import Link from "next/link";
+import img from "@/assets/images/nice.jpg";
 
-export default function TicketCard() {
+export type TicketCardProps = {
+  ticketId: string;
+  eventId: number;
+  eventName: string;
+  eventPlace: string;
+  eventCity: string;
+  eventDate: string; // format: "18 Mai 2025"
+  eventHour: string; // format: "15:00"
+  eventImage?: string; // chemin ou url
+  ticketKey: string;
+};
+
+export default function TicketCard({
+  ticketId,
+  eventId,
+  eventName,
+  eventPlace,
+  eventCity,
+  eventDate,
+  eventHour,
+  eventImage,
+  ticketKey,
+}: TicketCardProps) {
   const [isQRCodeOpen, setIsQRCodeOpen] = useState(false);
-
-  // Identifiant unique du ticket (à remplacer par les vraies données)
-  const ticketId = "TKT-2025-MORGAN-001";
-  const eventName = "morgan"; // Nom de l'événement, utilisé dans le lien
 
   const handleShowQRCode = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -21,23 +39,36 @@ export default function TicketCard() {
     setIsQRCodeOpen(true);
   };
 
+  const slugify = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "") // Supprimer les caractères spéciaux
+      .replace(/\s+/g, "-") // Remplacer les espaces par des tirets
+      .replace(/-+/g, "-") // Remplacer les tirets multiples par un seul
+      .trim(); // Supprimer les espaces au début et à la fin
+  };
+
   return (
-    <Link href={`/evenements/${eventName.toLowerCase()}`}>
+    <Link href={`/evenements/${eventId}/${slugify(eventName)}`}>
       <div className="ticket-card">
         <div className="ticket-container">
           <div className="flex flex-col gap-1">
-            <div className="event-name">Morgan</div>
-            <div className="event-place">Eglise Sainte Philomène</div>
-            <p className="event-city">LE CANNET, FRANCE</p>
+            <div className="event-name">{eventName}</div>
+            <div className="event-place">{eventPlace}</div>
+            <p className="event-city">{eventCity}</p>
             <div className="event-date">
-              <div>18 Mai 2025</div>
-              <div>15:00</div>
+              <div>{eventDate}</div>
+              <div>{eventHour}</div>
             </div>
-            <Image
-              src={img}
-              alt="picture event"
-              className="rounded-[var(--vv-border-radius)]"
-            />
+            {eventImage && (
+              <Image
+                src={img}
+                alt="picture event"
+                className="rounded-[var(--vv-border-radius)]"
+                width={300}
+                height={180}
+              />
+            )}
           </div>
           <div className="ticket-footer">
             <div className="barcode">
@@ -93,7 +124,7 @@ export default function TicketCard() {
                       setIsQRCodeOpen(false);
                     }}
                   >
-                    <QRCode value={ticketId} size={250} />
+                    <QRCode value={ticketKey} size={250} />
                     <div className="primary-btn">
                       <span>Fermer</span>
                     </div>

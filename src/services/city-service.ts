@@ -6,6 +6,7 @@ import {
   Place,
   SingleUser,
   CityData,
+  OrganizersResponse,
 } from "@/types";
 import { mockCities } from "@/services/data/cities";
 
@@ -470,19 +471,66 @@ export const cityService = {
     }
   },
 
-  async getOrganizers(): Promise<SingleUser[]> {
+  async getOrganizers(page: number = 0, size: number = 20): Promise<OrganizersResponse> {
     try {
-      const allUsers = await this.getAllUsers();
+      if (useMockData) {
+        return {
+          _embedded: { userResponses: [] },
+          _links: {
+            first: { href: `/users/organizers?page=0&size=${size}` },
+            self: { href: `/users/organizers?page=${page}&size=${size}` },
+            last: { href: `/users/organizers?page=0&size=${size}` },
+          },
+          page: {
+            size,
+            totalElements: 0,
+            totalPages: 1,
+            number: page,
+          },
+        };
+      }
 
-      // Filtrer pour ne garder que les organisateurs (role "Organizer")
-      return allUsers.filter((user) => user.role === "Organizer");
+      const searchParams = new URLSearchParams();
+      searchParams.append("page", page.toString());
+      searchParams.append("size", size.toString());
+
+      const response = await fetch(`${apiUrl}/users/organizers?${searchParams.toString()}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("Organizers API Response:", result); // Debug
+
+      return {
+        _embedded: {
+          userResponses: result._embedded?.organizerResponses || [],
+        },
+        _links: result._links || {
+          first: { href: `/users/organizers?page=0&size=${size}` },
+          self: { href: `/users/organizers?page=${page}&size=${size}` },
+          last: { href: `/users/organizers?page=0&size=${size}` },
+        },
+        page: result.page || {
+          size,
+          totalElements: 0,
+          totalPages: 1,
+          number: page,
+        },
+      };
     } catch (error) {
       console.error("❌ Error in getOrganizers:", error);
       throw error;
     }
   },
 
-  async getOrganizersByCity(cityName: string): Promise<SingleUser[]> {
+  async getOrganizersByCity(cityName: string): Promise<OrganizersResponse> {
     try {
       // Pour cette version, on récupère tous les organisateurs
       // Dans une version future, on pourrait filtrer par ville

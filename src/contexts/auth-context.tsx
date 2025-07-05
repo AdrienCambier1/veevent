@@ -1,20 +1,18 @@
 "use client";
 import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-  useCallback,
-} from "react";
-import { UserData } from "@/types";
-import { 
-  authService, 
-  LoginCredentials, 
-  RegisterData, 
-  AuthResponse, 
-  AuthError 
+  authService,
+  LoginCredentials,
+  RegisterData
 } from "@/services/auth-service";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
 
 interface JWTPayload {
   sub: string;
@@ -26,7 +24,6 @@ interface JWTPayload {
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: UserData | null;
   token: string | null;
   loading: boolean;
   error: string | null;
@@ -39,14 +36,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<UserData | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+
 
   // Nettoyer les erreurs
   const clearError = useCallback(() => {
@@ -56,11 +52,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Rafraîchir l'authentification
   const refreshAuth = useCallback(async () => {
     try {
-      const { token: storedToken, user: storedUser } = authService.getStoredAuthData();
+      const storedToken = authService.getStoredToken();
       
       if (!storedToken) {
         setIsAuthenticated(false);
-        setUser(null);
         setToken(null);
         return;
       }
@@ -69,48 +64,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Tentative de rafraîchissement du token
         const newToken = await authService.refreshToken(storedToken);
         if (newToken) {
-          const userData = await authService.fetchUserData(newToken);
-          if (userData) {
-            authService.storeAuthData(newToken, userData);
-            setToken(newToken);
-            setUser(userData);
-            setIsAuthenticated(true);
-            return;
-          }
+          authService.storeAuthData(newToken);
+          setToken(newToken);
+          setIsAuthenticated(true);
+          return;
         }
         
         // Si le rafraîchissement échoue, déconnexion
         authService.clearAuthData();
         setIsAuthenticated(false);
-        setUser(null);
         setToken(null);
         return;
       }
 
-      // Token valide, récupérer les données utilisateur si nécessaire
-      if (!storedUser) {
-        const userData = await authService.fetchUserData(storedToken);
-        if (userData) {
-          authService.storeAuthData(storedToken, userData);
-          setUser(userData);
-        } else {
-          authService.clearAuthData();
-          setIsAuthenticated(false);
-          setUser(null);
-          setToken(null);
-          return;
-        }
-      } else {
-        setUser(storedUser);
-      }
-
+      // Token valide
       setToken(storedToken);
       setIsAuthenticated(true);
     } catch (error) {
       console.error("Erreur lors du rafraîchissement de l'authentification:", error);
       authService.clearAuthData();
       setIsAuthenticated(false);
-      setUser(null);
       setToken(null);
     }
   }, []);
@@ -125,7 +98,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error("Erreur vérification authentification:", error);
         setIsAuthenticated(false);
-        setUser(null);
         setToken(null);
       } finally {
         const elapsed = Date.now() - startTime;
@@ -156,16 +128,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return false;
         }
 
-        const { token: authToken, user: userData } = result;
+        const { token: authToken } = result;
         
-        if (!userData) {
-          setError("Impossible de récupérer les données utilisateur");
-          return false;
-        }
-
-        authService.storeAuthData(authToken, userData);
+        authService.storeAuthData(authToken);
         setToken(authToken);
-        setUser(userData);
         setIsAuthenticated(true);
 
         if (typeof window !== "undefined") {
@@ -219,7 +185,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     authService.clearAuthData();
     setIsAuthenticated(false);
-    setUser(null);
     setToken(null);
     clearError();
     
@@ -230,7 +195,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value: AuthContextType = {
     isAuthenticated,
-    user,
     token,
     loading,
     error,

@@ -3,9 +3,11 @@ import Link from "next/link";
 import "./welcome.scss";
 import { useAuth } from "@/contexts/auth-context";
 import WelcomeSkeleton from "./welcome-skeleton";
+import { useUser } from "@/hooks/commons/use-user";
 
 export default function Welcome() {
-  const { loading, isAuthenticated, user } = useAuth();
+  const { loading, isAuthenticated } = useAuth();
+  const { user } = useUser();
 
   if (loading) {
     return <WelcomeSkeleton />;
