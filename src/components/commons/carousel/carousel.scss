@@ -64,6 +64,11 @@
           }
         }
       }
+
+      &.swiper-pagination-bullets-dynamic {
+        min-width: 120px !important;
+        width: auto !important;
+      }
     }
   }
 

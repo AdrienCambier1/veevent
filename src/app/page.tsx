@@ -180,8 +180,8 @@ export default function HomePage() {
       return (
         <TrendingCard
           key={eventId}
-          organizer={event.organizer?.pseudo || ""}
-          city={event.address.split(",")[0] || event.address}
+          organizer={event.organizer?.firstName + " " + event.organizer?.lastName || ""}
+          city={event.cityName || ""}
           description={
             event.description.length > 50
               ? event.description.substring(0, 50) + "..."
@@ -300,7 +300,7 @@ export default function HomePage() {
       {/* ✅ Carousel des trending cards avec défilement automatique */}
       {renderTrendingCards(trendingEvents, trendingLoading, trendingError) && (
         <Carousel 
-          title="Les évènements populaires" 
+        title="Les évènements à ne pas manquer"
           autoplayDelay={3000}
         >
           {renderTrendingCards(trendingEvents, trendingLoading, trendingError)}
@@ -447,6 +447,14 @@ export default function HomePage() {
 
       <section className="wrapper">
         <CustomTitle
+          description="Organisateurs populaires"
+          title="Découvrez leurs derniers évènements"
+        />
+        {renderOrganizerCards()}
+      </section>
+
+      <section className="wrapper">
+        <CustomTitle
           title="Questions fréquentes de nos utilisateurs"
           description="FAQ"
         />
@@ -463,6 +471,30 @@ export default function HomePage() {
             <FaqCard label="Comment acheter un billet de concert ?" />
           </>
         )}
+      </section>
+
+      
+
+      <section className="wrapper">
+        <CustomTitle
+          description="Newsletter"
+          title="Ne ratez rien des derniers évènements locaux"
+        />
+        <p>
+          Abonnez-vous à notre newsletter pour recevoir les dernières
+          informations sur les événements locaux.
+        </p>
+        <div className="flex flex-col gap-2">
+          <label>Adresse mail </label>
+          <input type="text" placeholder="text input" />
+        </div>
+        <p className="text-gray-500">
+          En vous inscrivant, vous acceptez notre politique de confidentialité
+          et consentez à recevoir des mises à jour.
+        </p>
+        <button className="primary-btn">
+          <span>S'inscrire à la newsletter</span>
+        </button>
       </section>
 
       <section className="wrapper">
@@ -489,35 +521,7 @@ export default function HomePage() {
         />
       </section>
 
-      <section className="wrapper">
-        <CustomTitle
-          description="Newsletter"
-          title="Ne ratez rien des derniers évènements locaux"
-        />
-        <p>
-          Abonnez-vous à notre newsletter pour recevoir les dernières
-          informations sur les événements locaux.
-        </p>
-        <div className="flex flex-col gap-2">
-          <label>Adresse mail </label>
-          <input type="text" placeholder="text input" />
-        </div>
-        <p className="text-gray-500">
-          En vous inscrivant, vous acceptez notre politique de confidentialité
-          et consentez à recevoir des mises à jour.
-        </p>
-        <button className="primary-btn">
-          <span>S'inscrire à la newsletter</span>
-        </button>
-      </section>
-
-      <section className="wrapper">
-        <CustomTitle
-          description="Organisateurs populaires"
-          title="Découvrez leurs derniers évènements"
-        />
-        {renderOrganizerCards()}
-      </section>
+      
     </main>
   );
 }
