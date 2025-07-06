@@ -180,13 +180,7 @@ export default function HomePage() {
       return (
         <TrendingCard
           key={eventId}
-          organizer={event.organizer?.firstName + " " + event.organizer?.lastName || ""}
-          city={event.cityName || ""}
-          description={
-            event.description.length > 50
-              ? event.description.substring(0, 50) + "..."
-              : event.description
-          }
+          event={event}
         />
       );
     });
