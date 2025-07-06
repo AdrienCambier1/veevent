@@ -1,6 +1,6 @@
 .floating-menu-container {
   /* @apply fixed bottom-4 left-1/2 z-30 flex items-center gap-2 transform -translate-x-1/2; */
-  @apply fixed bottom-4 z-30 flex items-center gap-2 w-full mx-auto px-4 max-w-[1200px] pb-3;
+  @apply fixed bottom-2 z-30 flex items-center gap-2 w-full mx-auto px-4 max-w-[1200px] pb-3;
 }
 
 .floating-menu {

@@ -81,6 +81,8 @@ export interface BaseEvent {
   status?: EventStatus;
   categories: BaseCategory[];
   organizer?: SingleUser;
+  cityName?: string;
+  placeName?: string;
   currentParticipants: number;
   isInvitationOnly?: boolean;
 }
