@@ -65,10 +65,10 @@ export function usePaginatedData<T>({
     }
   }, [fetchData, pageSize]);
 
-  // Chargement initial
+  // Chargement initial et rechargement quand fetchData change
   useEffect(() => {
     fetchPage(0);
-  }, []); // Dépendances vides pour éviter la boucle
+  }, [fetchData]); // Écouter les changements de fetchData
 
   const refetch = useCallback(() => {
     fetchPage(0);

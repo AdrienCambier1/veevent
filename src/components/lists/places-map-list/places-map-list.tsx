@@ -1,5 +1,5 @@
 import PlaceCard from "@/components/cards/place-card/place-card";
-import Gmaps from "./gmap";
+import dynamic from "next/dynamic";
 import { Place } from "@/types";
 import img from "@/assets/images/nice.jpg";
 import { useRef, useState } from "react";
@@ -43,6 +43,8 @@ import "./places-map-list.scss";
 //     eventsCount: 8,
 //   },
 // ];
+
+const Gmaps = dynamic(() => import("./gmap"), { ssr: false, loading: () => <div>Chargement de la carte...</div> });
 
 export interface PlaceMapListProps {
   locations: Place[];

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { SingleEvent } from "@/types";
 import "./billet-selector.scss";
 import { useRouter } from "next/navigation";
+import DatePicker from "react-datepicker";
 
 interface BilletSelectorProps {
   event: SingleEvent;

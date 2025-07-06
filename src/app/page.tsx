@@ -390,6 +390,27 @@ export default function HomePage() {
 
       <section className="wrapper">
         <CustomTitle
+          description="Lieux"
+          title="Les lieux populaires proche de chez vous"
+        />
+
+        {/* Affichage dynamique des lieux proches avec la map */}
+        {loadingNearbyPlaces ? (
+          <div className="flex gap-4">
+            <PlaceCardSkeleton />
+            <PlaceCardSkeleton />
+            <PlaceCardSkeleton />
+          </div>
+        ) : (
+          <PlacesMapList locations={nearbyPlaces} />
+        )}
+        <Link href="/lieux" className="secondary-btn mt-4 mb-2">
+          <span>Voir tous les lieux</span>
+        </Link>
+      </section>
+
+      <section className="wrapper">
+        <CustomTitle
           description="Avis"
           title="Ils conseillent veevent pour des évènements"
         />
@@ -462,27 +483,6 @@ export default function HomePage() {
           label="Trouver un lieu"
           icon={<Iconoir.Home />}
         />
-      </section>
-
-      <section className="wrapper">
-        <CustomTitle
-          description="Lieux"
-          title="Les lieux populaires proche de chez vous"
-        />
-
-        {/* Affichage dynamique des lieux proches avec la map */}
-        {loadingNearbyPlaces ? (
-          <div className="flex gap-4">
-            <PlaceCardSkeleton />
-            <PlaceCardSkeleton />
-            <PlaceCardSkeleton />
-          </div>
-        ) : (
-          <PlacesMapList locations={nearbyPlaces} />
-        )}
-        <Link href="/lieux" className="secondary-btn mt-4 mb-2">
-          <span>Voir tous les lieux</span>
-        </Link>
       </section>
 
       <section className="wrapper">
