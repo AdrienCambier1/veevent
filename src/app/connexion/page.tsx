@@ -19,6 +19,10 @@ function ConnexionPageContent() {
     password: "",
   });
 
+  // Récupérer le message d'erreur depuis les paramètres d'URL
+  const urlError = searchParams?.get("error");
+  const errorMessage = urlError === "banned" ? "Votre compte a été suspendu. Contactez l'administrateur pour plus d'informations." : null;
+
   useEffect(() => {
     setHideCitySelector(true);
     return () => setHideCitySelector(false);
@@ -83,9 +87,9 @@ function ConnexionPageContent() {
             </Link>
           </div>
 
-          {error && (
+          {(error || errorMessage) && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
-              {error}
+              {errorMessage || error}
             </div>
           )}
 

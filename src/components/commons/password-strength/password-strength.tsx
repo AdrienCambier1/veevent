@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { AUTH_CONFIG } from "@/config/auth.config";
 
 interface PasswordStrengthProps {
   password: string;
@@ -18,8 +19,8 @@ export function PasswordStrength({ password, className = "" }: PasswordStrengthP
   useEffect(() => {
     const newCriteria: PasswordCriteria[] = [
       {
-        label: "Au moins 6 caractères",
-        met: password.length >= 6,
+        label: `Au moins ${AUTH_CONFIG.SECURITY.PASSWORD_MIN_LENGTH} caractères`,
+        met: password.length >= AUTH_CONFIG.SECURITY.PASSWORD_MIN_LENGTH,
       },
       {
         label: "Au moins une lettre minuscule",
@@ -33,15 +34,19 @@ export function PasswordStrength({ password, className = "" }: PasswordStrengthP
         label: "Au moins un chiffre",
         met: /\d/.test(password),
       },
+      {
+        label: "Au moins un caractère spécial",
+        met: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+      }
     ];
 
     setCriteria(newCriteria);
 
     // Calculer la force du mot de passe
     const metCriteria = newCriteria.filter(c => c.met).length;
-    if (metCriteria === 4) {
+    if (metCriteria === 6) {
       setStrength("strong");
-    } else if (metCriteria >= 2) {
+    } else if (metCriteria >= 4) {
       setStrength("medium");
     } else {
       setStrength("weak");

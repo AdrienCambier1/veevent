@@ -57,7 +57,7 @@ export default function OrganisateurPage() {
 
         {/* Messages de succès/erreur */}
         {successMessage && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
+          <div className="bg-secondary-50 border border-secondary-200 text-secondary-700 px-4 py-3 rounded-lg mb-6">
             {successMessage}
           </div>
         )}
@@ -71,18 +71,17 @@ export default function OrganisateurPage() {
         {isOrganizer ? (
           /* Statut organisateur actif */
           <div className="flex flex-col gap-4">
-            <div className="">
               <div className="flex items-center gap-4">
-                <CheckCircle className="w-8 h-8 text-green-600" />
+                <CheckCircle className="w-8 h-8 text-secondary-600" />
                 <div>
-                  <h2 className="text-xl font-semibold text-green-800">Vous êtes déjà organisateur !</h2>
-                  <p className="text-green-700">Profitez de tous les avantages du statut organisateur.</p>
+                  <h2 className="text-xl font-semibold text-secondary-800">Vous êtes déjà organisateur !</h2>
+                  <p className="text-secondary-700">Profitez de tous les avantages du statut organisateur.</p>
                 </div>
               </div>
               
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h3 className="font-medium text-green-800 mb-2">Vos avantages :</h3>
-                <ul className="text-green-700 space-y-1">
+              <div className="bg-secondary-50 border border-secondary-200 rounded-lg p-4">
+                <h3 className="font-medium text-secondary-800 mb-2">Vos avantages :</h3>
+                <ul className="text-secondary-700 space-y-1">
                   <li>• Créer et gérer vos événements</li>
                   <li>• Accéder aux statistiques détaillées</li>
                   <li>• Gérer les réservations et tickets</li>
@@ -90,7 +89,6 @@ export default function OrganisateurPage() {
                   <li>• Accéder aux outils de promotion</li>
                 </ul>
               </div>
-            </div>
           </div>
         ) : (
           /* Formulaire de demande */

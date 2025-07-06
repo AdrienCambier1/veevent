@@ -1,7 +1,8 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useUser } from "@/hooks/commons/use-user";
+import { isUserBanned } from "@/utils/security";
 
 interface AuthGuardProps {
   children: ReactNode;
@@ -10,7 +11,31 @@ interface AuthGuardProps {
 
 export function AuthGuard({ children, fallback }: AuthGuardProps) {
   const { isAuthenticated, loading } = useAuth();
-  const { user, loading: userLoading } = useUser();
+  const { user, loading: userLoading, error: userError } = useUser();
+
+  // Rediriger automatiquement si une erreur d'authentification est détectée
+  useEffect(() => {
+    if (userError && (
+      userError.message.includes("Token invalide") ||
+      userError.message.includes("Unauthorized") ||
+      userError.message.includes("401")
+    )) {
+      console.warn("Erreur d'authentification détectée dans AuthGuard, redirection vers la connexion");
+      if (typeof window !== "undefined") {
+        window.location.href = "/connexion";
+      }
+    }
+  }, [userError]);
+
+  // Vérifier si l'utilisateur est banni
+  useEffect(() => {
+    if (user && isUserBanned(user)) {
+      console.warn("Utilisateur banni détecté dans AuthGuard, redirection vers la connexion");
+      if (typeof window !== "undefined") {
+        window.location.href = "/connexion?error=banned";
+      }
+    }
+  }, [user]);
 
   // Afficher le fallback pendant le chargement
   if (loading || userLoading) {

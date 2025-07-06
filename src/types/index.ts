@@ -304,7 +304,7 @@ export interface CategoryData extends BaseCategory {
 
 // === INTERFACES POUR LES UTILISATEURS ===
 
-export type UserRole = "User" | "Admin" | "AuthService" | "Organizer";
+export type UserRole = "User" | "Admin" | "AuthService" | "Organizer" | "Banned";
 
 // Interface de base pour un utilisateur (propriétés communes API)
 export interface BaseUser {

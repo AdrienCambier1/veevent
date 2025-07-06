@@ -54,8 +54,8 @@ export function validatePassword(password: string): { isValid: boolean; error?: 
     return { isValid: false, error: "Le mot de passe est trop long" };
   }
 
-  if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-    return { isValid: false, error: "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre" };
+  if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(password)) {
+    return { isValid: false, error: "Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial" };
   }
 
   if (/[<>\"'&]/.test(password)) {
@@ -203,4 +203,26 @@ export function sanitizeUserData(data: any): any {
   }
 
   return sanitized;
+}
+
+/**
+ * Vérifie si un utilisateur est banni
+ */
+export function isUserBanned(user: any): boolean {
+  return user?.role === "Banned";
+}
+
+/**
+ * Valide l'accès d'un utilisateur (vérifie s'il n'est pas banni)
+ */
+export function validateUserAccess(user: any): { isValid: boolean; error?: string } {
+  if (!user) {
+    return { isValid: false, error: "Utilisateur non trouvé" };
+  }
+
+  if (isUserBanned(user)) {
+    return { isValid: false, error: "Votre compte a été suspendu. Contactez l'administrateur pour plus d'informations." };
+  }
+
+  return { isValid: true };
 } 

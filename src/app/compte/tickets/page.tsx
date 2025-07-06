@@ -1,7 +1,8 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useUser } from "@/hooks/commons/use-user";
 import { useUserOrders } from "@/hooks/commons/use-user-orders";
+import { useAuth } from "@/contexts/auth-context";
 import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import OrderCard from "@/components/cards/order-card/order-card";
@@ -10,9 +11,46 @@ import { Ticket } from "@/types";
 function TicketsPageContent() {
   const { user, loading: userLoading, error: userError } = useUser();
   const { orders, loading: ordersLoading, error: ordersError } = useUserOrders();
+  const { logout } = useAuth();
+
+  // Rediriger automatiquement en cas d'erreur d'authentification
+  useEffect(() => {
+    if (userError && (
+      userError.message.includes("Token invalide") ||
+      userError.message.includes("Unauthorized") ||
+      userError.message.includes("401")
+    )) {
+      console.warn("Erreur d'authentification détectée sur la page tickets, redirection vers la connexion");
+      if (typeof window !== "undefined") {
+        window.location.href = "/connexion";
+      }
+    }
+  }, [userError]);
 
   if (userLoading || ordersLoading) return <div>Chargement...</div>;
-  if (userError) return <div>Erreur utilisateur : {userError.message}</div>;
+  
+  if (userError) {
+    // Afficher un message d'erreur temporaire avant la redirection
+    return (
+      <div className="wrapper">
+        <div className="text-center py-8">
+          <div className="text-red-600 mb-4">
+            ⚠️ Erreur d'authentification : {userError.message}
+          </div>
+          <p className="text-gray-600 mb-4">
+            Votre session a expiré. Vous allez être redirigé vers la page de connexion.
+          </p>
+          <button 
+            onClick={() => logout()}
+            className="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700"
+          >
+            Se reconnecter maintenant
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
   if (ordersError) return <div>Erreur commandes : {ordersError.message}</div>;
 
   // Rassembler tous les tickets avec leur événement associé

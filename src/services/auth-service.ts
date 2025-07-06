@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { UserData, AuthenticatedUser } from "@/types";
 import { AUTH_CONFIG } from "@/config/auth.config";
-import { sanitizeUserData, validateEmail, validatePassword, validateName, validatePseudo } from "@/utils/security";
+import { sanitizeUserData, validateEmail, validatePassword, validateName, validatePseudo, validateUserAccess } from "@/utils/security";
 
 export interface LoginCredentials {
   email: string;
@@ -230,6 +230,19 @@ class AuthService {
         return {
           message: AUTH_CONFIG.ERROR_MESSAGES.USER_FETCH_FAILED,
           code: "USER_FETCH_FAILED",
+        };
+      }
+
+      // Vérifier si l'utilisateur n'est pas banni
+      const accessValidation = validateUserAccess(userData);
+      if (!accessValidation.isValid) {
+        // Rediriger vers la page de connexion avec le paramètre d'erreur
+        if (typeof window !== "undefined") {
+          window.location.href = "/connexion?error=banned";
+        }
+        return {
+          message: AUTH_CONFIG.ERROR_MESSAGES.USER_BANNED,
+          code: "USER_BANNED",
         };
       }
 

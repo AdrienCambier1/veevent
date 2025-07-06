@@ -62,6 +62,7 @@ export const AUTH_CONFIG = {
     ACCESS_DENIED: "Accès refusé",
     INVALID_INPUT: "Données d'entrée invalides",
     XSS_ATTEMPT: "Tentative d'injection détectée",
+    USER_BANNED: "Votre compte a été suspendu. Contactez l'administrateur pour plus d'informations.",
   },
 } as const;
 

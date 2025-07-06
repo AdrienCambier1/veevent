@@ -34,8 +34,8 @@ interface AuthContextType {
   }) => Promise<boolean>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
   requestOrganizerRole: (reason: string) => Promise<boolean>;
-  deleteAccount: (password: string) => Promise<boolean>;
-  logout: () => void;
+  deleteAccount: () => Promise<boolean>;
+  logout: (redirectToLogin?: boolean, errorCode?: string) => void;
   clearError: () => void;
   refreshAuth: () => Promise<void>;
 }
@@ -140,9 +140,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           authService.clearAuthData();
           setIsAuthenticated(false);
           setToken(null);
+          // Rediriger vers la page de connexion
+          logout(true);
         }
       } catch (error) {
         console.error("Erreur lors de la vérification périodique du token:", error);
+        // En cas d'erreur de réseau ou autre, on peut aussi déconnecter pour être sûr
+        if (error instanceof Error && (
+          error.message.includes("Unauthorized") ||
+          error.message.includes("401") ||
+          error.message.includes("token")
+        )) {
+          console.warn("Erreur d'authentification détectée, déconnexion automatique");
+          logout(true);
+        }
       }
     }, 5 * 60 * 1000); // 5 minutes
 
@@ -254,14 +265,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   // Déconnexion
-  const logout = useCallback(() => {
+  const logout = useCallback((redirectToLogin = false, errorCode?: string) => {
     authService.clearAuthData();
     setIsAuthenticated(false);
     setToken(null);
     clearError();
     
     if (typeof window !== "undefined") {
-      window.location.href = "/";
+      if (redirectToLogin) {
+        const errorParam = errorCode ? `?error=${errorCode}` : "";
+        window.location.href = `/connexion${errorParam}`;
+      } else {
+        window.location.href = "/";
+      }
     }
   }, [clearError]);
 
@@ -282,13 +298,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           await userService.changePassword(newPassword, token);
           
           // Déconnexion après changement de mot de passe réussi
-          authService.clearAuthData();
-          setIsAuthenticated(false);
-          setToken(null);
-          
-          if (typeof window !== "undefined") {
-            window.location.href = "/connexion";
-          }
+          logout(true);
           
           return true;
         } catch (error) {
@@ -346,13 +356,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await userService.deleteAccount(token);
         
         // Déconnexion après suppression
-        authService.clearAuthData();
-        setIsAuthenticated(false);
-        setToken(null);
-        
-        if (typeof window !== "undefined") {
-          window.location.href = "/";
-        }
+        logout();
         
         return true;
       } catch (error) {
@@ -363,7 +367,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(false);
       }
     },
-    [token, clearError]
+    [token, clearError, logout]
   );
 
   const value: AuthContextType = {
