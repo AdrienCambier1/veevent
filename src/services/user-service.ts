@@ -90,6 +90,85 @@ export const userService = {
     if (!res.ok) throw new Error("Erreur lors de la récupération des commandes utilisateur");
     return res.json();
   },
+
+  // Méthode pour changer le mot de passe
+  async changePassword(
+    newPassword: string,
+    token?: string
+  ) {
+    if (!token) throw new Error("Utilisateur non authentifié");
+    
+    const res = await fetch(`${API_BASE_URL}/users/me`, {
+      method: "PATCH",
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        password: newPassword
+      }),
+      credentials: "include"
+    });
+    
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || "Erreur lors du changement de mot de passe");
+    }
+    
+    return res.json();
+  },
+
+  // Nouvelle méthode pour demander à devenir organisateur
+  async requestOrganizerRole(
+    token: string
+  ) {
+    if (!token) throw new Error("Utilisateur non authentifié");
+    
+    const res = await fetch(`${API_BASE_URL}/users/me`, {
+      method: "PATCH",  
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        role: "Organizer"
+      }),
+      credentials: "include"
+    });
+    
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || "Erreur lors de la demande d'organisation");
+    }
+    
+    return res.json();
+  },
+
+  // Nouvelle méthode pour supprimer le compte
+  async deleteAccount(
+    token: string
+  ) {
+    if (!token) throw new Error("Utilisateur non authentifié");
+    
+    const res = await fetch(`${API_BASE_URL}/users/me`, {
+      method: "PATCH",
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        role: "Banned" 
+      }),
+      credentials: "include"
+    });
+    
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || "Erreur lors de la suppression du compte");
+    }
+    
+    return res.json();
+  },
 };
 
 export default userService; 

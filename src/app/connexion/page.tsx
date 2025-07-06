@@ -46,11 +46,16 @@ function ConnexionPageContent() {
   return (
     <main>
       <section className="wrapper flex items-center">
-        <p className="font-semibold text-base">Connexion</p>
+       <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold mb-2">
+            Connexion à votre compte{" "}
+            <span className="text-[var(--primary-600)]">veevent</span>
+          </h1>
+        </div>
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="flex flex-col gap-2">
-            <label>Adresse mail ou pseudo</label>
+            <label>Adresse mail</label>
             <input
               className="input"
               type="email"

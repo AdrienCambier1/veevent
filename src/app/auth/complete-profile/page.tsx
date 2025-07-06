@@ -1,28 +1,23 @@
 "use client";
 import SelectorThemeTags from "@/components/tags/selector-theme-tags/selector-theme-tags";
-import Link from "next/link";
 import { FormEvent, useState, useEffect } from "react";
 import { useHeader } from "@/contexts/header-context";
 import { useAuth } from "@/contexts/auth-context";
 import { categoryService } from "@/services/category-service";
+import { authService } from "@/services/auth-service";
 import { Category } from "@/types";
-import { PasswordStrength } from "@/components/commons/password-strength/password-strength";
 import { ProgressSteps } from "@/components/commons/progress-steps/progress-steps";
+import { useRouter } from "next/navigation";
 
 interface FormData {
-  // Étape 1: Login
-  email: string;
-  pseudo: string;
-  password: string;
-  confirmPassword: string;
-  
-  // Étape 2: Informations personnelles
+  // Étape 1: Informations personnelles
   firstName: string;
   lastName: string;
+  pseudo: string;
   phone: string;
   description: string;
   
-  // Étape 3: Préférences
+  // Étape 2: Préférences
   categoryKeys: string[];
 }
 
@@ -30,21 +25,20 @@ interface ValidationErrors {
   [key: string]: string;
 }
 
-export default function InscriptionPage() {
+export default function CompleteProfilePage() {
   const [step, setStep] = useState(1);
   const { setHideCitySelector } = useHeader();
-  const { register, loading, error, clearError } = useAuth();
+  const { token, loading, error, clearError, updateProfile } = useAuth();
+  const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+  const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
-    email: "",
-    pseudo: "",
-    password: "",
-    confirmPassword: "",
     firstName: "",
     lastName: "",
+    pseudo: "",
     phone: "",
     description: "",
     categoryKeys: [],
@@ -52,26 +46,62 @@ export default function InscriptionPage() {
 
   useEffect(() => {
     setHideCitySelector(true);
-    return () => setHideCitySelector(false);
+    return () => {
+      setHideCitySelector(false);
+    };
   }, [setHideCitySelector]);
+
+  // Vérifier si l'utilisateur est authentifié et charger ses données
+  useEffect(() => {
+    // Attendre que le contexte d'authentification soit complètement initialisé
+    if (loading) {
+      return;
+    }
+
+    if (!token) {
+      router.push("/connexion");
+      return;
+    }
+
+    // Charger les données utilisateur existantes pour pré-remplir le formulaire
+    const loadUserData = async () => {
+      try {
+        const userData = await authService.fetchUserData(token);
+        
+        if (userData) {
+          // Vérifier si le profil est déjà complet
+          const isProfileComplete = await authService.isProfileComplete(token);
+          
+          // Si le profil est déjà complet, rediriger vers le compte
+          if (isProfileComplete) {
+            router.push("/compte/tickets");
+            return;
+          }
+          
+          setFormData(prev => ({
+            ...prev,
+            firstName: userData.firstName || "",
+            lastName: userData.lastName || "",
+            pseudo: "", // Ne pas pré-remplir le pseudo OAuth temporaire
+            phone: userData.phone || "",
+            description: userData.description || "",
+            categoryKeys: userData.categories?.map(cat => cat.key) || [],
+          }));
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des données utilisateur:", error);
+      }
+    };
+
+    loadUserData();
+  }, [token, loading, router]);
 
   // Nettoyer les erreurs quand l'utilisateur modifie les champs
   useEffect(() => {
     if (error) {
-      // Si c'est une erreur d'email ou pseudo déjà existant, rediriger vers l'étape 1
-      if (error.includes("adresse email est déjà utilisée") || error.includes("pseudo est déjà utilisé")) {
-        setStep(1);
-      }
+      clearError();
     }
-  }, [error]);
-
-  // Nettoyer l'erreur quand l'utilisateur modifie l'email ou le pseudo
-  useEffect(() => {
-    if (error && (error.includes("adresse email est déjà utilisée") || error.includes("pseudo est déjà utilisé"))) {
-      // Ne pas nettoyer automatiquement, laisser l'erreur visible
-      // L'erreur sera nettoyée quand l'utilisateur modifie les champs
-    }
-  }, [formData.email, formData.pseudo, error, clearError]);
+  }, [formData, error, clearError]);
 
   // Charger les catégories depuis l'API
   useEffect(() => {
@@ -113,52 +143,6 @@ export default function InscriptionPage() {
 
     switch (currentStep) {
       case 1:
-        // Validation email
-        if (!formData.email) {
-          errors.email = "L'adresse email est requise";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-          errors.email = "Format d'email invalide";
-        } else if (formData.email.length > 254) {
-          errors.email = "L'adresse email est trop longue";
-        } else if (/[<>\"'&]/.test(formData.email)) {
-          errors.email = "L'adresse email contient des caractères non autorisés";
-        }
-
-        // Validation pseudo
-        if (!formData.pseudo) {
-          errors.pseudo = "Le pseudo est requis";
-        } else if (formData.pseudo.length < 3) {
-          errors.pseudo = "Le pseudo doit contenir au moins 3 caractères";
-        } else if (!/^[a-zA-Z0-9_]+$/.test(formData.pseudo)) {
-          errors.pseudo = "Le pseudo ne peut contenir que des lettres (sans accent), chiffres et underscores";
-        } else if (/\s/.test(formData.pseudo)) {
-          errors.pseudo = "Le pseudo ne peut pas contenir d'espaces";
-        } else if (/[àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ]/.test(formData.pseudo)) {
-          errors.pseudo = "Le pseudo ne peut pas contenir d'accents";
-        }
-
-        // Validation mot de passe
-        if (!formData.password) {
-          errors.password = "Le mot de passe est requis";
-        } else if (formData.password.length < 8) {
-          errors.password = "Le mot de passe doit contenir au moins 8 caractères";
-        } else if (formData.password.length > 128) {
-          errors.password = "Le mot de passe est trop long";
-        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-          errors.password = "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre";
-        } else if (/[<>\"'&]/.test(formData.password)) {
-          errors.password = "Le mot de passe contient des caractères non autorisés";
-        }
-
-        // Validation confirmation mot de passe
-        if (!formData.confirmPassword) {
-          errors.confirmPassword = "La confirmation du mot de passe est requise";
-        } else if (formData.password !== formData.confirmPassword) {
-          errors.confirmPassword = "Les mots de passe ne correspondent pas";
-        }
-        break;
-
-      case 2:
         // Validation prénom
         if (!formData.firstName) {
           errors.firstName = "Le prénom est requis";
@@ -181,16 +165,42 @@ export default function InscriptionPage() {
           errors.lastName = "Le nom contient des caractères non autorisés";
         }
 
-        // Validation téléphone (optionnel mais format si fourni)
-        if (formData.phone && !/^[\+]?[0-9\s\-\(\)]{10,}$/.test(formData.phone)) {
+        // Validation pseudo
+        if (!formData.pseudo) {
+          errors.pseudo = "Le pseudo est requis";
+        } else if (formData.pseudo.length < 3) {
+          errors.pseudo = "Le pseudo doit contenir au moins 3 caractères";
+        } else if (formData.pseudo.length > 30) {
+          errors.pseudo = "Le pseudo est trop long";
+        } else if (!/^[a-zA-Z0-9_]+$/.test(formData.pseudo)) {
+          errors.pseudo = "Le pseudo ne peut contenir que des lettres (sans accent), chiffres et underscores";
+        } else if (/\s/.test(formData.pseudo)) {
+          errors.pseudo = "Le pseudo ne peut pas contenir d'espaces";
+        } else if (/[àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ]/.test(formData.pseudo)) {
+          errors.pseudo = "Le pseudo ne peut pas contenir d'accents";
+        }
+
+        // Validation téléphone (requis pour un profil complet)
+        if (!formData.phone) {
+          errors.phone = "Le téléphone est requis pour compléter votre profil";
+        } else if (!/^[\+]?[0-9\s\-\(\)]{10,20}$/.test(formData.phone)) {
           errors.phone = "Format de téléphone invalide";
+        } else if (/[<>\"'&]/.test(formData.phone)) {
+          errors.phone = "Le téléphone contient des caractères non autorisés";
+        }
+
+        // Validation description (optionnelle mais avec limites)
+        if (formData.description && formData.description.length > 500) {
+          errors.description = "La description ne peut pas dépasser 500 caractères";
+        } else if (formData.description && /[<>\"'&]/.test(formData.description)) {
+          errors.description = "La description contient des caractères non autorisés";
         }
         break;
 
-      case 3:
-        // Validation catégories (optionnel mais recommandé)
+      case 2:
+        // Validation catégories (requis pour un profil complet)
         if (formData.categoryKeys.length === 0) {
-          errors.categories = "Sélectionnez au moins une catégorie d'intérêt";
+          errors.categoryKeys = "Sélectionnez au moins une catégorie d'intérêt pour personnaliser votre expérience";
         }
         break;
     }
@@ -213,11 +223,6 @@ export default function InscriptionPage() {
         return newErrors;
       });
     }
-    
-    // Nettoyer l'erreur d'inscription si l'utilisateur modifie l'email ou le pseudo
-    if (error && (field === 'email' || field === 'pseudo')) {
-      clearError();
-    }
   };
 
   const handleCategoriesChange = (selectedCategories: string[]) => {
@@ -233,8 +238,6 @@ export default function InscriptionPage() {
     }
   };
 
-
-
   const handleNextStep = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -242,32 +245,31 @@ export default function InscriptionPage() {
       return;
     }
 
-    if (step < 3) {
+    if (step < 2) {
       setStep(step + 1);
     } else {
-             // Finalisation de l'inscription
-             try {
-        const registerData = {
-          email: formData.email,
-          password: formData.password,
-          lastName: formData.lastName,
+      // Finalisation de la complétion du profil
+      try {
+        setSubmitting(true);
+        
+        const updateData = {
           firstName: formData.firstName,
+          lastName: formData.lastName,
           pseudo: formData.pseudo,
           phone: formData.phone || null,
           description: formData.description || null,
-          imageUrl: null,
-          bannerUrl: "",
           categoryKeys: formData.categoryKeys,
         };
 
-        const success = await register(registerData, "/compte/tickets");
-        
+        const success = await updateUserProfile(updateData);
         if (success) {
-          // Redirection vers le profil après inscription réussie
-          window.location.href = "/compte/tickets";
+          // Redirection vers le profil après mise à jour réussie
+          router.push("/compte/tickets");
         }
       } catch (error) {
-        console.error("Erreur lors de l'inscription:", error);
+        console.error("Erreur lors de la mise à jour du profil:", error);
+      } finally {
+        setSubmitting(false);
       }
     }
   };
@@ -278,100 +280,33 @@ export default function InscriptionPage() {
     }
   };
 
+  const updateUserProfile = async (data: any): Promise<boolean> => {
+    try {
+      return await updateProfile(data);
+    } catch (error) {
+      console.error("Erreur mise à jour profil:", error);
+      return false;
+    }
+  };
+
   const progressSteps = [
     {
-      name: "Compte",
+      name: "Profil",
       value: 1,
       completed: step > 1,
       current: step === 1,
     },
     {
-      name: "Profil",
+      name: "Préférences",
       value: 2,
       completed: step > 2,
       current: step === 2,
-    },
-    {
-      name: "Préférences",
-      value: 3,
-      completed: step > 3,
-      current: step === 3,
     },
   ];
 
   const renderStep = () => {
     switch (step) {
       case 1:
-        return (
-          <>
-            <div className="flex flex-col gap-2">
-              <label>Adresse mail*</label>
-              <input
-                className={`input ${validationErrors.email ? 'border-red-500' : ''}`}
-                type="email"
-                placeholder="exemple@mail.com"
-                value={formData.email}
-                onChange={handleInputChange('email')}
-                disabled={loading}
-                required
-              />
-              {validationErrors.email && (
-                <span className="text-red-500 text-sm">{validationErrors.email}</span>
-              )}
-            </div>
-            
-            <div className="flex flex-col gap-2">
-              <label>Pseudo*</label>
-              <input
-                className={`input ${validationErrors.pseudo ? 'border-red-500' : ''}`}
-                type="text"
-                placeholder="monPseudo"
-                value={formData.pseudo}
-                onChange={handleInputChange('pseudo')}
-                disabled={loading}
-                required
-              />
-              {validationErrors.pseudo && (
-                <span className="text-red-500 text-sm">{validationErrors.pseudo}</span>
-              )}
-            </div>
-            
-            <div className="flex flex-col gap-2">
-              <label>Mot de passe*</label>
-              <input
-                className={`input ${validationErrors.password ? 'border-red-500' : ''}`}
-                type="password"
-                placeholder="******"
-                value={formData.password}
-                onChange={handleInputChange('password')}
-                disabled={loading}
-                required
-              />
-              <PasswordStrength password={formData.password} />
-              {validationErrors.password && (
-                <span className="text-red-500 text-sm">{validationErrors.password}</span>
-              )}
-            </div>
-            
-            <div className="flex flex-col gap-2">
-              <label>Confirmer le mot de passe*</label>
-              <input
-                className={`input ${validationErrors.confirmPassword ? 'border-red-500' : ''}`}
-                type="password"
-                placeholder="******"
-                value={formData.confirmPassword}
-                onChange={handleInputChange('confirmPassword')}
-                disabled={loading}
-                required
-              />
-              {validationErrors.confirmPassword && (
-                <span className="text-red-500 text-sm">{validationErrors.confirmPassword}</span>
-              )}
-            </div>
-          </>
-        );
-
-      case 2:
         return (
           <>
             <div className="flex flex-col gap-2">
@@ -382,7 +317,7 @@ export default function InscriptionPage() {
                 placeholder="John"
                 value={formData.firstName}
                 onChange={handleInputChange('firstName')}
-                disabled={loading}
+                disabled={loading || submitting}
                 required
               />
               {validationErrors.firstName && (
@@ -398,11 +333,27 @@ export default function InscriptionPage() {
                 placeholder="Doe"
                 value={formData.lastName}
                 onChange={handleInputChange('lastName')}
-                disabled={loading}
+                disabled={loading || submitting}
                 required
               />
               {validationErrors.lastName && (
                 <span className="text-red-500 text-sm">{validationErrors.lastName}</span>
+              )}
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <label>Pseudo*</label>
+              <input
+                className={`input ${validationErrors.pseudo ? 'border-red-500' : ''}`}
+                type="text"
+                placeholder="monPseudo"
+                value={formData.pseudo}
+                onChange={handleInputChange('pseudo')}
+                disabled={loading || submitting}
+                required
+              />
+              {validationErrors.pseudo && (
+                <span className="text-red-500 text-sm">{validationErrors.pseudo}</span>
               )}
             </div>
             
@@ -414,7 +365,7 @@ export default function InscriptionPage() {
                 placeholder="0601020304"
                 value={formData.phone}
                 onChange={handleInputChange('phone')}
-                disabled={loading}
+                disabled={loading || submitting}
                 required
               />
               {validationErrors.phone && (
@@ -429,21 +380,21 @@ export default function InscriptionPage() {
                 placeholder="Quelques mots pour vous décrire..."
                 value={formData.description}
                 onChange={handleInputChange('description')}
-                disabled={loading}
+                disabled={loading || submitting}
               />
             </div>
           </>
         );
 
-      case 3:
+      case 2:
         return (
           <div className="flex flex-col gap-4">
             <div>
               <h3 className="text-lg font-semibold mb-2">
-                Sélectionnez vos centres d'intérêts :
+                Sélectionnez vos centres d'intérêts* :
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Choisissez les catégories qui vous intéressent pour personnaliser votre expérience
+                Ces informations nous permettent de vous proposer des événements qui correspondent à vos goûts
               </p>
             </div>
 
@@ -481,34 +432,35 @@ export default function InscriptionPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <main>
       <section className="wrapper flex items-center">
-        <p className="font-semibold text-base">
-          Bienvenue sur{" "}
-          <span className="text-[var(--primary-600)]">veevent</span>
-        </p>
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold mb-2">
+            Complétez votre profil sur{" "}
+            <span className="text-[var(--primary-600)]">veevent</span>
+          </h1>
+          <p className="text-gray-600">
+            Pour une expérience personnalisée, nous avons besoin de quelques informations supplémentaires
+          </p>
+        </div>
         
         <ProgressSteps steps={progressSteps} className="mb-6" />
         
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm w-full mb-4">
-            <div className="flex items-start gap-2">
-              <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-              <div>
-                <p className="font-medium">Erreur lors de l'inscription</p>
-                <p className="mt-1">{error}</p>
-                {error.includes("adresse email est déjà utilisée") && (
-                  <p className="mt-2 text-sm">
-                    <a href="/connexion" className="text-blue-600 hover:underline">
-                      Cliquez ici pour vous connecter avec votre compte existant
-                    </a>
-                  </p>
-                )}
-              </div>
-            </div>
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm w-full">
+            {error}
           </div>
         )}
         
@@ -521,7 +473,7 @@ export default function InscriptionPage() {
                 type="button"
                 onClick={handlePreviousStep}
                 className="secondary-btn flex-1"
-                disabled={loading}
+                disabled={loading || submitting}
               >
                 Précédent
               </button>
@@ -530,13 +482,13 @@ export default function InscriptionPage() {
             <button
               className="primary-btn flex-1"
               type="submit"
-              disabled={loading || (step === 3 && formData.categoryKeys.length === 0)}
+              disabled={loading || submitting || (step === 2 && formData.categoryKeys.length === 0)}
             >
               <span>
-                {loading 
-                  ? "Inscription en cours..." 
-                  : step === 3 
-                    ? "Créer mon compte" 
+                {submitting 
+                  ? "Mise à jour en cours..." 
+                  : step === 2 
+                    ? "Compléter mon profil" 
                     : "Suivant"
                 }
               </span>
@@ -544,13 +496,15 @@ export default function InscriptionPage() {
           </div>
         </form>
         
-        <p className="font-bold">
-          Vous avez déjà un compte ?{" "}
-          <Link className="text-primary-600" href="/connexion">
-            Connectez-vous
-          </Link>
+        <p className="text-center text-gray-600 mt-6">
+          Ces informations nous aident à vous proposer une expérience personnalisée.{" "}
+          <br />
+          Vous pourrez les modifier à tout moment dans les{" "}
+          <a className="text-primary-600 hover:underline" href="/parametres">
+            paramètres
+          </a>
         </p>
       </section>
     </main>
   );
-}
+} 

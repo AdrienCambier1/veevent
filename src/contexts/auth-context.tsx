@@ -4,6 +4,7 @@ import {
   LoginCredentials,
   RegisterData
 } from "@/services/auth-service";
+import { userService } from "@/services/user-service";
 import {
   createContext,
   ReactNode,
@@ -14,13 +15,7 @@ import {
 } from "react";
 
 
-interface JWTPayload {
-  sub: string;
-  id: number;
-  email: string;
-  exp: number;
-  iat: number;
-}
+
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -29,6 +24,17 @@ interface AuthContextType {
   error: string | null;
   login: (credentials: LoginCredentials, redirectPath?: string) => Promise<boolean>;
   register: (data: RegisterData, redirectPath?: string) => Promise<boolean>;
+  updateProfile: (data: {
+    firstName: string;
+    lastName: string;
+    pseudo?: string;
+    phone?: string | null;
+    description?: string | null;
+    categoryKeys?: string[];
+  }) => Promise<boolean>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
+  requestOrganizerRole: (reason: string) => Promise<boolean>;
+  deleteAccount: (password: string) => Promise<boolean>;
   logout: () => void;
   clearError: () => void;
   refreshAuth: () => Promise<void>;
@@ -52,8 +58,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Rafraîchir l'authentification
   const refreshAuth = useCallback(async () => {
     try {
+      console.log("🔄 refreshAuth appelé");
       const storedToken = authService.getStoredToken();
+      console.log("🔑 Token stocké:", !!storedToken);
       if (!storedToken) {
+        console.log("❌ Pas de token stocké");
         setIsAuthenticated(false);
         setToken(null);
         return;
@@ -95,7 +104,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const startTime = Date.now();
       
       try {
+        console.log("🔍 Vérification initiale de l'authentification...");
         await refreshAuth();
+        console.log("✅ Vérification initiale terminée");
       } catch (error) {
         console.error("Erreur vérification authentification:", error);
         setIsAuthenticated(false);
@@ -114,6 +125,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     checkAuth();
   }, [refreshAuth]);
+
+
 
   // Vérification périodique de la validité du token (toutes les 5 minutes)
   useEffect(() => {
@@ -185,7 +198,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setError(result.message);
           return false;
         }
-
         // Après inscription réussie, rediriger vers la connexion
         if (typeof window !== "undefined") {
           window.location.href = redirectPath;
@@ -203,6 +215,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [clearError]
   );
 
+  // Mise à jour du profil
+  const updateProfile = useCallback(
+    async (data: {
+      firstName: string;
+      lastName: string;
+      pseudo?: string;
+      phone?: string | null;
+      description?: string | null;
+      categoryKeys?: string[];
+    }): Promise<boolean> => {
+      try {
+        if (!token) {
+          setError("Token d'authentification manquant");
+          return false;
+        }
+
+        setLoading(true);
+        clearError();
+
+        const result = await authService.updateUserProfile(token, data);
+        
+        if ('message' in result) {
+          setError(result.message);
+          return false;
+        }
+
+        return true;
+      } catch (error) {
+        console.error("Erreur mise à jour profil:", error);
+        setError("Erreur lors de la mise à jour du profil");
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token, clearError]
+  );
+
   // Déconnexion
   const logout = useCallback(() => {
     authService.clearAuthData();
@@ -215,6 +265,107 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [clearError]);
 
+  // Changement de mot de passe
+  const changePassword = useCallback(
+    async (currentPassword: string, newPassword: string): Promise<boolean> => {
+      try {
+        if (!token) {
+          setError("Token d'authentification manquant");
+          return false;
+        }
+
+        setLoading(true);
+        clearError();
+
+        // Changer directement le mot de passe
+        try {
+          await userService.changePassword(newPassword, token);
+          
+          // Déconnexion après changement de mot de passe réussi
+          authService.clearAuthData();
+          setIsAuthenticated(false);
+          setToken(null);
+          
+          if (typeof window !== "undefined") {
+            window.location.href = "/connexion";
+          }
+          
+          return true;
+        } catch (error) {
+          setError(error instanceof Error ? error.message : "Erreur lors du changement de mot de passe");
+          return false;
+        }
+      } catch (error) {
+        console.error("Erreur changement mot de passe:", error);
+        setError(error instanceof Error ? error.message : "Erreur lors du changement de mot de passe");
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token, clearError]
+  );
+
+  // Demande pour devenir organisateur
+  const requestOrganizerRole = useCallback(
+    async (): Promise<boolean> => {
+      try {
+        if (!token) {
+          setError("Token d'authentification manquant");
+          return false;
+        }
+
+        setLoading(true);
+        clearError();
+
+        await userService.requestOrganizerRole(token);
+        return true;
+      } catch (error) {
+        console.error("Erreur demande organisateur:", error);
+        setError(error instanceof Error ? error.message : "Erreur lors de la demande d'organisation");
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token, clearError]
+  );
+
+  // Suppression du compte
+  const deleteAccount = useCallback(
+    async (): Promise<boolean> => {
+      try {
+        if (!token) {
+          setError("Token d'authentification manquant");
+          return false;
+        }
+
+        setLoading(true);
+        clearError();
+
+        await userService.deleteAccount(token);
+        
+        // Déconnexion après suppression
+        authService.clearAuthData();
+        setIsAuthenticated(false);
+        setToken(null);
+        
+        if (typeof window !== "undefined") {
+          window.location.href = "/";
+        }
+        
+        return true;
+      } catch (error) {
+        console.error("Erreur suppression compte:", error);
+        setError(error instanceof Error ? error.message : "Erreur lors de la suppression du compte");
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token, clearError]
+  );
+
   const value: AuthContextType = {
     isAuthenticated,
     token,
@@ -222,6 +373,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     error,
     login,
     register,
+    updateProfile,
+    changePassword,
+    requestOrganizerRole,
+    deleteAccount,
     logout,
     clearError,
     refreshAuth,
