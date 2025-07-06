@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "dev:turbo": "next dev --turbopack",
+    "dev:fast": "rm -rf .next && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "rm -rf .next node_modules/.cache",
+    "clean:all": "rm -rf .next node_modules/.cache node_modules package-lock.json && npm install"
   },
   "dependencies": {
     "@eslint/eslintrc": "^3",
@@ -44,6 +48,7 @@
     "@types/node": "22.15.29",
     "@types/qrcode.react": "^1.0.5",
     "@types/react": "19.1.6",
+    "critters": "^0.0.23",
     "typescript": "5.8.3"
   }
 }

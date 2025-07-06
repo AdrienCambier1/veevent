@@ -1,3 +1,9 @@
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Configuration des images
@@ -39,23 +45,56 @@ const nextConfig = {
   },
 
   // Configuration webpack pour les SVG
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
 
-    // TEMPORAIRE : Désactiver le cache pour résoudre le problème
-    // config.cache = false;
+    if (dev) {
+      // Optimiser la résolution des modules
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+
+      // Optimiser les watchOptions pour macOS
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+        ignored: ['**/node_modules', '**/.git', '**/.next'],
+      };
+    }
 
     return config;
   },
 
   // Configuration expérimentale
   experimental: {
-    optimizePackageImports: ["iconoir-react"],
-    // Désactiver le worker webpack temporairement
-    // webpackBuildWorker: false,
+    // Réactiver le worker webpack pour améliorer les performances
+    webpackBuildWorker: true,
+    // Optimisations de compilation
+    optimizePackageImports: [
+      "iconoir-react",
+      "framer-motion",
+      "@fortawesome/fontawesome-svg-core",
+      "@fortawesome/free-solid-svg-icons",
+      "@fortawesome/free-brands-svg-icons",
+      "swiper",
+      "embla-carousel-react"
+    ],
+  },
+
+  // Configuration Turbopack (stable)
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
   },
 
   // Optimisations de production
@@ -88,7 +127,7 @@ const nextConfig = {
                 `style-src 'self' 'unsafe-inline'; ` +
                 `img-src 'self' data: blob: https:; ` +
                 `font-src 'self' data:; ` +
-                `connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://maps.googleapis.com https://maps.gstatic.com https://dominant-skylark-civil.ngrok-free.app;`,
+                `connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://maps.googleapis.com https://maps.googleapis.com https://maps.gstatic.com https://dominant-skylark-civil.ngrok-free.app;`,
             },
         ],
       },

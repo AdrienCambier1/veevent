@@ -47,7 +47,18 @@ interface FilterProviderProps {
 function cleanFilters(filters: EventFilters): EventFilters {
   return Object.fromEntries(
     Object.entries(filters).filter(
-      ([, value]) => value !== undefined && value !== null && !(Array.isArray(value) && value.length === 0)
+      ([key, value]) => {
+        // Garder les valeurs non-null et non-undefined
+        if (value === undefined || value === null) return false;
+        
+        // Pour les tableaux, garder même s'ils sont vides (pour les catégories)
+        if (Array.isArray(value)) return true;
+        
+        // Pour les chaînes, ne pas garder si vides
+        if (typeof value === 'string' && value.trim() === '') return false;
+        
+        return true;
+      }
     )
   );
 }

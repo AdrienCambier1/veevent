@@ -238,6 +238,7 @@ export const cityService = {
       startDate?: string;
       endDate?: string;
       categories?: string;
+      placeName?: string;
       page?: number;
       size?: number;
     },
@@ -263,18 +264,22 @@ export const cityService = {
         const searchParams = new URLSearchParams();
 
         if (filters) {
-          if (filters.minPrice !== undefined)
+          // N'ajouter que les filtres qui ont des valeurs valides
+          if (filters.minPrice !== undefined && filters.minPrice !== null)
             searchParams.append("minPrice", filters.minPrice.toString());
-          if (filters.maxPrice !== undefined)
+          if (filters.maxPrice !== undefined && filters.maxPrice !== null)
             searchParams.append("maxPrice", filters.maxPrice.toString());
-          if (filters.startDate)
+          if (filters.startDate && filters.startDate.trim() !== "")
             searchParams.append("startDate", filters.startDate);
-          if (filters.endDate) searchParams.append("endDate", filters.endDate);
-          if (filters.categories)
+          if (filters.endDate && filters.endDate.trim() !== "")
+            searchParams.append("endDate", filters.endDate);
+          if (filters.categories && filters.categories.trim() !== "" && filters.categories !== ",")
             searchParams.append("categories", filters.categories);
-          if (filters.page !== undefined)
+          if ((filters as any).placeName && (filters as any).placeName.trim() !== "")
+            searchParams.append("placeName", (filters as any).placeName);
+          if (filters.page !== undefined && filters.page !== null)
             searchParams.append("page", filters.page.toString());
-          if (filters.size !== undefined)
+          if (filters.size !== undefined && filters.size !== null)
             searchParams.append("size", filters.size.toString());
         }
 
@@ -282,16 +287,25 @@ export const cityService = {
           searchParams.append("limit", limit.toString());
         }
 
-        // Remplacer le template {?...} par les vrais paramètres
+        // Remplacer les templates HATEOAS {?...} et {&...} par les vrais paramètres
         if (url.includes("{?")) {
           url = url.split("{?")[0];
           if (searchParams.toString()) {
             url += "?" + searchParams.toString();
           }
+        } else if (url.includes("{&")) {
+          url = url.split("{&")[0];
+          if (searchParams.toString()) {
+            url += "&" + searchParams.toString();
+          }
         }
       } else {
-        // Supprimer le template si pas de filtres
-        url = url.split("{?")[0];
+        // Supprimer les templates si pas de filtres
+        if (url.includes("{?")) {
+          url = url.split("{?")[0];
+        } else if (url.includes("{&")) {
+          url = url.split("{&")[0];
+        }
       }
 
       console.log("Fetching events from:", url); // Debug

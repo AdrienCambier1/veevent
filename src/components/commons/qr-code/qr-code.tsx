@@ -1,6 +1,9 @@
 "use client";
 
-import { QRCodeSVG } from "qrcode.react";
+import dynamic from "next/dynamic";
+import { FC } from "react";
+
+const QRCodeSVG = dynamic(() => import("qrcode.react").then(mod => ({ default: mod.QRCodeSVG })), { ssr: false });
 
 interface QRCodeProps {
   value: string;

@@ -47,9 +47,10 @@ export default function CategoriesFilter() {
   // Gérer le changement de sélection depuis SelectorThemeTags
   const handleSelectionChange = useCallback(
     (selectedThemes: string[]) => {
+      console.log("🎯 Categories selected:", selectedThemes);
       setSelectedCategories(selectedThemes);
       updateTempFilters({
-        categories: selectedThemes.length > 0 ? selectedThemes : undefined,
+        categories: selectedThemes.length > 0 ? selectedThemes : [],
       });
     },
     [updateTempFilters]
@@ -58,7 +59,7 @@ export default function CategoriesFilter() {
   // Effacer toutes les catégories sélectionnées
   const clearCategories = useCallback(() => {
     setSelectedCategories([]);
-    updateTempFilters({ categories: undefined });
+    updateTempFilters({ categories: [] });
   }, [updateTempFilters]);
 
   const hasSelectedCategories = selectedCategories.length > 0;

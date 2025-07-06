@@ -16,13 +16,12 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent" as const,
   },
-  themeColor: "#f7f7f7",
 };
 
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  // themeColor: "transparent",
+  themeColor: "#f7f7f7",
   viewportFit: "cover" as const,
 };
 

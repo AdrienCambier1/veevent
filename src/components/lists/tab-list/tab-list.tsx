@@ -36,47 +36,43 @@ export default function TabList({ title, items, generateHref }: TabListProps) {
         </motion.span>
       </div>
 
-      <AnimatePresence>
-        {isOpen && (
+      <motion.div
+        className="list-content"
+        initial={{
+          height: 0,
+          opacity: 0,
+        }}
+        animate={{
+          height: "auto",
+          opacity: 1,
+        }}
+        exit={{
+          height: 0,
+          opacity: 0,
+        }}
+        transition={{
+          duration: 0.4,
+          ease: [0.25, 0.46, 0.45, 0.94],
+        }}
+        style={{ overflow: "hidden" }}
+      >
+        {items.map((item, index) => (
           <motion.div
-            className="list-content"
-            initial={{
-              height: 0,
-              opacity: 0,
-            }}
-            animate={{
-              height: "auto",
-              opacity: 1,
-            }}
-            exit={{
-              height: 0,
-              opacity: 0,
-            }}
+            key={index}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.4,
+              delay: index * 0.03,
+              duration: 0.5,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
-            style={{ overflow: "hidden" }}
           >
-            {items.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: index * 0.03,
-                  duration: 0.5,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-              >
-                <Link href={generateHref ? generateHref(item) : ""}>
-                  {item}
-                </Link>
-              </motion.div>
-            ))}
+            <Link href={generateHref ? generateHref(item) : ""}>
+              {item}
+            </Link>
           </motion.div>
-        )}
-      </AnimatePresence>
+        ))}
+      </motion.div>
     </div>
   );
 }

@@ -20,6 +20,7 @@ import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
+import Carousel from "@/components/commons/carousel/carousel";
 import FaqCard from "@/components/cards/faq-card/faq-card";
 import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import { useAuth } from "@/contexts/auth-context";
@@ -296,11 +297,14 @@ export default function HomePage() {
         </div>
       </section>
  
-      {/* ✅ Sections conditionnelles - n'affichent que si contenu disponible */}
+      {/* ✅ Carousel des trending cards avec défilement automatique */}
       {renderTrendingCards(trendingEvents, trendingLoading, trendingError) && (
-        <HorizontalList title="Les évènements populaires">
+        <Carousel 
+          title="Les évènements populaires" 
+          autoplayDelay={3000}
+        >
           {renderTrendingCards(trendingEvents, trendingLoading, trendingError)}
-        </HorizontalList>
+        </Carousel>
       )}
 
       {/* ✅ Afficher seulement si on a du contenu ou en chargement */}
@@ -390,6 +394,27 @@ export default function HomePage() {
 
       <section className="wrapper">
         <CustomTitle
+          description="Lieux"
+          title="Les lieux populaires proche de chez vous"
+        />
+
+        {/* Affichage dynamique des lieux proches avec la map */}
+        {loadingNearbyPlaces ? (
+          <div className="flex gap-4">
+            <PlaceCardSkeleton />
+            <PlaceCardSkeleton />
+            <PlaceCardSkeleton />
+          </div>
+        ) : (
+          <PlacesMapList locations={nearbyPlaces} />
+        )}
+        <Link href="/lieux" className="secondary-btn mt-4 mb-2">
+          <span>Voir tous les lieux</span>
+        </Link>
+      </section>
+
+      <section className="wrapper">
+        <CustomTitle
           description="Avis"
           title="Ils conseillent veevent pour des évènements"
         />
@@ -462,27 +487,6 @@ export default function HomePage() {
           label="Trouver un lieu"
           icon={<Iconoir.Home />}
         />
-      </section>
-
-      <section className="wrapper">
-        <CustomTitle
-          description="Lieux"
-          title="Les lieux populaires proche de chez vous"
-        />
-
-        {/* Affichage dynamique des lieux proches avec la map */}
-        {loadingNearbyPlaces ? (
-          <div className="flex gap-4">
-            <PlaceCardSkeleton />
-            <PlaceCardSkeleton />
-            <PlaceCardSkeleton />
-          </div>
-        ) : (
-          <PlacesMapList locations={nearbyPlaces} />
-        )}
-        <Link href="/lieux" className="secondary-btn mt-4 mb-2">
-          <span>Voir tous les lieux</span>
-        </Link>
       </section>
 
       <section className="wrapper">
