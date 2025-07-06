@@ -13,24 +13,17 @@ interface ValidationErrors {
 export default function SupprimerPage() {
   const { setHideCitySelector } = useHeader();
   const { deleteAccount, loading, error, clearError } = useAuth();
-  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
-  const [deletePassword, setDeletePassword] = useState("");
   const [showFinalConfirm, setShowFinalConfirm] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!deletePassword.trim()) {
-      setValidationErrors({ deletePassword: "Le mot de passe est requis pour confirmer la suppression" });
-      return;
-    }
 
     setShowFinalConfirm(true);
   };
 
   const handleFinalDelete = async () => {
     try {
-      const success = await deleteAccount(deletePassword);
+      const success = await deleteAccount();
       
       if (success) {
         // La redirection sera gérée par le contexte d'authentification
@@ -42,10 +35,10 @@ export default function SupprimerPage() {
   };
 
   return (
-    <div className="wrapper py-8 parametres-page">
-      <div className="max-w-2xl mx-auto">
+    <section className="wrapper">
+      <div className="flex flex-col gap-4">
         {/* Header avec navigation */}
-        <div className="mb-8">
+        <div className="">
           <div className="flex items-center gap-4 mb-4">
             <Link 
               href="/compte/parametres"
@@ -66,14 +59,9 @@ export default function SupprimerPage() {
         )}
 
         {/* Avertissements */}
-        <div className="settings-section mb-6">
-          <div className="p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <ShieldAlert className="w-8 h-8 text-red-600" />
-              <h2 className="text-xl font-semibold text-red-800">Attention !</h2>
-            </div>
+        <div className="flex flex-col gap-4">
             
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <h3 className="font-medium text-red-800 mb-2">Cette action est irréversible</h3>
               <p className="text-red-700 text-sm mb-3">
                 La suppression de votre compte entraînera la perte définitive de :
@@ -95,56 +83,26 @@ export default function SupprimerPage() {
                 <li>• Contactez le support si vous avez des questions</li>
               </ul>
             </div>
-          </div>
+
         </div>
 
         {/* Formulaire de confirmation */}
-        <div className="settings-section">
-          <form onSubmit={handleSubmit} className="p-6">
-            <h2 className="text-xl font-semibold mb-4 text-red-800">Confirmation de suppression</h2>
-            
-            <div className="form-group">
-              <label className="form-label">
-                Mot de passe de confirmation *
-              </label>
-              <input
-                type="password"
-                value={deletePassword}
-                onChange={(e) => {
-                  setDeletePassword(e.target.value);
-                  if (validationErrors.deletePassword) {
-                    setValidationErrors(prev => {
-                      const newErrors = { ...prev };
-                      delete newErrors.deletePassword;
-                      return newErrors;
-                    });
-                  }
-                }}
-                className={`form-input ${validationErrors.deletePassword ? 'error' : ''}`}
-                disabled={loading}
-                placeholder="Entrez votre mot de passe pour confirmer"
-                required
-              />
-              {validationErrors.deletePassword && (
-                <span className="error-message">{validationErrors.deletePassword}</span>
-              )}
-              <p className="text-sm text-gray-500 mt-1">
-                Entrez votre mot de passe actuel pour confirmer la suppression.
-              </p>
-            </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <h2 >Confirmation de suppression</h2>
 
             {/* Bouton de suppression */}
-            <div className="flex justify-end mt-8">
+            <div className="flex">
               <button
                 type="submit"
                 disabled={loading}
-                className="btn bg-red-600 hover:bg-red-700 text-white"
+                className="primary-btn"
               >
-                {loading ? "Vérification..." : "Supprimer le compte"}
+                <span>{loading ? "Vérification..." : "Supprimer le compte"}</span>
               </button>
             </div>
           </form>
-        </div>
+
 
         {/* Lien vers le support */}
         <div className="mt-6 text-center">
@@ -165,7 +123,7 @@ export default function SupprimerPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md mx-4">
             <div className="flex items-center gap-3 mb-4">
-              <ShieldAlert className="w-6 h-6 text-red-600" />
+              <ShieldAlert className="text-sm text-red-600" />
               <h3 className="text-lg font-semibold text-red-600">Dernière confirmation</h3>
             </div>
             
@@ -177,21 +135,21 @@ export default function SupprimerPage() {
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowFinalConfirm(false)}
-                className="btn bg-gray-300 hover:bg-gray-400"
+                className="secondary-btn"
               >
                 Annuler
               </button>
               <button
                 onClick={handleFinalDelete}
                 disabled={loading}
-                className="btn bg-red-600 hover:bg-red-700 text-white"
+                className="primary-btn"
               >
-                {loading ? "Suppression..." : "Supprimer définitivement"}
+                <span>{loading ? "Suppression..." : "Supprimer"}</span>
               </button>
             </div>
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 } 

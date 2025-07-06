@@ -95,7 +95,7 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
               <Settings /> Paramètres
             </Link>
           </div>
-          <button onClick={logout} className="user-btn">
+          <button onClick={() => logout()} className="user-btn">
             <LogOut /> Se déconnecter
           </button>
         </div>

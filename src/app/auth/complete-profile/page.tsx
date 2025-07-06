@@ -497,12 +497,8 @@ export default function CompleteProfilePage() {
         </form>
         
         <p className="text-center text-gray-600 mt-6">
-          Ces informations nous aident à vous proposer une expérience personnalisée.{" "}
-          <br />
-          Vous pourrez les modifier à tout moment dans les{" "}
-          <a className="text-primary-600 hover:underline" href="/parametres">
-            paramètres
-          </a>
+          Ces informations nous aident à vous proposer une expérience personnalisée.
+          Vous pourrez les modifier à tout moment dans les paramètres
         </p>
       </section>
     </main>

@@ -24,7 +24,7 @@ export default function ParametresPage() {
           <div className="bg-white rounded-lg border p-4">
             <h2 className="text-lg font-semibold mb-3">Compte</h2>
             <button 
-              onClick={logout}
+              onClick={() => logout()}
               className="secondary-btn"
             >
               <span>Se déconnecter</span>
