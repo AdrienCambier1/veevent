@@ -20,6 +20,7 @@ import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
+import Carousel from "@/components/commons/carousel/carousel";
 import FaqCard from "@/components/cards/faq-card/faq-card";
 import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import { useAuth } from "@/contexts/auth-context";
@@ -296,11 +297,14 @@ export default function HomePage() {
         </div>
       </section>
  
-      {/* ✅ Sections conditionnelles - n'affichent que si contenu disponible */}
+      {/* ✅ Carousel des trending cards avec défilement automatique */}
       {renderTrendingCards(trendingEvents, trendingLoading, trendingError) && (
-        <HorizontalList title="Les évènements populaires">
+        <Carousel 
+          title="Les évènements populaires" 
+          autoplayDelay={3000}
+        >
           {renderTrendingCards(trendingEvents, trendingLoading, trendingError)}
-        </HorizontalList>
+        </Carousel>
       )}
 
       {/* ✅ Afficher seulement si on a du contenu ou en chargement */}
