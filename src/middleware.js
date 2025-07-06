@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 const ROUTES = {
   PROTECTED: ["/compte", "/parametres"],
   AUTH: ["/connexion", "/inscription"],
+  COMPLETE_PROFILE: ["/auth/complete-profile"],
   PUBLIC: ["/", "/evenements", "/lieux", "/villes", "/organisateurs"],
 };
 
@@ -18,6 +19,11 @@ const REDIRECTS = {
 export default function middleware(request) {
   const path = request.nextUrl.pathname;
   const authCookie = request.cookies.get("auth_token");
+
+  // Ignorer explicitement les routes d'auth
+  if (path.startsWith("/auth/")) {
+    return NextResponse.next();
+  }
 
   // Validation du token
   const isValidToken = () => {
@@ -40,16 +46,26 @@ export default function middleware(request) {
     (route) => path === route || path.startsWith(`${route}/`)
   );
 
+  // Vérifier si c'est une route de complétion de profil
+  const isCompleteProfileRoute = ROUTES.COMPLETE_PROFILE.some(
+    (route) => path === route || path.startsWith(`${route}/`)
+  );
+
   // Vérifier si c'est une route protégée
   const isProtectedRoute = ROUTES.PROTECTED.some(
     (route) => path === route || path.startsWith(`${route}/`)
   );
 
-  // Redirection si utilisateur connecté accède aux pages d'auth
+  // Redirection si utilisateur connecté accède aux pages d'auth (mais pas la complétion de profil)
   if (isAuthRoute && hasValidToken) {
     const redirectParam = request.nextUrl.searchParams.get("redirect");
     const redirectUrl = redirectParam || REDIRECTS.AFTER_LOGIN;
     return NextResponse.redirect(new URL(redirectUrl, request.url));
+  }
+
+  // Redirection si utilisateur non connecté accède à la page de complétion de profil
+  if (isCompleteProfileRoute && !hasValidToken) {
+    return NextResponse.redirect(new URL(REDIRECTS.LOGIN_PAGE, request.url));
   }
 
   // Redirection si utilisateur non connecté accède aux pages protégées
@@ -77,6 +93,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - auth/callback (OAuth callback)
+     * - auth/complete-profile (profile completion)
      */
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],

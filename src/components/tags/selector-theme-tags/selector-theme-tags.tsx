@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ThemeTag from "../theme-tag/theme-tag";
 import { Category } from "@/types";
 
@@ -22,6 +22,11 @@ export default function SelectorThemeTags({
   const [internalSelected, setInternalSelected] =
     useState<string[]>(selectedThemes);
   const [displayedCount, setDisplayedCount] = useState(itemsPerPage);
+
+  // Synchroniser l'état interne avec les props selectedThemes
+  useEffect(() => {
+    setInternalSelected(selectedThemes);
+  }, [selectedThemes]);
 
   const handleTagClick = (themeName: string) => {
     let newSelection: string[];

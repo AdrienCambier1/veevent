@@ -36,21 +36,32 @@ export const AUTH_CONFIG = {
 
   // Configuration de sécurité
   SECURITY: {
-    PASSWORD_MIN_LENGTH: 6,
+    PASSWORD_MIN_LENGTH: 8,
+    PASSWORD_MAX_LENGTH: 128,
+    EMAIL_MAX_LENGTH: 254,
+    NAME_MAX_LENGTH: 50,
+    PSEUDO_MAX_LENGTH: 30,
     SESSION_TIMEOUT: 24 * 60 * 60, // 24 heures
     COOKIE_SECURE: true,
     COOKIE_SAME_SITE: "Lax" as const,
+    ALLOWED_CHARS: {
+      EMAIL: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      PSEUDO: /^[a-zA-Z0-9_]+$/,
+      NAME: /^[a-zA-ZÀ-ÿ\s'-]+$/,
+    },
   },
 
   // Messages d'erreur
   ERROR_MESSAGES: {
     MISSING_CREDENTIALS: "Email et mot de passe requis",
-    WEAK_PASSWORD: "Le mot de passe doit contenir au moins 6 caractères",
+    WEAK_PASSWORD: "Le mot de passe doit contenir au moins 8 caractères",
     INVALID_TOKEN: "Token invalide ou expiré",
     USER_FETCH_FAILED: "Impossible de récupérer les données utilisateur",
     NETWORK_ERROR: "Erreur de connexion",
     AUTH_FAILED: "L'authentification a échoué",
     ACCESS_DENIED: "Accès refusé",
+    INVALID_INPUT: "Données d'entrée invalides",
+    XSS_ATTEMPT: "Tentative d'injection détectée",
   },
 } as const;
 

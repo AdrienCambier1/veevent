@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { useUser } from "@/hooks/commons/use-user";
 import { AuthGuard } from "@/components/commons/auth-guard/auth-guard";
 import { useAuthError } from "@/hooks/commons/use-auth-error";
+import { usePathname } from "next/navigation";
 import React, { Suspense } from "react";
 
 interface CompteLayoutProps {
@@ -31,9 +32,13 @@ function AuthErrorBanner() {
 
 export default function CompteLayout({ children }: CompteLayoutProps) {
   const { user } = useUser();
+  const pathname = usePathname();
 
   // Détection du rôle organisateur
   const isOrganizer = user?.role === "Organizer" || user?.role === "Admin" || user?.role === "AuthService";
+
+  // Vérifier si on est sur une page de paramètres
+  const isParametresPage = pathname?.startsWith("/compte/parametres");
 
   const navigation = [
     { label: "Tickets", href: "/compte/tickets" },
@@ -49,13 +54,19 @@ export default function CompteLayout({ children }: CompteLayoutProps) {
           <Suspense fallback={null}>
             <AuthErrorBanner />
           </Suspense>
-          <BannerHead bannerImage={banner} />
-          <section className="wrapper">
-            <ProfileHead isMe={true} user={user} />
-          </section>
-          <section className="wrapper">
-            <BarMenu navigation={navigation} />
-          </section>
+          {!isParametresPage && (
+            <>
+              <BannerHead bannerImage={banner} />
+              <section className="wrapper">
+                <ProfileHead isMe={true} user={user} />
+              </section>
+            </>
+          )}
+          {!isParametresPage && (
+            <section className="wrapper">
+              <BarMenu navigation={navigation} />
+            </section>
+          )}
           {children}
         </main>
       </Suspense>

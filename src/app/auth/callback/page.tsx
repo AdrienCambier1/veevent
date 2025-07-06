@@ -18,8 +18,10 @@ function AuthCallbackContent() {
         // URL de redirection par défaut
         let redirectUrl = searchParams?.get("redirect") || "/compte/tickets";
         
-        // Sécurité : empêcher les redirections vers des pages d'auth
-        if (redirectUrl.startsWith("/auth/") || redirectUrl.startsWith("/connexion") || redirectUrl.startsWith("/inscription")) {
+        // Sécurité : empêcher les redirections vers des pages d'auth (sauf complétion de profil)
+        if ((redirectUrl.startsWith("/auth/") && !redirectUrl.startsWith("/auth/complete-profile")) || 
+            redirectUrl.startsWith("/connexion") || 
+            redirectUrl.startsWith("/inscription")) {
           redirectUrl = "/compte/tickets";
         }
 
@@ -68,11 +70,22 @@ function AuthCallbackContent() {
 
         if (!userData) {
           console.warn("Impossible de récupérer les données utilisateur après plusieurs tentatives, mais le token est stocké");
-          // On continue quand même, la validation se fera plus tard
+          // Rediriger vers la complétion par précaution pour les utilisateurs OAuth
+          window.location.href = "/auth/complete-profile";
+          return;
+        } else {
+          // Pour les utilisateurs OAuth, vérifier si le profil est vraiment complet
+          const isProfileComplete = await authService.isProfileComplete(token);
+          
+          if (!isProfileComplete) {
+            // L'utilisateur OAuth n'a pas un profil complet, le rediriger vers la page de complétion
+            window.location.href = "/auth/complete-profile";
+            return;
+          }
         }
         
-        // Redirection vers la page demandée
-        router.replace(redirectUrl);
+        // Redirection vers la page demandée (profil complet)
+        window.location.href = redirectUrl;
         
       } catch (err: any) {
         console.error("Erreur lors du traitement du callback:", err);
@@ -87,7 +100,7 @@ function AuthCallbackContent() {
       }
     };
 
-    handleCallback();
+            handleCallback();
   }, [searchParams, router]);
 
   // Affichage de chargement

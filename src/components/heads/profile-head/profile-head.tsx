@@ -88,7 +88,7 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
       {isMe && (
         <div className="profile-actions">
           <div className="flex gap-2 items-center">
-            <Link href={"/compte/modifier"} className="user-btn-variant">
+            <Link href={"/compte/parametres/profil"} className="user-btn-variant">
               Modifier le profil
             </Link>
             <Link href="/compte/parametres" className="user-btn-variant">

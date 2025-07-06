@@ -1,5 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { UserData, AuthenticatedUser } from "@/types";
+import { AUTH_CONFIG } from "@/config/auth.config";
+import { sanitizeUserData, validateEmail, validatePassword, validateName, validatePseudo } from "@/utils/security";
 
 export interface LoginCredentials {
   email: string;
@@ -37,8 +39,6 @@ export interface AuthError {
   code?: string;
 }
 
-import { AUTH_CONFIG } from "@/config/auth.config";
-
 class AuthService {
   private apiUrl: string;
   private tokenKey: string;
@@ -54,11 +54,19 @@ class AuthService {
   private setSecureCookie(name: string, value: string, maxAge: number): void {
     if (typeof window === "undefined") return;
 
+    // Encodage sécurisé de la valeur
     const encodedValue = encodeURIComponent(value);
-    let cookieStr = `${name}=${encodedValue}; path=/; max-age=${maxAge}; SameSite=Lax`;
-
-    if (window.location.protocol === "https:") {
+    
+    // Construction du cookie avec sécurité adaptée à l'environnement
+    let cookieStr = `${name}=${encodedValue}; path=/; max-age=${maxAge}`;
+    
+    // SameSite adapté à l'environnement
+    if (window.location.protocol === "https:" || process.env.NODE_ENV === "production") {
+      cookieStr += "; SameSite=Strict";
       cookieStr += "; Secure";
+    } else {
+      // En développement local (HTTP), utiliser Lax pour éviter les problèmes
+      cookieStr += "; SameSite=Lax";
     }
 
     document.cookie = cookieStr;
@@ -160,19 +168,35 @@ class AuthService {
     credentials: LoginCredentials
   ): Promise<AuthResponse | AuthError> {
     try {
-      if (!credentials.email || !credentials.password) {
+      // Validation des données d'entrée
+      const emailValidation = validateEmail(credentials.email);
+      if (!emailValidation.isValid) {
         return {
-          message: AUTH_CONFIG.ERROR_MESSAGES.MISSING_CREDENTIALS,
-          code: "MISSING_CREDENTIALS",
+          message: emailValidation.error || AUTH_CONFIG.ERROR_MESSAGES.MISSING_CREDENTIALS,
+          code: "INVALID_EMAIL",
         };
       }
+
+      const passwordValidation = validatePassword(credentials.password);
+      if (!passwordValidation.isValid) {
+        return {
+          message: passwordValidation.error || AUTH_CONFIG.ERROR_MESSAGES.MISSING_CREDENTIALS,
+          code: "INVALID_PASSWORD",
+        };
+      }
+
+      // Nettoyage des données avant envoi
+      const sanitizedCredentials = {
+        email: credentials.email.trim().toLowerCase(),
+        password: credentials.password,
+      };
 
       const response = await fetch(
         `${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.LOGIN}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(credentials),
+          body: JSON.stringify(sanitizedCredentials),
         }
       );
 
@@ -222,51 +246,80 @@ class AuthService {
   // Inscription
   public async register(data: RegisterData): Promise<AuthResponse | AuthError> {
     try {
-      if (
-        !data.email ||
-        !data.password ||
-        !data.lastName ||
-        !data.firstName ||
-        !data.pseudo
-      ) {
+      // Validation des données d'entrée avec les nouvelles fonctions de sécurité
+      const emailValidation = validateEmail(data.email);
+      if (!emailValidation.isValid) {
         return {
-          message: "Tous les champs obligatoires sont requis",
-          code: "MISSING_FIELDS",
+          message: emailValidation.error || "Email invalide",
+          code: "INVALID_EMAIL",
         };
       }
 
-      if (data.password.length < AUTH_CONFIG.SECURITY.PASSWORD_MIN_LENGTH) {
+      const passwordValidation = validatePassword(data.password);
+      if (!passwordValidation.isValid) {
         return {
-          message: AUTH_CONFIG.ERROR_MESSAGES.WEAK_PASSWORD,
-          code: "WEAK_PASSWORD",
+          message: passwordValidation.error || AUTH_CONFIG.ERROR_MESSAGES.WEAK_PASSWORD,
+          code: "INVALID_PASSWORD",
         };
       }
 
-      // Préparer les données pour l'API
-      const apiData = {
-        lastName: data.lastName,
-        firstName: data.firstName,
-        pseudo: data.pseudo,
-        email: data.email,
-        password: data.password,
-        phone: data.phone || null,
-        description: data.description || null,
-        imageUrl: data.imageUrl || null,
-        bannerUrl: data.bannerUrl || "",
-        categoryKeys: (data as any).categoryKeys || [],
-      };
+      const firstNameValidation = validateName(data.firstName, "Prénom");
+      if (!firstNameValidation.isValid) {
+        return {
+          message: firstNameValidation.error || "Prénom invalide",
+          code: "INVALID_FIRST_NAME",
+        };
+      }
+
+      const lastNameValidation = validateName(data.lastName, "Nom");
+      if (!lastNameValidation.isValid) {
+        return {
+          message: lastNameValidation.error || "Nom invalide",
+          code: "INVALID_LAST_NAME",
+        };
+      }
+
+      const pseudoValidation = validatePseudo(data.pseudo);
+      if (!pseudoValidation.isValid) {
+        return {
+          message: pseudoValidation.error || "Pseudo invalide",
+          code: "INVALID_PSEUDO",
+        };
+      }
+
+      // Nettoyage des données avant envoi
+      const sanitizedData = sanitizeUserData({
+        ...data,
+        email: data.email.trim().toLowerCase(),
+      });
 
       const response = await fetch(
         `${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.REGISTER}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(apiData),
+          body: JSON.stringify(sanitizedData),
         }
       );
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        
+        // Gestion spécifique des erreurs de contrainte unique
+        if (errorData.message && errorData.message.includes("duplicate key value violates unique constraint")) {
+          if (errorData.message.includes("_user_email_key")) {
+            return {
+              message: "Cette adresse email est déjà utilisée. Veuillez utiliser une autre adresse email ou vous connecter avec votre compte existant.",
+              code: "EMAIL_ALREADY_EXISTS",
+            };
+          } else if (errorData.message.includes("_user_pseudo_key")) {
+            return {
+              message: "Ce pseudo est déjà utilisé. Veuillez choisir un autre pseudo.",
+              code: "PSEUDO_ALREADY_EXISTS",
+            };
+          }
+        }
+        
         return {
           message: errorData.message || "Erreur d'inscription",
           code: `HTTP_${response.status}`,
@@ -349,6 +402,75 @@ class AuthService {
     } catch (error) {
       console.error("Erreur rafraîchissement token:", error);
       return null;
+    }
+  }
+
+  // Mise à jour du profil utilisateur
+  public async updateUserProfile(
+    token: string,
+    data: {
+      firstName: string;
+      lastName: string;
+      pseudo?: string;
+      phone?: string | null;
+      description?: string | null;
+      categoryKeys?: string[];
+    }
+  ): Promise<AuthenticatedUser | AuthError> {
+    try {
+      const response = await fetch(
+        `${this.apiUrl}${AUTH_CONFIG.API.ENDPOINTS.USER_PROFILE}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        return {
+          message: errorData.message || "Erreur lors de la mise à jour du profil",
+          code: `HTTP_${response.status}`,
+        };
+      }
+
+      const updatedUser = await response.json();
+      return updatedUser;
+    } catch (error) {
+      console.error("Erreur mise à jour profil:", error);
+      return {
+        message: AUTH_CONFIG.ERROR_MESSAGES.NETWORK_ERROR,
+        code: "NETWORK_ERROR",
+      };
+    }
+  }
+
+  // Vérifier si un utilisateur a un profil complet
+  public async isProfileComplete(token: string): Promise<boolean> {
+    try {
+      const userData = await this.fetchUserData(token);
+      if (!userData) {
+        console.log("isProfileComplete: Pas de données utilisateur");
+        return false;
+      }
+
+      // Vérifier si tous les champs importants sont remplis
+      const hasBasicInfo = !!(userData.firstName && userData.lastName);
+      const hasContactInfo = !!userData.phone;
+      const hasDescription = !!userData.description;
+      const hasCategories = !!(userData.categories && userData.categories.length > 0);
+
+      // Pour un profil vraiment complet, on veut au moins les infos de base + téléphone + catégories
+      const isComplete = hasBasicInfo && hasContactInfo && hasCategories;
+      
+      return isComplete;
+    } catch (error) {
+      console.error("Erreur vérification profil complet:", error);
+      return false;
     }
   }
 }
