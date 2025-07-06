@@ -35,6 +35,18 @@ function EvenementsPageContent() {
   // Utiliser le hook pour gérer le filtre de catégorie
   const { categoryParam, hasCategoryFilter, clearCategoryFilter } = useCategoryFilter();
 
+  // Stabiliser les filtres de catégorie pour éviter les re-créations d'objets
+  const categoryFilters = useMemo(() => {
+    if (hasCategoryFilter && categoryParam) {
+      // Combiner les filtres de catégorie avec les filtres appliqués
+      return { 
+        ...appliedFilters,
+        categories: [categoryParam] 
+      };
+    }
+    return {};
+  }, [hasCategoryFilter, categoryParam, appliedFilters]);
+
   const {
     events: popularEvents,
     loading: popularLoading,
@@ -99,7 +111,7 @@ function EvenementsPageContent() {
     loadPreviousPage: categoryLoadPreviousPage,
     loadPage: categoryLoadPage,
   } = useEventsPaginated({
-    filters: hasCategoryFilter ? { categories: [categoryParam!] } : {},
+    filters: categoryFilters,
     scrollTargetRef: categoryScrollTargetRef,
     filterVersion,
   });
@@ -261,7 +273,14 @@ function EvenementsPageContent() {
           <>
             {/* Bouton pour effacer le filtre de catégorie */}
             <section className="wrapper">
-                <h2>Événements de la catégorie {categoryParam}</h2> 
+                <h2>
+                  Événements de la catégorie {categoryParam}
+                  {hasActiveFilters && Object.keys(appliedFilters).some(key => key !== 'categories') && (
+                    <span className="text-sm text-gray-500 ml-2">
+                      (avec filtres supplémentaires)
+                    </span>
+                  )}
+                </h2> 
             </section>
             <PaginatedList
               items={categoryEvents}

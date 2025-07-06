@@ -1,7 +1,7 @@
 import { usePaginatedData } from "@/hooks/commons/use-paginated-data";
 import { eventService } from "@/services/event-service";
 import { Event, EventFilters } from "@/types";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 interface UseEventsPaginatedOptions {
   filters?: EventFilters;
@@ -14,16 +14,22 @@ export function useEventsPaginated({
   scrollTargetRef,
   filterVersion = 0,
 }: UseEventsPaginatedOptions = {}) {
-  const fetchEvents = useCallback(async (page: number, size: number = 10) => {
-    const result = await eventService.getEvents({
-      ...filters,
-      page,
-      size,
-    });
-    
-    return {
-      items: result._embedded.eventSummaryResponses,
-      pagination: result.page,
+  const previousFiltersRef = useRef<EventFilters | undefined>(undefined);
+  const previousFilterVersionRef = useRef<number>(0);
+
+  // Stabiliser la fonction fetchEvents avec useMemo pour éviter les re-créations
+  const fetchEvents = useMemo(() => {
+    return async (page: number, size: number = 10) => {
+      const result = await eventService.getEvents({
+        ...filters,
+        page,
+        size,
+      });
+      
+      return {
+        items: result._embedded.eventSummaryResponses,
+        pagination: result.page,
+      };
     };
   }, [filters, filterVersion]);
 
@@ -33,14 +39,17 @@ export function useEventsPaginated({
     scrollTargetRef,
   });
 
-  // Recharger les données quand les filtres changent ou que filterVersion change
+  // Recharger les données seulement quand filterVersion change ET que les filtres ont réellement changé
   useEffect(() => {
-    paginatedData.loadPage(0);
-  }, [filterVersion]);
-
-  useEffect(() => {
-    paginatedData.refetch();
-  }, [filterVersion]);
+    const filtersChanged = JSON.stringify(filters) !== JSON.stringify(previousFiltersRef.current);
+    const versionChanged = filterVersion !== previousFilterVersionRef.current;
+    
+    if (filtersChanged || versionChanged) {
+      paginatedData.refetch();
+      previousFiltersRef.current = filters;
+      previousFilterVersionRef.current = filterVersion;
+    }
+  }, [filterVersion, filters, paginatedData.refetch]);
 
   return paginatedData;
 } 

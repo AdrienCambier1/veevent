@@ -49,7 +49,50 @@ const mockCategories: Category[] = [
   },
 ];
 
+// Mock des comptes de catégories
+const mockCategoryCounts = {
+  "trending": 0,
+  "festivals": 0,
+  "nightlife": 0,
+  "technology": 2,
+  "food": 3,
+  "art-culture": 0,
+  "outdoor": 0,
+  "music": 0,
+  "theater": 0,
+  "culture": 5,
+  "wellness": 3,
+  "cinema": 0,
+  "family": 0,
+  "sport": 3,
+  "conferences": 0
+};
+
 export const categoryService = {
+  async getCategoryCounts(): Promise<Record<string, number>> {
+    try {
+      if (useMockData) {
+        return mockCategoryCounts;
+      }
+
+      const response = await fetch(`${apiUrl}/categories/counts`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("❌ Error in getCategoryCounts:", error);
+      throw error;
+    }
+  },
+
   async getCategories(): Promise<Category[]> {
     try {
       if (useMockData) {
@@ -68,7 +111,18 @@ export const categoryService = {
       }
 
       const result: CategoriesResponse = await response.json();
-      return result._embedded?.categories || [];
+      const allCategories = result._embedded?.categories || [];
+      
+      // Récupérer les comptes des catégories
+      const categoryCounts = await this.getCategoryCounts();
+      
+      // Filtrer uniquement les catégories qui ont des événements
+      const categoriesWithEvents = allCategories.filter(category => {
+        const count = categoryCounts[category.key] || 0;
+        return count > 0;
+      });
+
+      return categoriesWithEvents;
     } catch (error) {
       console.error("❌ Error in getCategories:", error);
       throw error;

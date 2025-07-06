@@ -22,5 +22,29 @@ header {
         @apply flex items-center;
       }
     }
+
+    .desktop-nav {
+      @apply hidden md:flex items-center gap-6;
+
+      .nav-link {
+        @apply text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-200 px-3 py-2 rounded-lg;
+        text-decoration: none;
+        border: none;
+        background: none;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &.active {
+          @apply text-primary-600 font-semibold;
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        svg {
+          @apply w-5 h-5;
+        }
+      }
+    }
   }
 }

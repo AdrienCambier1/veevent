@@ -117,7 +117,7 @@ export default function ParametresPage() {
     // },
     {
       id: "danger",
-      title: "Clôture",
+      title: "Gestion",
       icon: <Trash />,
       items: [
         {

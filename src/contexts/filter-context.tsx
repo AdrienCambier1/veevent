@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useRef } from "react";
 
 export interface EventFilters {
   minPrice?: number;
@@ -63,10 +63,18 @@ function cleanFilters(filters: EventFilters): EventFilters {
   );
 }
 
+// Fonction utilitaire pour comparer deux objets de filtres
+function areFiltersEqual(filters1: EventFilters, filters2: EventFilters): boolean {
+  const clean1 = cleanFilters(filters1);
+  const clean2 = cleanFilters(filters2);
+  return JSON.stringify(clean1) === JSON.stringify(clean2);
+}
+
 export const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
   const [tempFilters, setTempFilters] = useState<EventFilters>({});
   const [appliedFilters, setAppliedFilters] = useState<EventFilters>({});
   const [filterVersion, setFilterVersion] = useState(0);
+  const previousAppliedFilters = useRef<EventFilters>({});
 
   const updateTempFilters = (newFilters: Partial<EventFilters>) => {
     setTempFilters((prev) => cleanFilters({ ...prev, ...newFilters }));
@@ -74,15 +82,27 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
 
   const applyFilters = () => {
     console.log("[FilterContext] applyFilters called", tempFilters);
-    setAppliedFilters(cleanFilters(tempFilters));
-    setFilterVersion((v) => v + 1);
+    const cleanedFilters = cleanFilters(tempFilters);
+    
+    // Ne pas incrémenter filterVersion si les filtres n'ont pas changé
+    if (!areFiltersEqual(cleanedFilters, previousAppliedFilters.current)) {
+      setAppliedFilters(cleanedFilters);
+      setFilterVersion((v) => v + 1);
+      previousAppliedFilters.current = cleanedFilters;
+    }
   };
 
   const clearFilters = () => {
     console.log("[FilterContext] clearFilters called");
-    setTempFilters({});
-    setAppliedFilters({});
-    setFilterVersion((v) => v + 1);
+    const emptyFilters = {};
+    setTempFilters(emptyFilters);
+    setAppliedFilters(emptyFilters);
+    
+    // Ne pas incrémenter filterVersion si les filtres étaient déjà vides
+    if (!areFiltersEqual(previousAppliedFilters.current, emptyFilters)) {
+      setFilterVersion((v) => v + 1);
+      previousAppliedFilters.current = emptyFilters;
+    }
   };
 
   const hasActiveFilters = Object.keys(appliedFilters).length > 0;

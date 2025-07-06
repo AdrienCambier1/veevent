@@ -32,6 +32,7 @@ export function usePaginatedData<T>({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [pagination, setPagination] = useState<PaginationInfo | undefined>(undefined);
+  const fetchDataRef = useRef(fetchData);
 
   const scrollToTarget = useCallback(() => {
     if (scrollTargetRef?.current) {
@@ -53,7 +54,7 @@ export function usePaginatedData<T>({
       setLoading(true);
       setError(null);
 
-      const result = await fetchData(page, pageSize);
+      const result = await fetchDataRef.current(page, pageSize);
       setItems(result.items);
       setPagination(result.pagination);
     } catch (err) {
@@ -63,12 +64,13 @@ export function usePaginatedData<T>({
     } finally {
       setLoading(false);
     }
-  }, [fetchData, pageSize]);
+  }, [pageSize]);
 
   // Chargement initial et rechargement quand fetchData change
   useEffect(() => {
+    fetchDataRef.current = fetchData;
     fetchPage(0);
-  }, [fetchData]); // Écouter les changements de fetchData
+  }, [fetchData, fetchPage]);
 
   const refetch = useCallback(() => {
     fetchPage(0);

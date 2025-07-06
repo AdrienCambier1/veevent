@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { eventService } from "@/services/event-service";
 import { Event, EventFilters, PaginationInfo } from "@/types";
 
@@ -24,6 +24,22 @@ export const useEvents = (
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [pagination, setPagination] = useState<PaginationInfo | undefined>(undefined);
+
+  // Stabiliser les filtres pour éviter les re-créations
+  const stableFilters = useMemo(() => filters, [
+    filters?.minPrice,
+    filters?.maxPrice,
+    filters?.startDate,
+    filters?.endDate,
+    filters?.cityName,
+    filters?.placeName,
+    filters?.sortBy,
+    filters?.sortOrder,
+    filters?.page,
+    filters?.size,
+    // Pour les catégories, utiliser JSON.stringify pour la comparaison
+    filters?.categories ? JSON.stringify(filters.categories) : undefined,
+  ]);
 
   const scrollToTarget = useCallback(() => {
     if (scrollTargetRef?.current) {
@@ -66,7 +82,7 @@ export const useEvents = (
           setEvents(data || []);
           break;
         default:
-          data = await eventService.getEvents(pageFilters || filters);
+          data = await eventService.getEvents(pageFilters || stableFilters);
           setEvents(data._embedded.eventSummaryResponses || []);
           setPagination(data.page);
       }
@@ -77,7 +93,7 @@ export const useEvents = (
     } finally {
       setLoading(false);
     }
-  }, [type, filters]);
+  }, [type, stableFilters]);
 
   useEffect(() => {
     fetchEvents();
@@ -90,25 +106,25 @@ export const useEvents = (
   const loadNextPage = useCallback(() => {
     if (pagination && pagination.number < pagination.totalPages - 1) {
       const nextPage = pagination.number + 1;
-      fetchEvents({ ...filters, page: nextPage });
+      fetchEvents({ ...stableFilters, page: nextPage });
       scrollToTarget();
     }
-  }, [pagination, filters, fetchEvents, scrollToTarget]);
+  }, [pagination, stableFilters, fetchEvents, scrollToTarget]);
 
   const loadPreviousPage = useCallback(() => {
     if (pagination && pagination.number > 0) {
       const previousPage = pagination.number - 1;
-      fetchEvents({ ...filters, page: previousPage });
+      fetchEvents({ ...stableFilters, page: previousPage });
       scrollToTarget();
     }
-  }, [pagination, filters, fetchEvents, scrollToTarget]);
+  }, [pagination, stableFilters, fetchEvents, scrollToTarget]);
 
   const loadPage = useCallback((page: number) => {
     if (pagination && page >= 0 && page < pagination.totalPages) {
-      fetchEvents({ ...filters, page });
+      fetchEvents({ ...stableFilters, page });
       scrollToTarget();
     }
-  }, [pagination, filters, fetchEvents, scrollToTarget]);
+  }, [pagination, stableFilters, fetchEvents, scrollToTarget]);
 
   const hasNextPage = pagination ? pagination.number < pagination.totalPages - 1 : false;
   const hasPreviousPage = pagination ? pagination.number > 0 : false;
