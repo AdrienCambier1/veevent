@@ -19,7 +19,7 @@ export function useEventsPaginated({
 
   // Stabiliser la fonction fetchEvents avec useMemo pour éviter les re-créations
   const fetchEvents = useMemo(() => {
-    return async (page: number, size: number = 10) => {
+    return async (page: number, size: number = 12) => {
       const result = await eventService.getEvents({
         ...filters,
         page,
@@ -35,7 +35,7 @@ export function useEventsPaginated({
 
   const paginatedData = usePaginatedData({
     fetchData: fetchEvents,
-    pageSize: 10,
+    pageSize: 12,
     scrollTargetRef,
   });
 

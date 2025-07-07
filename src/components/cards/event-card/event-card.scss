@@ -15,14 +15,15 @@
   @media (min-width: 1200px) {
     scroll-margin-left: calc((100vw - 1200px) / 2 + 0.5rem);
   }
-
   &.minify {
-    @apply min-h-[260px] h-fit max-w-max;
+    @apply min-h-[290px] h-[290px] max-h-[290px] max-w-max;
     .banner {
       @apply aspect-[32/9];
     }
+    .title {
+      @apply line-clamp-2;
+    }
   }
-
   &.grid {
     @apply min-w-0 max-w-none w-full;
     scroll-margin-left: 0;
