@@ -1,0 +1,1485 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventCard Snapshot correspond au snapshot avec plusieurs catégories 1`] = `
+<a
+  class="event-card  "
+  href="/evenements/1/nuit-matisse---couleurs-de-la-mediterranee"
+>
+  <div
+    class="image-container"
+  >
+    <div
+      class="theme-tags"
+    >
+      <span
+        class="theme-tag on-event-card "
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12.1471 21.2646L12 21.2351L11.8529 21.2646C9.47627 21.7399 7.23257 21.4756 5.59352 20.1643C3.96312 18.86 2.75 16.374 2.75 12C2.75 7.52684 3.75792 5.70955 5.08541 5.04581C5.77977 4.69863 6.67771 4.59759 7.82028 4.72943C8.96149 4.86111 10.2783 5.21669 11.7628 5.71153L12.0235 5.79841L12.2785 5.69638C14.7602 4.70367 16.9909 4.3234 18.5578 5.05463C20.0271 5.7403 21.25 7.59326 21.25 12C21.25 16.374 20.0369 18.86 18.4065 20.1643C16.7674 21.4756 14.5237 21.7399 12.1471 21.2646Z"
+            stroke="currentColor"
+          />
+          <path
+            d="M12 5.5C12 3 11 2 9 2"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Nourriture
+      </span>
+      <span
+        class="theme-tag on-event-card "
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Culture
+      </span>
+      <span
+        class="theme-tag on-event-card "
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M17.7357 20.1916C22.2597 17.0238 23.3592 10.7884 20.1914 6.2643C17.0237 1.74025 10.7882 0.640771 6.26415 3.80855C1.7401 6.97632 0.640621 13.2118 3.8084 17.7358C6.97617 22.2599 13.2116 23.3594 17.7357 20.1916Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M17.7357 20.1916L6.26416 3.80853"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M19.5774 5.47348C15.8066 11.3693 11.069 14.6867 3.27527 16.8884"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M13.0597 2.05625C13.4732 7.29607 16.4517 11.55 21.7065 14.4052"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M2.29333 9.59491C7.0757 11.7757 10.0544 16.0294 10.9402 21.9439"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Sport
+      </span>
+    </div>
+    <img
+      alt="Event image"
+      class="banner"
+      height="180"
+      src="https://res.cloudinary.com/dtepwacbx/image/upload/v1751890500/danny-howe-bn-D2bCvpik-unsplash_adelrk.jpg"
+      width="320"
+    />
+  </div>
+  <div
+    class="flex flex-col justify-between flex-1 p-2 gap-1"
+  >
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <div
+        class="title"
+      >
+        Nuit Matisse - Couleurs de la Méditerranée
+      </div>
+      <svg
+        class="icon"
+        color="currentColor"
+        fill="none"
+        height="1.5em"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        width="1.5em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L13.0815 17.1953C12.4227 16.7717 11.5773 16.7717 10.9185 17.1953L5 21Z"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex items-center gap-2"
+    >
+      <img
+        alt="Quentin Marchal"
+        class="profile-pic icon"
+        height="48"
+        src="[object Object]"
+        width="48"
+      />
+      <div
+        class="flex flex-col justify-center"
+      >
+        <p
+          class="text-base font-medium"
+        >
+          Quentin Marchal
+        </p>
+      </div>
+    </div>
+    <div
+      class="flex flex-wrap gap-2"
+    >
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z"
+            stroke="currentColor"
+          />
+          <path
+            d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          164 Avenue des Arènes de Cimiez, 06000 Nice
+        </span>
+      </div>
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          Le
+           
+          22 mars 2026 à 19:30
+        </span>
+      </div>
+    </div>
+    <p
+      class="description"
+    >
+      Exposition exceptionnelle des œuvres de Matisse inspirées par la Côte d'Azur
+    </p>
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <p
+        class="text-primary-600 font-medium "
+      >
+        Aucun participant
+      </p>
+      <p
+        class="price"
+      >
+        À partir de 
+        <span>
+          25
+           €
+        </span>
+      </p>
+    </div>
+  </div>
+</a>
+`;
+
+exports[`EventCard Snapshot correspond au snapshot en mode grid 1`] = `
+<a
+  class="event-card  grid"
+  href="/evenements/1/nuit-matisse---couleurs-de-la-mediterranee"
+>
+  <div
+    class="image-container"
+  >
+    <div
+      class="theme-tags"
+    >
+      <span
+        class="theme-tag on-event-card "
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Culture
+      </span>
+    </div>
+    <img
+      alt="Event image"
+      class="banner"
+      height="180"
+      src="https://res.cloudinary.com/dtepwacbx/image/upload/v1751890500/danny-howe-bn-D2bCvpik-unsplash_adelrk.jpg"
+      width="320"
+    />
+  </div>
+  <div
+    class="flex flex-col justify-between flex-1 p-2 gap-1"
+  >
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <div
+        class="title"
+      >
+        Nuit Matisse - Couleurs de la Méditerranée
+      </div>
+      <svg
+        class="icon"
+        color="currentColor"
+        fill="none"
+        height="1.5em"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        width="1.5em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L13.0815 17.1953C12.4227 16.7717 11.5773 16.7717 10.9185 17.1953L5 21Z"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex items-center gap-2"
+    >
+      <img
+        alt="Quentin Marchal"
+        class="profile-pic icon"
+        height="48"
+        src="[object Object]"
+        width="48"
+      />
+      <div
+        class="flex flex-col justify-center"
+      >
+        <p
+          class="text-base font-medium"
+        >
+          Quentin Marchal
+        </p>
+      </div>
+    </div>
+    <div
+      class="flex flex-wrap gap-2"
+    >
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z"
+            stroke="currentColor"
+          />
+          <path
+            d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          164 Avenue des Arènes de Cimiez, 06000 Nice
+        </span>
+      </div>
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          Le
+           
+          22 mars 2026 à 19:30
+        </span>
+      </div>
+    </div>
+    <p
+      class="description"
+    >
+      Exposition exceptionnelle des œuvres de Matisse inspirées par la Côte d'Azur
+    </p>
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <p
+        class="text-primary-600 font-medium "
+      >
+        Aucun participant
+      </p>
+      <p
+        class="price"
+      >
+        À partir de 
+        <span>
+          25
+           €
+        </span>
+      </p>
+    </div>
+  </div>
+</a>
+`;
+
+exports[`EventCard Snapshot correspond au snapshot en mode minify 1`] = `
+<a
+  class="event-card minify "
+  href="/evenements/1/nuit-matisse---couleurs-de-la-mediterranee"
+>
+  <div
+    class="image-container"
+  >
+    <div
+      class="theme-tags"
+    >
+      <span
+        class="theme-tag on-event-card "
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Culture
+      </span>
+    </div>
+    <img
+      alt="Event image"
+      class="banner"
+      height="180"
+      src="https://res.cloudinary.com/dtepwacbx/image/upload/v1751890500/danny-howe-bn-D2bCvpik-unsplash_adelrk.jpg"
+      width="320"
+    />
+  </div>
+  <div
+    class="flex flex-col justify-between flex-1 p-2 gap-1"
+  >
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <div
+        class="title"
+      >
+        Nuit Matisse - Couleurs de la Méditerranée
+      </div>
+      <svg
+        class="icon"
+        color="currentColor"
+        fill="none"
+        height="1.5em"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        width="1.5em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L13.0815 17.1953C12.4227 16.7717 11.5773 16.7717 10.9185 17.1953L5 21Z"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex items-center gap-2"
+    >
+      <img
+        alt="Quentin Marchal"
+        class="profile-pic icon"
+        height="48"
+        src="[object Object]"
+        width="48"
+      />
+      <div
+        class="flex flex-col justify-center"
+      >
+        <p
+          class="text-base font-medium"
+        >
+          Quentin Marchal
+        </p>
+      </div>
+    </div>
+    <div
+      class="flex flex-wrap gap-1"
+    >
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z"
+            stroke="currentColor"
+          />
+          <path
+            d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          164 Avenue des Arènes de Cimiez, 06000 Nice
+        </span>
+      </div>
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          Le
+           
+          22 mars 2026 à 19:30
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <p
+        class="price"
+      >
+        À partir de 
+        <span>
+          25
+           €
+        </span>
+      </p>
+      <svg
+        class="text-lg"
+        color="currentColor"
+        fill="none"
+        height="1.5em"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        width="1.5em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.00005 19L19 5.99996M19 5.99996V18.48M19 5.99996H6.52005"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+  </div>
+</a>
+`;
+
+exports[`EventCard Snapshot correspond au snapshot en mode normal 1`] = `
+<a
+  class="event-card  "
+  href="/evenements/1/nuit-matisse---couleurs-de-la-mediterranee"
+>
+  <div
+    class="image-container"
+  >
+    <div
+      class="theme-tags"
+    >
+      <span
+        class="theme-tag on-event-card "
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Culture
+      </span>
+    </div>
+    <img
+      alt="Event image"
+      class="banner"
+      height="180"
+      src="https://res.cloudinary.com/dtepwacbx/image/upload/v1751890500/danny-howe-bn-D2bCvpik-unsplash_adelrk.jpg"
+      width="320"
+    />
+  </div>
+  <div
+    class="flex flex-col justify-between flex-1 p-2 gap-1"
+  >
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <div
+        class="title"
+      >
+        Nuit Matisse - Couleurs de la Méditerranée
+      </div>
+      <svg
+        class="icon"
+        color="currentColor"
+        fill="none"
+        height="1.5em"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        width="1.5em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L13.0815 17.1953C12.4227 16.7717 11.5773 16.7717 10.9185 17.1953L5 21Z"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex items-center gap-2"
+    >
+      <img
+        alt="Quentin Marchal"
+        class="profile-pic icon"
+        height="48"
+        src="[object Object]"
+        width="48"
+      />
+      <div
+        class="flex flex-col justify-center"
+      >
+        <p
+          class="text-base font-medium"
+        >
+          Quentin Marchal
+        </p>
+      </div>
+    </div>
+    <div
+      class="flex flex-wrap gap-2"
+    >
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z"
+            stroke="currentColor"
+          />
+          <path
+            d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          164 Avenue des Arènes de Cimiez, 06000 Nice
+        </span>
+      </div>
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          Le
+           
+          22 mars 2026 à 19:30
+        </span>
+      </div>
+    </div>
+    <p
+      class="description"
+    >
+      Exposition exceptionnelle des œuvres de Matisse inspirées par la Côte d'Azur
+    </p>
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <p
+        class="text-primary-600 font-medium "
+      >
+        Aucun participant
+      </p>
+      <p
+        class="price"
+      >
+        À partir de 
+        <span>
+          25
+           €
+        </span>
+      </p>
+    </div>
+  </div>
+</a>
+`;
+
+exports[`EventCard Snapshot correspond au snapshot pour un événement gratuit 1`] = `
+<a
+  class="event-card  "
+  href="/evenements/10/green-tourism-hackathon"
+>
+  <div
+    class="image-container"
+  >
+    <div
+      class="theme-tags"
+    >
+      <span
+        class="theme-tag on-event-card "
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Bien-être
+      </span>
+      <span
+        class="theme-tag on-event-card "
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Technologie
+      </span>
+    </div>
+    <img
+      alt="Event image"
+      class="banner"
+      height="180"
+      src="https://res.cloudinary.com/dtepwacbx/image/upload/v1751890500/danny-howe-bn-D2bCvpik-unsplash_adelrk.jpg"
+      width="320"
+    />
+  </div>
+  <div
+    class="flex flex-col justify-between flex-1 p-2 gap-1"
+  >
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <div
+        class="title"
+      >
+        Green Tourism Hackathon
+      </div>
+      <svg
+        class="icon"
+        color="currentColor"
+        fill="none"
+        height="1.5em"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        width="1.5em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L13.0815 17.1953C12.4227 16.7717 11.5773 16.7717 10.9185 17.1953L5 21Z"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex items-center gap-2"
+    >
+      <img
+        alt="Quentin Marchal"
+        class="profile-pic icon"
+        height="48"
+        src="[object Object]"
+        width="48"
+      />
+      <div
+        class="flex flex-col justify-center"
+      >
+        <p
+          class="text-base font-medium"
+        >
+          Quentin Marchal
+        </p>
+      </div>
+    </div>
+    <div
+      class="flex flex-wrap gap-2"
+    >
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z"
+            stroke="currentColor"
+          />
+          <path
+            d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          2405 Route des Dolines, 06560 Sophia Antipolis
+        </span>
+      </div>
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          Le
+           
+          18 mai 2026 à 11:00
+        </span>
+      </div>
+    </div>
+    <p
+      class="description"
+    >
+      Hackathon de 48h dédié aux solutions durables pour le tourisme
+    </p>
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <p
+        class="text-primary-600 font-medium "
+      >
+        Aucun participant
+      </p>
+      <p
+        class="price"
+      >
+        <span>
+          Gratuit
+        </span>
+      </p>
+    </div>
+  </div>
+</a>
+`;
+
+exports[`EventCard Snapshot correspond au snapshot sans organisateur 1`] = `
+<a
+  class="event-card  "
+  href="/evenements/1/nuit-matisse---couleurs-de-la-mediterranee"
+>
+  <div
+    class="image-container"
+  >
+    <div
+      class="theme-tags"
+    >
+      <span
+        class="theme-tag on-event-card "
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Culture
+      </span>
+    </div>
+    <img
+      alt="Event image"
+      class="banner"
+      height="180"
+      src="https://res.cloudinary.com/dtepwacbx/image/upload/v1751890500/danny-howe-bn-D2bCvpik-unsplash_adelrk.jpg"
+      width="320"
+    />
+  </div>
+  <div
+    class="flex flex-col justify-between flex-1 p-2 gap-1"
+  >
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <div
+        class="title"
+      >
+        Nuit Matisse - Couleurs de la Méditerranée
+      </div>
+      <svg
+        class="icon"
+        color="currentColor"
+        fill="none"
+        height="1.5em"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        width="1.5em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L13.0815 17.1953C12.4227 16.7717 11.5773 16.7717 10.9185 17.1953L5 21Z"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex items-center gap-2"
+    >
+      <img
+        alt="undefined undefined"
+        class="profile-pic icon"
+        height="48"
+        src="[object Object]"
+        width="48"
+      />
+      <div
+        class="flex flex-col justify-center"
+      >
+        <p
+          class="text-base font-medium"
+        >
+          undefined undefined
+        </p>
+        <div
+          class="rating-stars"
+        >
+          <svg
+            class="icon-very-small "
+            color="currentColor"
+            fill="none"
+            height="1.5em"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+            width="1.5em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.58737 8.23597L11.1849 3.00376C11.5183 2.33208 12.4817 2.33208 12.8151 3.00376L15.4126 8.23597L21.2215 9.08017C21.9668 9.18848 22.2638 10.0994 21.7243 10.6219L17.5217 14.6918L18.5135 20.4414C18.6409 21.1798 17.8614 21.7428 17.1945 21.3941L12 18.678L6.80547 21.3941C6.1386 21.7428 5.35909 21.1798 5.48645 20.4414L6.47825 14.6918L2.27575 10.6219C1.73617 10.0994 2.03322 9.18848 2.77852 9.08017L8.58737 8.23597Z"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg
+            class="icon-very-small "
+            color="currentColor"
+            fill="none"
+            height="1.5em"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+            width="1.5em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.58737 8.23597L11.1849 3.00376C11.5183 2.33208 12.4817 2.33208 12.8151 3.00376L15.4126 8.23597L21.2215 9.08017C21.9668 9.18848 22.2638 10.0994 21.7243 10.6219L17.5217 14.6918L18.5135 20.4414C18.6409 21.1798 17.8614 21.7428 17.1945 21.3941L12 18.678L6.80547 21.3941C6.1386 21.7428 5.35909 21.1798 5.48645 20.4414L6.47825 14.6918L2.27575 10.6219C1.73617 10.0994 2.03322 9.18848 2.77852 9.08017L8.58737 8.23597Z"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg
+            class="icon-very-small "
+            color="currentColor"
+            fill="none"
+            height="1.5em"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+            width="1.5em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.58737 8.23597L11.1849 3.00376C11.5183 2.33208 12.4817 2.33208 12.8151 3.00376L15.4126 8.23597L21.2215 9.08017C21.9668 9.18848 22.2638 10.0994 21.7243 10.6219L17.5217 14.6918L18.5135 20.4414C18.6409 21.1798 17.8614 21.7428 17.1945 21.3941L12 18.678L6.80547 21.3941C6.1386 21.7428 5.35909 21.1798 5.48645 20.4414L6.47825 14.6918L2.27575 10.6219C1.73617 10.0994 2.03322 9.18848 2.77852 9.08017L8.58737 8.23597Z"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg
+            class="icon-very-small "
+            color="currentColor"
+            fill="none"
+            height="1.5em"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+            width="1.5em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.58737 8.23597L11.1849 3.00376C11.5183 2.33208 12.4817 2.33208 12.8151 3.00376L15.4126 8.23597L21.2215 9.08017C21.9668 9.18848 22.2638 10.0994 21.7243 10.6219L17.5217 14.6918L18.5135 20.4414C18.6409 21.1798 17.8614 21.7428 17.1945 21.3941L12 18.678L6.80547 21.3941C6.1386 21.7428 5.35909 21.1798 5.48645 20.4414L6.47825 14.6918L2.27575 10.6219C1.73617 10.0994 2.03322 9.18848 2.77852 9.08017L8.58737 8.23597Z"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg
+            class="icon-very-small "
+            color="currentColor"
+            fill="none"
+            height="1.5em"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+            width="1.5em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.58737 8.23597L11.1849 3.00376C11.5183 2.33208 12.4817 2.33208 12.8151 3.00376L15.4126 8.23597L21.2215 9.08017C21.9668 9.18848 22.2638 10.0994 21.7243 10.6219L17.5217 14.6918L18.5135 20.4414C18.6409 21.1798 17.8614 21.7428 17.1945 21.3941L12 18.678L6.80547 21.3941C6.1386 21.7428 5.35909 21.1798 5.48645 20.4414L6.47825 14.6918L2.27575 10.6219C1.73617 10.0994 2.03322 9.18848 2.77852 9.08017L8.58737 8.23597Z"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex flex-wrap gap-2"
+    >
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z"
+            stroke="currentColor"
+          />
+          <path
+            d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          164 Avenue des Arènes de Cimiez, 06000 Nice
+        </span>
+      </div>
+      <div
+        class="info"
+      >
+        <svg
+          class="icon-small"
+          color="currentColor"
+          fill="none"
+          height="1.5em"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 10V6C3 4.89543 3.89543 4 5 4H7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7 2V6"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>
+          Le
+           
+          22 mars 2026 à 19:30
+        </span>
+      </div>
+    </div>
+    <p
+      class="description"
+    >
+      Exposition exceptionnelle des œuvres de Matisse inspirées par la Côte d'Azur
+    </p>
+    <div
+      class="flex items-center justify-between gap-2"
+    >
+      <p
+        class="text-primary-600 font-medium "
+      >
+        Aucun participant
+      </p>
+      <p
+        class="price"
+      >
+        À partir de 
+        <span>
+          25
+           €
+        </span>
+      </p>
+    </div>
+  </div>
+</a>
+`;

@@ -86,7 +86,11 @@ export default function EventCard({ id, event, minify, grid }: EventCardProps) {
         <div className="flex items-center justify-between gap-2">
           {!minify && <ProfilesImg totalCount={event.currentParticipants} />}
           <p className="price">
-            {event.price === 0 ? (
+            {event.status === "CANCELLED" ? (
+              <span className="text-red-600 font-medium">Annulé</span>
+            ) : event.status === "COMPLETED" ? (
+              <span className="text-green-600 font-medium">Terminé</span>
+            ) : event.price === 0 ? (
               <span>Gratuit</span>
             ) : (
               <>
