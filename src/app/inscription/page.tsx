@@ -8,6 +8,7 @@ import { categoryService } from "@/services/category-service";
 import { Category } from "@/types";
 import { PasswordStrength } from "@/components/commons/password-strength/password-strength";
 import { ProgressSteps } from "@/components/commons/progress-steps/progress-steps";
+import { authService } from "@/services/auth-service";
 
 interface FormData {
   // Étape 1: Login
@@ -233,8 +234,6 @@ export default function InscriptionPage() {
     }
   };
 
-
-
   const handleNextStep = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -263,8 +262,16 @@ export default function InscriptionPage() {
         const success = await register(registerData, "/compte/tickets");
         
         if (success) {
-          // Redirection vers le profil après inscription réussie
-          window.location.href = "/compte/tickets";
+          // Correction : poser le flag de profil complet si le profil l'est vraiment
+          const token = authService.getStoredToken();
+          if (token) {
+            const isComplete = await authService.isProfileComplete(token);
+            if (isComplete) {
+              authService.markProfileAsComplete();
+            }
+          }
+          // Redirection vers la page de connexion avec message de succès
+          window.location.href = "/connexion?success=1";
         }
       } catch (error) {
         console.error("Erreur lors de l'inscription:", error);

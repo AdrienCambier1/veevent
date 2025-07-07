@@ -15,9 +15,8 @@
   @media (min-width: 1200px) {
     scroll-margin-left: calc((100vw - 1200px) / 2 + 0.5rem);
   }
- &.minify {
-    @apply min-h-[280px] h-[280px] max-h-[280px] max-w-max;
-    // (remplace ou adapte les valeurs selon le rendu que tu veux)
+  &.minify {
+    @apply min-h-[290px] h-[290px] max-h-[290px] max-w-max;
     .banner {
       @apply aspect-[32/9];
     }

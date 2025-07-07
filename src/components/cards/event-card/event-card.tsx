@@ -18,6 +18,7 @@ interface EventCardProps {
 
 export default function EventCard({ id, event, minify, grid }: EventCardProps) {
   const nameSlug = useSlugify(event.name);
+  const imageToShow = event.imageUrl || niceImage;
   return (
     <Link
       href={`/evenements/${id}/${nameSlug}`}
@@ -36,7 +37,14 @@ export default function EventCard({ id, event, minify, grid }: EventCardProps) {
             );
           })}
         </div>
-        <Image src={niceImage} className="banner" alt="Event image" />
+        <Image
+          src={imageToShow}
+          className="banner"
+          alt="Event image"
+          width={320}
+          height={180}
+          priority
+        />
       </div>
       <div className={`flex flex-col justify-between flex-1 p-2 ${minify ? "gap-1" : "gap-1"}`}>
         <div className="flex items-center justify-between gap-2">

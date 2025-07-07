@@ -22,6 +22,7 @@ function ConnexionPageContent() {
   // Récupérer le message d'erreur depuis les paramètres d'URL
   const urlError = searchParams?.get("error");
   const errorMessage = urlError === "banned" ? "Votre compte a été suspendu. Contactez l'administrateur pour plus d'informations." : null;
+  const showSuccess = searchParams?.get("success") === "1";
 
   useEffect(() => {
     setHideCitySelector(true);
@@ -50,7 +51,12 @@ function ConnexionPageContent() {
   return (
     <main>
       <section className="wrapper flex items-center">
-       <div className="text-center mb-6">
+        {showSuccess && (
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md text-sm w-full mb-4">
+            Votre compte a bien été créé ! Vous pouvez maintenant vous connecter.
+          </div>
+        )}
+        <div className="text-center mb-6">
           <h1 className="text-2xl font-bold mb-2">
             Connexion à votre compte{" "}
             <span className="text-[var(--primary-600)]">veevent</span>
