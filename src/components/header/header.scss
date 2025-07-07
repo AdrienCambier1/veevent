@@ -9,7 +9,7 @@ header {
     }
 
     .city-selector {
-      @apply flex text-sm font-bold items-end text-primary-600 gap-1 cursor-pointer  px-4 py-2 rounded-xl;
+      @apply flex text-sm font-bold items-end text-primary-600 gap-1 cursor-pointer  p-2 rounded-xl;
       background: none;
       transition: background-color 0.2s;
       border: none;
@@ -19,7 +19,7 @@ header {
       }
 
       span {
-        @apply flex items-center;
+        @apply flex items-center text-sm text-ellipsis overflow-hidden;
       }
     }
 
@@ -27,7 +27,7 @@ header {
       @apply hidden md:flex items-center gap-6;
 
       .nav-link {
-        @apply text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-200 p-2 rounded-lg;
+        @apply text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-200 px-3 py-2 rounded-lg;
         text-decoration: none;
         border: none;
         background: none;

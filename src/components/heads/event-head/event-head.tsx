@@ -132,7 +132,7 @@ export default function EventHead({
         ))}
       </div>
       <h1>{title}</h1>
-      <ProfileImg name={organizer.pseudo || ""} note={organizer.note} />
+      <ProfileImg name={`${organizer.firstName || ""} ${organizer.lastName || ""}`.trim() || "Organisateur"} note={organizer.note} />
       <div className="flex flex-col gap-2">
         <div className="info">
           <MapPin className="icon-small" />

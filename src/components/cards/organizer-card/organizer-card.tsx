@@ -66,6 +66,7 @@ export default function OrganizerCard({
         <ProfileImg
           name={`${organizer.firstName || ""} ${organizer.lastName || ""}`.trim() || "Organisateur"}
           note={organizer.note || 0}
+          imageUrl={organizer.imageUrl}
         />
         <div className="profile-stats">
           {/* <div>

@@ -23,7 +23,7 @@ export default function EventCardLine({ event }: EventCardLineProps) {
     return (
       <div className="event-card-line">
         <div className="card-image">
-          <Image src={img} alt="Événement" />
+          <Image src={img} alt="Événement" fill priority />
         </div>
         <div className="card-content">
           <div className="card-title">Concert de rock à Nice</div>
@@ -46,12 +46,12 @@ export default function EventCardLine({ event }: EventCardLineProps) {
     <Link href={`/evenements/${eventId}/${nameSlug}`}>
       <div className="event-card-line">
         <div className="card-image">
-          <Image src={img} alt={event.name} />
+          <Image src={event.imageUrl || img} alt={event.name} width={100} height={100} priority />
         </div>
         <div className="card-content">
           <div className="card-title">{event.name}</div>
           <ul className="card-specs">
-            <li className="card-organizer">{event.organizer?.pseudo}</li>
+            <li className="card-organizer">{`${event.organizer?.firstName || ""} ${event.organizer?.lastName || ""}`.trim()}</li>
             <li className="card-price">{priceDisplay}</li>
           </ul>
         </div>

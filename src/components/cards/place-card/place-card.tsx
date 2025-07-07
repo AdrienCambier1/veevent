@@ -14,6 +14,7 @@ export default function PlaceCard({ place, index }: PlaceCardProps) {
   if (!place) {
     return null;
   }
+  const imageToShow = place.imageUrl || img;
 
   const nameSlug = useSlugify(place.name);
   return (
@@ -22,7 +23,7 @@ export default function PlaceCard({ place, index }: PlaceCardProps) {
         {index && <div className="number">{index}</div>}
         <div className="place-card-container">
           <div className="place-card-image">
-            <Image src={img} alt={place.name} />
+            <Image src={imageToShow} alt={place.name} fill priority/>
           </div>
           <div className="place-card-content">
             <div className="place-card-name">{place.name}</div>

@@ -48,6 +48,8 @@ export default function TicketCard({
       .trim(); // Supprimer les espaces au début et à la fin
   };
 
+  const imageToShow = eventImage || img;
+
   return (
     <Link href={`/evenements/${eventId}/${slugify(eventName)}`}>
       <div className="ticket-card">
@@ -62,11 +64,12 @@ export default function TicketCard({
             </div>
             {eventImage && (
               <Image
-                src={img}
                 alt="picture event"
                 className="rounded-[var(--vv-border-radius)]"
                 width={300}
                 height={180}
+                src={imageToShow}
+                priority
               />
             )}
           </div>

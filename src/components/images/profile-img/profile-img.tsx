@@ -24,15 +24,16 @@ export default function ProfileImg({
   size = "base",
 }: ProfileImgProps) {
   const iconSize = sizeMap[size];
-
+  const imageToShow = imageUrl || profilePicture;
   return (
     <div className="flex items-center gap-2">
       <Image
-        src={imageUrl || profilePicture}
+        src={imageToShow}
         alt={name || "Profile picture"}
         className={`profile-pic ${iconSize}`}
         width={48}
         height={48}
+        priority
       />
 
       

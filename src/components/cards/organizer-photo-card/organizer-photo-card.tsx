@@ -10,12 +10,13 @@ interface OrganizerPhotoCardProps {
 }
 
 export default function OrganizerPhotoCard({name, imageUrl, href}: OrganizerPhotoCardProps) {
+  const imageToShow = imageUrl || img;
   return (
     <Link href={href}>
       <div className="organizer-photo-card">
         <div className="photo-card-image">
           <Image 
-            src={imageUrl || img} 
+            src={imageToShow} 
             alt={name} 
             width={200}
             height={200}

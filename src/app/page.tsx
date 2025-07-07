@@ -257,7 +257,7 @@ export default function HomePage() {
     }
     return (
       <>
-        {organizers.slice(0, 2).map((organizer) => (
+        {organizers.filter((organizer) => organizer.eventsCount > 0).slice(0, 2).map((organizer) => (
           <OrganizerCard key={organizer.id} organizer={organizer} />
         ))}
         <Link href="/organisateurs" className="secondary-btn mt-4">

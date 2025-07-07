@@ -21,6 +21,7 @@ export default function TextImageCard({
   isCard = true,
   onClick,
 }: TextImageCardProps) {
+  const imageToShow = image || img;
   return (
     <Link
       href={href}
@@ -29,7 +30,7 @@ export default function TextImageCard({
     >
       <div className="flex items-center">
         <p className="title">{title}</p>
-        <Image src={img} alt={`${title} image`} />
+        <Image src={imageToShow} alt={`${title} image`} width={100} height={100} priority/>
       </div>
       {subtitle && (
         <div className="flex items-center justify-between gap-2 text-secondary-400">

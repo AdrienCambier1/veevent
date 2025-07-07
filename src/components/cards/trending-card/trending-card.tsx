@@ -21,9 +21,15 @@ const slugify = (text: string) => {
 export default function TrendingCard({
   event,
 }: TrendingCardProps) {
+  const imageToShow = event.imageUrl || niceImage;
   return (
     <Link href={`/evenements/${event.id}/${slugify(event.name)}`} className="trending-card group">
-      <Image src={niceImage} alt="Trending image" fill />
+      <Image
+        src={imageToShow}
+        alt="Trending image"
+        fill
+        priority
+      />
 
       <div className="content">
         <div className="flex justify-between items-center">
