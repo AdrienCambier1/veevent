@@ -155,14 +155,14 @@ function EvenementsPageContent() {
   const commonSkeleton = renderEventCards([], true, null);
 
   // Fonction de rendu pour PaginatedList
-  const renderEventCard = (event: Event, index: number) => {
+  const renderPaginatedEventCard = (event: Event, index: number) => {
     const eventId = extractIdFromSelfLink(event);
     return (
       <EventCard
         key={eventId}
         id={eventId}
         event={event}
-        minify={false}
+        minify={true}
         grid={true}
       />
     );
@@ -228,15 +228,7 @@ function EvenementsPageContent() {
               onNextPage={searchLoadNextPage}
               hasActiveFilters={false}
               onOpenFilters={() => {}}
-              renderItem={(item: any, index: number) => (
-                <EventCard
-                  key={item.event.id}
-                  id={item.event.id.toString()}
-                  event={item.event}
-                  minify={false}
-                  grid={true}
-                />
-              )}
+              renderItem={renderPaginatedEventCard}
               renderEmpty={renderSearchEmpty}
               showFilters={false}
               scrollTargetRef={searchScrollTargetRef}
@@ -294,7 +286,7 @@ function EvenementsPageContent() {
               onNextPage={categoryLoadNextPage}
               hasActiveFilters={hasActiveFilters}
               onOpenFilters={handleOpenFilters}
-              renderItem={renderEventCard}
+              renderItem={renderPaginatedEventCard}
               renderEmpty={() => (
                 <div className="text-center text-gray-500 py-8">
                   <p className="text-lg md:text-xl font-semibold mb-2">
@@ -355,7 +347,7 @@ function EvenementsPageContent() {
               onNextPage={loadNextPage}
               hasActiveFilters={hasActiveFilters}
               onOpenFilters={handleOpenFilters}
-              renderItem={renderEventCard}
+              renderItem={renderPaginatedEventCard}
               title="Tous les événements"
               scrollTargetRef={eventsSectionRef}
             />

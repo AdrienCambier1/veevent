@@ -101,6 +101,19 @@ function EvenementsContent() {
   if (placeLoading) {
     return <div className="p-8 text-center">Chargement du lieu...</div>;
   }
+  // Fonction de rendu pour PaginatedList
+  const renderPaginatedEventCard = (event: Event, index: number) => {
+    const eventId = extractIdFromSelfLink(event);
+    return (
+      <EventCard
+        key={eventId}
+        id={eventId}
+        event={event}
+        minify={true}
+        grid={true}
+      />
+    );
+  };
 
   return (
     <>
@@ -130,18 +143,7 @@ function EvenementsContent() {
         onNextPage={loadNextPage}
         hasActiveFilters={hasActiveFilters}
         onOpenFilters={() => setIsFilterOpen(true)}
-        renderItem={(event: Event, index: number) => {
-          const eventId = extractIdFromSelfLink(event);
-          return (
-            <EventCard
-              key={eventId}
-              id={eventId}
-              event={event}
-              minify={true}
-              grid={true}
-            />
-          );
-        }}
+        renderItem={renderPaginatedEventCard}
         title={
           place ? `Tous les événements à ${place.name}` : "Tous les événements"
         }
