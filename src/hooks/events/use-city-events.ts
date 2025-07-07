@@ -10,13 +10,11 @@ interface UseCityEventsReturn {
   refetch: () => void;
 }
 
-export const useCityEvents = (
-  limit?: number
-): UseCityEventsReturn => {
+export const useCityEvents = (limit?: number): UseCityEventsReturn => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  
+
   const { selectedCity, nearbyCities } = useCity();
 
   const fetchCityEvents = useCallback(async () => {
@@ -31,11 +29,17 @@ export const useCityEvents = (
       }
 
       // Créer un tableau avec la ville sélectionnée et ses villes proches
-      const citiesToSearch = [selectedCity.name, ...nearbyCities];
-      
+      const citiesToSearch = [
+        selectedCity.name,
+        ...nearbyCities.map((city) => city.name),
+      ];
+
       // Utiliser la nouvelle méthode getEventsByCities
-      const cityEvents = await eventService.getEventsByCities(citiesToSearch, limit || 6);
-      
+      const cityEvents = await eventService.getEventsByCities(
+        citiesToSearch,
+        limit || 6
+      );
+
       setEvents(cityEvents);
     } catch (err) {
       console.error("❌ Erreur dans useCityEvents:", err);
@@ -54,10 +58,10 @@ export const useCityEvents = (
     fetchCityEvents();
   }, [fetchCityEvents]);
 
-  return { 
-    events, 
-    loading, 
-    error, 
-    refetch
+  return {
+    events,
+    loading,
+    error,
+    refetch,
   };
-}; 
+};
