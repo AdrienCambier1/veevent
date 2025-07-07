@@ -252,7 +252,7 @@ export const eventService = {
         searchParams.append("size", filters.size.toString());
 
       const queryString = searchParams.toString();
-      const url = `${apiUrl}/events${queryString ? `?${queryString}` : ""}`;
+      const url = `${apiUrl}/events${queryString ? `?${queryString}` : ""}&sort=date`;
 
       const response = await fetch(url, {
         headers: {
@@ -282,7 +282,7 @@ export const eventService = {
         return trendingEvents.map(mapMockEventToEvent);
       }
       // Code API existant...
-      const response = await fetch(`${apiUrl}/events?categories=trending`, {
+      const response = await fetch(`${apiUrl}/events?categories=trending&sort=date`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -478,7 +478,7 @@ export const eventService = {
         return mappedEvents;
       }
 
-      const response = await fetch(`${apiUrl}/users/${organizerId}/events`, {
+      const response = await fetch(`${apiUrl}/users/${organizerId}/events&sort=date`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -682,7 +682,7 @@ export const eventService = {
       const queryString = searchParams.toString();
       const url = `${apiUrl}/events/first-editions${
         queryString ? `?${queryString}` : ""
-      }`;
+      }&sort=date`;
 
       const response = await fetch(url, {
         headers: {
