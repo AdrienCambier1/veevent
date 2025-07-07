@@ -7,8 +7,6 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.17-38B2AC.svg)](https://tailwindcss.com/)
 [![Jest](https://img.shields.io/badge/Jest-29.7.0-C21325.svg)](https://jestjs.io/)
 
-Next.js 15 React 19 TypeScript Tailwind CSS
-
 ## 📋 Table des matières
 
 * [Description du projet](#-description-du-projet)
@@ -611,13 +609,6 @@ frontend:
 * **Documentation** : Consulter ce README et la documentation des technologies
 * **Issues GitHub** : Ouvrir une issue pour les bugs ou demandes de fonctionnalités
 * **Discussions** : Utiliser les discussions GitHub pour les questions générales
-* **Wiki** : Consulter le wiki du projet pour les guides détaillés
-
-### Contact
-
-* **Équipe de développement** : [@Quantix06](https://github.com/Quantix06)
-* **Backend API** : [apifilrouge](https://github.com/Quantix06/apifilrouge/)
-* **Documentation API** : Consulter la documentation du backend
 
 ### Débogage
 
