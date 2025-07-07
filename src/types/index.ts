@@ -83,6 +83,7 @@ export interface BaseEvent {
   organizer?: SingleUser;
   cityName?: string;
   placeName?: string;
+  imageUrl: string;
   currentParticipants: number;
   isInvitationOnly?: boolean;
 }

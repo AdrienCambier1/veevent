@@ -60,7 +60,7 @@
   }
 
   main {
-    @apply pt-16 pb-4 top-0 flex flex-col relative;
+    @apply pt-16 pb-4 top-0 flex flex-col relative md:gap-6;
   }
 
   .wrapper {

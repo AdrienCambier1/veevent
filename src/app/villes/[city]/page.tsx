@@ -179,6 +179,7 @@ export default function CityPage() {
           title={`Les évènements à ne pas manquer à ${city.name} et ses alentours`}
           description="Actualités"
         />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <NewsCard
           title={`Les événements incontournables à ${city.name}`}
           description={`Découvrez les meilleurs événements qui se déroulent à ${city.name}. 
@@ -201,7 +202,7 @@ export default function CityPage() {
             date={new Date().toLocaleDateString("fr-FR")}
           />
         )}
-
+        </div>
         <Link href="#" className="secondary-btn">
           <span>Voir les actualités de la ville</span>
         </Link>

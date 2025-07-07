@@ -15,6 +15,80 @@ interface EventHeadProps {
   categories: BaseCategory[];
 }
 
+// Fonction pour formater la date de manière plus lisible
+const formatEventDate = (dateString: string) => {
+  try {
+    // Si la date est déjà formatée en français, l'afficher directement
+    if (dateString.includes('à') && (dateString.includes('lundi') || dateString.includes('mardi') || dateString.includes('mercredi') || dateString.includes('jeudi') || dateString.includes('vendredi') || dateString.includes('samedi') || dateString.includes('dimanche'))) {
+      return dateString;
+    }
+    
+    // Essayer différents formats de parsing
+    let date: Date;
+    
+    // Essayer de parser la date ISO
+    date = new Date(dateString);
+    
+    // Si ça ne marche pas, essayer d'autres formats
+    if (isNaN(date.getTime())) {
+      // Essayer avec des formats alternatifs
+      const formats = [
+        dateString.replace('T', ' '), // Enlever le T
+        dateString.replace('T', ' ').replace('Z', ''), // Enlever le T et Z
+      ];
+      
+      for (const format of formats) {
+        date = new Date(format);
+        if (!isNaN(date.getTime())) break;
+      }
+    }
+    
+    // Vérifier si la date est valide
+    if (isNaN(date.getTime())) {
+      return "Date non disponible";
+    }
+    
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    // Vérifier si c'est aujourd'hui
+    const isToday = date.toDateString() === now.toDateString();
+    // Vérifier si c'est demain
+    const isTomorrow = date.toDateString() === tomorrow.toDateString();
+    
+    // Formater la date
+    const dayName = date.toLocaleDateString("fr-FR", { weekday: "long" });
+    const dayNumber = date.toLocaleDateString("fr-FR", { day: "numeric" });
+    const month = date.toLocaleDateString("fr-FR", { month: "long" });
+    const year = date.getFullYear();
+    const time = date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+    
+    // Construire le texte de la date
+    let dateText = "";
+    
+    if (isToday) {
+      dateText = `Aujourd'hui à ${time}`;
+    } else if (isTomorrow) {
+      dateText = `Demain à ${time}`;
+    } else {
+      // Si c'est cette année, ne pas afficher l'année
+      if (year === now.getFullYear()) {
+        dateText = `${dayName} ${dayNumber} ${month} à ${time}`;
+      } else {
+        dateText = `${dayName} ${dayNumber} ${month} ${year} à ${time}`;
+      }
+    }
+    
+    return dateText;
+  } catch (error) {
+    return "Date non disponible";
+  }
+};
+
 export default function EventHead({
   id: eventId,
   title,
@@ -66,19 +140,7 @@ export default function EventHead({
         </div>
         <div className="info">
           <Calendar className="icon-small" />
-          <span>
-            Le{" "}
-            {new Date(date).toLocaleDateString("fr-FR", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            }) +
-              " à " +
-              new Date(date).toLocaleTimeString("fr-FR", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-          </span>
+          <span>{formatEventDate(date)}</span>
         </div>
       </div>
       <div className="flex gap-2">

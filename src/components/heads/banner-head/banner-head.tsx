@@ -9,12 +9,22 @@ interface BannerHeadProps {
 
 export default function BannerHead({
   city,
-  bannerImage = nice4k,
+  bannerImage,
 }: BannerHeadProps) {
+  // Utiliser l'image par défaut si bannerImage n'est pas fournie
+  const imageToShow = bannerImage || nice4k;
+
   return (
     <div className="banner-img">
       <div className="gradient" />
-      <Image src={bannerImage} alt="Banner image" className="banner" />
+      <Image 
+        src={imageToShow} 
+        alt="Banner image" 
+        className="banner"
+        width={1200}
+        height={400}
+        priority
+      />
       {city && (
         <div className="content">
           <section className="wrapper">
