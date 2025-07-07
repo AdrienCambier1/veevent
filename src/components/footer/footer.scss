@@ -2,7 +2,7 @@
   @apply bg-primary-950 text-white mt-16;
 
   .footer-content {
-    @apply max-w-7xl mx-auto px-4 py-12;
+    @apply py-12;
 
     .footer-main {
       @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8;

@@ -12,6 +12,7 @@ import { useCityData } from "@/hooks/cities/use-city-data";
 import { useSearchPaginated } from "@/hooks/commons/use-search-paginated";
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 import EventCard from "@/components/cards/event-card/event-card";
+import NotFound from "@/app/not-found";
 
 interface CitiesLayoutProps {
   children: ReactNode;
@@ -23,12 +24,15 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
   const initialQuery = searchParams.get("q") || "";
   const searchScrollTargetRef = useRef<HTMLElement>(null);
 
-  const { city: cityData } = useCityData(city);
+  const { city: cityData, loading } = useCityData(city);
 
   // Stabiliser les filtres pour éviter les re-renders
-  const cityFilters = useMemo(() => ({
-    cityName: cityData?.name || city,
-  }), [cityData?.name, city]);
+  const cityFilters = useMemo(
+    () => ({
+      cityName: cityData?.name || city,
+    }),
+    [cityData?.name, city]
+  );
 
   // Nouvelle logique de recherche avec useSearchPaginated et filtre par ville
   const {
@@ -66,6 +70,68 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
       ))}
     </div>
   );
+
+  if (loading) {
+    return (
+      <main>
+        {/* Skeleton du banner */}
+        <div className="skeleton-bg h-64 w-full mb-6"></div>
+
+        <div className="wrapper">
+          {/* Skeleton du titre principal */}
+          <div className="skeleton-bg h-8 w-3/4 mb-4"></div>
+
+          {/* Skeleton du sous-titre */}
+          <div className="skeleton-bg h-6 w-1/2 mb-6"></div>
+
+          {/* Skeleton de la barre de recherche */}
+          <div className="skeleton-bg h-12 w-full mb-8 rounded-lg"></div>
+
+          {/* Skeleton du menu de navigation */}
+          <div className="flex gap-4 mb-8">
+            {Array.from({ length: 4 }, (_, i) => (
+              <div key={i} className="skeleton-bg h-10 w-24 rounded-lg"></div>
+            ))}
+          </div>
+
+          {/* Skeleton de la grille d'événements */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
+            {Array.from({ length: 8 }, (_, i) => (
+              <div key={i} className="skeleton-bg h-80 rounded-lg"></div>
+            ))}
+          </div>
+
+          {/* Skeleton de la section avis */}
+          <div className="mb-8">
+            <div className="skeleton-bg h-6 w-48 mb-2"></div>
+            <div className="skeleton-bg h-8 w-96 mb-6"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              {Array.from({ length: 2 }, (_, i) => (
+                <div key={i} className="skeleton-bg h-48 rounded-lg"></div>
+              ))}
+            </div>
+            <div className="skeleton-bg h-10 w-32 rounded-lg"></div>
+          </div>
+
+          {/* Skeleton de la section FAQ */}
+          <div>
+            <div className="skeleton-bg h-6 w-24 mb-2"></div>
+            <div className="skeleton-bg h-8 w-80 mb-6"></div>
+            {Array.from({ length: 3 }, (_, i) => (
+              <div
+                key={i}
+                className="skeleton-bg h-16 w-full mb-4 rounded-lg"
+              ></div>
+            ))}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (!cityData) {
+    return <NotFound />;
+  }
 
   return (
     <main>
@@ -130,24 +196,24 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
               description="Avis"
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <ReviewCard
-              author="Jean Dupont"
-              note={3}
-              title="Je recommande cette platefomre pour trouver des artistes locaux"
-              description="Sed non triarius nata consectetur est homines esse dolor voluptatem in iam ipsum viros est est est instrumento itaque iste epicuro. Isto triarius iste habent abducas atque et igitur se."
-              type="pop rock"
-              place="Maison 13"
-              city="Cannes"
-            />
-            <ReviewCard
-              author="Jean Dupont"
-              note={3}
-              title="Je recommande cette platefomre pour trouver des artistes locaux"
-              description="Sed non triarius nata consectetur est homines esse dolor voluptatem in iam ipsum viros est est est instrumento itaque iste epicuro. Isto triarius iste habent abducas atque et igitur se."
-              type="pop rock"
-              place="Maison 13"
-              city="Cannes"
-            />
+              <ReviewCard
+                author="Jean Dupont"
+                note={3}
+                title="Je recommande cette platefomre pour trouver des artistes locaux"
+                description="Sed non triarius nata consectetur est homines esse dolor voluptatem in iam ipsum viros est est est instrumento itaque iste epicuro. Isto triarius iste habent abducas atque et igitur se."
+                type="pop rock"
+                place="Maison 13"
+                city="Cannes"
+              />
+              <ReviewCard
+                author="Jean Dupont"
+                note={3}
+                title="Je recommande cette platefomre pour trouver des artistes locaux"
+                description="Sed non triarius nata consectetur est homines esse dolor voluptatem in iam ipsum viros est est est instrumento itaque iste epicuro. Isto triarius iste habent abducas atque et igitur se."
+                type="pop rock"
+                place="Maison 13"
+                city="Cannes"
+              />
             </div>
             <Link href="#" className="secondary-btn">
               <span>Voir plus d'avis</span>
