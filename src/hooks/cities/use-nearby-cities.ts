@@ -16,7 +16,10 @@ export function useNearbyCities(limit = 3) {
       let cityNames: string[] = [];
 
       if (currentCity) {
-        cityNames = [currentCity, ...nearbyCities].slice(0, limit);
+        cityNames = [
+          currentCity,
+          ...nearbyCities.map((city) => city.name),
+        ].slice(0, limit);
       } else {
         cityNames = [DEFAULT_CITY];
       }
