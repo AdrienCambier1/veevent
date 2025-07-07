@@ -28,7 +28,7 @@ export interface NearestCitiesResponse {
   success: boolean;
   data?: {
     currentCity: string;
-    nearbyCities: string[];
+    nearbyCities: SingleCity[];
     userLocation: {
       latitude: number;
       longitude: number;
@@ -307,7 +307,12 @@ export interface CategoryData extends BaseCategory {
 
 // === INTERFACES POUR LES UTILISATEURS ===
 
-export type UserRole = "User" | "Admin" | "AuthService" | "Organizer" | "Banned";
+export type UserRole =
+  | "User"
+  | "Admin"
+  | "AuthService"
+  | "Organizer"
+  | "Banned";
 
 // Interface de base pour un utilisateur (propriétés communes API)
 export interface BaseUser {

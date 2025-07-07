@@ -15,7 +15,7 @@ import { useSlugify } from "@/hooks/commons/use-slugify";
 interface CityContextType {
   selectedCity: SingleCity | undefined;
   currentCity: string | undefined;
-  nearbyCities: string[];
+  nearbyCities: SingleCity[];
   changeCity: (city: SingleCity) => void;
   loading: boolean;
   geoLoading: boolean;
@@ -47,7 +47,7 @@ interface CityProviderProps {
 export function CityProvider({ children }: CityProviderProps) {
   const [selectedCity, setSelectedCity] = useState<SingleCity | undefined>();
   const [currentCity, setCurrentCity] = useState<string | undefined>();
-  const [nearbyCities, setNearbyCities] = useState<string[]>([]);
+  const [nearbyCities, setNearbyCities] = useState<SingleCity[]>([]);
   const [userLocation, setUserLocation] = useState<
     { latitude: number; longitude: number } | undefined
   >();

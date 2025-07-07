@@ -30,9 +30,15 @@ export default function TextImageCard({
     >
       <div className="flex items-center">
         <p className="title">{title}</p>
-        <Image src={imageToShow} alt={`${title} image`} width={100} height={100} priority/>
+        <Image
+          src={imageToShow}
+          alt={`${title} image`}
+          width={100}
+          height={100}
+          priority
+        />
       </div>
-      {subtitle && (
+      {subtitle && isCard && (
         <div className="flex items-center justify-between gap-2 text-secondary-400">
           <p>{subtitle}</p>
           <ArrowUpRight className="group-hover:-translate-y-1 transition icon" />

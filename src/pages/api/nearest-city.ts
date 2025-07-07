@@ -170,27 +170,32 @@ export default async function handler(
     )[0];
 
     // Filtrer les villes à moins de 50km, trier et prendre les 4 premières
-    const nearbyCities = citiesWithDistance
+    const nearbyCitiesObjects = citiesWithDistance
       .filter((city) => city.distance <= 50)
       .sort((a, b) => a.distance - b.distance)
-      .slice(0, 4)
-      .map((city) => city.name);
+      .slice(0, 4);
 
-    // Fallback si aucune ville proche trouvée
-    const fallbackCities = ["Nice", "Cannes", "Marseille", "Lyon"];
+    // Fallback vers les villes populaires si aucune ville proche trouvée
+    const fallbackCities = citiesWithDistance
+      .sort((a, b) => b.eventsCount - a.eventsCount)
+      .slice(0, 4);
 
     console.log(
       "🏙️ Ville la plus proche:",
       nearestCity.name,
       "(" + Math.round(nearestCity.distance) + "km)"
     );
-    console.log("🎯 Villes proches:", nearbyCities);
+    console.log(
+      "🎯 Villes proches:",
+      nearbyCitiesObjects.map((city) => city.name)
+    );
 
     return res.status(200).json({
       success: true,
       data: {
         currentCity: nearestCity.name,
-        nearbyCities: nearbyCities.length > 0 ? nearbyCities : fallbackCities,
+        nearbyCities:
+          nearbyCitiesObjects.length > 0 ? nearbyCitiesObjects : fallbackCities,
         userLocation: {
           latitude: userLocation.lat,
           longitude: userLocation.lon,

@@ -3,6 +3,7 @@ import img from "@/assets/images/nice.jpg";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import { useCity } from "@/contexts/city-context";
 import { useSidebar } from "@/contexts/sidebar-context";
+import { useCities } from "@/hooks/cities/use-cities";
 import { AnimatePresence, motion } from "framer-motion";
 import { City, MapPin, Xmark } from "iconoir-react";
 import Link from "next/link";
@@ -23,6 +24,33 @@ export default function SidebarMenu() {
     canUsePreciseLocation,
     isGpsEnabled,
   } = useCity();
+
+  // Hook pour récupérer les villes populaires par défaut
+  const { cities: popularCities, loading: popularLoading } = useCities(
+    "popular",
+    { limit: 4 }
+  );
+
+  // Logique simplifiée avec gestion de la transition
+  const hasNearbyCities = nearbyCities.length > 0;
+  const hasPopularCities = popularCities.length > 0;
+
+  // Utiliser les villes proches si disponibles, sinon les populaires
+  const citiesToDisplay = hasNearbyCities ? nearbyCities : popularCities;
+
+  // Afficher skeleton si :
+  // - Géolocalisation en cours
+  // - Pas de villes proches ET chargement des populaires en cours
+  // - Aucune ville à afficher (transition)
+  const isLoadingCities =
+    geoLoading ||
+    (!hasNearbyCities && popularLoading) ||
+    citiesToDisplay.length === 0;
+
+  // Titre dynamique
+  const sectionTitle = hasNearbyCities
+    ? "Villes à proximité"
+    : "Villes populaires";
 
   const overlayVariants = {
     hidden: { opacity: 0 },
@@ -127,7 +155,9 @@ export default function SidebarMenu() {
               <div className="city-selector">
                 <City strokeWidth={2} />
                 <div className="city-info">
-                  <span>{geoLoading ? "Localisation..." : currentCity}</span>
+                  <span>
+                    {isLoadingCities ? "Localisation..." : currentCity}
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -140,27 +170,42 @@ export default function SidebarMenu() {
               exit="hidden"
             >
               <motion.p className="sidebar-list-title" variants={itemVariants}>
-                {nearbyCities.length > 0
-                  ? "Villes à proximité"
-                  : "Explorer par ville"}
+                {sectionTitle}
               </motion.p>
 
-              {nearbyCities.map((city, index) => (
-                <motion.div
-                  key={city}
-                  variants={itemVariants}
-                  custom={index}
-                  style={{ cursor: "pointer" }}
-                >
-                  <TextImageCard
-                    title={city}
-                    href={`/villes/${city.toLowerCase()}`}
-                    isCard={false}
-                    image={img}
-                    onClick={closeSidebar}
-                  />
-                </motion.div>
-              ))}
+              {isLoadingCities
+                ? // Skeleton loading pour les villes
+                  Array.from({ length: 4 }, (_, index) => (
+                    <motion.div
+                      key={`skeleton-${index}`}
+                      variants={itemVariants}
+                      custom={index}
+                      className="flex items-center gap-3 p-3 rounded-lg mb-2"
+                    >
+                      <div className="skeleton-bg w-12 h-12 rounded-lg flex-shrink-0"></div>
+                      <div className="flex-1">
+                        <div className="skeleton-bg h-4 w-20 mb-1"></div>
+                        <div className="skeleton-bg h-3 w-16 opacity-70"></div>
+                      </div>
+                      <div className="skeleton-bg w-4 h-4 rounded"></div>
+                    </motion.div>
+                  ))
+                : citiesToDisplay.map((city, index) => (
+                    <motion.div
+                      key={city.id}
+                      variants={itemVariants}
+                      custom={index}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <TextImageCard
+                        title={city.name}
+                        href={`/villes/${city.name.toLowerCase()}`}
+                        isCard={false}
+                        image={city.imageUrl || img}
+                        onClick={closeSidebar}
+                      />
+                    </motion.div>
+                  ))}
 
               <motion.div variants={itemVariants}>
                 <Link
