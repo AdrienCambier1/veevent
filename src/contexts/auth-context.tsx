@@ -267,6 +267,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Déconnexion
   const logout = useCallback((redirectToLogin = false, errorCode?: string) => {
     authService.clearAuthData();
+    authService.clearProfileCompleteFlag();
     setIsAuthenticated(false);
     setToken(null);
     clearError();

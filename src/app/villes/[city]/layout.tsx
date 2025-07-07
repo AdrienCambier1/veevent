@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useRef, Suspense } from "react";
+import { ReactNode, useRef, Suspense, useMemo } from "react";
 import SearchInput from "@/components/inputs/search-input/search-input";
 import BarMenu from "@/components/menu/bar-menu/bar-menu";
 import BannerHead from "@/components/heads/banner-head/banner-head";
@@ -25,7 +25,12 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
 
   const { city: cityData } = useCityData(city);
 
-  // Nouvelle logique de recherche avec useSearchPaginated
+  // Stabiliser les filtres pour éviter les re-renders
+  const cityFilters = useMemo(() => ({
+    cityName: cityData?.name || city,
+  }), [cityData?.name, city]);
+
+  // Nouvelle logique de recherche avec useSearchPaginated et filtre par ville
   const {
     query,
     setQuery,
@@ -43,6 +48,7 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
     initialTypes: ["event"],
     pageSize: 20,
     scrollTargetRef: searchScrollTargetRef,
+    filters: cityFilters,
   });
 
   const navigation = [
@@ -101,7 +107,7 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
             )}
             renderEmpty={() => (
               <div className="text-center text-gray-500 py-8">
-                <p>Aucun événement trouvé à {city}</p>
+                <p>Aucun événement trouvé à {cityData?.name || city}</p>
               </div>
             )}
             renderLoading={renderSearchLoading}
@@ -123,6 +129,7 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
               title="Nos utilisateurs parlent de leur expérience à Nice"
               description="Avis"
             />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <ReviewCard
               author="Jean Dupont"
               note={3}
@@ -141,6 +148,7 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
               place="Maison 13"
               city="Cannes"
             />
+            </div>
             <Link href="#" className="secondary-btn">
               <span>Voir plus d'avis</span>
             </Link>

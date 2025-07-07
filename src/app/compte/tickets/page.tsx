@@ -3,6 +3,7 @@ import React, { Suspense, useEffect } from "react";
 import { useUser } from "@/hooks/commons/use-user";
 import { useUserOrders } from "@/hooks/commons/use-user-orders";
 import { useAuth } from "@/contexts/auth-context";
+import { ProfileCompleteGuard } from "@/components/commons/profile-complete-guard";
 import TicketCard from "@/components/cards/ticket-card/ticket-card";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import OrderCard from "@/components/cards/order-card/order-card";
@@ -127,7 +128,9 @@ function TicketsPageContent() {
 export default function TicketsPage() {
   return (
     <Suspense fallback={null}>
-      <TicketsPageContent />
+      <ProfileCompleteGuard>
+        <TicketsPageContent />
+      </ProfileCompleteGuard>
     </Suspense>
   );
 }

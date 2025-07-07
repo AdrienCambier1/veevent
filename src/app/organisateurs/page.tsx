@@ -44,7 +44,7 @@ function OrganisateursPageContent() {
     loadNextPage: searchLoadNextPage,
   } = useSearchPaginated({
     initialQuery,
-    initialTypes: ["user"],
+    initialTypes: ["organizer"],
     pageSize: 20,
     scrollTargetRef,
   });

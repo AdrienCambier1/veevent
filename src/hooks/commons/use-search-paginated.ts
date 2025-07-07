@@ -1,7 +1,7 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { searchGlobal, searchByType } from "@/services/search-service";
-import { PaginationInfo } from "@/types";
+import { PaginationInfo, EventFilters } from "@/types";
 
 interface UseSearchPaginatedOptions {
   initialQuery?: string;
@@ -9,6 +9,7 @@ interface UseSearchPaginatedOptions {
   pageSize?: number;
   scrollTargetRef?: React.RefObject<HTMLElement | null>;
   debounceDelay?: number;
+  filters?: EventFilters;
 }
 
 export function useSearchPaginated({
@@ -17,6 +18,7 @@ export function useSearchPaginated({
   pageSize = 20,
   scrollTargetRef,
   debounceDelay = 400,
+  filters = {},
 }: UseSearchPaginatedOptions = {}) {
   const [query, setQuery] = useState<string>(initialQuery);
   const [types, setTypes] = useState<string[] | undefined>(initialTypes);
@@ -28,6 +30,32 @@ export function useSearchPaginated({
   );
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const fetchRef = useRef<(() => void) | null>(null);
+
+  const stableFilters = useMemo(() => {
+    if (!filters || Object.keys(filters).length === 0) return {};
+    
+    const validFilters: EventFilters = {};
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        if (Array.isArray(value) && value.length > 0) {
+          (validFilters as any)[key] = value;
+        } else if (!Array.isArray(value)) {
+          (validFilters as any)[key] = value;
+        }
+      }
+    });
+    return validFilters;
+  }, [
+    filters?.cityName,
+    filters?.placeName,
+    filters?.categories,
+    filters?.minPrice,
+    filters?.maxPrice,
+    filters?.startDate,
+    filters?.endDate,
+    filters?.sortBy,
+    filters?.sortOrder,
+  ]);
 
   const scrollToTarget = useCallback(() => {
     if (scrollTargetRef?.current) {
@@ -58,13 +86,13 @@ export function useSearchPaginated({
         setError(null);
 
         let data;
+
         if (types && types.length > 0) {
-          data = await searchByType(query, types, page, size);
+          data = await searchByType(query, types, page, size, stableFilters);
         } else {
           data = await searchGlobal(query, page, size);
         }
 
-        // Extraire les résultats de la réponse API
         const searchItems = data._embedded?.searchResultResponses || [];
         const searchPagination = data.page || {
           size,
@@ -83,35 +111,32 @@ export function useSearchPaginated({
         setLoading(false);
       }
     },
-    [query, types, pageSize]
+    [query, types, pageSize, stableFilters]
   );
 
-  // Mettre à jour la référence de la fonction
   useEffect(() => {
     fetchRef.current = () => fetchSearchResults(0);
   }, [fetchSearchResults]);
 
-  // Recharger les données quand la requête ou les types changent avec debounce
   useEffect(() => {
-    // Annuler le timeout précédent
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     }
 
-    // Créer un nouveau timeout
-    debounceTimeoutRef.current = setTimeout(() => {
-      if (fetchRef.current) {
-        fetchRef.current();
-      }
-    }, debounceDelay);
+    if (query.trim()) {
+      debounceTimeoutRef.current = setTimeout(() => {
+        if (fetchRef.current) {
+          fetchRef.current();
+        }
+      }, debounceDelay);
+    }
 
-    // Cleanup function
     return () => {
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
       }
     };
-  }, [query, types, debounceDelay]);
+  }, [query, types, stableFilters, debounceDelay]);
 
   const loadPage = useCallback(
     (page: number) => {

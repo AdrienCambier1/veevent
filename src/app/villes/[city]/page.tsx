@@ -187,8 +187,15 @@ export default function CityPage() {
           pour tous les goûts et tous les âges. Ne manquez pas les événements qui font vibrer notre région !`}
           date={new Date().toLocaleDateString("fr-FR")}
         />
+        <NewsCard
+          title={`Les événements incontournables à ${city.name}`}
+          description={`Découvrez les meilleurs événements qui se déroulent à ${city.name}. 
+          Avec ${city.eventsCount} événements disponibles, notre ville offre une programmation riche et variée 
+          pour tous les goûts et tous les âges. Ne manquez pas les événements qui font vibrer notre région !`}
+          date={new Date().toLocaleDateString("fr-FR")}
+        />
 
-        {nearestCities.length > 0 && (
+        {/* {nearestCities.length > 0 && (
           <NewsCard
             title={`Explorez les villes voisines de ${city.name}`}
             description={`${
@@ -201,7 +208,7 @@ export default function CityPage() {
             }.`}
             date={new Date().toLocaleDateString("fr-FR")}
           />
-        )}
+        )} */}
         </div>
         <Link href="#" className="secondary-btn">
           <span>Voir les actualités de la ville</span>

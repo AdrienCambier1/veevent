@@ -474,7 +474,6 @@ class AuthService {
       // Vérifier si tous les champs importants sont remplis
       const hasBasicInfo = !!(userData.firstName && userData.lastName);
       const hasContactInfo = !!userData.phone;
-      const hasDescription = !!userData.description;
       const hasCategories = !!(userData.categories && userData.categories.length > 0);
 
       // Pour un profil vraiment complet, on veut au moins les infos de base + téléphone + catégories
@@ -485,6 +484,39 @@ class AuthService {
       console.error("Erreur vérification profil complet:", error);
       return false;
     }
+  }
+
+  // Marquer le profil comme complet (stockage en cookie)
+  public markProfileAsComplete(): void {
+    if (typeof window === "undefined") return;
+    
+    // Stocker un flag dans un cookie pour indiquer que le profil est complet
+    // Cookie valide pour 1 an
+    const maxAge = 365 * 24 * 60 * 60;
+    this.setSecureCookie("profile_complete", "true", maxAge);
+    console.log("🔍 AuthService - Profil marqué comme complet, cookie créé");
+  }
+
+  // Vérifier si le profil a été marqué comme complet
+  public isProfileMarkedAsComplete(): boolean {
+    if (typeof window === "undefined") return false;
+    
+    const cookies = document.cookie.split(';');
+    const profileCompleteCookie = cookies.find(cookie => 
+      cookie.trim().startsWith("profile_complete=")
+    );
+    
+    const isComplete = profileCompleteCookie?.split('=')[1] === "true";
+    console.log("🔍 AuthService - Vérification profil complet:", isComplete, "Cookie:", profileCompleteCookie);
+    
+    return isComplete;
+  }
+
+  // Nettoyer le flag de profil complet
+  public clearProfileCompleteFlag(): void {
+    if (typeof window === "undefined") return;
+    
+    this.clearSecureCookie("profile_complete");
   }
 }
 
