@@ -81,6 +81,9 @@ function AuthCallbackContent() {
             // L'utilisateur OAuth n'a pas un profil complet, le rediriger vers la page de complétion
             window.location.href = "/auth/complete-profile";
             return;
+          } else {
+            // Le profil est complet côté serveur, le marquer comme complet localement
+            authService.markProfileAsComplete();
           }
         }
         

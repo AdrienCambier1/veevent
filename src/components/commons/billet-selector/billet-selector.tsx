@@ -3,6 +3,8 @@ import { SingleEvent } from "@/types";
 import "./billet-selector.scss";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
+import { useAuth } from "@/contexts/auth-context";
+import { authService } from "@/services/auth-service";
 
 interface BilletSelectorProps {
   event: SingleEvent;
@@ -14,6 +16,7 @@ const BilletSelector: React.FC<BilletSelectorProps> = ({ event, disabled }) => {
   const placesRestantes = event.maxCustomers - event.currentParticipants;
   const max = Math.min(10, placesRestantes);
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
 
   const handleMinus = () => {
     if (disabled) return;
@@ -27,6 +30,15 @@ const BilletSelector: React.FC<BilletSelectorProps> = ({ event, disabled }) => {
   const handleReserve = () => {
     if (disabled) return;
     if (quantity > 0) {
+      // Vérifier si l'utilisateur est connecté et a un profil complet
+      if (isAuthenticated) {
+        const isProfileComplete = authService.isProfileMarkedAsComplete();
+        if (!isProfileComplete) {
+          // Rediriger vers la complétion de profil avec retour vers l'inscription
+          router.push(`/auth/complete-profile?redirect=/evenements/${event.id}/order?qty=${quantity}`);
+          return;
+        }
+      }
       router.push(`/evenements/${event.id}/order?qty=${quantity}`);
     }
   };

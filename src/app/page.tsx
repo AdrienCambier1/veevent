@@ -279,13 +279,13 @@ export default function HomePage() {
         <Welcome />
       </section>
       <section className="wrapper">
-        <p className="text-lg font-bold text-center">
+        <p className="text-lg font-bold text-center md:text-2xl md:w-2/3 mx-auto md:leading-10 md:h-[150px] flex items-center justify-center">
           Un concert 🎸qui fait vibrer. Un atelier qui inspire. Un festival 🎪 à
           ne pas manquer. Tout est ici. Découvrez, réservez, profitez. 🗓️
         </p>
       </section>
       <section className="wrapper">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 md:w-1/2 md:mx-auto">
           <p className="font-medium">Recherchez ce qui vous intéresse</p>
           <SearchBtn />
         </div>
@@ -336,17 +336,23 @@ export default function HomePage() {
 
       {!isAuthenticated && (
         <section className="wrapper">
+          <div className="flex flex-col gap-2 md:flex-row md:justify-between md:items-center">
+            <div className="flex flex-col gap-2">
           <h2>Gérer vos évènements facilement</h2>
           <p>
             Créer un compte ou connectez-vous pour rester informer sur vos
             évènements et notifications.
           </p>
+          </div>
+          <div className="flex flex-col gap-2 md:flex-row md:w-1/3">
           <Link href="/connexion" className="primary-btn">
             <span>S'inscrire</span>
           </Link>
           <Link href="/inscription" className="secondary-btn">
             <span>Se connecter</span>
           </Link>
+          </div>
+          </div>
         </section>
       )}
 
@@ -362,6 +368,7 @@ export default function HomePage() {
           </>
         ) : (
           <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <NewsCard
               title="Les 5 artistes émergeants qui font le show sur la Côte d'Azur"
               description="Magis reges hoc pertinacior inquam nulla arcesilas nata hoc diodorus erit coercendi maximas quod. Et effectrix tanto est quid est modo voluptatem autem tanto familiares actione et credo si.\nCum quis callipho credo tuus nulla est dicis sequuntur aegyptum interrete cum pullum constructio atqui etiam istud iste... En lire plus"
@@ -372,6 +379,7 @@ export default function HomePage() {
               description="description courte le bouton ne s'affiche pas à voir si ça redirige vers une page ou ça affiche tout le texte"
               date="25/04/2025"
             />
+            </div>
           </>
         )}
         <Link href="/actualites" className="secondary-btn">
@@ -424,6 +432,7 @@ export default function HomePage() {
         {loadingReview ? (
           <ReviewCardSkeleton />
         ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <ReviewCard
             author="Jean Dupont"
             note={3}
@@ -433,6 +442,16 @@ export default function HomePage() {
             place="Maison 13"
             city="Cannes"
           />
+          <ReviewCard
+            author="Jean Dupont"
+            note={3}
+            title="Je recommande cette platefomre pour trouver des artistes locaux"
+            description="Sed non triarius nata consectetur est homines esse dolor voluptatem in iam ipsum viros est est est instrumento itaque iste epicuro. Isto triarius iste habent abducas atque et igitur se."
+            type="pop rock"
+            place="Maison 13"
+            city="Cannes"
+          />
+          </div>
         )}
         <Link href="#" className="secondary-btn">
           <span>Voir tous les avis</span>
@@ -480,7 +499,7 @@ export default function HomePage() {
         </p>
         <div className="flex flex-col gap-2">
           <label>Adresse mail </label>
-          <input type="text" placeholder="text input" />
+          <input type="text" placeholder="Votre adresse mail" />
         </div>
         <p className="text-gray-500">
           En vous inscrivant, vous acceptez notre politique de confidentialité
@@ -493,6 +512,7 @@ export default function HomePage() {
 
       <section className="wrapper">
         <h2>Sortir avec veevent</h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
         <Shortcut
           link="/evenements"
           label="Trouver un évènement"
@@ -513,6 +533,7 @@ export default function HomePage() {
           label="Trouver un lieu"
           icon={<Iconoir.Home />}
         />
+        </div>
       </section>
 
       

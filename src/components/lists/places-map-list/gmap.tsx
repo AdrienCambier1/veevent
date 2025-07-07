@@ -27,7 +27,7 @@ export default function Gmaps({ locations, onMarkerClick }: GmapsProps) {
       : { lat: 0, lng: 0 };
 
   return (
-    <div className="w-full h-[250px] rounded-[var(--vv-border-radius)] overflow-hidden border-2 border-gray-300">
+    <div className="w-full h-[250px] md:h-[500px] rounded-[var(--vv-border-radius)] overflow-hidden border-2 border-gray-300">
       <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}>
         <Map
           defaultZoom={13}

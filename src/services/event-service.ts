@@ -50,6 +50,7 @@ const mapMockEventToEvent = (mockEvent: any): Event => {
       isTrending: mockEvent.isTrending,
       price: mockEvent.price,
       status: mockEvent.status,
+      imageUrl: mockEvent.imageUrl,
       categories: mockEvent.categories,
       organizer: undefined,
       currentParticipants: mockEvent.currentParticipants,
@@ -96,6 +97,7 @@ const mapMockEventToEvent = (mockEvent: any): Event => {
     isTrending: mockEvent.isTrending,
     price: mockEvent.price,
     status: mockEvent.status,
+    imageUrl: mockEvent.imageUrl,
     categories: mockEvent.categories,
     organizer: mappedOrganizer,
     currentParticipants: mockEvent.currentParticipants,
@@ -364,6 +366,7 @@ export const eventService = {
           ...mockEvent,
           date: formatEventDate(mockEvent.date),
           status: mockEvent.status as EventStatus,
+          imageUrl: "",
           organizer: mappedOrganizer,
           _links: {
             self: {
@@ -422,6 +425,7 @@ export const eventService = {
         isInvitationOnly: apiEvent.isInvitationOnly,
         price: apiEvent.price,
         status: apiEvent.status,
+        imageUrl: apiEvent.imageUrl,
         categories: apiEvent.categories || [],
         organizer: apiEvent.organizer,
         currentParticipants: apiEvent.currentParticipants || 0,

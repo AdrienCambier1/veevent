@@ -14,14 +14,23 @@ const REDIRECTS = {
   AFTER_LOGIN: "/compte/tickets",
   AFTER_LOGOUT: "/",
   LOGIN_PAGE: "/connexion",
+  COMPLETE_PROFILE: "/auth/complete-profile",
 };
 
 export default function middleware(request) {
   const path = request.nextUrl.pathname;
   const authCookie = request.cookies.get("auth_token");
+  
+  // Log pour le débogage (à retirer en production)
+  console.log(`🔍 Middleware - Path: ${path}, HasToken: ${!!authCookie?.value}`);
 
-  // Ignorer explicitement les routes d'auth
-  if (path.startsWith("/auth/")) {
+  // Ignorer explicitement les routes d'auth sauf la complétion de profil
+  if (path.startsWith("/auth/") && !path.startsWith("/auth/complete-profile")) {
+    return NextResponse.next();
+  }
+
+  // Ignorer les ressources statiques et les fichiers
+  if (path.includes(".") || path.startsWith("/_next/") || path.startsWith("/api/")) {
     return NextResponse.next();
   }
 
@@ -74,6 +83,58 @@ export default function middleware(request) {
     return NextResponse.redirect(
       new URL(`${REDIRECTS.LOGIN_PAGE}?redirect=${encodedRedirectPath}`, request.url)
     );
+  }
+
+  // Redirection si utilisateur connecté avec profil incomplet
+  if (hasValidToken && !isCompleteProfileRoute && !isAuthRoute) {
+    const profileCompleteCookie = request.cookies.get("profile_complete");
+    const isProfileComplete = profileCompleteCookie?.value === "true";
+    
+    console.log(`🔍 Middleware - ProfileComplete: ${isProfileComplete}, Path: ${path}`);
+    
+    // Si l'utilisateur n'a pas de profil complet, vérifier les restrictions
+    if (!isProfileComplete) {
+      // Routes publiques autorisées sans profil complet
+      const publicRoutes = [
+        "/",
+        "/evenements",
+        "/lieux", 
+        "/villes",
+        "/organisateurs",
+        "/connexion",
+        "/inscription",
+        "/auth/callback",
+        "/test-profile-complete", // Page de test temporaire
+        "/test-event-order" // Page de test événements temporaire
+      ];
+      
+      // Routes qui nécessitent un profil complet (même si elles commencent par une route publique)
+      const requiresCompleteProfileRoutes = [
+        "/evenements/*/order", // Pages d'inscription aux événements
+        "/evenements/*/order/*", // Sous-pages d'inscription
+      ];
+      
+      // Vérifier si la route actuelle nécessite un profil complet
+      const requiresCompleteProfile = requiresCompleteProfileRoutes.some(route => {
+        const routePattern = route.replace(/\*/g, '[^/]+');
+        const regex = new RegExp(`^${routePattern}$`);
+        return regex.test(path);
+      });
+      
+      const isPublicRoute = publicRoutes.some(route => 
+        path === route || path.startsWith(`${route}/`)
+      );
+      
+      console.log(`🔍 Middleware - IsPublicRoute: ${isPublicRoute}, RequiresCompleteProfile: ${requiresCompleteProfile}, Path: ${path}`);
+      
+      // Si ce n'est pas une route publique OU si c'est une route qui nécessite un profil complet, rediriger
+      if (!isPublicRoute || requiresCompleteProfile) {
+        console.log(`🔄 Middleware - Redirection vers /auth/complete-profile depuis ${path}`);
+        return NextResponse.redirect(new URL(REDIRECTS.COMPLETE_PROFILE, request.url));
+      } else {
+        console.log(`✅ Middleware - Route publique autorisée: ${path}`);
+      }
+    }
   }
 
   // Ajout de la Content-Security-Policy pour toutes les autres réponses

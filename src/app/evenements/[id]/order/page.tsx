@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { useUser } from "@/hooks/commons/use-user";
 import { useSingleEvent } from "@/hooks/events/use-single-event";
 import { eventService } from "@/services/event-service";
+import { authService } from "@/services/auth-service";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -35,8 +36,20 @@ export default function OrderPage() {
   useEffect(() => {
     if (!isAuthenticated) {
       router.replace(`/connexion?redirect=/evenements/${id}/order?qty=${qty}`);
+      return;
     }
-  }, [isAuthenticated, id, qty, router]);
+
+    // Vérifier si le profil est complet
+    if (isAuthenticated && token) {
+      const isProfileComplete = authService.isProfileMarkedAsComplete();
+      console.log("🔍 OrderPage - Profil complet:", isProfileComplete);
+      
+      if (!isProfileComplete) {
+        console.log("🔍 OrderPage - Profil incomplet, redirection vers complétion");
+        router.replace(`/auth/complete-profile?redirect=/evenements/${id}/order?qty=${qty}`);
+      }
+    }
+  }, [isAuthenticated, token, id, qty, router]);
 
   if (eventLoading) return <div className="wrapper py-12">Chargement...</div>;
   if (eventError || !event) return <div className="wrapper py-12 text-red-600">Erreur lors du chargement de l'événement.</div>;

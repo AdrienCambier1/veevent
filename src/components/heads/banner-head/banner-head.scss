@@ -1,6 +1,10 @@
 .banner-img {
   @apply relative;
 
+  .banner {
+    @apply w-full h-64 object-cover;
+  }
+
   .gradient {
     @apply inset-0 absolute opacity-50 bg-gradient-to-r from-primary-600 via-transparent to-primary-600;
   }

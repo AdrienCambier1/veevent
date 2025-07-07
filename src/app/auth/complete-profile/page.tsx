@@ -1,13 +1,13 @@
 "use client";
 import SelectorThemeTags from "@/components/tags/selector-theme-tags/selector-theme-tags";
-import { FormEvent, useState, useEffect } from "react";
+import { FormEvent, useState, useEffect, Suspense } from "react";
 import { useHeader } from "@/contexts/header-context";
 import { useAuth } from "@/contexts/auth-context";
 import { categoryService } from "@/services/category-service";
 import { authService } from "@/services/auth-service";
 import { Category } from "@/types";
 import { ProgressSteps } from "@/components/commons/progress-steps/progress-steps";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface FormData {
   // Étape 1: Informations personnelles
@@ -25,11 +25,13 @@ interface ValidationErrors {
   [key: string]: string;
 }
 
-export default function CompleteProfilePage() {
+// Composant wrapper pour gérer useSearchParams avec Suspense
+function CompleteProfileContent() {
   const [step, setStep] = useState(1);
   const { setHideCitySelector } = useHeader();
   const { token, loading, error, clearError, updateProfile } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
@@ -53,13 +55,26 @@ export default function CompleteProfilePage() {
 
   // Vérifier si l'utilisateur est authentifié et charger ses données
   useEffect(() => {
+    console.log("🔍 CompleteProfile - Loading:", loading, "Token:", !!token);
+    
     // Attendre que le contexte d'authentification soit complètement initialisé
     if (loading) {
       return;
     }
 
     if (!token) {
+      console.log("🔍 CompleteProfile - Pas de token, redirection vers connexion");
       router.push("/connexion");
+      return;
+    }
+
+    // Vérifier si le profil est déjà marqué comme complet
+    const isMarkedComplete = authService.isProfileMarkedAsComplete();
+    console.log("🔍 CompleteProfile - Profil marqué comme complet:", isMarkedComplete);
+    
+    if (isMarkedComplete) {
+      console.log("🔍 CompleteProfile - Profil déjà complet, redirection vers tickets");
+      router.push("/compte/tickets");
       return;
     }
 
@@ -69,11 +84,12 @@ export default function CompleteProfilePage() {
         const userData = await authService.fetchUserData(token);
         
         if (userData) {
-          // Vérifier si le profil est déjà complet
+          // Vérifier si le profil est déjà complet côté serveur
           const isProfileComplete = await authService.isProfileComplete(token);
           
-          // Si le profil est déjà complet, rediriger vers le compte
+          // Si le profil est déjà complet côté serveur, le marquer comme complet et rediriger
           if (isProfileComplete) {
+            authService.markProfileAsComplete();
             router.push("/compte/tickets");
             return;
           }
@@ -102,6 +118,40 @@ export default function CompleteProfilePage() {
       clearError();
     }
   }, [formData, error, clearError]);
+
+  // Empêcher l'utilisateur de quitter la page sans avoir complété son profil
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // Vérifier si le formulaire a été soumis avec succès
+      if (!authService.isProfileMarkedAsComplete()) {
+        e.preventDefault();
+        e.returnValue = "Vous devez compléter votre profil avant de quitter cette page.";
+        return "Vous devez compléter votre profil avant de quitter cette page.";
+      }
+    };
+
+    const handlePopState = (e: PopStateEvent) => {
+      // Empêcher la navigation arrière si le profil n'est pas complet
+      if (!authService.isProfileMarkedAsComplete()) {
+        e.preventDefault();
+        window.history.pushState(null, "", window.location.pathname);
+        alert("Vous devez compléter votre profil avant de quitter cette page.");
+      }
+    };
+
+    // Ajouter les event listeners
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("popstate", handlePopState);
+    
+    // Empêcher la navigation arrière initiale
+    window.history.pushState(null, "", window.location.pathname);
+
+    // Nettoyer les event listeners
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   // Charger les catégories depuis l'API
   useEffect(() => {
@@ -262,9 +312,19 @@ export default function CompleteProfilePage() {
         };
 
         const success = await updateUserProfile(updateData);
+        console.log("🔍 CompleteProfile - Mise à jour profil réussie:", success);
+        
         if (success) {
-          // Redirection vers le profil après mise à jour réussie
-          router.push("/compte/tickets");
+          // Marquer le profil comme complet après mise à jour réussie
+          authService.markProfileAsComplete();
+          console.log("🔍 CompleteProfile - Profil marqué comme complet");
+          
+          // Vérifier s'il y a une redirection demandée
+          const redirectParam = searchParams?.get("redirect");
+          const redirectUrl = redirectParam || "/compte/tickets";
+          
+          console.log("🔍 CompleteProfile - Redirection vers:", redirectUrl);
+          router.push(redirectUrl);
         }
       } catch (error) {
         console.error("Erreur lors de la mise à jour du profil:", error);
@@ -432,12 +492,46 @@ export default function CompleteProfilePage() {
     }
   };
 
+  // État pour vérifier si JavaScript est activé
+  const [jsEnabled, setJsEnabled] = useState(false);
+  const [isDirectAccess, setIsDirectAccess] = useState(false);
+
+  useEffect(() => {
+    setJsEnabled(true);
+    
+    // Vérifier si c'est un accès direct (pas via redirection OAuth)
+    const referrer = document.referrer;
+    const isFromOAuth = referrer.includes('/auth/callback') || referrer.includes('/connexion');
+    setIsDirectAccess(!isFromOAuth && referrer !== '');
+    
+    console.log("🔍 CompleteProfile - Accès direct:", !isFromOAuth, "Referrer:", referrer);
+  }, []);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Afficher un message si JavaScript est désactivé
+  if (!jsEnabled) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <h2 className="text-lg font-semibold text-red-700 mb-2">
+              JavaScript requis
+            </h2>
+            <p className="text-red-600 text-sm">
+              Cette page nécessite JavaScript pour fonctionner correctement. 
+              Veuillez activer JavaScript dans votre navigateur pour compléter votre profil.
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -451,9 +545,23 @@ export default function CompleteProfilePage() {
             Complétez votre profil sur{" "}
             <span className="text-[var(--primary-600)]">veevent</span>
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 mb-4">
             Pour une expérience personnalisée, nous avons besoin de quelques informations supplémentaires
           </p>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 max-w-md mx-auto">
+            <p className="text-sm text-blue-700">
+              <strong>Important :</strong> Vous devez compléter votre profil avant de pouvoir accéder aux fonctionnalités de votre compte.
+            </p>
+          </div>
+          
+          {isDirectAccess && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 max-w-md mx-auto mt-4">
+              <p className="text-sm text-yellow-700">
+                <strong>Attention :</strong> Cette page est normalement accessible uniquement après une connexion OAuth. 
+                Si vous êtes arrivé ici par erreur, veuillez vous connecter via OAuth.
+              </p>
+            </div>
+          )}
         </div>
         
         <ProgressSteps steps={progressSteps} className="mb-6" />
@@ -502,5 +610,13 @@ export default function CompleteProfilePage() {
         </p>
       </section>
     </main>
+  );
+}
+
+export default function CompleteProfilePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CompleteProfileContent />
+    </Suspense>
   );
 } 

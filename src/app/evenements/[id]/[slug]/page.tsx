@@ -240,7 +240,7 @@ export default function EventPage() {
 
   return (
     <main>
-      <BannerHead />
+      <BannerHead bannerImage={event.imageUrl} />
       <EventHead
         id={event.id}
         title={event.name}
@@ -512,6 +512,7 @@ export default function EventPage() {
           description="Actualités"
           title="Ces artistes font la Une"
         />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <NewsCard
           title="Les 5 artistes émergeants qui font le show sur la Côte d'Azur"
           description="Magis reges hoc pertinacior inquam nulla arcesilas nata hoc diodorus erit coercendi maximas quod. Et effectrix tanto est quid est modo voluptatem autem tanto familiares actione et credo si."
@@ -522,6 +523,7 @@ export default function EventPage() {
           description="Découvrez notre sélection d'événements incontournables pour cette semaine."
           date="20/04/2025"
         />
+        </div>
       </section>
 
       <section className="wrapper">
