@@ -9,6 +9,8 @@ import { usePlaceEventsPaginated } from "@/hooks/places/use-place-events-paginat
 import { Event } from "@/types";
 import { useParams } from "next/navigation";
 import { useCallback, useRef, useState } from "react";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;
@@ -24,6 +26,12 @@ function EvenementsContent() {
 
   // Récupérer le lieu depuis l'API
   const { place, loading: placeLoading } = usePlaceData(placeParam);
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle({
+    title: place ? `Événements à ${place.name}` : 'Événements du lieu',
+    description: place ? `Découvrez tous les événements à ${place.name} à ${place.cityName}` : 'Découvrez les événements de ce lieu',
+  });
 
   // Hook paginé pour les événements du lieu
   const {
@@ -141,18 +149,16 @@ function EvenementsContent() {
         onPageChange={loadPage}
         onPreviousPage={loadPreviousPage}
         onNextPage={loadNextPage}
-        hasActiveFilters={hasActiveFilters}
-        onOpenFilters={() => setIsFilterOpen(true)}
+        hasActiveFilters={false}
+        showFilters={false}
+        onOpenFilters={() => {}}
         renderItem={renderPaginatedEventCard}
         title={
           place ? `Tous les événements à ${place.name}` : "Tous les événements"
         }
         scrollTargetRef={eventsSectionRef}
       />
-      <FilterBottomSheet
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
-      />
+      
     </>
   );
 }

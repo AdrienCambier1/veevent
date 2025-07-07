@@ -22,7 +22,7 @@ export default function BannerHead({
         alt="Banner image" 
         className="banner"
         width={1200}
-        height={400}
+        height={300}
         priority
       />
       {city && (

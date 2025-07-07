@@ -7,7 +7,7 @@
   @apply flex gap-1 justify-between border-[0.5px] border-gray-500 bg-gray-200/80 backdrop-blur-sm rounded-full p-1 flex-grow max-w-[340px] mx-auto;
 
   .floating-menu-item {
-    @apply border border-transparent bg-white/70 text-gray-500 rounded-full font-bold max-w-[100px] text-[12px] h-10 flex flex-grow items-center justify-center px-4;
+    @apply border border-transparent bg-white/70 text-gray-500 rounded-full font-bold max-w-[100px] text-[12px] h-10 flex flex-grow items-center justify-center px-4 text-nowrap overflow-hidden;
     text-align: center;
     cursor: pointer;
 

@@ -6,6 +6,8 @@ import { useHeader } from "@/contexts/header-context";
 import { useAuth } from "@/contexts/auth-context";
 import { categoryService } from "@/services/category-service";
 import { Category } from "@/types";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 import { PasswordStrength } from "@/components/commons/password-strength/password-strength";
 import { ProgressSteps } from "@/components/commons/progress-steps/progress-steps";
 import { authService } from "@/services/auth-service";
@@ -35,6 +37,9 @@ export default function InscriptionPage() {
   const [step, setStep] = useState(1);
   const { setHideCitySelector } = useHeader();
   const { register, loading, error, clearError } = useAuth();
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle(PAGE_TITLES.auth.register);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
@@ -79,7 +84,7 @@ export default function InscriptionPage() {
     const loadCategories = async () => {
       try {
         setLoadingCategories(true);
-        const categoriesData = await categoryService.getCategories();
+        const categoriesData = await categoryService.getAllCategories();
         setCategories(categoriesData);
       } catch (error) {
         console.error("Erreur lors du chargement des catégories:", error);

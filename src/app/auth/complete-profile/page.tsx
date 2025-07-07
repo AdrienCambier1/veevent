@@ -158,7 +158,7 @@ function CompleteProfileContent() {
     const loadCategories = async () => {
       try {
         setLoadingCategories(true);
-        const categoriesData = await categoryService.getCategories();
+        const categoriesData = await categoryService.getAllCategories();
         setCategories(categoriesData);
       } catch (error) {
         console.error("Erreur lors du chargement des catégories:", error);
@@ -324,7 +324,13 @@ function CompleteProfileContent() {
           const redirectUrl = redirectParam || "/compte/tickets";
           
           console.log("🔍 CompleteProfile - Redirection vers:", redirectUrl);
-          router.push(redirectUrl);
+          
+          // Utiliser setTimeout pour éviter les conflits avec les états asynchrones
+          setTimeout(() => {
+            router.push(redirectUrl);
+          }, 100);
+        } else {
+          console.error("🔍 CompleteProfile - Échec de la mise à jour du profil");
         }
       } catch (error) {
         console.error("Erreur lors de la mise à jour du profil:", error);
@@ -342,7 +348,10 @@ function CompleteProfileContent() {
 
   const updateUserProfile = async (data: any): Promise<boolean> => {
     try {
-      return await updateProfile(data);
+      console.log("🔍 CompleteProfile - Début mise à jour profil avec données:", data);
+      const result = await updateProfile(data);
+      console.log("🔍 CompleteProfile - Résultat mise à jour profil:", result);
+      return result;
     } catch (error) {
       console.error("Erreur mise à jour profil:", error);
       return false;
@@ -590,7 +599,19 @@ function CompleteProfileContent() {
             <button
               className="primary-btn flex-1"
               type="submit"
-              disabled={loading || submitting || (step === 2 && formData.categoryKeys.length === 0)}
+              disabled={
+                loading || 
+                submitting || 
+                (step === 1 && (!formData.firstName || !formData.lastName || !formData.pseudo || !formData.phone)) ||
+                (step === 2 && formData.categoryKeys.length === 0)
+              }
+              onClick={() => {
+                // Debug: vérifier l'état du bouton
+                const isDisabled = loading || 
+                  submitting || 
+                  (step === 1 && (!formData.firstName || !formData.lastName || !formData.pseudo || !formData.phone)) ||
+                  (step === 2 && formData.categoryKeys.length === 0);
+              }}
             >
               <span>
                 {submitting 

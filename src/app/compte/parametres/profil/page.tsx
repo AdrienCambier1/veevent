@@ -67,7 +67,7 @@ export default function ProfilPage() {
     const loadCategories = async () => {
       try {
         setLoadingCategories(true);
-        const categoriesData = await categoryService.getCategories();
+        const categoriesData = await categoryService.getAllCategories();
         setCategories(categoriesData);
       } catch (error) {
         console.error("Erreur lors du chargement des catégories:", error);

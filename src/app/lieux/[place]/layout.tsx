@@ -27,7 +27,7 @@ export default function PlaceLayout({ children }: PlacesLayoutProps) {
 
   return (
     <main>
-      {placeData && <PlaceHead place={placeData} />}
+      {placeData && <PlaceHead place={placeData} bannerImage={placeData.bannerUrl || undefined} />}
       <section className="wrapper">
         <BarMenu navigation={navigation} />
       </section>

@@ -16,6 +16,8 @@ import { useEffect, useState, Suspense } from "react";
 import EventCardSkeleton from "@/components/cards/event-card/event-card-skeleton";
 import ThemeCardSkeleton from "@/components/cards/theme-card/theme-card-skeleton";
 import TrendingCardSkeleton from "@/components/cards/trending-card/trending-card-skeleton";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 function SearchSheetContent() {
   const router = useRouter();
@@ -24,6 +26,12 @@ function SearchSheetContent() {
   const initialQuery = searchParams.get("q") || "";
   const { query, setQuery, results, loading, error } = useSearch({
     initialQuery,
+  });
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle({
+    title: query ? `Recherche : ${query}` : 'Recherche',
+    description: query ? `Résultats de recherche pour "${query}" sur Veevent` : 'Recherchez des événements, lieux, villes et organisateurs',
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -133,7 +141,7 @@ function SearchSheetContent() {
                         </div>
                       </div>
                     )}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                       {categories.map((cat) => (
                         <ThemeCard key={cat.key} category={cat} />
                       ))}

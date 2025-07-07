@@ -10,6 +10,8 @@ import { Event } from "@/types";
 import { MapPin } from "iconoir-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;
@@ -21,6 +23,12 @@ export default function PlacePage() {
   const { place: placeParam } = useParams() as { place: string };
 
   const { place, loading, error, refetch } = usePlaceData(placeParam);
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle({
+    title: place ? `${place.name} - ${place.cityName}` : 'Lieu',
+    description: place ? `Découvrez ${place.name} à ${place.cityName} et ses événements` : 'Découvrez ce lieu et ses événements',
+  });
 
   const {
     events: trendingEvents,
@@ -133,7 +141,7 @@ export default function PlacePage() {
           Iconique {place.name} à {place.cityName}
         </h2>
         {place.content ? (
-          <NewsCard description={place.content} />
+          <NewsCard description={place.content} imageUrl={place.imageUrl} />
         ) : (
           <NewsCard
             description={`Découvrez ${place.name}, un magnifique lieu de la ville ${place.cityName}. 

@@ -12,6 +12,11 @@ import HydrationFix from "@/components/commons/hydration-fix/hydration-fix";
 import Footer from "@/components/footer/footer";
 
 export const metadata: Metadata = {
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent" as const,

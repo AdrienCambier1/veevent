@@ -1,8 +1,13 @@
 "use client";
 import Link from "next/link";
 import * as Iconoir from "iconoir-react";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 export default function NotFound() {
+  // Gestion dynamique du titre de la page
+  usePageTitle(PAGE_TITLES.error.notFound);
+  
   return (
     <main>
       <div className="wrapper">

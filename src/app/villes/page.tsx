@@ -17,11 +17,19 @@ import { usePlaces } from "@/hooks/places/use-places";
 import { useSearchPaginated } from "@/hooks/commons/use-search-paginated";
 import { useSearchParams } from "next/navigation";
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 function VillesPageContent() {
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
   const scrollTargetRef = useRef<HTMLElement>(null);
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle({
+    title: 'Villes',
+    description: 'Découvrez toutes les villes disponibles sur Veevent et leurs événements.',
+  });
 
   // Hook pour récupérer les villes populaires
   const { cities: popularCities, loading: popularLoading } = useCities(

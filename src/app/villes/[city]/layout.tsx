@@ -135,7 +135,7 @@ function CityLayoutContent({ children }: CitiesLayoutProps) {
 
   return (
     <main>
-      <BannerHead city={cityData?.name || ""} />
+      <BannerHead city={cityData?.name || ""} bannerImage={cityData?.bannerUrl || undefined} />
       <section className="wrapper">
         <h1>Évènements et activités proche de la ville de {cityData?.name}</h1>
         <h3>Rechercher un évènement à {cityData?.name}</h3>

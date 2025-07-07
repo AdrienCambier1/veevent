@@ -4,11 +4,19 @@ import { useOrganizerBySlug, useOrganizerEvents } from "@/hooks/organizers";
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 import EventCard from "@/components/cards/event-card/event-card";
 import { SingleEvent } from "@/types";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 export default function OrganisateurEvenementsPage() {
   const params = useParams();
   const userSlug = params?.user as string;
   const { organizer, loading: organizerLoading, error: organizerError } = useOrganizerBySlug(userSlug);
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle({
+    title: organizer ? `${organizer.firstName} ${organizer.lastName} - Événements` : 'Organisateur - Événements',
+    description: organizer ? `Découvrez tous les événements organisés par ${organizer.firstName} ${organizer.lastName}` : 'Découvrez les événements de cet organisateur',
+  });
   const userId = organizer?.id ? Number(organizer.id) : null;
   const { events, loading: eventsLoading, error: eventsError, pagination, hasNextPage, hasPreviousPage } = useOrganizerEvents(userId);
 

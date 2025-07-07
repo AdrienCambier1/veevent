@@ -33,7 +33,7 @@ interface AuthContextType {
     categoryKeys?: string[];
   }) => Promise<boolean>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
-  requestOrganizerRole: (reason: string) => Promise<boolean>;
+  requestOrganizerRole: () => Promise<boolean>;
   deleteAccount: () => Promise<boolean>;
   logout: (redirectToLogin?: boolean, errorCode?: string) => void;
   clearError: () => void;

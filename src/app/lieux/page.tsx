@@ -15,12 +15,20 @@ import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import TextImageCardSkeleton from "@/components/cards/text-image-card/text-image-card-skeleton";
 import React from "react";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 function LieuxPageContent() {
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
   const scrollTargetRef = useRef<HTMLElement>(null);
   const [isSearching, setIsSearching] = useState(false);
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle({
+    title: 'Lieux',
+    description: 'Découvrez tous les lieux disponibles sur Veevent et leurs événements.',
+  });
 
   // Récupérer les lieux populaires
   const {

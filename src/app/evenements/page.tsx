@@ -13,6 +13,8 @@ import FilterBottomSheet from "@/components/commons/filters/filter-bottom-sheet"
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 import { useSearchPaginated } from "@/hooks/commons/use-search-paginated";
 import { useCategoryFilter } from "@/hooks/commons/use-category-filter";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
 const extractIdFromSelfLink = (event: Event): string => {
@@ -23,6 +25,9 @@ const extractIdFromSelfLink = (event: Event): string => {
 
 function EvenementsPageContent() {
   const { appliedFilters, hasActiveFilters, filterVersion } = useFilters();
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle(PAGE_TITLES.events);
   const eventsSectionRef = useRef<HTMLElement>(null);
   const searchScrollTargetRef = useRef<HTMLElement>(null);
   const categoryScrollTargetRef = useRef<HTMLElement>(null);

@@ -93,7 +93,32 @@ export const categoryService = {
     }
   },
 
-  async getCategories(): Promise<Category[]> {
+  async getAllCategories(): Promise<Category[]> {
+    try {
+      if (useMockData) {
+        return mockCategories;
+      }
+
+      const response = await fetch(`${apiUrl}/categories`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const result: CategoriesResponse = await response.json();
+      return result._embedded?.categories || [];
+    } catch (error) {
+      console.error("❌ Error in getAllCategories:", error);
+      throw error;
+    }
+  },
+
+  async getCategoriesWithEvents(): Promise<Category[]> {
     try {
       if (useMockData) {
         return mockCategories;
@@ -124,9 +149,14 @@ export const categoryService = {
 
       return categoriesWithEvents;
     } catch (error) {
-      console.error("❌ Error in getCategories:", error);
+      console.error("❌ Error in getCategoriesWithEvents:", error);
       throw error;
     }
+  },
+
+  // Méthode legacy pour maintenir la compatibilité
+  async getCategories(): Promise<Category[]> {
+    return this.getCategoriesWithEvents();
   },
 
   async getCategoryByKey(key: string): Promise<Category | null> {

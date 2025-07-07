@@ -60,7 +60,8 @@
   }
 
   main {
-    @apply pt-16 pb-4 top-0 flex flex-col relative md:gap-6;
+    @apply pb-4 top-0 flex flex-col relative md:gap-6;
+    padding-top: calc(4rem + env(safe-area-inset-top, 0));
   }
 
   .wrapper {

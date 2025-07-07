@@ -44,10 +44,16 @@ import TrustpilotCardSkeleton from "@/components/cards/trustpilot-card/trustpilo
 import ReviewCardSkeleton from "@/components/cards/review-card/review-card-skeleton";
 import PlaceCardSkeleton from "@/components/cards/place-card/place-card-skeleton";
 import TextImageCardSkeleton from "@/components/cards/text-image-card/text-image-card-skeleton";
+import { useUser } from "@/hooks/commons/use-user";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 export default function HomePage() {
   const { login, loading, isAuthenticated, logout } = useAuth();
-
+  const { user } = useUser();
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle(PAGE_TITLES.home);
   // Récupération des événements par catégorie
   const {
     events: popularEvents,
@@ -345,12 +351,36 @@ export default function HomePage() {
           </p>
           </div>
           <div className="flex flex-col gap-2 md:flex-row md:w-1/3">
-          <Link href="/connexion" className="primary-btn">
+          <Link href="/inscription" className="primary-btn">
             <span>S'inscrire</span>
           </Link>
-          <Link href="/inscription" className="secondary-btn">
+          <Link href="/connexion" className="secondary-btn">
             <span>Se connecter</span>
           </Link>
+          </div>
+          </div>
+        </section>
+      )}
+       {isAuthenticated && (
+        <section className="wrapper">
+          <div className="flex flex-col gap-2 md:flex-row md:justify-between md:items-center">
+            <div className="flex flex-col gap-2">
+          <h2>Organiser un évènement</h2>
+          <p>
+           Activez le mode organisateur pour créer vos propres événements. 
+Gérez les détails, suivez les inscriptions et publiez en quelques clics. Notre plateforme vous accompagne à chaque étape, de la création à la gestion.
+          </p>
+          </div>
+          <div className="flex flex-col gap-2 md:flex-row md:w-1/3">
+          {user?.role === "Organizer" ? (
+            <Link href="https://veevent-admin.vercel.app" target="_blank" rel="noopener noreferrer" className="primary-btn">
+              <span>Gérer vos événements</span>
+            </Link>
+          ) : (
+            <Link href="/compte/parametres/organisateur" className="primary-btn">
+              <span>Devenir organisateur</span>
+            </Link>
+          )}
           </div>
           </div>
         </section>

@@ -71,8 +71,8 @@ function MesEvenementsPageContent() {
         <div className="text-center text-gray-500 py-8">
           <p>Vous n'avez pas encore créé d'événements</p>
           <p className="text-sm mt-2">
-            <a href="/evenements" className="text-blue-600 hover:text-blue-800 underline">
-              Découvrir les événements
+            <a target="_blank" href="https://veevent-admin.vercel.app" className="text-blue-600 hover:text-blue-800 underline">
+              Créer un événement
             </a>
           </p>
         </div>

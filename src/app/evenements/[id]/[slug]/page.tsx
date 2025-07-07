@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { eventService } from "@/services/event-service";
 import Modal from "@/components/commons/modal/modal";
 import { useUser } from "@/hooks/commons/use-user";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
 
 // Motifs prédéfinis pour le signalement
 const REPORT_REASONS = [
@@ -57,6 +58,12 @@ export default function EventPage() {
   const { id, slug } = useParams() as { id: string; slug: string };
   const eventIdNumber = Number(id);
   const { event, loading, error } = useSingleEvent(eventIdNumber);
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle({
+    title: event?.name || 'Événement',
+    description: event?.description || 'Découvrez cet événement exceptionnel',
+  });
   // Récupérer les infos complètes de l'organisateur
   const {
     organizer: detailedOrganizer,

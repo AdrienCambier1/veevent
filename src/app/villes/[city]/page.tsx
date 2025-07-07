@@ -15,6 +15,8 @@ import TextImageCard from "@/components/cards/text-image-card/text-image-card";
 import img from "@/assets/images/nice.jpg";
 import OrganizerCard from "@/components/cards/organizer-card/organizer-card";
 import { useCityData } from "@/hooks/cities/use-city-data";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 const extractIdFromSelfLink = (event: Event): string => {
   const href = event._links.self.href;
@@ -30,6 +32,12 @@ export default function CityPage() {
 
   // Hook pour récupérer les données de la ville
   const { city, events, nearestCities, loading, error } = useCity(cityName);
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle({
+    title: city?.name || 'Ville',
+    description: city?.content || PAGE_TITLES.city(cityName, city?.eventsCount).description,
+  });
 
   const { trendingEvents } = useCityEvents(cityName);
   const { organizers: popularOrganizers } = useCityData(
@@ -125,7 +133,7 @@ export default function CityPage() {
       <section className="wrapper">
         <h2>Découvrir la ville de {city.name}</h2>
         {city.content ? (
-          <NewsCard description={city.content} />
+          <NewsCard description={city.content} imageUrl={city.imageUrl || undefined} />
         ) : (
           <NewsCard
             description={`Découvrez ${city.name}, une ville magnifique de la région ${city.region}. 
@@ -167,9 +175,9 @@ export default function CityPage() {
           {popularOrganizers.map((organizer: SingleUser) => (
             <OrganizerCard key={organizer.id} organizer={organizer} />
           ))}
-          <button className="secondary-btn">
+          <Link href={`/villes/${cityParam}/organisateurs`} className="secondary-btn">
             <span>Voir tous les organisateurs</span>
-          </button>
+          </Link>
         </section>
       )}
 

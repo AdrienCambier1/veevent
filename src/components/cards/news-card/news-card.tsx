@@ -36,7 +36,7 @@ export default function NewsCard({
 
   return (
     <div className="news-card">
-      <Image src={niceImage} alt="News image" className="banner" />
+      <Image src={imageUrl || niceImage} alt="News image" className="banner" width={1080} height={720} priority  />
       {date && <p className="date">{date}</p>}
       {title && <p className="title">{title}</p>}
       <p ref={contentRef} className="line-clamp-4">

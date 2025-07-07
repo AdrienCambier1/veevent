@@ -3,6 +3,7 @@ import "./place-head.scss";
 import nice4k from "@/assets/images/nice4k.jpg";
 import Image from "next/image";
 import { MapPin, Shop } from "iconoir-react";
+import { PLACE_TYPE_LABELS } from "@/constants/places-categories";
 
 
 interface PlaceHeadProps {
@@ -11,13 +12,13 @@ interface PlaceHeadProps {
 }
 export default function PlaceHead({
   place,
-  bannerImage = nice4k,
+  bannerImage ,
 }: PlaceHeadProps) {
   return (
     <>
      <div className="banner-img">
       <div className="gradient" />
-      <Image src={bannerImage} alt="Banner image" className="banner" />
+      <Image src={bannerImage || nice4k} alt="Banner image" className="banner" width={1080} height={720} priority />
     </div>
     <section className="wrapper">
         <h1>{place?.name}</h1>
@@ -28,7 +29,7 @@ export default function PlaceHead({
           </div>
           <div className="flex gap-1">
             <Shop />
-            {place?.type}
+            {PLACE_TYPE_LABELS[place?.type] || PLACE_TYPE_LABELS.default}
           </div>
         </div>
         <p>{place?.description}</p>

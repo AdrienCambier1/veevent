@@ -4,9 +4,14 @@ import { useFavoriteEvents } from "@/hooks/commons/use-favorite-events";
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 import EventCard from "@/components/cards/event-card/event-card";
 import { Event } from "@/types";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 function EnregistresPageContent() {
   const { events, loading, error, refetch } = useFavoriteEvents();
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle(PAGE_TITLES.account.favorites);
 
   // Pagination locale (optionnel, ici tout d'un coup)
   // Pour une vraie pagination, il faudrait découper events en pages

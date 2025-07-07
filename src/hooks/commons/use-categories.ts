@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { Category } from "@/types";
 import { categoryService } from "@/services/category-service";
 
-export function useCategories() {
+interface UseCategoriesOptions {
+  withEventsOnly?: boolean;
+}
+
+export function useCategories(options: UseCategoriesOptions = {}) {
+  const { withEventsOnly = true } = options;
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -12,7 +17,9 @@ export function useCategories() {
       try {
         setLoading(true);
         setError(null);
-        const data = await categoryService.getCategories();
+        const data = withEventsOnly 
+          ? await categoryService.getCategoriesWithEvents()
+          : await categoryService.getAllCategories();
         setCategories(data);
       } catch (err) {
         setError(err as Error);
@@ -23,7 +30,7 @@ export function useCategories() {
     };
 
     fetchCategories();
-  }, []);
+  }, [withEventsOnly]);
 
   return { categories, loading, error };
 }

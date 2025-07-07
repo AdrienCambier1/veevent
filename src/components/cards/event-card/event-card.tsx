@@ -3,9 +3,10 @@ import ProfileImg from "@/components/images/profile-img/profile-img";
 import ProfilesImg from "@/components/images/profiles-img/profiles-img";
 import ThemeTag from "@/components/tags/theme-tag/theme-tag";
 import { BaseCategory, Event } from "@/types";
-import { ArrowUpRight, Bookmark, Calendar, MapPin } from "iconoir-react";
+import { ArrowUpRight, Bookmark, BookmarkSolid, Calendar, MapPin } from "iconoir-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import "./event-card.scss";
 import { useSlugify } from "@/hooks/commons/use-slugify";
 
@@ -19,6 +20,37 @@ interface EventCardProps {
 export default function EventCard({ id, event, minify, grid }: EventCardProps) {
   const nameSlug = useSlugify(event.name);
   const imageToShow = event.imageUrl || niceImage;
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const favs = JSON.parse(localStorage.getItem("vv-fav-events") || "[]");
+        setIsFavorite(favs.includes(parseInt(id)));
+      } catch (error) {
+        console.error("Erreur lors de la lecture des favoris:", error);
+        setIsFavorite(false);
+      }
+    }
+  }, [id]);
+
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "vv-fav-events") {
+        try {
+          const favs = JSON.parse(e.newValue || "[]");
+          setIsFavorite(favs.includes(parseInt(id)));
+        } catch (error) {
+          console.error("Erreur lors de la mise à jour des favoris:", error);
+          setIsFavorite(false);
+        }
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [id]);
+
   return (
     <Link
       href={`/evenements/${id}/${nameSlug}`}
@@ -49,7 +81,7 @@ export default function EventCard({ id, event, minify, grid }: EventCardProps) {
       <div className={`flex flex-col justify-between flex-1 p-2 ${minify ? "gap-1" : "gap-1"}`}>
         <div className="flex items-center justify-between gap-2">
           <div className="title">{event.name}</div>
-          <Bookmark className="icon" />
+          {isFavorite ? <BookmarkSolid className="icon" /> : <Bookmark className="icon" />}
         </div>
         <ProfileImg
           name={

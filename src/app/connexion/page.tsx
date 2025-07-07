@@ -4,11 +4,16 @@ import { useState, Suspense, useEffect } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useSearchParams } from "next/navigation";
 import { useHeader } from "@/contexts/header-context";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 function ConnexionPageContent() {
   const { login, loading, error, clearError } = useAuth();
   const { setHideCitySelector } = useHeader();
   const searchParams = useSearchParams();
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle(PAGE_TITLES.auth.login);
   const redirectUri = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/auth/callback`;
   const backendGoogleLoginUrl = `${
     process.env.NEXT_PUBLIC_BACK_URL

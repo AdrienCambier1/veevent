@@ -10,11 +10,19 @@ import { useSearchPaginated } from "@/hooks/commons/use-search-paginated";
 import PaginatedList from "@/components/commons/paginated-list/paginated-list";
 import Pagination from "@/components/commons/pagination/pagination";
 import { SingleUser } from "@/types";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 
 function OrganisateursPageContent() {
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
   const scrollTargetRef = useRef<HTMLElement>(null);
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle({
+    title: 'Organisateurs',
+    description: 'Découvrez tous les organisateurs d\'événements sur Veevent.',
+  });
 
   // Hook pour récupérer tous les organisateurs avec pagination
   const {

@@ -5,6 +5,8 @@ import { useUserOrders } from "@/hooks/commons/use-user-orders";
 import { useAuth } from "@/contexts/auth-context";
 import { ProfileCompleteGuard } from "@/components/commons/profile-complete-guard";
 import TicketCard from "@/components/cards/ticket-card/ticket-card";
+import { usePageTitle } from "@/hooks/commons/use-page-title";
+import { PAGE_TITLES } from "@/utils/page-titles";
 import HorizontalList from "@/components/lists/horizontal-list/horizontal-list";
 import OrderCard from "@/components/cards/order-card/order-card";
 import { Ticket } from "@/types";
@@ -13,6 +15,9 @@ function TicketsPageContent() {
   const { user, loading: userLoading, error: userError } = useUser();
   const { orders, loading: ordersLoading, error: ordersError } = useUserOrders();
   const { logout } = useAuth();
+  
+  // Gestion dynamique du titre de la page
+  usePageTitle(PAGE_TITLES.account.tickets);
 
   // Rediriger automatiquement en cas d'erreur d'authentification
   useEffect(() => {
