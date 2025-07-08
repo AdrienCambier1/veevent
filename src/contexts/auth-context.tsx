@@ -76,6 +76,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           authService.storeAuthData(newToken);
           setToken(newToken);
           setIsAuthenticated(true);
+          
+          // Vérifier le profil complet après rafraîchissement
+          try {
+            const isProfileComplete = await authService.isProfileComplete(newToken);
+            if (isProfileComplete) {
+              authService.markProfileAsComplete();
+            }
+          } catch (error) {
+            console.error("Erreur vérification profil complet après rafraîchissement:", error);
+          }
+          
           return;
         }
         
@@ -90,6 +101,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // La validation serveur se fera plus tard via le hook useUser
       setToken(storedToken);
       setIsAuthenticated(true);
+      
+      // Vérifier le profil complet même avec un token non expiré
+      try {
+        const isProfileComplete = await authService.isProfileComplete(storedToken);
+        console.log("🔍 refreshAuth - Profil complet:", isProfileComplete);
+        if (isProfileComplete) {
+          authService.markProfileAsComplete();
+        }
+      } catch (error) {
+        console.error("Erreur vérification profil complet dans refreshAuth:", error);
+      }
     } catch (error) {
       console.error("Erreur lors du rafraîchissement de l'authentification:", error);
       authService.clearAuthData();
@@ -179,6 +201,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         authService.storeAuthData(authToken);
         setToken(authToken);
         setIsAuthenticated(true);
+
+        // Vérifier si le profil est complet après connexion
+        try {
+          const isProfileComplete = await authService.isProfileComplete(authToken);
+          console.log("🔍 AuthContext - Profil complet après connexion:", isProfileComplete);
+          
+          if (isProfileComplete) {
+            authService.markProfileAsComplete();
+            console.log("🔍 AuthContext - Profil marqué comme complet");
+          } else {
+            console.log("🔍 AuthContext - Profil incomplet, redirection vers complétion");
+            // Rediriger vers la complétion de profil si nécessaire
+            if (typeof window !== "undefined") {
+              window.location.href = "/auth/complete-profile";
+              return true;
+            }
+          }
+        } catch (error) {
+          console.error("Erreur lors de la vérification du profil complet:", error);
+          // En cas d'erreur, rediriger vers la complétion par précaution
+          if (typeof window !== "undefined") {
+            window.location.href = "/auth/complete-profile";
+            return true;
+          }
+        }
 
         if (typeof window !== "undefined") {
           window.location.href = redirectPath;
