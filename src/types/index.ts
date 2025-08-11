@@ -331,6 +331,7 @@ export interface BaseUser {
 // Utilisateur détaillé (avec id et champs supplémentaires)
 export interface SingleUser extends BaseUser {
   id: number;
+  slug?: string; // Ajout du slug pour les URLs
   eventPastCount: number;
   eventsCount: number;
   socials?: string[]; // Tableau au lieu de string

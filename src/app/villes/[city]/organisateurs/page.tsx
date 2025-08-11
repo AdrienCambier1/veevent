@@ -126,13 +126,13 @@ export default function OrganisateursPage() {
             .slice(0, 5)
             .map((organizer, index) => (
               <TextImageCard
-                key={organizer.pseudo || index}
+                key={index}
                 title={
                   `${organizer.firstName || ""} ${
                     organizer.lastName || ""
                   }`.trim() || organizer.pseudo
                 }
-                href={`/organisateurs/${organizer.pseudo}`}
+                href={`/organisateurs/${organizer.slug}`}
                 image={organizer.imageUrl || organizer.bannerUrl}
               />
             ))
@@ -155,12 +155,12 @@ export default function OrganisateursPage() {
         <section className="wrapper">
           <h2>Ils ont organisé récemment à {city.name}</h2>
           <div className="grid grid-cols-3 gap-4">
-            {organizers.map((organizer) => (
+            {organizers.map((organizer, index) => (
               <OrganizerPhotoCard
-                key={organizer.pseudo}
+                key={index}
                 name={organizer.firstName + " " + organizer.lastName}
                 imageUrl={organizer.imageUrl}
-                href={`/organisateurs/${organizer.pseudo}`}
+                href={`/organisateurs/${organizer.slug}`}
               />
             ))}
           </div>

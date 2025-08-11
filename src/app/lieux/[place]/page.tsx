@@ -23,11 +23,13 @@ export default function PlacePage() {
   const { place: placeParam } = useParams() as { place: string };
 
   const { place, loading, error, refetch } = usePlaceData(placeParam);
-  
+
   // Gestion dynamique du titre de la page
   usePageTitle({
-    title: place ? `${place.name} - ${place.cityName}` : 'Lieu',
-    description: place ? `Découvrez ${place.name} à ${place.cityName} et ses événements` : 'Découvrez ce lieu et ses événements',
+    title: place ? `${place.name} - ${place.cityName}` : "Lieu",
+    description: place
+      ? `Découvrez ${place.name} à ${place.cityName} et ses événements`
+      : "Découvrez ce lieu et ses événements",
   });
 
   const {
@@ -178,7 +180,7 @@ export default function PlacePage() {
             .slice(0, 5)
             .map((organizer, index) => (
               <TextImageCard
-                key={organizer.pseudo || index}
+                key={index}
                 title={
                   `${organizer.firstName || ""} ${
                     organizer.lastName || ""
@@ -186,7 +188,7 @@ export default function PlacePage() {
                   organizer.pseudo ||
                   "Organisateur"
                 }
-                href={`/organisateurs/${organizer.pseudo || "unknown"}`}
+                href={`/organisateurs/${organizer.slug}`}
                 image={organizer.imageUrl || organizer.bannerUrl || ""}
               />
             ))
