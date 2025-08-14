@@ -19,13 +19,12 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
   }
   const { logout } = useAuth();
 
-  const { orders} = useUserOrders();
+  const { orders } = useUserOrders();
 
   const isOrganizer =
     user.role === "Organizer" ||
     user.role === "Admin" ||
     user.role === "AuthService";
-
 
   return (
     <div className="profile-head">
@@ -53,20 +52,20 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
           <span>12</span> abonnés
         </div> */}
         {isOrganizer && (
-          <>    
-          <div>
-            <span>{user.eventsCount} </span>événements à venir
-          </div>
+          <>
+            <div>
+              <span>{user.eventsCount} </span>événements à venir
+            </div>
 
-        <div>
-          <span>{user.eventPastCount} </span>événements passés
-        </div>
-        </>
+            <div>
+              <span>{user.eventPastCount} </span>événements passés
+            </div>
+          </>
         )}
         {isMe && orders.length > 0 && (
-        <div>
-          <span>{orders.length} </span>participations
-        </div>
+          <div>
+            <span>{orders.length} </span>participations
+          </div>
         )}
       </div>
       {user.description && (
@@ -76,11 +75,11 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
       )}
       {user.categories && (
         <div className="profile-themes">
-          {user.categories.map((category: CategoryData) => (
+          {user.categories.map((category: CategoryData, index: number) => (
             <ThemeTag
-              key={category.key}
-              category={category.key}
-              name={category.name}
+              key={index}
+              category={category.key.toString()}
+              name={category.name.toString()}
             />
           ))}
         </div>
@@ -88,7 +87,10 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
       {isMe && (
         <div className="profile-actions">
           <div className="flex gap-2 items-center">
-            <Link href={"/compte/parametres/profil"} className="user-btn-variant">
+            <Link
+              href={"/compte/parametres/profil"}
+              className="user-btn-variant"
+            >
               Modifier le profil
             </Link>
             <Link href="/compte/parametres" className="user-btn-variant">
