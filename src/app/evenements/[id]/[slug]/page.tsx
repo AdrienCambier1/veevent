@@ -363,7 +363,7 @@ export default function EventPage() {
                       Votre invitation a été acceptée ! Vous pouvez désormais
                       accéder à l'événement.
                     </span>
-                  ) : invitation.status === "REFUSED" ? (
+                  ) : invitation.status === "REJECTED" ? (
                     <span className="text-red-600">
                       Votre demande d'invitation a été refusée.
                       <br />
@@ -426,7 +426,7 @@ export default function EventPage() {
                       Votre invitation a été acceptée ! Vous pouvez désormais
                       accéder à l'événement.
                     </span>
-                  ) : invitation.status === "REFUSED" ? (
+                  ) : invitation.status === "REJECTED" ? (
                     <span className="text-red-600">
                       Votre demande d'invitation a été refusée.
                       <br />
@@ -483,7 +483,7 @@ export default function EventPage() {
                   Votre invitation a été acceptée ! Vous pouvez désormais
                   accéder à l'événement.
                 </span>
-              ) : invitation.status === "REFUSED" ? (
+              ) : invitation.status === "REJECTED" ? (
                 <span className="text-red-600">
                   Votre demande d'invitation a été refusée.
                   <br />

@@ -143,7 +143,14 @@ function SearchSheetContent() {
                     )}
                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                       {categories.map((cat) => (
-                        <ThemeCard key={cat.key} category={cat} />
+                        <div 
+                          key={cat.key}
+                          onClick={handleSheetNavigation(
+                            `/evenements?category=${cat.key}`
+                          )}
+                        >
+                          <ThemeCard category={cat} />
+                        </div>
                       ))}
                     </div>
                   </>

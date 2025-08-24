@@ -229,8 +229,15 @@ export default function HomePage() {
     if (trendingCitiesError || !trendingCities || trendingCities.length === 0) {
       return null;
     }
-
-    return trendingCities.map((city) => (
+    
+    // ✅ Filtrer les villes avec au moins 1 événement actif
+    const citiesWithEvents = trendingCities.filter((city) => city.eventsCount > 0);
+    
+    if (citiesWithEvents.length === 0) {
+      return null;
+    }
+    
+    return citiesWithEvents.map((city) => (
       <TextImageCard
         key={city.id}
         title={city.name}
@@ -243,6 +250,34 @@ export default function HomePage() {
       />
     ));
   };
+
+  // ✅ Fonction pour rendre les lieux proches avec événements actifs
+  const renderNearbyPlaces = () => {
+    if (loadingNearbyPlaces) {
+      return (
+        <div className="flex gap-4">
+          <PlaceCardSkeleton />
+          <PlaceCardSkeleton />
+          <PlaceCardSkeleton />
+        </div>
+      );
+    }
+
+    // ✅ Retourner null en cas d'erreur ou pas de données
+    if (!nearbyPlaces || nearbyPlaces.length === 0) {
+      return null;
+    }
+    
+    // ✅ Filtrer les lieux avec au moins 1 événement actif
+    const placesWithEvents = nearbyPlaces.filter((place) => place.eventsCount > 0);
+    
+    if (placesWithEvents.length === 0) {
+      return null;
+    }
+    
+    return <PlacesMapList locations={placesWithEvents} />;
+  };
+  
 
   // ✅ Fonction pour rendre les cartes d'organisateurs populaires
   const renderOrganizerCards = () => {
@@ -424,26 +459,21 @@ Gérez les détails, suivez les inscriptions et publiez en quelques clics. Notre
         </HorizontalList>
       )}
 
-      <section className="wrapper">
-        <CustomTitle
-          description="Lieux"
-          title="Les lieux populaires proche de chez vous"
-        />
+      {/* ✅ Afficher seulement si on a des lieux avec événements ou en chargement */}
+      {renderNearbyPlaces() && (
+        <section className="wrapper">
+          <CustomTitle
+            description="Lieux"
+            title="Les lieux populaires proche de chez vous"
+          />
 
-        {/* Affichage dynamique des lieux proches avec la map */}
-        {loadingNearbyPlaces ? (
-          <div className="flex gap-4">
-            <PlaceCardSkeleton />
-            <PlaceCardSkeleton />
-            <PlaceCardSkeleton />
-          </div>
-        ) : (
-          <PlacesMapList locations={nearbyPlaces} />
-        )}
-        <Link href="/lieux" className="secondary-btn mt-4 mb-2">
-          <span>Voir tous les lieux</span>
-        </Link>
-      </section>
+          {/* Affichage dynamique des lieux proches avec la map */}
+          {renderNearbyPlaces()}
+          <Link href="/lieux" className="secondary-btn mt-4 mb-2">
+            <span>Voir tous les lieux</span>
+          </Link>
+        </section>
+      )}
 
       <section className="wrapper">
         <CustomTitle

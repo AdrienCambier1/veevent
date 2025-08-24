@@ -272,11 +272,11 @@ function EvenementsPageContent() {
             <section className="wrapper">
                 <h2>
                   Événements de la catégorie {categoryParam}
-                  {hasActiveFilters && Object.keys(appliedFilters).some(key => key !== 'categories') && (
+                  {/* {hasActiveFilters && Object.keys(appliedFilters).some(key => key !== 'categories') && (
                     <span className="text-sm text-gray-500 ml-2">
                       (avec filtres supplémentaires)
                     </span>
-                  )}
+                  )} */}
                 </h2> 
             </section>
             <PaginatedList
