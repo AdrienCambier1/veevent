@@ -61,10 +61,13 @@ export default function OrganizerCard({
   };
 
   return (
-    <Link href={`/organisateurs/${slugify(organizer.pseudo || "")}/evenements`}>
+    <Link href={`/organisateurs/${organizer.slug}/evenements`}>
       <div className="organizer-card">
         <ProfileImg
-          name={`${organizer.firstName || ""} ${organizer.lastName || ""}`.trim() || "Organisateur"}
+          name={
+            `${organizer.firstName || ""} ${organizer.lastName || ""}`.trim() ||
+            "Organisateur"
+          }
           note={organizer.note || 0}
           imageUrl={organizer.imageUrl}
         />
@@ -76,7 +79,9 @@ export default function OrganizerCard({
             <span>12</span> abonnés
           </div> */}
           <div>
-            <span>{Math.max(0, organizer.eventsCount - organizer.eventPastCount)} </span>
+            <span>
+              {Math.max(0, organizer.eventsCount - organizer.eventPastCount)}{" "}
+            </span>
             événements en cours
           </div>
           <div>

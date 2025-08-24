@@ -17,11 +17,11 @@ function OrganisateursPageContent() {
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
   const scrollTargetRef = useRef<HTMLElement>(null);
-  
+
   // Gestion dynamique du titre de la page
   usePageTitle({
-    title: 'Organisateurs',
-    description: 'Découvrez tous les organisateurs d\'événements sur Veevent.',
+    title: "Organisateurs",
+    description: "Découvrez tous les organisateurs d'événements sur Veevent.",
   });
 
   // Hook pour récupérer tous les organisateurs avec pagination
@@ -116,13 +116,20 @@ function OrganisateursPageContent() {
           onOpenFilters={() => {}}
           renderItem={(item: any, index: number) => {
             // Filtrer pour ne montrer que les organisateurs avec des événements
-            if (item.user.role !== "Organizer" || (item.user.eventsCount === 0 && item.user.eventPastCount === 0)) {
+            if (
+              item.user.role !== "Organizer" ||
+              (item.user.eventsCount === 0 && item.user.eventPastCount === 0)
+            ) {
               return null;
             }
             return (
               <OrganizerPhotoCard
                 key={item.user.id}
-                name={`${item.user.firstName || ""} ${item.user.lastName || ""}`.trim() || "Organisateur"}
+                name={
+                  `${item.user.firstName || ""} ${
+                    item.user.lastName || ""
+                  }`.trim() || "Organisateur"
+                }
                 imageUrl={item.user.imageUrl || ""}
                 href={`/organisateurs/${item.user.pseudo}`}
               />
@@ -150,7 +157,11 @@ function OrganisateursPageContent() {
       {!query && (
         <>
           {/* Organisateurs populaires */}
-          {organizers.filter((org) => org.role === "Organizer" && (org.eventsCount > 0 || org.eventPastCount > 0)).length > 0 && (
+          {organizers.filter(
+            (org) =>
+              org.role === "Organizer" &&
+              (org.eventsCount > 0 || org.eventPastCount > 0)
+          ).length > 0 && (
             <section className="wrapper">
               <CustomTitle
                 description="Organisateurs populaires"
@@ -158,7 +169,11 @@ function OrganisateursPageContent() {
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {organizers
-                  .filter((org) => org.role === "Organizer" && (org.eventsCount > 0 || org.eventPastCount > 0))
+                  .filter(
+                    (org) =>
+                      org.role === "Organizer" &&
+                      (org.eventsCount > 0 || org.eventPastCount > 0)
+                  )
                   .sort(
                     (a, b) =>
                       b.eventsCount +
@@ -179,13 +194,24 @@ function OrganisateursPageContent() {
           {/* Tous les organisateurs */}
           <section className="wrapper">
             <h2>Tous les organisateurs</h2>
-            {organizers.filter(org => org.role === "Organizer" && (org.eventsCount > 0 || org.eventPastCount > 0)).length > 0 ? (
+            {organizers.filter(
+              (org) =>
+                org.role === "Organizer" &&
+                (org.eventsCount > 0 || org.eventPastCount > 0)
+            ).length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {organizers
-                    .filter(org => org.role === "Organizer" && (org.eventsCount > 0 || org.eventPastCount > 0))
+                    .filter(
+                      (org) =>
+                        org.role === "Organizer" &&
+                        (org.eventsCount > 0 || org.eventPastCount > 0)
+                    )
                     .map((organizer: SingleUser) => (
-                      <OrganizerCard key={organizer.pseudo} organizer={organizer} />
+                      <OrganizerCard
+                        key={organizer.pseudo}
+                        organizer={organizer}
+                      />
                     ))}
                 </div>
                 {organizersPagination && (
@@ -207,7 +233,8 @@ function OrganisateursPageContent() {
                   Aucun organisateur trouvé
                 </p>
                 <p className="text-sm md:text-base">
-                  Aucun organisateur avec des événements n'est disponible pour le moment
+                  Aucun organisateur avec des événements n'est disponible pour
+                  le moment
                 </p>
               </div>
             )}
