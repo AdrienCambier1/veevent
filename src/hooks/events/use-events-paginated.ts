@@ -25,7 +25,7 @@ export function useEventsPaginated({
         page,
         size,
       });
-      
+      console.log("Résultat filtré (events):", result._embedded.eventSummaryResponses);
       return {
         items: result._embedded.eventSummaryResponses,
         pagination: result.page,
@@ -52,4 +52,4 @@ export function useEventsPaginated({
   }, [filterVersion, filters, paginatedData.refetch]);
 
   return paginatedData;
-} 
+}

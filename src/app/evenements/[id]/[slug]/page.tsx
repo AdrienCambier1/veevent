@@ -238,8 +238,13 @@ export default function EventPage() {
     );
   }
 
+  // DEBUG: Affiche le href utilisé et l'objet détaillé reçu
+  console.log('event._links.organizer.href:', event?._links?.organizer?.href);
+  console.log('detailedOrganizer:', detailedOrganizer);
+
   // Utiliser l'organisateur détaillé si disponible, sinon celui de l'événement
   const organizerToUse = detailedOrganizer || event.organizer;
+  console.log('organizerToUse:', organizerToUse);
 
   // Calcul du pourcentage de places restantes
   const placesRestantes = event.maxCustomers - event.currentParticipants;

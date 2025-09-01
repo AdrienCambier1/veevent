@@ -12,6 +12,7 @@ function convertSingleUserToUserData(singleUser: any): any {
     firstName: singleUser.firstName,
     lastName: singleUser.lastName,
     pseudo: singleUser.pseudo,
+    slug: singleUser.slug,
     email: singleUser.email,
     phone: singleUser.phone,
     description: singleUser.description,
@@ -52,6 +53,7 @@ export const userService = {
     });
     if (!res.ok) throw new Error("Erreur lors de la récupération de l'utilisateur");
     const data = await res.json();
+    console.log('API getUserBySlug data:', data); // <-- Ajoute ce log
     return convertSingleUserToUserData(data);
   },
 
@@ -171,4 +173,4 @@ export const userService = {
   },
 };
 
-export default userService; 
+export default userService;

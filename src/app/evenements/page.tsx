@@ -17,15 +17,37 @@ import { usePageTitle } from "@/hooks/commons/use-page-title";
 import { PAGE_TITLES } from "@/utils/page-titles";
 
 // Fonction utilitaire pour extraire l'ID depuis les liens HATEOAS
-const extractIdFromSelfLink = (event: Event): string => {
-  const href = event._links.self.href;
-  const id = href.split("/").pop();
-  return id || "";
+const extractIdFromSelfLink = (item: any): string => {
+  try {
+    // Pour les résultats de recherche d'événements
+    if (item.type === 'event' && item.event) {
+      // Utiliser l'ID direct de l'événement
+      return item.event.id?.toString() || '';
+    }
+
+    // Pour les événements directs (pas de recherche)
+    if (item._links?.self?.href) {
+      const href = item._links.self.href;
+      const id = href.split("/").pop();
+      return id || '';
+    }
+
+    // Pour les événements avec ID direct
+    if (item.id) {
+      return item.id.toString();
+    }
+
+    console.warn('Impossible d\'extraire l\'ID pour:', item);
+    return '';
+  } catch (error) {
+    console.error('Erreur lors de l\'extraction de l\'ID:', error);
+    return '';
+  }
 };
 
 function EvenementsPageContent() {
   const { appliedFilters, hasActiveFilters, filterVersion } = useFilters();
-  
+
   // Gestion dynamique du titre de la page
   usePageTitle(PAGE_TITLES.events);
   const eventsSectionRef = useRef<HTMLElement>(null);
@@ -36,7 +58,7 @@ function EvenementsPageContent() {
 
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
-  
+
   // Utiliser le hook pour gérer le filtre de catégorie
   const { categoryParam, hasCategoryFilter, clearCategoryFilter } = useCategoryFilter();
 
@@ -44,9 +66,9 @@ function EvenementsPageContent() {
   const categoryFilters = useMemo(() => {
     if (hasCategoryFilter && categoryParam) {
       // Combiner les filtres de catégorie avec les filtres appliqués
-      return { 
+      return {
         ...appliedFilters,
-        categories: [categoryParam] 
+        categories: [categoryParam]
       };
     }
     return {};
@@ -160,13 +182,29 @@ function EvenementsPageContent() {
   const commonSkeleton = renderEventCards([], true, null);
 
   // Fonction de rendu pour PaginatedList
-  const renderPaginatedEventCard = (event: Event, index: number) => {
-    const eventId = extractIdFromSelfLink(event);
+  // Dans /evenements/page.tsx, remplacez renderPaginatedEventCard par :
+
+  const renderPaginatedEventCard = (item: any, index: number) => {
+    // Pour les résultats de recherche qui ont la structure { type: "event", event: {...} }
+    if (item.type === 'event' && item.event) {
+      return (
+        <EventCard
+          key={item.event.id}
+          id={item.event.id?.toString() || ''}
+          event={item.event}
+          minify={true}
+          grid={true}
+        />
+      );
+    }
+
+    // Pour les événements directs (comportement normal)
+    const eventId = extractIdFromSelfLink(item);
     return (
       <EventCard
         key={eventId}
         id={eventId}
-        event={event}
+        event={item}
         minify={true}
         grid={true}
       />
@@ -232,7 +270,7 @@ function EvenementsPageContent() {
               onPreviousPage={searchLoadPreviousPage}
               onNextPage={searchLoadNextPage}
               hasActiveFilters={false}
-              onOpenFilters={() => {}}
+              onOpenFilters={() => { }}
               renderItem={renderPaginatedEventCard}
               renderEmpty={renderSearchEmpty}
               showFilters={false}
@@ -270,14 +308,14 @@ function EvenementsPageContent() {
           <>
             {/* Bouton pour effacer le filtre de catégorie */}
             <section className="wrapper">
-                <h2>
-                  Événements de la catégorie {categoryParam}
-                  {/* {hasActiveFilters && Object.keys(appliedFilters).some(key => key !== 'categories') && (
+              <h2>
+                Événements de la catégorie {categoryParam}
+                {/* {hasActiveFilters && Object.keys(appliedFilters).some(key => key !== 'categories') && (
                     <span className="text-sm text-gray-500 ml-2">
                       (avec filtres supplémentaires)
                     </span>
                   )} */}
-                </h2> 
+              </h2>
             </section>
             <PaginatedList
               items={categoryEvents}

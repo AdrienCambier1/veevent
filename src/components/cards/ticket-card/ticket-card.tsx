@@ -65,7 +65,7 @@ export default function TicketCard({
             {eventImage && (
               <Image
                 alt="picture event"
-                className="rounded-[var(--vv-border-radius)]"
+                className="w-full max-h-[180px] object-cover rounded-[var(--vv-border-radius)]"
                 width={300}
                 height={180}
                 src={imageToShow}

@@ -60,42 +60,43 @@ export default function OrganizerCard({
     );
   };
 
+  console.log('OrganizerCard organizer:', organizer);
+
   return (
-    <Link href={`/organisateurs/${organizer.slug}/evenements`}>
-      <div className="organizer-card">
-        <ProfileImg
-          name={
-            `${organizer.firstName || ""} ${organizer.lastName || ""}`.trim() ||
-            "Organisateur"
-          }
-          note={organizer.note || 0}
-          imageUrl={organizer.imageUrl}
-        />
-        <div className="profile-stats">
-          {/* <div>
+    <Link href={`/organisateurs/${organizer.slug}/evenements`}>      <div className="organizer-card">
+      <ProfileImg
+        name={
+          `${organizer.firstName || ""} ${organizer.lastName || ""}`.trim() ||
+          "Organisateur"
+        }
+        note={organizer.note || 0}
+        imageUrl={organizer.imageUrl}
+      />
+      <div className="profile-stats">
+        {/* <div>
             <span>28</span> abonnements
           </div>
           <div>
             <span>12</span> abonnés
           </div> */}
-          <div>
-            <span>
-              {Math.max(0, organizer.eventsCount - organizer.eventPastCount)}{" "}
-            </span>
-            événements en cours
-          </div>
-          <div>
-            <span>{organizer.eventPastCount}</span>
-            {organizer.eventPastCount > 1 ? " passés" : " passé"}
-          </div>
+        <div>
+          <span>
+            {Math.max(0, organizer.eventsCount - organizer.eventPastCount)}{" "}
+          </span>
+          événements en cours
         </div>
-
-        {renderEvents()}
-
-        <span className="text-primary-600 font-medium underline">
-          Voir le profil
-        </span>
+        <div>
+          <span>{organizer.eventPastCount}</span>
+          {organizer.eventPastCount > 1 ? " passés" : " passé"}
+        </div>
       </div>
+
+      {renderEvents()}
+
+      <span className="text-primary-600 font-medium underline">
+        Voir le profil
+      </span>
+    </div>
     </Link>
   );
 }

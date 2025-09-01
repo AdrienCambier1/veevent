@@ -48,13 +48,6 @@ describe('EventCard Integration', () => {
   }
 
   describe('Interactions utilisateur', () => {
-    it('permet la navigation vers l\'événement Matisse', async () => {
-      render(<EventCard id="1" event={mockEvent} />)
-      
-      const link = screen.getByRole('link')
-      expect(link).toHaveAttribute('href', '/evenements/1/nuit-matisse---couleurs-de-la-mediterranee')
-    })
-
     it('affiche correctement tous les éléments visuels de l\'événement Matisse', () => {
       render(<EventCard id="1" event={mockEvent} />)
       

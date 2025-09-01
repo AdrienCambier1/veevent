@@ -30,14 +30,18 @@ const formatEventDate = (dateString: string): string => {
   return date.toLocaleDateString("fr-FR", options);
 };
 
-// Fonction pour récupérer l'organisateur complet à partir du pseudo
-const getOrganizerByPseudo = (pseudo: string) => {
-  return mockOrganizers.find((organizer) => organizer.pseudo === pseudo);
+// Fonction pour récupérer l'organisateur complet à partir du slug
+const getOrganizerBySlug = (slug: string) => {
+  return mockOrganizers.find((organizer) => organizer.slug === slug);
 };
 
 // Fonction pour mapper les données mock vers le format Event
 const mapMockEventToEvent = (mockEvent: any): Event => {
-  const fullOrganizer = getOrganizerByPseudo(mockEvent.organizer.pseudo);
+  const fullOrganizer = getOrganizerBySlug(
+    (mockEvent.organizer && "slug" in mockEvent.organizer)
+      ? mockEvent.organizer.slug
+      : mockEvent.organizer.pseudo
+  );
 
   if (!fullOrganizer) {
     return {
@@ -63,6 +67,7 @@ const mapMockEventToEvent = (mockEvent: any): Event => {
     firstName: fullOrganizer.firstName,
     lastName: fullOrganizer.lastName,
     pseudo: fullOrganizer.pseudo,
+    slug: fullOrganizer.slug,
     email: fullOrganizer.email,
     phone: fullOrganizer.phone,
     description: fullOrganizer.description,
@@ -74,17 +79,7 @@ const mapMockEventToEvent = (mockEvent: any): Event => {
     organizer: true,
     socials: fullOrganizer.socials,
     categories: fullOrganizer.categories,
-    _links: {
-      self: fullOrganizer._links?.self || {
-        href: `/users/${fullOrganizer.pseudo}`,
-      },
-      users: { href: "/users" },
-      events: fullOrganizer._links?.events || {
-        href: `/users/${fullOrganizer.pseudo}/events`,
-      },
-      categories: { href: "/categories" },
-      invitations: { href: `/users/${fullOrganizer.pseudo}/invitations` },
-    },
+    _links: fullOrganizer._links,
   };
 
   return {
@@ -326,10 +321,18 @@ export const eventService = {
           throw new Error("Événement non trouvé");
         }
 
-        const fullOrganizer = getOrganizerByPseudo(mockEvent.organizer.pseudo);
+        const fullOrganizer = getOrganizerBySlug(
+          "slug" in mockEvent.organizer
+            ? String(mockEvent.organizer.slug)
+            : String(mockEvent.organizer.pseudo)
+        );
         if (!fullOrganizer) {
           throw new Error(
-            `Organisateur non trouvé: ${mockEvent.organizer.pseudo}`
+            `Organisateur non trouvé: ${
+              "slug" in mockEvent.organizer
+                ? mockEvent.organizer.slug
+                : mockEvent.organizer.pseudo
+            }`
           );
         }
 
@@ -338,6 +341,7 @@ export const eventService = {
           firstName: fullOrganizer.firstName,
           lastName: fullOrganizer.lastName,
           pseudo: fullOrganizer.pseudo,
+          slug: fullOrganizer.slug,
           email: fullOrganizer.email,
           phone: fullOrganizer.phone,
           description: fullOrganizer.description,
@@ -559,7 +563,7 @@ export const eventService = {
   async getFreeEvents(): Promise<Event[]> {
     const eventsResponse = await this.getEvents();
     const freeEvents = eventsResponse._embedded.eventSummaryResponses.filter(
-      (event: Event) => event.price === 0
+      (event: Event) => Number(event.price) === 0
     );
     return freeEvents;
   },
@@ -567,8 +571,8 @@ export const eventService = {
   async getOrganizerByEvent(organizerHref: string): Promise<SingleUser> {
     try {
       if (useMockData) {
-        const organizerPseudo = organizerHref.split("/").pop() || "";
-        const organizer = getOrganizerByPseudo(organizerPseudo);
+        const organizerSlug = organizerHref.split("/").pop() || "";
+        const organizer = getOrganizerBySlug(organizerSlug);
         if (!organizer) {
           throw new Error("Organisateur non trouvé");
         }
@@ -576,6 +580,7 @@ export const eventService = {
         const mappedOrganizer: SingleUser = {
           id: organizer.id,
           pseudo: organizer.pseudo,
+          slug: organizer.slug,
           firstName: organizer.firstName,
           lastName: organizer.lastName,
           note: organizer.note || 0,
@@ -621,6 +626,7 @@ export const eventService = {
         id: organizerData.id,
         pseudo: organizerData.pseudo,
         note: organizerData.note || 0,
+        slug: organizerData.slug,
         firstName: organizerData.firstName || "",
         lastName: organizerData.lastName || "",
         description: organizerData.description || null,
@@ -731,9 +737,9 @@ export const eventService = {
   ): Promise<Event[]> {
     try {
       if (useMockData) {
-        // Pour les données mock, on extrait le pseudo de l'URL
-        const organizerPseudo = organizerEventsHref.split("/").pop() || "";
-        const organizer = getOrganizerByPseudo(organizerPseudo);
+        // Pour les données mock, on extrait le slug de l'URL
+        const organizerSlug = organizerEventsHref.split("/").pop() || "";
+        const organizer = getOrganizerBySlug(organizerSlug);
 
         if (!organizer) {
           return [];
@@ -742,8 +748,14 @@ export const eventService = {
         const organizerEvents = mockEvents
           .filter((event) => {
             const isFromOrganizer =
-              event.organizer.pseudo.toLowerCase() ===
-              organizerPseudo.toLowerCase();
+              (
+                typeof event.organizer === "object" &&
+                event.organizer !== null &&
+                "slug" in event.organizer &&
+                typeof (event.organizer as { slug?: string }).slug === "string"
+                  ? (event.organizer as { slug: string }).slug.toLowerCase()
+                  : (event.organizer as { pseudo: string }).pseudo.toLowerCase()
+              ) === organizerSlug.toLowerCase();
 
             const isNotCurrentEvent =
               !currentEventId || event.id.toString() !== currentEventId;
