@@ -131,7 +131,7 @@ function OrganisateursPageContent() {
                   }`.trim() || "Organisateur"
                 }
                 imageUrl={item.user.imageUrl || ""}
-                href={`/organisateurs/${item.user.pseudo}`}
+                href={`/organisateurs/${item.user.slug}`}
               />
             );
           }}

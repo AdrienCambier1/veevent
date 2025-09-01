@@ -223,7 +223,7 @@ function SearchSheetContent() {
                                     <li key={idx}>
                                       <div
                                         onClick={handleSheetNavigation(
-                                          `/organisateurs/${item.user.pseudo}`
+                                          `/organisateurs/${item.user.slug}`
                                         )}
                                         style={{ cursor: "pointer" }}
                                       >
@@ -234,7 +234,7 @@ function SearchSheetContent() {
                                             item.user.lastName
                                           }
                                           imageUrl={item.user.imageUrl || ""}
-                                          href={`/organisateurs/${item.user.pseudo}`}
+                                          href={`/organisateurs/${item.user.slug}`}
                                         />
                                       </div>
                                     </li>
