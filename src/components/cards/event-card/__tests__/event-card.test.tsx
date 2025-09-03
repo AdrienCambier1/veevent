@@ -28,7 +28,6 @@ jest.mock('@/hooks/commons/use-slugify', () => ({
   useSlugify: jest.fn((text) => text.toLowerCase().replace(/\s+/g, '-').replace(/[éèêë]/g, 'e').replace(/[àâä]/g, 'a').replace(/[îï]/g, 'i').replace(/[ôö]/g, 'o').replace(/[ûüù]/g, 'u').replace(/[ç]/g, 'c')),
 }))
 
-// Données de test basées sur votre API réelle
 const mockEvent: Event = {
   id: 1,
   date: "2026-03-22T19:30:00",

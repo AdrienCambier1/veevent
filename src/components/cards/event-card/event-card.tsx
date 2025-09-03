@@ -58,7 +58,7 @@ export default function EventCard({ id, event, minify, grid }: EventCardProps) {
     >
       <div className="image-container">
         <div className="theme-tags">
-          {event.categories.map((category: BaseCategory, index: number) => {
+          {(Array.isArray(event.categories) ? event.categories : []).map((category: BaseCategory, index: number) => {
             return (
               <ThemeTag
                 key={`${category.key}-${index}`}
@@ -78,19 +78,19 @@ export default function EventCard({ id, event, minify, grid }: EventCardProps) {
           priority
         />
       </div>
-      <div className={`flex flex-col justify-between flex-1 p-2 ${minify ? "gap-1" : "gap-1"}`}>
+      <div className={`flex flex-col justify-between flex-1 p-2 ${minify ? "gap-1" : "gap-1"}`}> 
         <div className="flex items-center justify-between gap-2">
           <div className="title">{event.name}</div>
           {isFavorite ? <BookmarkSolid className="icon" /> : <Bookmark className="icon" />}
         </div>
         <ProfileImg
           name={
-            `${event.organizer?.firstName} ${event.organizer?.lastName}` || ""
+            `${event.organizer?.firstName ?? ""} ${event.organizer?.lastName ?? ""}`
           }
           note={event.organizer?.note}
           imageUrl={event.organizer?.imageUrl}
         />
-        <div className={`flex flex-wrap ${minify ? "gap-1" : "gap-2"}`}>
+        <div className={`flex flex-wrap ${minify ? "gap-1" : "gap-2"}`}> 
           <div className="info">
             <MapPin className="icon-small" />
             <span>{event.address}</span>
@@ -99,16 +99,18 @@ export default function EventCard({ id, event, minify, grid }: EventCardProps) {
             <Calendar className="icon-small" />
             <span>
               Le{" "}
-              {new Date(event.date).toLocaleDateString("fr-FR", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              }) +
+              {event.date ? (
+                new Date(event.date).toLocaleDateString("fr-FR", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                }) +
                 " à " +
                 new Date(event.date).toLocaleTimeString("fr-FR", {
                   hour: "2-digit",
                   minute: "2-digit",
-                })}
+                })
+              ) : ""}
             </span>
           </div>
         </div>

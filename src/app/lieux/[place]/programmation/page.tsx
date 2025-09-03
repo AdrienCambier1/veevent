@@ -41,13 +41,13 @@ function ProgrammationContent() {
             .slice(0, 5)
             .map((organizer, index) => (
               <TextImageCard
-                key={organizer.pseudo || index}
+                key={organizer.slug || index}
                 title={
                   (`${organizer.firstName || ""} ${
                     organizer.lastName || ""
                   }`.trim() || organizer.pseudo || "Organisateur")
                 }
-                href={`/organisateurs/${organizer.pseudo || "unknown"}`}
+                href={`/organisateurs/${organizer.slug || "unknown"}`}
                 image={organizer.imageUrl || organizer.bannerUrl || ""}
               />
             ))

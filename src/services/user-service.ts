@@ -7,6 +7,8 @@ function getToken() {
 
 // Fonction pour convertir SingleUser vers UserData
 function convertSingleUserToUserData(singleUser: any): any {
+  console.log('Données brutes reçues de l\'API:', singleUser);
+  
   return {
     id: singleUser.id,
     firstName: singleUser.firstName,
@@ -23,12 +25,31 @@ function convertSingleUserToUserData(singleUser: any): any {
     eventsCount: singleUser.eventsCount,
     eventPastCount: singleUser.eventPastCount,
     socials: singleUser.socials,
-    categories: singleUser.categories?.map((cat: string) => ({
-      key: cat,
-      name: cat,
-      description: "",
-      trending: false
-    })) || [],
+    
+    // Amélioration du mapping des catégories
+    categories: singleUser.categories ? 
+      (Array.isArray(singleUser.categories) ? 
+        singleUser.categories.map((cat: any) => {
+          // Si c'est déjà un objet avec key/name
+          if (typeof cat === 'object' && cat.key) {
+            return cat;
+          }
+          // Si c'est juste une string
+          return {
+            key: cat,
+            name: cat,
+            description: "",
+            trending: false
+          };
+        }) : 
+        // Si categories n'est pas un array, le convertir
+        [{
+          key: singleUser.categories,
+          name: singleUser.categories,
+          description: "",
+          trending: false
+        }]
+      ) : [],
     isOrganizer: singleUser.role === "Organizer" || singleUser.role === "Admin" || singleUser.role === "AuthService",
     // Préserver les liens HATEOAS
     _links: singleUser._links

@@ -17,6 +17,11 @@ export default function ProfileHead({ isMe, user }: ProfileHeadProps) {
   if (!user) {
     return null;
   }
+  
+  // 🔍 Debug pour voir les données utilisateur
+  console.log('👤 ProfileHead - Données utilisateur:', user);
+  console.log('🏷️ ProfileHead - Catégories:', user.categories);
+  
   const { logout } = useAuth();
 
   const { orders } = useUserOrders();

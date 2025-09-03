@@ -56,7 +56,7 @@ export default function CompteLayout({ children }: CompteLayoutProps) {
           </Suspense>
           {!isParametresPage && (
             <>
-              <BannerHead bannerImage={banner} />
+              <BannerHead bannerImage={user?.bannerUrl || banner} />
               <section className="wrapper">
                 <ProfileHead isMe={true} user={user} />
               </section>

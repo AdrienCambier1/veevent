@@ -125,6 +125,9 @@ export default function PaginatedList<T>({
       <p>Erreur lors du chargement : {error.message}</p>
     </div>
   );
+  // ...existing code...
+  // Sécuriser le mapping pour éviter les crashs si items n'est pas un tableau
+  const safeItems = Array.isArray(items) ? items : [];
 
   return (
     <section className="wrapper" ref={targetRef}>
@@ -165,19 +168,19 @@ export default function PaginatedList<T>({
 
       {error && (renderError?.(error) || defaultRenderError(error))}
 
-      {!loading && !error && items.length > 0 && (
+      {!loading && !error && safeItems.length > 0 && (
         <div className={gridClassName}>
-          {items.map((item, index) => renderItem(item, index))}
+          {safeItems.map((item, index) => renderItem(item, index))}
         </div>
       )}
 
-      {!loading && !error && items.length === 0 && hasActiveFilters && (
+      {!loading && !error && safeItems.length === 0 && hasActiveFilters && (
         <p>Aucun élément ne correspond à vos critères de filtrage.</p>
       )}
 
       {!loading &&
         !error &&
-        items.length === 0 &&
+        safeItems.length === 0 &&
         !hasActiveFilters &&
         (renderEmpty?.() || defaultRenderEmpty())}
 
