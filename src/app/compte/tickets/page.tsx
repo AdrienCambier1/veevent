@@ -15,7 +15,7 @@ function TicketsPageContent() {
   const { user, loading: userLoading, error: userError } = useUser();
   const { orders, loading: ordersLoading, error: ordersError } = useUserOrders();
   const { logout } = useAuth();
-  
+
   // Gestion dynamique du titre de la page
   usePageTitle(PAGE_TITLES.account.tickets);
 
@@ -34,7 +34,7 @@ function TicketsPageContent() {
   }, [userError]);
 
   if (userLoading || ordersLoading) return <div>Chargement...</div>;
-  
+
   if (userError) {
     // Afficher un message d'erreur temporaire avant la redirection
     return (
@@ -46,7 +46,7 @@ function TicketsPageContent() {
           <p className="text-gray-600 mb-4">
             Votre session a expiré. Vous allez être redirigé vers la page de connexion.
           </p>
-          <button 
+          <button
             onClick={() => logout()}
             className="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700"
           >
@@ -56,20 +56,25 @@ function TicketsPageContent() {
       </div>
     );
   }
-  
+
   if (ordersError) return <div>Erreur commandes : {ordersError.message}</div>;
 
-  // Rassembler tous les tickets avec leur événement associé
+  // Rassembler tous les tickets avec leur événement associé (SEULEMENT les futurs)
   let allTickets: (Ticket & { event: any; orderId: number })[] = [];
+  const now = new Date();
   orders.forEach((order) => {
     if (order.tickets && order.tickets.length > 0 && order.event && order.event.date) {
-      order.tickets.forEach((ticket: Ticket) => {
-        allTickets.push({
-          ...ticket,
-          event: order.event,
-          orderId: order.id,
+      const eventDate = new Date(order.event.date);
+      // SEULEMENT les événements futurs pour les tickets
+      if (eventDate > now) {
+        order.tickets.forEach((ticket: Ticket) => {
+          allTickets.push({
+            ...ticket,
+            event: order.event,
+            orderId: order.id,
+          });
         });
-      });
+      }
     }
   });
 

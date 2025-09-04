@@ -13,7 +13,7 @@ function MyVeeventPageContent() {
   const participatedEvents = Array.from(
     new Map(
       orders
-        .filter(order => order.event && order.event.date > new Date())
+        .filter(order => order.event && order.event.date <= new Date())
         .map(order => [order.event._links?.self?.href, order.event])
     ).values()
   );
@@ -21,7 +21,7 @@ function MyVeeventPageContent() {
   return (
     <section className="wrapper">
       <h2>Mes veevents</h2>
-      <p>Vous retrouverez ici tous les événements auxquels vous avez participés</p>
+      <p>Vous retrouverez ici tous les événements auxquels vous avez participé</p>
       {participatedEvents.length === 0 && <div>Aucun veevent pour l'instant.</div>}
       <div className="flex flex-wrap gap-8 justify-center">
         {participatedEvents.map((event, idx) => (
