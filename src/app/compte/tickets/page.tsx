@@ -58,7 +58,6 @@ function TicketsPageContent() {
   }
 
   if (ordersError) return <div>Erreur commandes : {ordersError.message}</div>;
-
   // Rassembler tous les tickets avec leur événement associé (SEULEMENT les futurs)
   let allTickets: (Ticket & { event: any; orderId: number })[] = [];
   const now = new Date();
@@ -85,8 +84,17 @@ function TicketsPageContent() {
     return dateA - dateB;
   });
 
-  // Commandes sans tickets
-  const pastOrders = orders.filter((order) => !order.tickets || order.tickets.length === 0);
+  // Commandes pour événements passés (toutes les commandes avec événements passés)
+  const pastOrders = orders.filter((order) => {
+    if (order.event && order.event.date) {
+      const eventDate = new Date(order.event.date);
+      return eventDate < now;
+    }
+    return false;
+  });
+
+  console.log('DEBUG - Future tickets:', allTickets);
+  console.log('DEBUG - Past orders:', pastOrders);
 
   return (
     <>
