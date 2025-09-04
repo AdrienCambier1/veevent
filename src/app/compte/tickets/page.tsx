@@ -134,7 +134,7 @@ function TicketsPageContent() {
             key={order.id || idx}
             orderId={order.id || idx}
             eventName={order.event?.name || "Événement"}
-            eventUrl={order.event?.id ? `/evenements/${order.event.id}` : "#"}
+            eventUrl={order.event?.id ? `/evenements/${order.event.id}/${order.event.slug}` : "#"}
             eventDate={order.event?.date ? new Date(order.event.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "Date inconnue"}
             totalPrice={order.totalPrice}
           />
