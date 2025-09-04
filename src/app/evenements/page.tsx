@@ -25,7 +25,7 @@ const extractIdFromSelfLink = (event: Event): string => {
 
 function EvenementsPageContent() {
   const { appliedFilters, hasActiveFilters, filterVersion } = useFilters();
-
+  
   // Gestion dynamique du titre de la page
   usePageTitle(PAGE_TITLES.events);
   const eventsSectionRef = useRef<HTMLElement>(null);
@@ -36,7 +36,7 @@ function EvenementsPageContent() {
 
   const searchParams = useSearchParams()!;
   const initialQuery = searchParams.get("q") || "";
-
+  
   // Utiliser le hook pour gérer le filtre de catégorie
   const { categoryParam, hasCategoryFilter, clearCategoryFilter } = useCategoryFilter();
 
@@ -44,9 +44,9 @@ function EvenementsPageContent() {
   const categoryFilters = useMemo(() => {
     if (hasCategoryFilter && categoryParam) {
       // Combiner les filtres de catégorie avec les filtres appliqués
-      return {
+      return { 
         ...appliedFilters,
-        categories: [categoryParam]
+        categories: [categoryParam] 
       };
     }
     return {};
@@ -148,13 +148,20 @@ function EvenementsPageContent() {
       return null;
     }
 
-    return events.map((event: Event) => {
+    return events.map((item: any, index: number) => {
+      // Gérer la structure des données de recherche
+      let event = item;
+      if (item.type === 'event' && item.event) {
+        event = item.event;
+      }
+
       // Correction : si event.id n'existe pas, extraire depuis _links.self.href
       let eventId = event.id?.toString();
       if (!eventId && event._links?.self?.href) {
         eventId = event._links.self.href.split("/").pop() || "";
       }
-      eventId = eventId || "";
+      eventId = eventId || index.toString();
+
       return (
         <EventCard key={eventId} id={eventId} event={event} minify={false} />
       );
@@ -167,29 +174,23 @@ function EvenementsPageContent() {
   // Fonction de rendu pour PaginatedList
   const renderPaginatedEventCard = (item: any, index: number) => {
     // Pour les résultats de recherche qui ont la structure { type: "event", event: {...} }
+    let event = item;
     if (item.type === 'event' && item.event) {
-      return (
-        <EventCard
-          key={item.event.id}
-          id={item.event.id?.toString() || ''}
-          event={item.event}
-          minify={true}
-          grid={true}
-        />
-      );
+      event = item.event;
     }
 
-    // Pour les événements directs (comportement normal)
-    let eventId = item.id?.toString();
-    if (!eventId && item._links?.self?.href) {
-      eventId = item._links.self.href.split("/").pop() || "";
+    // Extraction de l'ID
+    let eventId = event.id?.toString();
+    if (!eventId && event._links?.self?.href) {
+      eventId = event._links.self.href.split("/").pop() || "";
     }
-    eventId = eventId || "";
+    eventId = eventId;
+
     return (
       <EventCard
         key={eventId}
         id={eventId}
-        event={item}
+        event={event}
         minify={true}
         grid={true}
       />
@@ -255,7 +256,7 @@ function EvenementsPageContent() {
               onPreviousPage={searchLoadPreviousPage}
               onNextPage={searchLoadNextPage}
               hasActiveFilters={false}
-              onOpenFilters={() => { }}
+              onOpenFilters={() => {}}
               renderItem={renderPaginatedEventCard}
               renderEmpty={renderSearchEmpty}
               showFilters={false}
@@ -293,14 +294,14 @@ function EvenementsPageContent() {
           <>
             {/* Bouton pour effacer le filtre de catégorie */}
             <section className="wrapper">
-              <h2>
-                Événements de la catégorie {categoryParam}
-                {/* {hasActiveFilters && Object.keys(appliedFilters).some(key => key !== 'categories') && (
+                <h2>
+                  Événements de la catégorie {categoryParam}
+                  {/* {hasActiveFilters && Object.keys(appliedFilters).some(key => key !== 'categories') && (
                     <span className="text-sm text-gray-500 ml-2">
                       (avec filtres supplémentaires)
                     </span>
                   )} */}
-              </h2>
+                </h2> 
             </section>
             <PaginatedList
               items={categoryEvents}
