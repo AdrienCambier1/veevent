@@ -10,13 +10,25 @@ function MyVeeventPageContent() {
 
   if (userLoading || ordersLoading) return <section className="wrapper">Chargement...</section>;
 
+  console.log('DEBUG - All orders:', orders);
+  console.log('DEBUG - Current date:', new Date());
+
   const participatedEvents = Array.from(
     new Map(
       orders
-        .filter(order => order.event && order.event.date <= new Date())
+        .filter(order => {
+          if (!order.event) return false;
+          const eventDate = new Date(order.event.date);
+          const now = new Date();
+          const isPast = eventDate < now;
+          console.log('DEBUG - Event:', order.event.title, 'Date:', eventDate, 'Is past:', isPast);
+          return isPast;
+        })
         .map(order => [order.event._links?.self?.href, order.event])
     ).values()
   );
+
+  console.log('DEBUG - Participated events:', participatedEvents);
 
   return (
     <section className="wrapper">
