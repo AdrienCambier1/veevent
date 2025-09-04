@@ -249,6 +249,11 @@ export default function EventPage() {
   // Calcul du pourcentage de places restantes
   const placesRestantes = event.maxCustomers - event.currentParticipants;
   const pourcentageRestant = (placesRestantes / event.maxCustomers) * 100;
+  
+  // Vérifier si l'événement est passé
+  const eventDate = new Date(event.date);
+  const now = new Date();
+  const isEventPast = eventDate < now;
 
   return (
     <main>
@@ -279,7 +284,7 @@ export default function EventPage() {
           </div>
         </div>
       )}
-      {pourcentageRestant <= 50 && placesRestantes > 0 && (
+      {!isEventPast && pourcentageRestant <= 50 && placesRestantes > 0 && (
         <section className="wrapper">
           <div className="bg-primary-50 border border-secondary-400 text-primary-950 rounded-lg p-4 text-center font-semibold">
             Dépêchez-vous, il ne reste que plus beaucoup de places ! Profitez-en
@@ -325,7 +330,12 @@ export default function EventPage() {
       >
         <h2>Billet</h2>
 
-        {event.status === "COMPLETED" ? (
+        {isEventPast ? (
+          <div className="mb-4 p-4 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 text-center text-lg font-bold flex items-center justify-center gap-2">
+            <Clock className="w-7 h-7" />
+            Événement terminé
+          </div>
+        ) : event.status === "COMPLETED" ? (
           <div className="mb-4 p-4 rounded-lg bg-gray-100 border border-gray-300 text-gray-700 text-center text-lg font-bold flex items-center justify-center gap-2">
             <Clock className="w-7 h-7" />
             Événement terminé
@@ -365,7 +375,7 @@ export default function EventPage() {
                     </span>
                   ) : invitation.status === "ACCEPTED" ? (
                     <span className="text-green-700 font-semibold">
-                      Votre invitation a été acceptée ! Vous pouvez désormais
+                      Votre invitation a été acceptée ! Vous pouvez désormais
                       accéder à l'événement.
                     </span>
                   ) : invitation.status === "REJECTED" ? (
@@ -428,7 +438,7 @@ export default function EventPage() {
                     </span>
                   ) : invitation.status === "ACCEPTED" ? (
                     <span className="text-green-700 font-semibold">
-                      Votre invitation a été acceptée ! Vous pouvez désormais
+                      Votre invitation a été acceptée ! Vous pouvez désormais
                       accéder à l'événement.
                     </span>
                   ) : invitation.status === "REJECTED" ? (
@@ -485,7 +495,7 @@ export default function EventPage() {
                 </span>
               ) : invitation.status === "ACCEPTED" ? (
                 <span className="text-green-700 font-semibold">
-                  Votre invitation a été acceptée ! Vous pouvez désormais
+                  Votre invitation a été acceptée ! Vous pouvez désormais
                   accéder à l'événement.
                 </span>
               ) : invitation.status === "REJECTED" ? (

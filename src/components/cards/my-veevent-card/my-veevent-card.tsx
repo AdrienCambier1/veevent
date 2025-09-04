@@ -16,8 +16,11 @@ export default function MyVeeventCard({ event }: MyVeeventCardProps) {
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* Overlay pour améliorer la lisibilité du texte */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60 z-10"></div>
+      {/* Overlay */}
+      <div 
+        className="absolute inset-0 z-10"
+        style={{ backgroundColor: 'rgba(18, 10, 189, 0.6)' }}
+      ></div>
       
       <div className="relative z-20 flex h-full justify-between">
         <div className="flex-1 flex flex-col justify-center items-center">

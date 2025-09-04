@@ -58,6 +58,7 @@ function TicketsPageContent() {
   }
 
   if (ordersError) return <div>Erreur commandes : {ordersError.message}</div>;
+
   // Rassembler tous les tickets avec leur événement associé (SEULEMENT les futurs)
   let allTickets: (Ticket & { event: any; orderId: number })[] = [];
   const now = new Date();
@@ -133,7 +134,7 @@ function TicketsPageContent() {
             key={order.id || idx}
             orderId={order.id || idx}
             eventName={order.event?.name || "Événement"}
-            eventUrl={order.event?._links?.self?.href || "#"}
+            eventUrl={order.event?.id ? `/evenements/${order.event.id}` : "#"}
             eventDate={order.event?.date ? new Date(order.event.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "Date inconnue"}
             totalPrice={order.totalPrice}
           />
