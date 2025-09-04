@@ -400,7 +400,7 @@ export default function EventPage() {
                 )}
               </div>
             ) : (
-              <BilletSelector event={event} disabled />
+              <BilletSelector event={event} disabled={true} />
             )}
           </>
         ) : event.currentParticipants >= event.maxCustomers ? (
@@ -463,7 +463,7 @@ export default function EventPage() {
                 )}
               </div>
             ) : (
-              <BilletSelector event={event} disabled />
+              <BilletSelector event={event} disabled={true} />
             )}
           </>
         ) : event.isInvitationOnly ? (
@@ -506,7 +506,7 @@ export default function EventPage() {
                 </span>
               ) : null
             ) : (
-              <button className="primary-btn" onClick={handleRequestInvitation}>
+              <button className="primary-btn" onClick={handleRequestInvitation} disabled={isEventPast}>
                 <span> Demander une invitation</span>
               </button>
             )}
@@ -515,7 +515,7 @@ export default function EventPage() {
             )}
           </div>
         ) : (
-          <BilletSelector event={event} />
+          <BilletSelector event={event} disabled={isEventPast} />
         )}
       </section>
 
