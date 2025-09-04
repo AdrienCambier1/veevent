@@ -17,7 +17,6 @@ import EventCardSkeleton from "@/components/cards/event-card/event-card-skeleton
 import ThemeCardSkeleton from "@/components/cards/theme-card/theme-card-skeleton";
 import TrendingCardSkeleton from "@/components/cards/trending-card/trending-card-skeleton";
 import { usePageTitle } from "@/hooks/commons/use-page-title";
-import { PAGE_TITLES } from "@/utils/page-titles";
 
 function SearchSheetContent() {
   const router = useRouter();
@@ -79,6 +78,37 @@ function SearchSheetContent() {
     setTimeout(() => {
       router.push(href);
     }, 100); // Délai minimal pour l'animation
+  };
+
+  const renderPaginatedEventCard = (item: any, index: number) => {
+    // Pour les résultats de recherche qui ont la structure { type: "event", event: {...} }
+    if (item.type === 'event' && item.event) {
+      return (
+        <EventCard
+          key={item.event.id}
+          id={item.event.id?.toString() || ''}
+          event={item.event}
+          minify={true}
+          grid={true}
+        />
+      );
+    }
+
+    // Pour les événements directs (comportement normal)
+    let eventId = item.id?.toString();
+    if (!eventId && item._links?.self?.href) {
+      eventId = item._links.self.href.split("/").pop() || "";
+    }
+    eventId = eventId || "";
+    return (
+      <EventCard
+        key={eventId}
+        id={eventId}
+        event={item}
+        minify={true}
+        grid={true}
+      />
+    );
   };
 
   return (
@@ -259,6 +289,7 @@ function SearchSheetContent() {
                                           id={item.event.id.toString()}
                                           event={item.event}
                                           minify
+                                          grid={true}
                                         />
                                       </div>
                                     </li>

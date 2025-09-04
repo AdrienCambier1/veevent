@@ -401,7 +401,6 @@ export const eventService = {
         };
       }
 
-      // Code API existant...
       const response = await fetch(`${apiUrl}/events/${id}`, {
         headers: {
           "Content-Type": "application/json",
