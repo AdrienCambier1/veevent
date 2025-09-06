@@ -271,15 +271,15 @@ export default function EventPage() {
       {orderStatus === "success" && (
         <div className="wrapper">
           <div className="bg-secondary-50 border border-secondary-200 text-secondary-800 rounded-lg p-4 text-center font-semibold">
-            🎉 Votre commande a bien été prise en compte ! Vous recevrez vos
-            billets par email.
+            Votre commande a bien été prise en compte ! Vous pourrez consulter vos
+            billets sur votre page profil.
           </div>
         </div>
       )}
       {orderStatus === "error" && (
         <div className="wrapper">
           <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 mb-6 text-center font-semibold">
-            ❌ Une erreur est survenue lors de la commande. Merci de réessayer
+            Une erreur est survenue lors de la commande. Merci de réessayer
             ou de contacter le support.
           </div>
         </div>
@@ -438,15 +438,12 @@ export default function EventPage() {
                     </span>
                   ) : invitation.status === "ACCEPTED" ? (
                     <span className="text-green-700 font-semibold">
-                      Votre invitation a été acceptée ! Vous pouvez désormais
+                      Votre invitation a été acceptée ! Retrouvez vos billets sur votre page profil ! Vous pouvez désormais
                       accéder à l'événement.
                     </span>
                   ) : invitation.status === "REJECTED" ? (
                     <span className="text-red-600">
                       Votre demande d'invitation a été refusée.
-                      <br />
-                      Vous pouvez contacter l'organisateur pour plus
-                      d'informations.
                     </span>
                   ) : null
                 ) : (
