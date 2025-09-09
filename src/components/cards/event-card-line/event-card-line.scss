@@ -24,7 +24,9 @@
   }
 
   .card-content {
-    @apply flex flex-col w-2/3 justify-between text-primary-950 text-base;
+    @apply flex flex-col justify-between text-primary-950 text-base;
+    flex: 1;
+    min-width: 0;
     line-height: 1.4;
 
     .card-title {
@@ -32,20 +34,42 @@
     }
 
     .card-specs {
-      @apply flex gap-2 text-xs text-ellipsis overflow-hidden whitespace-nowrap flex-grow w-full;
+      @apply flex gap-2 text-xs flex-grow w-full;
+      min-width: 0;
 
       li {
         @apply flex items-center gap-1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex-shrink: 1;
+        min-width: 0;
+
+        span {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
 
         &:not(:last-child)::after {
           content: "•";
           @apply mx-1;
+          flex-shrink: 0;
         }
       }
     }
   }
 
   svg {
-    @apply w-6 h-6 text-primary-600 mr-2 hidden sm:block;
+    @apply w-6 h-6 text-primary-600 mr-2;
+    flex-shrink: 0;
+
+    @media (max-width: 640px) {
+      @apply w-4 h-4 mr-1;
+    }
+
+    @media (min-width: 641px) {
+      @apply block;
+    }
   }
 }
